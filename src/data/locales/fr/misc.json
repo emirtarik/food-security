@@ -55,7 +55,7 @@
   "All Countries": "Tous les pays",
   "Total Population": "Population totale:",
   "Phase": "Phase",
-  "Disclaimer": "Ce document et toute carte qu’il peut comprendre sont sans préjudice du statut de tout territoire, de la souveraineté s’exerçant sur ce dernier, du tracé des frontières et limites internationales, et du nom de tout territoire, ville ou région.",
+  "Disclaimer": "Avec l'aimable autorisation du CILSS. Ce document et toute carte qu’il peut comprendre sont sans préjudice du statut de tout territoire, de la souveraineté s’exerçant sur ce dernier, du tracé des frontières et limites internationales, et du nom de tout territoire, ville ou région.",
   "Disclaimer Tool": "Cet outil de coordination est animé par le Secrétariat du Club du Sahel et de l’Afrique de l’Ouest (CSAO/OCDE) :",
   "No Data": "Pas de données",
   "Inaccessible Zone": "Zone inaccessible",
@@ -94,5 +94,7 @@
   "Languages": "Langues",
   "Videos90": "VIDÉOS EN 90 SECONDES",
   "DocumentsH": "DOCUMENTS HISTORIQUES",
-  "close": "Fermer"
+  "close": "Fermer",
+  "projectsUnderRenovation": "La page des projets est en cours de rénovation.",
+  "checkBackLater": "Veuillez revenir plus tard !"
 }

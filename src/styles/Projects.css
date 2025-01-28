@@ -1,0 +1,22 @@
+/* src/styles/Projects.css */
+
+.projects-page {
+    color: #333;
+  }
+  
+  .projects-message-container {
+    /* Custom styles if needed */
+  }
+  
+  @media (max-width: 768px) {
+    .disclaimer-container {
+      padding: 15px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .disclaimer-container {
+      padding: 10px;
+    }
+  }
+  

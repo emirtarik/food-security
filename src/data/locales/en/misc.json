@@ -55,7 +55,7 @@
   "All Countries": "All Countries",
   "Total Population": "Total Population:",
   "Phase": "Phase",
-  "Disclaimer": "Any map included herein, are without prejudice to the status of or sovereignty over any territory, to the delimitation of international frontiers and boundaries and to the name of any territory, city or area.",
+  "Disclaimer": "Courtesy of CILSS. Any map included herein, are without prejudice to the status of or sovereignty over any territory, to the delimitation of international frontiers and boundaries and to the name of any territory, city or area.",
   "Disclaimer Tool": "This co-ordination tool is being developed by the Sahel and West Africa Secretariat (SWAC/OCDE):",
   "No Data": "No Data",
   "Inaccessible Zone": "Inaccessible Zone",
@@ -94,5 +94,7 @@
   "Languages": "Languages",
   "Videos90": "VIDEOS IN 90 SECONDS",
   "DocumentsH": "HISTORIC DOCUMENTS",
-  "close": "Close"
+  "close": "Close",
+  "projectsUnderRenovation": "The Projects page is under renovation.",
+  "checkBackLater": "Please check back again later!"
 }
