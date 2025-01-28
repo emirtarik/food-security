@@ -1,0 +1,55 @@
+.charts-wrapper {
+  display: flex;
+  justify-content: space-between; /* Align donut charts and speedometer in one line */
+  gap: 10px; /* Reduce the gap between speedometer and donut charts */
+  width: 100%;
+}
+
+.speedometer-wrapper {
+  display: flex;
+  flex-direction: column; /* Stack the gauge and animated text vertically */
+  justify-content: flex-end; /* Align gauge with the bottom of the wrapper */
+  align-items: center;
+  width: 100%; /* Ensure it takes up the full width */
+  max-width: 600px; /* Set the desired width for the gauge */
+  flex: 1; /* Allow the wrapper to grow */
+}
+
+.speedometer-container {
+  width: 100%; /* Let the gauge take full width */
+  height: 160px; /* Increase the height to make the gauge larger */
+}
+
+.donut-charts-container {
+  display: flex;
+  justify-content: flex-start;
+  gap: 0px; /* Reduce gap between donut charts */
+  flex: 2; /* Make the donut charts take up more space compared to the speedometer */
+}
+
+.donut-chart {
+  flex: 1;
+  text-align: center;
+  max-width: 25%;
+}
+
+.gauge-value-text {
+  margin-top: 10px; /* Add space between the gauge and the text */
+  margin-right: 17px;
+  display: flex;
+  justify-content: center; /* Center the text horizontally */
+}
+
+.animated-gauge-value {
+  font-size: 52px; /* Size of the animated value */
+  font-weight: bold;
+  color: #000; /* Set text color */
+}
+
+.additional-text {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 14px;
+  color: #333;
+  font-weight: bold;
+}

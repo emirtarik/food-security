@@ -1,0 +1,40 @@
+.legend-container {
+    background-color: white;
+    padding: 10px;
+    font-family: "Lato", sans-serif;
+    color: black;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 15px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+}
+
+.legend-key {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
+}
+
+.legend-value {
+    display: inline-block;
+    font-size: 12px;
+}
+
+.legend-container li img {
+    width: 135px;
+}
+
+.legend-item img {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
+}

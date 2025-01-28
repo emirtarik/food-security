@@ -1,0 +1,85 @@
+.ag-theme-alpine {
+  height: 105vh;
+  width: 100%;
+  background-color: lightgray;
+  margin-left: 50px;
+  margin-top: 20px;
+  left: 25%;
+  top: 0%;
+}
+
+.custom-header {
+  background-color: #e6e6e6e3;
+  color: rgb(0, 0, 0);
+  width: 20px;
+}
+
+.custom-cell-bold {
+  font-weight: bold;
+}
+
+.custom-header1 {
+  background-color: #d3f3d4;
+  color: rgb(0, 0, 0);
+  width: 20px;
+}
+
+.custom-header2 {
+  background-color: #ffe252;
+  color: rgb(0, 0, 0);
+  width: 20px;
+}
+
+.custom-header3 {
+  background-color: #fa890f;
+  color: rgb(0, 0, 0);
+  width: 20px;
+}
+
+.custom-header4 {
+  background-color: #eb3333;
+  color: rgb(0, 0, 0);
+  width: 20px;
+}
+
+.custom-header5 {
+  background-color: #900101e3;
+  color: rgb(255, 255, 255);
+  width: 20px;
+}
+
+.ag-theme-alpine .ag-header-cell {
+  width: 20px;
+  /* You can adjust this width */
+}
+
+.ag-theme-alpine .ag-cell {
+  padding: 8px;
+  width: 20px;
+}
+
+.ag-theme-alpine .ag-row.ag-row-level-0 {
+  background-color: #fffefe;
+  min-width: 80px;
+}
+
+.ag-theme-alpine .ag-row.ag-row-level-1 {
+  background-color: #e6e5e5b3;
+}
+
+.total-row {
+  font-weight: bold !important;
+}
+
+button {
+  background-color: transparent;
+  color: var(--gh-blue-5);
+  gap: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.button-td {
+  padding: 0 10px;
+  width: 2px;
+}

@@ -1,0 +1,43 @@
+.col-md-12 {
+  background-color: #243d54 !important;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
+
+.rubheader-intro {
+  color: #fff !important;
+  text-align: center !important;
+  padding-top: 10px !important;
+  margin-bottom: 10px !important; /* Adjust margin-bottom to reduce vertical spacing */
+  font-size: 20px !important; /* Adjusted font-size */
+  line-height: 24px !important; /* Adjusted line-height */
+  font: "normal normal bold 35px/42px Lato"
+}
+.rubheader-description {
+  color: #fff !important;
+  padding-left: 18% !important;
+  padding-right: 18% !important;
+  text-align: center !important;
+  font-family: Lato !important;
+  font-size: 14px !important; /* Adjusted font-size */
+  line-height: 18px !important; /* Adjusted line-height */
+  font-weight: normal !important;
+  font-style: italic !important;
+  font-variant: normal !important;
+}
+
+/* Prevent text wrapping and add ellipsis at a specific maximum width */
+#rubheader .title-row {
+  white-space: nowrap;
+  overflow: hidden;  /* Hide overflowing text */
+  text-overflow: ellipsis;  /* Display ellipsis if text overflows */
+  max-width: 100%;  /* Set to your preferred width */
+  display: flex;  /* Optional: if the content needs flexbox layout */
+}
+
+@media (max-width: 1200px) {
+  #rubheader .title-row {
+      /* Adjust the width for smaller devices or modify other styles */
+      max-width: 100%;
+  }
+}

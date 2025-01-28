@@ -1,0 +1,154 @@
+[
+    {
+        "ID": 0,
+        "en": {
+          "img": "/uploads/2018/12/CHARTE-PREGEC_fr-1-1400x682.jpg",
+          "date": "December 2018",
+          "title": "WHO ARE WE?",
+          "content": "Created in 1984 on the initiative of members and partners of CILSS and the Club du Sahel, the Food Crisis Prevention Network (RPCA) is an international platform for consultation and co-ordination under the political leadership of the ECOWAS and UEMOA Commissions. It brings together more than one hundred stakeholders. \n The SWAC/OECD Secretariat runs the Network alongside the CILSS. It contributes to the analyses and evaluations of the Charter for Food Crisis Prevention and Management (PREGEC); ensures advocacy and lobbying functions and plays a central role in the Network's communication. It provides decision makers (officials) and practitioners with decision-making, political dialogue and co-ordination tools.",
+          "sections": [
+            {
+              "id": "rub-0",
+              "title": "The PREGEC Charter",
+              "media": [
+                {
+                  "title": "",
+                  "link": "https://www.youtube.com/embed/n1rXsa_5vnQ?enablejsapi=1&origin=https%3A%2F%2Fwww.food-security.net"
+                }
+              ],
+              "documents": [
+                {
+                  "title": "PDF version of the Charter",
+                  "link": "/uploads/2018/12/Charter_EN.pdf"
+                }
+              ]
+            }
+          ],
+          "videos": [
+            {
+              "title": "Introduction to RPCA",
+              "link": "https://www.youtube.com/embed/sNQqEwEa8LA"
+            },
+            {
+              "title": "RPCA's Mission",
+              "link": "https://www.youtube.com/embed/UvjY0LvNDus"
+            },
+            {
+              "title": "Future of RPCA",
+              "link": "https://www.youtube.com/embed/n1rXsa_5vnQ"
+            }
+          ]
+        },
+        "fr": {
+          "img": "/uploads/2018/12/CHARTE-PREGEC_fr-1-1400x682.jpg",
+          "date": "December 2018",
+          "title": "QUI SOMMES NOUS ?",
+          "content": "Créé en 1984 à l’initiative des membres et partenaires du CILSS et du Club du Sahel, le Réseau de prévention des crises alimentaires est une plateforme internationale de concertation et de coordination placée sous le leadership politique des Commissions de la CEDEAO et de l’UEMOA. Il rassemble plus d’une centaine de parties prenantes. \n Le Secrétariat du CSAO/OCDE anime le Réseau aux côtés du CILSS. Il contribue aux analyses, évaluations de la Charte pour la prévention et la gestion des crises alimentaires (PREGEC) ; assure les fonctions de plaidoyer et le lobbying et joue un rôle central dans la communication du Réseau. Il met à disposition des responsables et praticiens des outils d’aide à la décision, au dialogue politique et à la coordination.",
+          "sections": [
+            {
+              "id": "rub-0",
+              "title": "The PREGEC Charter",
+              "media": [
+                {
+                  "title": "",
+                  "link": "https://www.youtube.com/embed/n1rXsa_5vnQ?enablejsapi=1&origin=https%3A%2F%2Fwww.food-security.net"
+                }
+              ],
+              "documents": [
+                {
+                  "title": "PDF version of the Charter",
+                  "link": "/uploads/2018/12/Charter_EN.pdf"
+                }
+              ]
+            }
+          ],
+          "videos": [
+            {
+              "title": "LE RÔLE DU RPCA",
+              "link": "https://www.youtube.com/embed/sNQqEwEa8LA"
+            },
+            {
+              "title": "LE FONCTIONNEMENT DU RPCA",
+              "link": "https://www.youtube.com/embed/UvjY0LvNDus"
+            },
+            {
+              "title": "LA CHARTE PREGEC",
+              "link": "https://www.youtube.com/embed/n1rXsa_5vnQ"
+            }
+          ]
+        },
+        "permalink": "/about/who-are-we",
+        "isMarkdown": false,
+        "markdownPath": false
+    },
+    {
+      "ID": 1,
+      "en": {
+          "img": "/uploads/2018/12/CHARTE-PREGEC_fr-1-1400x682.jpg",
+          "date": "December 2018",
+          "title": "HISTORY",
+          "content": "Forty years after its creation, the Food Crisis Prevention Network continues to work diligently to guide all stakeholders towards evidence-based policymaking and foster inclusive dialogue. Explore the key moments of our network over the decades and discover how we have shaped the future of food security.",
+          "sections": [],
+          "boxes": [
+              { "year": "1973", "title": "LES GRANDES SÉCHERESSES DU SAHEL" },
+              { "year": "1974", "title": "TÉMOIGNAGES DES ANCIENS" },
+              { "year": "1983", "title": "LENTEUR ET MANQUE DE COORDINATION DE L’AIDE" },
+              { "year": "1984", "title": "CRÉATION DU RPCA" },
+              { "year": "1990", "title": "CHARTE DE L’AIDE ALIMENTAIRE" },
+              { "year": "1997", "title": "MÉMORANDUM DE BANJUL" }
+          ],
+          "documentsH": [
+              {
+                  "link": "/documents/twentyyearsoffoodcrisispreventioninthesahelassessmentandperspectives-december2004",
+                  "title": "Twenty years of food crisis prevention in the Sahel. Assessment and perspectives",
+                  "thumbnail": "/uploads/2004/12/20ans-RPCA_EN-357x500.jpg"
+              },
+              {
+                  "link": "/documents/foodcrisispreventioninthesaheltenyearsofnetworkingexperience19851995-december1995",
+                  "title": "Food crisis prevention in the Sahel. Ten years of networking experience: 1985-1995",
+                  "thumbnail": "/uploads/2020/08/10ans_RPCA_FR-357x500.jpg"
+              },
+              {
+                  "link": "/documents/onepathtowardscoordinationthefoodcrisispreventionnetworkinthesaheliancountries-november1985",
+                  "title": "One path towards co-ordination: the Food Crisis Prevention Network in the Sahelian countries",
+                  "thumbnail": "/uploads/2020/08/1985-Un-des-chemins-de-la-coordination-1.jpg"
+              }
+          ]
+      },
+      "fr": {
+          "img": "/uploads/2018/12/CHARTE-PREGEC_fr-1-1400x682.jpg",
+          "date": "December 2018",
+          "title": "HISTOIRE",
+          "content": "Quarante ans après sa création, le Réseau de Prévention des Crises Alimentaires continue d'œuvrer avec détermination pour accompagner toutes les parties prenantes vers l'élaboration de politiques fondées sur des preuves et encourager le dialogue inclusif. Explorez les moments clés de notre réseau à travers les décennies et découvrez comment nous avons façonné l'avenir de la sécurité alimentaire.",
+          "sections": [],
+          "boxes": [
+              { "year": "1973", "title": "LES GRANDES SÉCHERESSES DU SAHEL" },
+              { "year": "1974", "title": "TÉMOIGNAGES DES ANCIENS" },
+              { "year": "1983", "title": "LENTEUR ET MANQUE DE COORDINATION DE L’AIDE" },
+              { "year": "1984", "title": "CRÉATION DU RPCA" },
+              { "year": "1990", "title": "CHARTE DE L’AIDE ALIMENTAIRE" },
+              { "year": "1997", "title": "MÉMORANDUM DE BANJUL" }
+          ],
+          "documentsH": [
+          {
+              "link": "/documents/twentyyearsoffoodcrisispreventioninthesahelassessmentandperspectives-december2004",
+              "title": "Vingt ans de prévention des crises alimentaires au Sahel. Bilan et perspectives",
+              "thumbnail": "/uploads/2004/12/20ans-RPCA_EN-357x500.jpg"
+          },
+          {
+              "link": "/documents/foodcrisispreventioninthesaheltenyearsofnetworkingexperience19851995-december1995",
+              "title": "Prévention des crises alimentaires au Sahel. Dix ans d'expérience en réseau : 1985-1995",
+              "thumbnail": "/uploads/2020/08/10ans_RPCA_FR-357x500.jpg"
+          },
+          {
+              "link": "/documents/onepathtowardscoordinationthefoodcrisispreventionnetworkinthesaheliancountries-november1985",
+              "title": "Une voie vers la coordination : le réseau de prévention des crises alimentaires dans les pays du Sahel",
+              "thumbnail": "/uploads/2020/08/1985-Un-des-chemins-de-la-coordination-1.jpg"
+          }
+          ]
+      },
+      "permalink": "/about/history",
+      "isMarkdown": false,
+      "markdownPath": false
+  }
+]

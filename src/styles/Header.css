@@ -1,0 +1,94 @@
+#verticalLine {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 576px) {
+  #verticalLine {
+    display: none !important;
+  }
+}
+
+#mainheader {
+  position: relative;
+  z-index: 2;
+  /*margin-top: 23px;  Use the old file's `#nav-menus-frame` margin-top */
+}
+
+/* Consistent Header Background */
+.head {
+  background: #f6f7f7;
+  padding: 10px;
+}
+
+.brand {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px; /* Old `.manage-menus` */
+}
+
+button.nav-link {
+  background: none !important;
+  border: none !important;
+  outline: none !important;
+  color: #50575e; /* `.is-submenu` color */
+  cursor: pointer;
+  padding: 0 10px;
+  margin: 0 3px; /* Inline spacing */
+  vertical-align: middle; /* Maintain inline-block alignment */
+}
+
+button.nav-link:active,
+button.nav-link:focus {
+  outline: none !important;
+  border: none !important;
+  color: #2271b1; /* `.bulk-selection .bulk-select-button` color */
+}
+
+button.nav-link:hover {
+  border-color: #0a4b78; /* Hover state from `.bulk-select-button:hover` */
+}
+
+button.nav-link.selected {
+  font-weight: bold !important; /* Make the selected language bold */
+}
+
+.col-sm-3.lang li.nav-item {
+  display: flex;
+  align-items: center;
+}
+
+.bulk-select-button {
+  background: #f6f7f7; /* Bulk select button design */
+  border: 1px solid #dcdcde;
+  cursor: pointer;
+  border-radius: 3px;
+  padding: 5px 10px;
+  white-space: nowrap;
+}
+
+.bulk-select-button:hover,
+.bulk-select-button:active {
+  background: #f0f0f1; /* Hover state */
+  border-color: #0a4b78;
+  color: #0a4b78;
+}
+
+.MuiPopper-root {
+  z-index: 9999;
+}
+
+.MuiPaper-root {
+  z-index: 9999;
+  background-color: #243d54 !important;
+}
+
+.MuiButtonBase-root {
+  color: white !important;
+  font-size: medium !important;
+}
+
+.MuiButtonBase-root:hover,
+.MuiButtonBase-root:active {
+  background-color: #243d54 !important;
+}

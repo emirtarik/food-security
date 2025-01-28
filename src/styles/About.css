@@ -1,0 +1,189 @@
+.title {
+    text-align: center;
+    font: normal normal bold 30px/36px Lato;
+    letter-spacing: 0px;
+    color: #C2BE00;
+    opacity: 1;
+}
+
+.document-detail-container {
+    display: grid;
+    grid-template-columns: 1fr; /* Adjusts the width ratio of thumbnail and document info */
+    gap: 0px; /* Reduced margin between sections */
+    justify-items: center; /* Centers items horizontally within the grid columns */
+    padding: 5%;
+    margin: 0 auto; /* Centers the container itself */
+    max-width: 1000px; /* Limits the maximum width of the container */
+  }
+  
+  .thumbnail-section {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Optional: If you want to center horizontally as well */
+    height: 100%;
+  }
+  
+  .thumbnail-img {
+    max-width: 100%; /* Ensure the image scales correctly within its container */
+    max-height: 100%;
+  }
+
+  .rpca-img {
+    max-width: 80%;
+    height: auto;
+    margin-bottom: 50px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+.document-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0px;
+    max-width: 600px; /* Adjust the width of the document-info */
+}
+  
+.document-info h2 {
+  text-align: left;
+  font: normal normal 900 24px/24px Lato;
+  letter-spacing: 0px;
+  color: #243D54;
+  opacity: 1;
+}
+  
+.document-info h3 {
+    text-align: left;
+    font: normal normal 300 20px/25px Lato;
+    letter-spacing: 0px;
+    color: #020202;
+    opacity: 1;
+}
+  
+.document-info p {
+    margin-bottom: 10px;
+    text-align: justify;
+    white-space: inherit;
+}
+
+.video-container {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  overflow: hidden;
+  background: #243D54 0% 0% no-repeat padding-box;
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.1;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.video-container .video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 30px;
+  font: normal normal bold 24px/30px Lato;
+  background: rgba(36, 61, 84, 0.9); /* Slightly transparent background */
+  color: rgba(255, 255, 255, 0.9); /* White text with slightly reduced opacity */
+  transition: opacity 0.3s ease-in-out;
+  opacity: 1;
+}
+
+.video-container:hover iframe {
+  opacity: 1;
+}
+
+.video-container:hover .video-overlay {
+  opacity: 0;
+}
+
+.box-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.green-box {
+  height: 250px;
+  background-color: #C2BE00; /* Green color */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  margin: 5px;
+  color: #243D54;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.rectangle {
+    width: 150px;
+    height: 7px;
+    background: #C2BE00 0% 0% no-repeat padding-box;
+    opacity: 1;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .document-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  
+  .document-col {
+    flex: 0 0 30%;
+    margin-bottom: 20px;
+  }
+  
+  .document-container {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+    background-size: cover;
+    background-position: center;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  
+  .document-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font: normal normal bold 24px/28px Lato;
+    color: white;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+    transition: background 0.3s ease-in-out;
+  }
+  
+  .document-container:hover .document-overlay {
+    background: rgba(0, 0, 0, 0.7);
+  }

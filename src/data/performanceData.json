@@ -1,0 +1,25 @@
+{
+    "Senegal": {
+      "years": [2019, 2020, 2021, 2022, 2023],
+      "metrics": {
+        "Performance du système d'information (Score CH)": ["60%", "75%", "75%", "80%", "80%"],
+        "Population analysée (million)": [13, 16.7, 17.2, 17.73, 17.8],
+        "Nombre de personnes en phase CH 3-5 (million)": [0.2, 0.4, 0.3, 0.7, 0.8],
+        "Proportion de personnes analysées en phase CH 3-5 (%)": ["1%", "3%", "2%", "4%", "4%"],
+        "Nombre de zones analysées": [42, 45, 45, 45, 45],
+        "Nombre de zones en phase CH 3-5": [34, 37, 41, 39, 42],
+        "Besoin de financement (million USD)": [150, 180, 200, 190, 200],
+        "Financement mobilisé (%)": ["65%", "75%", "55%", "60%", "35%"]
+      },
+      "annualChanges": {
+        "Evolution du système d'information (Score CH)": ["-", "15%", "0%", "5%", "0%"],
+        "Evolution personnes en phase CH 3-5": ["-", 3.7, 0.5, 0.5, 0.1],
+        "Evoluation personnes en phase CH 3-5 (%)": ["-", "1%", "-1%", "2%", "1%"],
+        "Evolution du nombre de zones en phase CH 3-5": ["-", 3, 4, -2, 3],
+        "Evolution du nombre de zones en phase CH 3-5 (%)": ["-", "9%", "11%", "-5%", "8%"],
+        "Evolution du besoin de financement couvert": ["-", "10%", "-20%", "5%", "-25%"],
+        "Gap de financement": [52.5, 45, 90, 76, 130]
+      }
+    }
+  }
+  

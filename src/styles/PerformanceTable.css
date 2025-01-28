@@ -1,0 +1,225 @@
+/* src/styles/PerformanceTable.css */
+
+/* ============================================================
+   Container Layout
+   ============================================================ */
+   .performance-container {
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    gap: 20px;
+    padding: 20px;
+    background-color: #f9f9f9; /* Light background to match general theme */
+    border-radius: 8px;
+  }
+  
+  /* ============================================================
+     Performance Data Table Styles
+     ============================================================ */
+  .performance-data-table,
+  .annual-changes-table {
+    width: 100%; /* Full width to stack vertically */
+    overflow-x: auto;
+    background-color: #ffffff; /* White background for clarity */
+    border: 1px solid #e0e0e0; /* Light gray border for definition */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  }
+  
+  .performance-data-table h3,
+  .annual-changes-table h3 {
+    padding: 16px;
+    margin: 0;
+    background-color: #243d54;
+    color: #ffffff;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+  
+  .performance-data-table table,
+  .annual-changes-table table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .performance-data-table th,
+  .performance-data-table td,
+  .annual-changes-table th,
+  .annual-changes-table td {
+    border: 1px solid #e0e0e0; /* Consistent border color */
+    padding: 12px 16px; /* Increased padding for better readability */
+    text-align: center; /* Center-align for all except first column */
+    font-size: 0.95rem; /* Slightly smaller font for table data */
+    color: #333333; /* Dark gray text for better contrast */
+  }
+  
+  /* Left-align the first column (Metrics Names) */
+  .performance-data-table th:first-child,
+  .performance-data-table td:first-child,
+  .annual-changes-table th:first-child,
+  .annual-changes-table td:first-child {
+    text-align: left;
+    font-weight: 600; /* Bold font for metrics names */
+  }
+  
+  /* Table Headers */
+  .performance-data-table th,
+  .annual-changes-table th {
+    background-color: #243d54; /* Primary theme color */
+    color: #ffffff; /* White text for contrast */
+  }
+  
+  /* Even Row Background */
+  .performance-data-table tr:nth-child(even),
+  .annual-changes-table tr:nth-child(even) {
+    background-color: #f2f2f2; /* Light gray for even rows */
+  }
+  
+  /* Hover Effect on Rows */
+  .performance-data-table tr:hover,
+  .annual-changes-table tr:hover {
+    background-color: #e6f0ff; /* Light blue hover effect */
+    cursor: pointer;
+  }
+  
+  /* ============================================================
+     Existing Performance Table Styles
+     ============================================================ */
+  .performance-table {
+    width: 100%; /* Full width for consistency */
+    background-color: #ffffff; /* White background for consistency */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  }
+  
+  .performance-header {
+    font-size: 1.75rem; /* Increased font size for emphasis */
+    margin-bottom: 25px; /* Increased margin for spacing */
+    text-align: center;
+    color: #243d54; /* Primary theme color */
+    font-weight: 700;
+  }
+  
+  /* Performance Row Styles */
+  .performance-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  /* Performance Title Styles */
+  .performance-title {
+    flex: 3;
+    display: flex;
+    align-items: center;
+    font-size: 1.05rem;
+    color: #333333;
+  }
+  
+  .performance-icon {
+    width: 28px; /* Increased size for better visibility */
+    height: 28px;
+    margin-right: 12px; /* Increased spacing between icon and text */
+  }
+  
+  /* Performance Data Styles */
+  .performance-data {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .performance-score {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #243d54; /* Primary theme color */
+  }
+  
+  .performance-trend {
+    font-size: 1rem;
+    color: #666666; /* Medium gray for subtlety */
+    margin-top: 4px;
+  }
+  
+  /* Performance Stage Styles */
+  .performance-stage {
+    flex: 1;
+    padding: 6px 12px;
+    border-radius: 6px;
+    color: #ffffff;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.95rem;
+    /* Dynamic background color handled inline via React */
+  }
+  
+  /* Performance Description Styles */
+  .performance-description {
+    flex: 3;
+    font-size: 0.95rem;
+    color: #555555; /* Darker gray for readability */
+    margin-left: 10px;
+  }
+  
+  /* ============================================================
+     Tooltip Icon Styles
+     ============================================================ */
+  .question-tooltip-icon {
+    color: #243d54; /* Primary theme color */
+    cursor: pointer;
+    margin-left: 8px;
+    font-size: 1.2rem;
+  }
+  
+  .question-tooltip-icon:hover {
+    color: #1a2b3c; /* Darker shade on hover */
+  }
+  
+  /* ============================================================
+     Responsive Design
+     ============================================================ */
+  @media (max-width: 768px) {
+    .performance-container {
+      flex-direction: column;
+      padding: 10px; /* Reduced padding for smaller screens */
+    }
+  
+    .performance-data-table,
+    .annual-changes-table,
+    .performance-table {
+      width: 100%;
+    }
+  
+    .performance-row {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .performance-title,
+    .performance-description {
+      flex: none;
+      margin-bottom: 8px;
+    }
+  
+    .performance-stage {
+      margin-top: 8px;
+    }
+  }
+  
+  /* ============================================================
+     Additional Enhancements
+     ============================================================ */
+  
+  /* Conditional Formatting for Annual Changes Table */
+  .annual-changes-table td.positive {
+    background-color: var(--positive-color); /* Light green */
+    color: var(--positive-text); /* Dark green text */
+  }
+  
+  .annual-changes-table td.negative {
+    background-color: var(--negative-color); /* Light red */
+    color: var(--negative-text); /* Dark red text */
+  }
+
+  

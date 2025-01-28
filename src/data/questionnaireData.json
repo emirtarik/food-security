@@ -1,0 +1,850 @@
+[
+    {
+      "title": "1 : Information et analyse sur la situation alimentaire et nutritionnelle et instruments de réponse",
+      "subsections": [
+        {
+          "title": "1.1 Information et analyse sur la sécurité alimentaire et nutritionnelle",
+          "questions": [
+            { 
+              "index": "111",
+              "text": "Est-ce que le système d'alerte précoce (SAP) SAN est en place et produit-il une analyse Cadre Harmonisé (CH) satisfaisante ?",
+              "tooltip": "Examine si le système d'alerte précoce en matière de sécurité alimentaire et nutritionnelle (SAP SAN) est opérationnel et si les analyses produites, comme le Cadre Harmonisé (CH), sont suffisamment complètes et précises pour identifier les risques alimentaires et orienter les actions de réponse.",
+              "description": {
+                "level1": "Le SAP n'existe pas, ou existe mais ne produit pas une analyse CH = 1",
+                "level2": "Le SAP existe mais les fonctions du CH ne sont pas mises en œuvre de manière satisfaisante lors des sessions d’analyse (score de la grille d'évaluation de la session d'analyse CH < 50%) = 2",
+                "level3": "Le SAP gènère une analyse CH de qualité acceptable pour alimenter le CH (score de la session d'analyse CH entre [50% et 60%[) = 3",
+                "level4": "Le SAP produit une analyse CH de qualité satisfaisante pour alimenter le CH (score de la session d'analyse CH entre [60% et 80%[) = 4",
+                "level5": "Le SAP gènère une analyse CH de qualité très satisfaisante pour alimenter le CH (score de la session d'analyse CH supérieur ou égal à 80) = 5"
+              }
+            },
+            {
+              "index": "112",
+              "text": "L'information SAN est-elle désagrégée selon les diverses manifestations de l'insécurité alimentaire (transitoire, cyclique ou chronique) ?",
+              "tooltip": "Analyse si les données SAN produites sont détaillées et différenciées en fonction des types d’insécurité alimentaire : transitoire (temporaire), cyclique (récurrente) ou chronique.",
+              "description": {
+                "level1": "Aucune désagrégation de l'information n'est effectuée selon les différentes manifestations de l'insécurité alimentaire, pas de méthodologie  = 1",
+                "level2": "Des méthodologies sont en cours de développement dans certains secteurs sans concertation = 2",
+                "level3": "Il existe des méthodes de caractérisation et de dénombrement des différents types d'insécurité alimentaire mais elles ne sont pas consensuelles = 3",
+                "level4": "Il existe une méthodologie consensuelle et l'information SAN est désagrégée partiellement = 4",
+                "level5": "L'information est pleinement désagrégée selon les diverses manifestations de l'insécurité alimentaire (transitoire, cyclique, chronique) = 5"
+              }
+            },
+            {
+              "index": "113",
+              "text": "L'information SAN fournit-elle la prépondérance des causes de l'insécurité alimentaire selon la zone analysée ?",
+              "tooltip": "Examine si les données SAN identifient et précisent les principales causes de l’insécurité alimentaire dans chaque zone analysée.",
+              "description": {
+                "level1": "Aucune cause de l'insécurité alimentaire n'est identifiée par zone  = 1",
+                "level2": "Les causes de l'insécurité alimentaire sont abordées de manière globale et non hiérarchisée = 2",
+                "level3": "Les causes de l'insécurité alimentaire sont identifées mais non hiérarchisées et non désagrégées par zone analysée = 3",
+                "level4": "Les causes de l'insécurité alimentaire sont identifées, hiérarchisées et désagrégées par zone analysée ou de manière irrégulière = 4",
+                "level5": "Les causes de l'insécurité alimentaire sont identifées, hiérarchisées et désagrégées par zone analysée pour chaque cycle d'analyse CH = 5"
+              }
+            },
+            {
+              "index": "114",
+              "text": "Est-ce que la fréquence de la production d'information est alignée sur les divers types de chocs et les exigences de réponses correspondantes ?",
+              "tooltip": "Évalue si les informations sur la SAN sont produites suffisamment  souvent (fréquence) pour répondre efficacement aux différents types de crises (en fonction de leur probabilité d'occurence) et à leurs besoins spécifiques.",
+              "description": {
+                "level1": "Non, les données sont fournies selon un calendrier prédéfini qui ne prend pas en considération les différents types de chocs et les exigences de réponse = 1",
+                "level2": "L'information générée prend en considération la majorité des chocs; cependant, la fréquence n'est pas adaptée à certains impératifs de réponse = 2",
+                "level3": "L'information produite prend en compte tous les chocs mais la fréquence n'est pas adaptée à certains chocs et à la chronicité de l'insécurité alimentaire = 3",
+                "level4": "L'information produite prend en compte tous les chocs et la fréquence est adaptée à plupart des chocs et à la fréquence des crises alimentaires = 4",
+                "level5": "L'information produite prend en compte tous les chocs et la fréquence est adaptée à tous les chocs et à la fréquence des crises alimentaires = 5"
+              }
+            },
+            {
+              "index": "115",
+              "text": "Le gouvernement apporte-t-il une contribution significative à la production d'information dans le dispositif d'alerte précoce ?",
+              "tooltip": "Évalue si le gouvernement joue un rôle important en soutenant la collecte et la production d'informations dans le cadre du système d'alerte précoce.",
+              "description": {
+                "level1": "Non, le gouvernement ne produit pas d'information ; les partenaires ont fourni toutes les informations disponibles = 1",
+                "level2": "Le Gouvernement anime le système d'alerte précoce mais documente moins de 30% des indicateurs CH  = 2",
+                "level3": "Le Gouvernement anime le système d'alerte précoce et documente entre 30% et 50% des indicateurs CH = 3",
+                "level4": "Le Gouvernement anime le système d'alerte précoce et documente entre 50% et 80% des indicateurs CH = 4",
+                "level5": "Le Gouvernement anime le système d'alerte précoce et documente plus de 80% des indicateurs CH = 5"
+              }
+            },
+            {
+              "index": "116",
+              "text": "Le système d'alerte précoce sur la sécurité alimentaire et nutritionnelle regroupe-t-il une diversité d'acteurs représentatifs du domaine SAN ?",
+              "tooltip": "Examine si le système d’alerte précoce inclut une variété d’acteurs (gouvernement, ONG, organisations régionales et internationales, experts, communautés locales, etc.)",
+              "description": {
+                "level1": "Non, seuls le gouvernement et quelques partenaires techniques et financiers y sont représentés = 1",
+                "level2": "Le gouvernement et l'ensemble des partenaires techniques et financiers y sont représentés = 2",
+                "level3": "En plus des partenaires techniques et financiers, une partie de la société civile est représentée avec une contribution limitée  = 3",
+                "level4": "Tous les acteurs sont représentés dans le système d'alerte précoce mais leur contribution à la production d'information est irrégulière = 4",
+                "level5": "Tous les acteurs sont représentés dans le système d'alerte précoce et contribuent pleinement à la production d'information = 5"
+              }
+            }
+          ]
+        },
+        {
+          "title": "1.2 Information et analyse pour élaborer la réponse SAN",
+          "questions": [
+            {
+              "index": "121",
+              "text": "Le système d'alerte précoce SAN génère-t-il des informations sur l'évolution des moyens d'existence et de la vulnérabilité des ménages ?",
+              "tooltip": "Evalue si le système d'alerte précoce SAN génère des données sur l'évolution des conditions de vie des ménages, notamment leurs sources de revenus et leur vulnérabilité face aux crises ou aux chocs externes.",
+              "description": {
+                "level1": "Non, pas d'indicateurs consensuels sur l'évolution des moyens d'existence et de la vulnérabilité des ménages  = 1",
+                "level2": "Oui, des indicateurs consensuels existent mais seuls moins de 30% sont documentés de façon régulière = 2",
+                "level3": "Oui, 30% à 50% des indicateurs consensuels sont documentés de manière régulière  = 3",
+                "level4": "Oui, 50% à 80% des indicateurs consensuels sont documentés de manière régulière  = 4",
+                "level5": "Oui, plus de 80% des indicateurs consensuels sont documentés de manière régulière = 5"
+              }
+            },
+            {
+              "index": "122",
+              "text": "Est-ce que les indicateurs documentés sur l'évolution des moyens d'existence et la vulnérabilité des ménages contribuent à l'élaboration de la réponse SAN ?",
+              "tooltip" : "Evalue si les indicateurs sur l'évolution des moyens de subsistance et la vulnérabilité des ménages jouent un rôle clé dans l'élaboration et l'adaptation de la réponse pour prévenir et gérer les crises alimentaires et nutritionnelles.",
+              "description": {
+                "level1": "Non, les indicateurs documentés ne sont pas utilisés pour documenter l'élaboration de la réponse = 1",
+                "level2": "Oui, moins de 30% des indicateurs contribuent à la documentation de la réponse = 2",
+                "level3": "Oui, 30% à 50% des indicateurs consensuels contribuent à l'élaboration de la réponse  = 3",
+                "level4": "Oui, 50% à 80% des indicateurs consensuels scontributent à l'élaboration de la réponse  = 4",
+                "level5": "Oui, plus de 80% des indicateurs consensuels contribuent à l'élaboration de la réponse = 5"
+              }
+            },
+            {
+              "index": "123",
+              "text": "Des analyses sont elles conduites pour identifier et utiliser les opportunités économiques en soutien aux personnes pauvres et vulnérables ?",
+              "tooltip" : "Examine si des analyses sont réalisées pour identifier les opportunités économiques pouvant être exploitées afin de soutenir les personnes pauvres et vulnérables, et si ces opportunités sont intégrées dans les stratégies d’intervention pour prévénir et répondre aux crises alimentaires.",
+              "description": {
+                "level1": "Aucune analyse n'est actuellement réalisée pour identifier ou exploiter les opportunités de génération de revenus dans la réponse SAN = 1",
+                "level2": "Il n'existe pas de méthodologie consensuelle et les analyses sont limitées à moins de 30% des zones en crise alimentaire et nutritionnelle = 2",
+                "level3": "Une méthodologie consensuelle est définie et utilisée mais les analyses couvrent entre 30% et 50% des zones en crise alimentaire et nutritionnelle = 3",
+                "level4": "Les analyses sont faites sur la base d'une méthodologie consensuelle etcouvrent entre 50% et 80% des zones en crise alimentaire et nutritionnelle  = 4",
+                "level5": "Les analyses sont faites sur la base d'une méthodologie consensuelle etcouvrent plus de 80% des zones en crise alimentaire et nutritionnelle = 5"
+              }
+            },
+            {
+              "index": "124",
+              "text": "Des analyses de marché sont-elles effectuées afin d'identifier et de mettre en œuvre des solutions de soutien pour les personnes pauvres et vulnérables ?",
+              "tooltip" : "Évalue si des analyses de marché sont réalisées à l'avance pour identifier des solutions économiques adaptées afin de soutenir les personnes pauvres et vulnérables, et si ces solutions sont ensuite mises en œuvre dans les stratégies d'assistance.",
+              "description": {
+                "level1": "Aucune analyse de marché n'est actuellement réalisée pour identifier ou exploiter les solutions de soutien pour la réponse SAN = 1",
+                "level2": "Les analyses sont limitées à des constats et ne produisent que peu de solutions de soutien, faiblement reflétées dans la réponse SAN = 2",
+                "level3": "Des analyses de marché conduites fournissent des solutions à court terme qui sont faiblement intégrées dans la réponse SAN = 3",
+                "level4": "Les analyses de marché proposent des solutions à court et à long terme ; cependant, seules les mesures d'urgence sont intégrées dans la programmation = 4",
+                "level5": "Des solutions à court et à long terme générées par les analyses de marché sont prises en compte dans la prévention et la réponse SAN = 5"
+              }
+            },
+            {
+              "index": "125",
+              "text": "Est-ce qu'une méthodologie consensuelle est utilisée pour élaborer des paquets de réponse SAN spécifiques à chaque situation ?",
+              "tooltip" : "Évalue si une méthodologie ou des critères consensuels sont utilisés pour concevoir des paquets de réponse SAN adaptés à chaque situation spécifique, en tenant compte des besoins et des contextes locaux (type d'insécurité alimentaire, type de chocs, type de bénéficiaires).",
+"description": {
+                "level1": "Non, il n'existe pas de méthodologie consensuelle pour élaborer des paquets de réponse = 1",
+                "level2": "Des critères sont partagés mais ne font pas l'unanimité ou ne sont pas appliqués dans l'élaboration des paquets de réponse SAN = 2",
+                "level3": "Plusieurs méthodologies non consensuelles coexistent; cependant la disponibilité des ressources guide l'élaboration des paquets de réponse = 3",
+                "level4": "Une méthodologie consensuelle existe et guide partiellement la conception de la réponse SAN = 4",
+                "level5": "Une méthodologie consensuelle existe et guide la conception de l'ensemble de la réponse = 5"
+              }
+            },
+            {
+              "index": "126",
+              "text": "Est-ce que le système d'alerte précoce possède des indicateurs d'alerte et des seuils déclencheurs immédiats pour la réponse SAN ?",
+              "tooltip" : "Évalue si le système d'alerte précoce ni dispose d'indicateurs spécifiques et de seuils prédéfinis qui, lorsqu'ils sont atteints, déclenchent automatiquement une réponse immédiate pour faire face à une situation d'urgence.",
+"description": {
+                "level1": "Non, il n'existe pas d'indicateurs d'alerte précoce et des seuils de déclenchement automatique de la réponse = 1",
+                "level2": "Des indicateurs d'alerte précoce existent mais pas de seuils de déclenchement automatique de la réponse = 2",
+                "level3": "Des indicateurs d'alerte précoce et des seuils de déclenchement de la réponse existent mais pas toujours documentés = 3",
+                "level4": "Des indicateurs d'alerte précoce et des seuils de déclenchement de la réponse sont documentés mais pas pour tous les types de chocs = 4",
+                "level5": "Des indicateurs d'alerte précoce et des seuils de déclenchement de la réponse sont documentés pour tous les types de chocs = 5"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "2 : Programme, plan de réponse et autres interventions relatives à la SAN: couverture et adaptabilité par rapport aux chocs",
+      "subsections": [
+        {
+          "title": "2.1 Couverture et adaptabilité du Plan national de réponse à l'insécurité alimentaire",
+          "questions": [
+            {
+              "index": "211",
+              "text": "Quelle part des individus en insécurité alimentaire est prise en charge par le plan national de réponse ?",
+              "tooltip" : "Évalue la proportion des individus en situation d'insécurité alimentaire qui bénéficie du soutien du plan national de réponse.",
+"description": {
+                "level1": "Le plan national de réponse n'est pas élaboré ou est élaboré mais n'est pas mis en œuvre = 1",
+                "level2": "La mise en œuvre du plan national de réponse couvre moins de 30% des individus en insécurité alimentaire et nutritionnelle = 2",
+                "level3": "La mise en œuvre du plan national de réponse couvre entre 30% et 50% des individus en insécurité alimentaire et nutritionnelle = 3",
+                "level4": "Le plan national de réponse couvre entre 50 % et 80 % des individus en insécurité alimentaire et nutritionnelle = 4",
+                "level5": "Plus de 80 % des personnes en insécurité alimentaire sont soutenues par le plan national de réponse = 5"
+              }
+            },
+            {
+              "index": "212",
+              "text": "Des mesures de soutien visant à améliorer le fonctionnement du marché et le pouvoir d'achat des personnes pauvres et vulnérables sont elles appliquées ?",
+              "tooltip" : "Évalue si des actions spécifiques sont mises en place pour améliorer le fonctionnement du marché (faciliter l'accès physiques et économiques, prix, mise à disposition des infrastructures)  et augmenter la capacité d'achat des personnes pauvres et vulnérables, afin de les aider à accéder plus facilement aux biens et services essentiels.",
+"description": {
+                "level1": "Les analyses de marché n'ont pas fourni de solutions pour soutenir le fonctionnement du marché et le pouvoir d'achat des populations pauvres et vulnérables = 1",
+                "level2": "Les analyses de marché ont généré des solutions de soutien mais elles sont faiblement exécutées = 2",
+                "level3": "Parmi les solutions proposées par les analyses de marché, seules les mesures à court terme sont partiellement mises en œuvre = 3",
+                "level4": "Les solutions de soutien au marché et au pouvoir d'achat des personnes pauvres et vulnérables, à la fois à court et à long terme, sont partiellement appliquées = 4",
+                "level5": "Les solutions de soutien au marché et au pouvoir d'achat des personnes pauvres et vulnérables, à la fois à court et à long terme, sont intégralement appliquées = 5"
+              }
+            },
+            {
+              "index": "213",
+              "text": "Le Plan national de réponse (PNR) prévoie t'il des mesures en faveur d'une inclusion économique durable ?",
+              "tooltip" : "Évalue si le Plan national de réponse (PNR) prévoit des mesures spécifiques pour favoriser une inclusion économique durable pour les populations vulnérables, afin de renforcer leur autonomie économique à long terme.",
+"description": {
+                "level1": "Aucune disposition spécifique n'est envisagée pour promouvoir l'inclusion économique durable dans le PNR = 1",
+                "level2": "Des efforts sont entrepris, mais les mesures pour favoriser l'inclusion économique sont limitées et nécessitent une opérationnalisation = 2",
+                "level3": "Des initiatives sont mises en oeuvre dans le cadre du PNR, mais la portée et limitée = 3",
+                "level4": "Des actions sont entreprises, avec une attention accordée à l'inclusion économique, mais faiblement connectées aux actions structurelles = 4",
+                "level5": "Le Plan National de Réponse promeut l'inclusion économique durable dans le PNR et en relation avec des actions structurelles = 5"
+              }
+            },
+            {
+              "index": "214",
+              "text": "Le Plan national de réponse prévoit-il des mesures de protection/réconciliation/paix dans les zones d'insécurité ?",
+              "tooltip" : "Évalue si le Plan national de réponse (PNR) inclut des mesures visant à protéger les populations, prévenir les conflits et promouvoir la réconciliation ou restaurer la paix dans les zones confrontées à l'insécurité, en prenant en compte les besoins spécifiques de ces régions pour assurer la stabilité et le bien-être des communautés affectées.",
+"description": {
+                "level1": "Aucune disposition spécifique n'est envisagée pour promouvoir la protection, la réconciliation, ou la paix dans le programme national SAN et le PNR = 1",
+                "level2": "Des efforts sont entrepris, mais les mesures pour favoriser la protection, la réconciliation, ou la paix couvrent moins de 30 % des zones d'insécurité = 2",
+                "level3": "Des initiatives de protection, de réconciliation, ou de paix sont mises en œuvre sur 30 % à 50 % des zones d'insécurité = 3",
+                "level4": "Des actions sont entreprises sur 50 % à 80 % des zones d'insécurité = 4",
+                "level5": "Le Plan National de Réponse promeut la protection, la réconciliation, ou la paix sur plus de 80 % des zones d'insécurité = 5"
+              }
+            }
+          ]
+        },
+        {
+          "title": "2.2. Couverture et adaptabilité de la réponse à la crise nutritionnelle",
+          "questions": [
+            {
+              "index": "221",
+              "text": "Les crises nutritionnelles sont elles anticipées par des interventions spécifiques en nutrition ?",
+              "tooltip" : "Evalue si des interventions spécifiques en nutrition, telles que la distribution de suppléments alimentaires, la mise en place de programmes de nutrition thérapeutique, la promotion de l'allaitement maternel, ou encore des campagnes de sensibilisation sur la nutrition, sont prévues pour anticiper et prévenir les crises nutritionnelles, afin de protéger les populations vulnérables avant que la situation ne devienne critique.",
+"description": {
+                "level1": "Des interventions pour prévenir la malnutrition (dans le PNR, autres interventions) ne sont pas préparées, ou sont élaborées mais ne sont pas mises en oeuvre = 1",
+                "level2": "Des interventions pour prévenir la malnutrition existent mais elles couvrent moins de 30% des zones en crise = 2",
+                "level3": "La mise en oeuvre des interventions en nutrition a touché entre 30% et 50% des zones en crise = 3",
+                "level4": "Les interventions spécifiques en nutrition soutiennent entre 50% et 80% des individus en crise nutritionnelle = 4",
+                "level5": "Plus de 80% des personnes en insécurité alimentaire sont soutenues par le plan national de réponse = 5"
+              }
+            },
+            {
+              "index": "222",
+              "text": "Quelle est la part des individus en crise nutritionnelle prise en charge par le plan national de réponse ou des interventions spécifiques de nutrition ?",
+              "tooltip" : "Evalue la proportion des individus en situation de crise nutritionnelle bénéficiant de l’assistance fournie par le Plan national de réponse ou par des interventions spécifiques en nutrition, telles que les programmes de traitement de la malnutrition aiguë ou la distribution de suppléments alimentaires.",
+"description": {
+                "level1": "Le plan national de réponse et/ou des interventions spécifiques en nutrition ne sont pas élaborés ou sont élaborés mais ne sont pas mis en oeuvre = 1",
+                "level2": "La mise en oeuvre du plan national de réponse et/ou des interventions en nutrition couvrent moins de 30% des individus en crise nutritionnelle = 2",
+                "level3": "La mise en oeuvre du plan national de réponse et/ou des interventions spécifiques en nutrition ont touché entre 30% et 50% des individus en crise nutritionnelle = 3",
+                "level4": "Le plan national de réponse et/ou des interventions spécifiques en nutrition soutiennent entre 50% et 80% des individus en crise nutritionnelle = 4",
+                "level5": "Plus de 80% des personnes en insécurité alimentaire sont soutenues par le plan national de réponse = 5"
+              }
+            },
+            {
+              "index": "223",
+              "text": "Les programmes de nutrition promeuvent-ils des outils conjoints de ciblage des personnes pauvres et vulnérables ?",
+              "tooltip" : "Évalue si les programmes de nutrition utilisent des outils de ciblage communs, tels le RNU, des enquêtes conjointes sur la pauvreté et la vulnérabilité, ou des critères de sélection harmonisés entre les différents acteurs (gouvernement, ONG), afin d'identifier de manière précise et coordonnée les populations les plus pauvres et vulnérables qui nécessitent une aide nutritionnelle.",
+"description": {
+                "level1": "Les programmes de nutrition ont établi un mécanisme de ciblage intra sectoriel, utilisé uniquement par le secteur de la nutrition = 1",
+                "level2": "Les programmes de nutrition utilisent un mécanisme conjoint ou synchronisé de ciblage dans moins de 30% des zones en insécurité alimentaire et nutritionnelle = 2",
+                "level3": "Les programmes de nutrition utilisent un mécanisme conjoint ou synchronisé de ciblage dans 30% -50% des zones en insécurité alimentaire et nutritionnelle = 3",
+                "level4": "Les programmes de nutrition utilisent un mécanisme conjoint ou synchronisé de ciblage dans 50% -80% des zones en insécurité alimentaire et nutritionnelle = 4",
+                "level5": "Dans plus de 80% des zones en insécurité alimentaire et nutritionnelle, les programmes de nutrition utilisent un mécanisme conjoint ou synchronisé de ciblage = 5"
+              }
+            },
+            {
+              "index": "224",
+              "text": "Les mesures de prévention et de réponse des programmes de nutrition sont elles mises en oeuvre de manière synchronisée ?",
+              "tooltip" : "Évalue si les mesures de prévention (comme la promotion de la nutrition, la sensibilisation, ou la distribution de suppléments alimentaires) et de réponse  des programmes de nutrition sont mises en œuvre de manière coordonnée et synchronisée, afin d'assurer une intervention efficace et de maximiser l'impact sur la santé des populations vulnérables.",
+"description": {
+                "level1": "Les mesures de prévention et de réponse des programmes de nutrition sont mises en oeuvre de façon disjointe, sans coordination avec la SAN = 1",
+                "level2": "La mise en oeuvre des mesures de prévention et de réponse est sporadique, avec moins de 30% des actions coordonnées avec la SAN = 2",
+                "level3": "Environ 30% à 50% des mesures de prévention et de réponse des programmes de nutrition sont synchronisées avec la SAN = 3",
+                "level4": "Environ 50% à 80% des mesures de prévention et de réponse des programmes de nutrition sont synchronisées avec la SAN = 4",
+                "level5": "La synchronisation des mesures de prévention et de réponse des programmes de nutrition avec la SAN dépasse 80% des interventions planifiées = 5"
+              }
+            }
+          ]
+        },
+        {
+          "title": "2.3. Couverture et capacité de prévention et de réponse des programmes de protection sociale",
+          "questions": [
+            {
+              "index": "231",
+              "text": "Quelle est la part des individus en insécurité alimentaire et nutritionnelle prise en charge par les programmes de protection sociale ?",
+              "tooltip" : "Evalue si les programmes de protection sociale incluent des mesures spécifiques pour répondre aux besoins des individus en situation de crise alimentaire et nutritionnelle, telles que l'augmentation des montants des transferts, la mise en place de nouveaux services ou l'extension à de nouveaux bénéficiaires.",
+"description": {
+                "level1": "Les programmes de protection sociale ne sont pas élaborés ou sont élaborés mais mis en oeuvre = 1",
+                "level2": "La mise en oeuvre des programmes de protection sociale couvrent moins de 30% des individus en insécurité alimentaire et nutritionnelle = 2",
+                "level3": "La mise en oeuvre des programmes de protection sociale couvrent entre 30% et 50% des individus en insécurité alimentaire et nutritionnelle = 3",
+                "level4": "Les programmes de protection sociale couvrent entre 50% et 80% des individus en insécurité alimentaire et nutritionnelle = 4",
+                "level5": "Plus de 80% des personnes en insécurité alimentaire sont soutenues par les programmes de protection sociale = 5"
+              }
+            },
+            {
+              "index": "232",
+              "text": "Les programmes de protection sociale prévoient-ils des mesures de réponse en faveur des individus en situation de crise alimentaire et nutritionnelle ?",
+              "tooltip" : "Evalue la proportion de personnes en crise alimentaire prise en charge par les programmes de protection sociale.",
+"description": {
+                "level1": "Aucune disposition spécifique n'est envisagée par les programmes de protection sociale pour soutenir de manière spécifique les individus en insécurité alimentaire = 1",
+                "level2": "Les programmes intègrent des actions de réponse mais qui ne dépassent pas 30% des individus en insécurité alimentaire et nutritionnelle = 2",
+                "level3": "Les programmes intègrent des actions de réponse qui touchent 30% - 50% des individus en insécurité alimentaire et nutritionnelle = 3",
+                "level4": "Les programmes intègrent des actions réponse qui touchent 50% - 80% des individus en insécurité alimentaire et nutritionnelle = 4",
+                "level5": "Les programmes intègrent des actions de réponse qui touchent plus de 80% des individus en insécurité alimentaire et nutritionnelle = 5"
+              }
+            },
+            {
+              "index": "233",
+              "text": "Les programmes de protection sociale prévoient-ils des mesures d'inclusion économique des individus en situation de crise alimentaire et nutritionnelle ?",
+              "tooltip" : "Évalue si les programmes de protection sociale intègrent des mesures visant à favoriser l'inclusion économique des individus en situation de crise alimentaire et nutritionnelle, telles que des opportunités d'emploi, des formations professionnelles, des soutiens à l'entrepreneuriat, l'accès au crédit, etc.",
+"description": {
+                "level1": "Aucune disposition spécifique n'est envisagée par la protection sociale pour soutenir de manière spécifique les individus en insécurité alimentaire et nutritionnelle = 1",
+                "level2": "Les programmes intègrent des mesures d'inclusion économique mais la couverture ne dépasse pas 30% des individus en insécurité alimentaire et nutritionnelle = 2",
+                "level3": "Les programmes intègrent des mesures d'inclusion économique qui touchent 30% - 50% des individus en insécurité alimentaire et nutritionnelle = 3",
+                "level4": "Les programmes intègrent des mesures d'inclusion économique qui touchent 50% -80% des individus en insécurité alimentaire et nutritionnelle = 4",
+                "level5": "Les programmes intègrent des mesures d'inclusion économique qui touchent plus de 80% des individus en insécurité alimentaire et nutritionnelle = 5"
+              }
+            },
+            {
+              "index": "234",
+              "text": "Des mesures de soutien visant à améliorer le fonctionnement du marché et le pouvoir d'achat des personnes pauvres et vulnérables sont appliquées ?",
+              "tooltip" : "Évalue si des mesures spécifiques sont mises en place pour améliorer le fonctionnement du marché (comme la réduction des barrières commerciales, l'approvisionnement en biens essentiels ou la régulation des prix) et augmenter le pouvoir d'achat des personnes pauvres et vulnérables, par exemple via des subventions, des transferts monétaires ou des programmes d'aide ciblée, afin de faciliter leur accès aux ressources essentielles en période de crise.",
+"description": {
+                "level1": "Les analyses de marché n'ont pas fourni de solutions pour soutenir le fonctionnement du marché et le pouvoir d'achat des populations pauvres et vulnérables = 1",
+                "level2": "Les analyses de marché ont généré des solutions de soutien mais elles sont faiblement exécutées = 2",
+                "level3": "Parmi les solutions proposées par les analyses de marché, seules les mesures à court terme sont partiellement mises en œuvre = 3",
+                "level4": "Les solutions de soutien au marché et au pouvoir d'achat des personnes pauvres et vulnérables, à la fois à court et à long terme, sont partiellement réalisées = 4",
+                "level5": "Les solutions de soutien au marché et au pouvoir d'achat des personnes pauvres et vulnérables, à la fois à court et à long terme, sont intégralement réalisées = 5"
+              }
+            },
+            {
+              "index": "235",
+              "text": "Les programmes de protection sociale promeuvent-ils des outils conjoints de ciblage des personnes pauvres et vulnérables ?",
+              "tooltip" : "Évalue si les programmes de protection sociale utilisent des outils communs pour identifier et cibler efficacement les personnes pauvres et vulnérables, en combinant des critères socio-économiques, géographiques et contextuels pour la distribution ciblée de l'aide.",
+"description": {
+                "level1": "Les programmes de protection sociale ont établi un registre mais n'oeuvrent pas pour l'adoption d'un système de ciblage conjoint = 1",
+                "level2": "Le régiotre social est ouvert à tous les secteurs mais couvre moins de moins de 30% des zones en insécurité alimentaire et nutritionnelle = 2",
+                "level3": "Le registre social est utilisé dans 30% -50% des zones en insécurité alimentaire et nutritionnelle = 3",
+                "level4": "Le registre social est utilisé dans 50% -80% des zones en insécurité alimentaire et nutritionnelle = 4",
+                "level5": "Dans plus de 80% des zones en insécurité alimentaire et nutritionnelle, le régistre social est utilisé = 5"
+              }
+            },
+            {
+              "index": "236",
+              "text": "Les mesures de prévention et de réponse des programmes de protection sociale sont elles mises en oeuvre de manière synchronisée ?",
+              "tooltip" : "Évalue si les mesures de prévention et de réponse des programmes de protection sociale sont mises en œuvre de manière coordonnée et synchronisée avec les autres secteurs (SAN, agriculture, élevage, nutrition, etc.) afin d'assurer une prévention et une gestion efficace des crises alimentaires et nutritionnelles.",
+"description": {
+                "level1": "Les mesures de prévention et de réponse des programmes de protection sociale sont mises en oeuvre de façon disjointe, sans coordination avec la SAN = 1",
+                "level2": "La mise en oeuvre des mesures de prévention et de réponse est sporadique, avec moins de 30% des actions coordonnées avec la SAN = 2",
+                "level3": "Environ 30% à 50% des mesures de prévention et de réponse des programmes de protection sociale sont synchronisées avec la SAN = 3",
+                "level4": "Environ 50% à 80% des mesures de prévention et de réponse des programmes protection sociale sont synchronisées avec la SAN = 4",
+                "level5": "La synchronisation des mesures de prévention et de réponse des programmes protection sociale avec la SAN dépasse 80% des interventions planifiées = 5"
+              }
+            }
+          ]
+        },
+        {
+          "title": "2.4. Couverture et capacité de prévention et de réponse des programmes agricoles",
+          "questions": [
+            {
+              "index": "241",
+              "text": "Les programmes agricoles prévoient-ils des mesures de prévention et d'inclusion économique des individus en situation de crise alimentaire ?",
+              "tooltip" : "Examine si les programmes agricoles intègrent des mécanismes spécifiques pour soutenir les personnes en situation de crise alimentaire, comme des aides à la production ou des transferts pour garantir la sécurité alimentaire.",
+"description": {
+                "level1": "Aucune disposition spécifique n'est envisagée par les programmes agricoles pour soutenir les individus en insécurité alimentaire = 1",
+                "level2": "Les programmes intègrent des mesures de prévention mais la couverture ne dépasse pas 30% des individus en insécurité alimentaire = 2",
+                "level3": "Les programmes intègrent des mesures de prévention et d'inclusion économique qui touchent 30% - 50% des individus en insécurité alimentaire = 3",
+                "level4": "Les programmes intègrent des mesures de prévention et d'inclusion économique qui touchent 50% -80% des individus en insécurité alimentaire = 4",
+                "level5": "Les programmes intègrent des mesures de prévention et d'inclusion économique qui touchent plus de 80% des individus en insécurité alimentaire = 5"
+              }
+            },
+            {
+              "index": "242",
+              "text": "Des mesures de soutien visant à améliorer le fonctionnement du marché et le pouvoir d'achat des personnes pauvres et vulnérables sont appliquées ?",
+              "tooltip" : "Évalue si des mesures spécifiques sont mises en place pour améliorer le fonctionnement du marché, telles que la régulation des prix, l'amélioration de l'approvisionnement en biens essentiels ou la réduction des barrières commerciales, et pour augmenter le pouvoir d'achat des personnes pauvres et vulnérables, par exemple à travers des achats locaux, des transferts monétaires, des emplois ciblés, des subventions ciblées, etc.",
+"description": {
+                "level1": "Les analyses de marché n'ont pas fourni de solutions pour soutenir le fonctionnement du marché et le pouvoir d'achat des populations pauvres et vulnérables = 1",
+                "level2": "Les analyses de marché ont généré des solutions de soutien mais elles sont faiblement exécutées = 2",
+                "level3": "Parmi les solutions proposées par les analyses de marché, seules les mesures à court terme sont partiellement mises en œuvre = 3",
+                "level4": "Les solutions de soutien au marché et au pouvoir d'achat des personnes pauvres et vulnérables, à la fois à court et à long terme, sont partiellement réalisées = 4",
+                "level5": "Les solutions de soutien au marché et au pouvoir d'achat des personnes pauvres et vulnérables, à la fois à court et à long terme, sont intégralement réalisées = 5"
+              }
+            },
+            {
+              "index": "243",
+              "text": "Les programmes agricoles prévoient-ils des mesures de réponse en faveur des individus en situation de crise alimentaire ?",
+              "tooltip" : "Vérifie si les programmes agricoles incluent des mesures de réponse spécifiques pour soutenir les individus en situation de crise alimentaire, telles que la distribution de semences, de matériel agricole, ou des formations en techniques agricoles, afin de renforcer la sécurité alimentaire et la résilience des communautés affectées par la crise.",
+"description": {
+                "level1": "Aucune disposition spécifique n'est envisagée par les programmes agricoles pour soutenir de manière spécifique les individus en insécurité alimentaire = 1",
+                "level2": "Les programmes intègrent des actions de réponse mais qui ne dépassent pas 30% des individus en insécurité alimentaire = 2",
+                "level3": "Les programmes intègrent des actions de réponse qui touchent 30% - 50% des individus en insécurité alimentaire = 3",
+                "level4": "Les programmes intègrent des actions réponse qui touchent 50% - 80% des individus en insécurité alimentaire = 4",
+                "level5": "Les programmes intègrent des actions de réponse qui touchent plus de 80% des individus en insécurité alimentaire = 5"
+              }
+            },
+            {
+              "index": "244",
+              "text": "Les programmes agricoles recourent-ils aux outils communs de ciblage de la sécurité alimentaire et nutritionnelle et/ou de la protection sociale ?",
+              "tooltip" : "Évalue si les programmes agricoles utilisent des outils communs de ciblage, tels que des bases de données partagées, un registre social unique, des critères consensuels ou des méthodologies conjointes, pour identifier et enregistrer les populations les plus vulnérables en matière de sécurité alimentaire et nutritionnelle, afin de garantir que les interventions agricoles atteignent efficacement les individus et ménages les plus en difficulté.",
+"description": {
+                "level1": "Les programmes agricoles n'utilisent aucun mécanisme de ciblage des populations vulnérables du PNR ou de protection sociale = 1",
+                "level2": "Une utilisation limitée ou sporadique des mécanismes de ciblage est observée, mais elle couvre moins de 30% des population en crise alimentaire et nutritionnelle = 2",
+                "level3": "Les programmes agricoles font un usage régulier des mécanismes de ciblage, mais la couverture est entre 30% à 50% des populations en crise = 3",
+                "level4": "Les mécanismes de ciblage du PNR et/ou de la protection sociale sont intégrés dans les programmes agricoles, touchant entre 50% et 80% des bénéficiaires = 4",
+                "level5": "Les programmes agricoles optimisent l'utilisation des mécanismes de ciblage de la SAN et de la protection sociale, assurant une couverture supérieure à 80% = 5"
+              }
+            },
+            {
+              "index": "245",
+              "text": "Les programmes agricoles font-ils usage des systèmes de distribution de la protection sociale ou de la SAN en cas de nécessité ?",
+              "tooltip" : "Évalue si les programmes agricoles s'appuient sur les systèmes de distribution existants de la protection sociale ou de la SAN pour prévenir les crises ou fournir une aide rapide en cas de besoin, par exemple en utiliser l'utilisation du RNU.",
+"description": {
+                "level1": "Les programmes agricoles n'utilisent aucun mécanisme de distribution de la sécurité alimentaire et nutritionnelle ni de protection sociale = 1",
+                "level2": "Une utilisation limitée ou irrégulière des mécanismes de distribution est observée, couvrant moins de 30% des zones en crise = 2",
+                "level3": "Les programmes agricoles font un usage régulier des mécanismes de distribution, touchant 30% - 50% des zones en crise = 3",
+                "level4": "Les mécanismes de distribution de la SAN et de la protection sociale sont intégrés aux programmes agricoles, touchant 50% - 80% des zones en crise = 4",
+                "level5": "Les programmes agricoles optimisent l'utilisation des mécanismes de distribution existants, assurant une couverture de plus de 80% des zones en crise = 5"
+              }
+            },
+            {
+              "index": "246",
+              "text": "Les mesures de prévention et de réponse des programmes agricoles sont elles mises en oeuvre de manière synchronisée avec la SAN ?",
+              "tooltip" : "Évalue si les mesures de prévention et de réponse des programmes agricoles sont mises en œuvre de manière coordonnée et synchronisée avec les autres secteurs (SAN, élevage, protection sociale, nutrition, etc.) afin d'assurer une prévention et une gestion efficace des crises alimentaires et nutritionnelles.",
+"description": {
+                "level1": "Les mesures de prévention et de réponse des programmes agricoles sont mises en oeuvre de façon disjointe, sans coordination aven la SAN = 1",
+                "level2": "La mise en oeuvre des mesures de prévention et de réponse est sporadique, couvrant moins de 30% des zones en crise alimentaire et nutritionnelle = 2",
+                "level3": "La mise en oeuvre des mesures de prévention et de réponse est systématique, et couvre 30% à 50% des zones en crise alimentaire et nutritionnelle = 3",
+                "level4": "La mise en oeuvre des mesures de prévention et de réponse est systématique, et couvre 50% à 80% des zones en crise alimentaire et nutritionnelle = 4",
+                "level5": "La mise en oeuvre des mesures de prévention et de réponse est systématique, et couvre plus de 80% des zones en crise alimentaire et nutritionnelle = 5"
+              }
+            }
+          ]
+        },
+        {
+          "title": "2.5. Couverture et capacité de prévention et de réponse des programmes d'élevage",
+          "questions": [
+            {
+              "index": "251",
+              "text": "Les programmes d'élevage prévoient-ils des mesures de prévention et d'inclusion économique des individus en situation de crise alimentaire ?",
+              "tooltip" : "Évalue si les programmes d'élevage intègrent des mesures de prévention et de soutien économique ciblant spécifiquement les populations en situation de crise alimentaire et nutritionnelle.",
+"description": {
+                "level1": "Aucune disposition spécifique n'est envisagée par les programmes d'élevage pour soutenir de manière spécifiques les individus en insécurité alimentaire = 1",
+                "level2": "Les programmes intègrent des mesures de prévention mais la couverture ne dépasse pas 30% des individus en insécurité alimentaire = 2",
+                "level3": "Les programmes intègrent des mesures de prévention et d'inclusion économique qui touchent 30% - 50% des individus en insécurité alimentaire = 3",
+                "level4": "Les programmes intègrent des mesures de prévention et d'inclusion économique qui touchent 50% -80% des individus en insécurité alimentaire = 4",
+                "level5": "Les programmes intègrent des mesures de prévention et d'inclusion économique qui touchent plus de 80% des individus en insécurité alimentaire = 5"
+              }
+            },
+            {
+              "index": "252",
+              "text": "Des mesures de soutien visant à améliorer le fonctionnement du marché et le pouvoir d'achat des personnes pauvres et vulnérables sont appliquées ?",
+              "tooltip" : "Évalue si des mesures spécifiques sont mises en place pour améliorer le fonctionnement du marché, telles que la régulation des prix, l'amélioration de l'approvisionnement en biens essentiels ou la réduction des barrières commerciales, et pour augmenter le pouvoir d'achat des personnes pauvres et vulnérables, par exemple à travers le déstockage, des transferts monétaires, des emplois ciblés, des subventions ciblées, etc.",
+"description": {
+                "level1": "Les analyses de marché n'ont pas fournis de solutions pour soutenir le fonctionnement du marché et le pouvoir d'achat des poluations pauvres et vulnérables = 1",
+                "level2": "Les analyses de marché ont généré des solutions de soutien mais elles sont faiblement exécutées = 2",
+                "level3": "Parmi les solutions proposées par les analyses de marché, seules les mesures à court terme sont partiellement mises en œuvre = 3",
+                "level4": "Les solutions de soutien au marché et au pouvoir d'achat des personnes pauvres et vulnérables, à la fois à court et à long terme, sont partiellement réalisées = 4",
+                "level5": "Les solutions de soutien au marché et au pouvoir d'achat des personnes pauvres et vulnérables, à la fois à court et à long terme, sont intégralement réalisées = 5"
+              }
+            },
+            {
+              "index": "253",
+              "text": "Les programmes d'élevage prévoient-ils des mesures de réponse en faveur des individus en situation de crise alimentaire ?",
+              "tooltip" : "Évalue si les programmes d'élevage prévoient des mesures spécifiques pour répondre aux besoins des individus en situation de crise alimentaire, telles que la fourniture d'aliment bétail, des soins vétérinaires d'urgence, la distribution de noyaux reproducteurs, afin de protéger les moyens de subsistance et renforcer la résilience des populations en situation de crise alimentaire.",
+"description": {
+                "level1": "Aucune disposition spécifique n'est envisagée par les programmes d'élevage pour soutenir de manière spécifiques les individus en insécurité alimentaire = 1",
+                "level2": "Les programmes d'élevage intègrent des actions de réponse mais ne dépassent pas 30% des individus en insécurité alimentaire = 2",
+                "level3": "Les programmes d'élevage intègrent des actions de réponse qui touchent 30% - 50% des individus en insécurité alimentaire = 3",
+                "level4": "Les programmes d'élevage intègrent des actions réponse qui touchent 50% - 80% des individus en insécurité alimentaire = 4",
+                "level5": "Les programmes d'élevage intègrent des actions de réponse qui touchent plus de 80% des individus en insécurité alimentaire = 5"
+              }
+            },
+            {
+              "index": "254",
+              "text": "Les programmes d'élevage recourent-ils aux outils communs de ciblage de la sécurité alimentaire et nutritionnelle et/ou de la protection sociale ?",
+              "tooltip" : "Évalue si les programmes d'élevage utilisent des outils de ciblage communs, tels que des bases de données partagées, des critères de sélection harmonisés ou des méthodologies conjointes, pour identifier les populations vulnérables en matière de sécurité alimentaire et nutritionnelle, afin de garantir que les interventions en élevage atteignent efficacement les individus et ménages les plus à risque.",
+"description": {
+                "level1": "Les programmes d'élevage n'utilisent aucun mécanisme de ciblage des populations vulnérables du PNR ou de protection sociale = 1",
+                "level2": "Une utilisation limitée ou sporadique des mécanismes de ciblage est observée, mais elle couvre moins de 30% des zones en crise = 2",
+                "level3": "Les programmes d'élevage font un usage régulier des mécanismes de ciblage, mais la couverture est entre 30% à 50% des zones en crise = 3",
+                "level4": "Les mécanismes de ciblage du PNR et/ou de la protection sociale sont intégrés dans les programmes d'élevage, touchant entre 50% et 80% des zones en crise = 4",
+                "level5": "Les programmes d'élevage optimisent l'utilisation des mécanismes de ciblage de la SAN et de la protection sociale, couvrant plus de 80% des zones en crise = 5"
+              }
+            },
+            {
+              "index": "255",
+              "text": "Les programmes d'élevage font-ils usage des systèmes de distribution de la protection sociale ou de la SAN en cas de nécessité ?",
+              "tooltip" : "Évalue si les programmes d'élevage s'appuient sur les systèmes de distribution existants de la protection sociale ou de la SAN pour prévenir les crises ou fournir une aide rapide en cas de besoin, par exemple l'utilisation du RNU.",
+"description": {
+                "level1": "Les programmes d'élevage n'utilisent aucun mécanisme de distribution de la sécurité alimentaire et nutritionnelle ni de protection sociale = 1",
+                "level2": "Une utilisation limitée ou sporadique des mécanismes de distribution est observée, couvrant moins de 30% des zones en crise = 2",
+                "level3": "Les programmes d'élevage font un usage régulier des mécanismes de distribution, touchant 30% - 50% des des zones en crise = 3",
+                "level4": "Les mécanismes de distribution de la SAN et de la protection sociale sont intégrés aux programmes d'élevage, touchant 50% - 80% des des zones en crise = 4",
+                "level5": "Les programmes d'élevage optimisent l'utilisation des mécanismes de distribution existants, assurant une couverture de plus de 80% des des zones en crise = 5"
+              }
+            },
+            {
+              "index": "256",
+              "text": "Les mesures de prévention et de réponse des programmes d'élevage sont elles mises en oeuvre de manière synchronisée avec la SAN ?",
+              "tooltip" : "Évalue si les mesures de prévention et de réponse des programmes d'élevage sont mises en œuvre de manière coordonnée et synchronisée avec les autres secteurs (SAN, agriculture, protection sociale, nutrition, etc.) afin d'assurer une prévention et un gestion efficace des crises alimentaires et nutritionnelles.",
+"description": {
+                "level1": "Les mesures de prévention et de réponse des programmes agricoles sont mises en oeuvre de façon disjointe, sans coordination aven la SAN = 1",
+                "level2": "La mise en oeuvre des mesures de prévention et de réponse est sporadique, couvrant moins de 30% des zones en crise alimentaire et nutritionnelle = 2",
+                "level3": "La mise en oeuvre des mesures de prévention et de réponse est systématique, et couvre 30% à 50% des zones en crise alimentaire et nutritionnelle = 3",
+                "level4": "La mise en oeuvre des mesures de prévention et de réponse est systématique, et couvre 50% à 80% des zones en crise alimentaire et nutritionnelle = 4",
+                "level5": "La mise en oeuvre des mesures de prévention et de réponse est systématique, et couvre plus de 80% des zones en crise alimentaire et nutritionnelle = 5"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "3 : Financement de la sécurité alimentaire et nutritionnelle",
+      "subsections": [
+        {
+          "title": "3.1 Politique et instruments de financement de la sécurité alimentaire et nutritionnelle",
+          "questions": [
+            {
+              "index": "311",
+              "text": "Le Gouvernement dispose t'il de politique, loi et/ou de stratégie nationale de financement de la réponse aux crises alimentaires et nutritionnelles ?",
+              "tooltip" : "Évalue l'existence de politiques, de lois ou de stratégies nationales spécifiques qui prévoient des mécanismes de financement pour prévenir et répondre aux crises alimentaires et nutritionnelles.",
+"description": {
+                "level1": "Aucune politique, loi ou stratégie nationale de financement de la prévention ou de la gestion des crises alimentaires n'est établie = 1",
+                "level2": "Les documents politiques de prévention et réponse aux crises alimentaires et nutritionnelles sont en cours d'élaboration, ou ne sont pas à jour = 2",
+                "level3": "Une stratégie de financement des risques de crises alimentaires existe mais n'est pas soutenue par une loi ni par des instruments financiers = 3",
+                "level4": "Il existe une politique de financement des risques liés aux crises alimentaires, soutenue par des lois et instruments financiers peu adaptés = 4",
+                "level5": "Une politique de financement des risques de crises alimentaires existent; elle est soutenue par une législation et des instruments financiers adéquats = 5"
+              }
+            },
+            {
+              "index": "312",
+              "text": "La responsabilité du financement des différents secteurs pour répondre aux crises alimentaires est claire pour tous les acteurs ?",
+              "tooltip" : "Évalue si la répartition des responsabilités financières entre les différents secteurs (comme l'agriculture, la santé, la protection sociale, etc.) pour prévenir et répondre aux crises alimentaires est clairement définie et comprise par tous les acteurs impliqués, afin d'assurer une coordination efficace et une allocation adéquate des ressources à tout moment.",
+"description": {
+                "level1": "Aucune spécification sur les responsabilités quant au financement des différents secteurs = 1",
+                "level2": "Les responsabilités entre les différents secteurs ne sont pas explicites et ne sont pas coordonnées = 2",
+                "level3": "Les responsabilités sont bien définies, cependant, certains secteurs manquent d'instruments financiers et d'allocation budgétaire = 3",
+                "level4": "Les responsabilités sont bien définies, cependant, malgré des budgets alloués, les ressources demeurent modestes dans tous les secteurs = 4",
+                "level5": "Les responsabilités sont bien définies et tous les secteurs allouent des ressources conséquentes = 5"
+              }
+            },
+            {
+              "index": "313",
+              "text": "Est-ce que le gouvernement effectue une analyse et une estimation des coûts potentiels associés à une crise alimentaire et nutritionnelle ?",
+              "tooltip" : "Évalue si le gouvernement effectue des évaluations détaillées des coûts liés à la prévention et la gestion des crises alimentaires et nutritionnelles, en tenant compte des dépenses nécessaires pour l'aide humanitaire, le soutien aux secteurs agricoles, les soins de santé, les programmes de nutrition, et d'autres interventions essentielles.",
+"description": {
+                "level1": "Non, le gouvernement ne réalise aucune analyse ni estimation des coûts potentiels liés à une crise alimentaire et nutritionnelle = 1",
+                "level2": "Le gouvernement entreprend une analyse basée sur une série historique, mais elle est non consensuelle, et la couverture des zones à risque est faible = 2",
+                "level3": "Le Gouvernement conduit une analyse périodique avec une couverture géographique élargie, mais le consensus est partiel = 3",
+                "level4": "Le Gouvernement conduit une analyse périodique couvrant toutes les zones à risque avec un consensus partiel = 4",
+                "level5": "Le Gouvernement conduit une analyse proactive, régulière, et consensuelle. Ces analyses couvrent l'ensemble des zones à risque = 5"
+              }
+            },
+            {
+              "index": "314",
+              "text": "Existe-t-il un mécanisme conjoint de gestion des ressources financières dans le domaine de la sécurité alimentaire et nutritionnelle ?",
+              "tooltip" : "Évalue si un mécanisme commun existe pour la gestion des ressources financières dans le domaine de la sécurité alimentaire et nutritionnelle, permettant à différents acteurs (gouvernement, ONG, agences internationales) de coordonner leurs efforts et de garantir une allocation efficace des fonds pour répondre aux crises alimentaires et nutritionnelles.",
+"description": {
+                "level1": "Pas de coordination des ressources financières, pas de ligne budgétaire dédiée et pas de fond conjoint/commun SAN = 1",
+                "level2": "La ligne budgétaire dédiée et les fonds communs existent. Cependant, ils captent moins de 30% des ressources allouées au secteur SAN = 2",
+                "level3": "Il existe une ligne budgétaire dédiée et des fonds communs mais ceux-ci captent 30% à 50% des ressources allouées au secteur SAN = 3",
+                "level4": "Il existe une ligne budgétaire dédiée et des fonds communs mais ceux-ci captent 50% à 80% des ressources allouées au secteur SAN = 4",
+                "level5": "Les instruments sont fonctionnels et captent plus de 80% des ressources = 5"
+              }
+            }
+          ]
+        },
+        {
+          "title": "3.2 Types et disponibilité de financement de la sécurité alimentaire et nutritionnelle (SAN)",
+          "questions": [
+            {
+              "index": "321",
+              "text": "Quelles sont les sources de financement disponibles pour soutenir la production d'information en matière alimentaire et nutritionnelle ?",
+              "tooltip" : "Identifie les différentes sources de financement disponibles pour soutenir la collecte d'information, l'analyse et la diffusion d'informations relatives à la sécurité alimentaire et nutritionnelle, telles que les fonds nationaux, les financements des partenaires techniques et financiers. La situation idéale étant un financement souverain conséquent.",
+"description": {
+                "level1": "Le financement de la production d'information SAN dépend exclusivement des contributions des partenaires internationaux = 1",
+                "level2": "La contribution du gouvernement sur le financement de la production d'information SAN ne dépasse pas 30% = 2",
+                "level3": "Le gouvernement contribue pour 30% - 50% du financement de la production d'information SAN = 3",
+                "level4": "Le gouvernement contribue pour 50% - 80% du financement de la production d'information SAN = 4",
+                "level5": "La contribution financière du gouvernement sur la production d'information SAN dépasse 80% des besoins = 5"
+              }
+            },
+            {
+              "index": "322",
+              "text": "Quelles sont les sources de financement disponibles pour soutenir les interventions d'urgence en matière alimentaire et nutritionnelle ?",
+              "tooltip" : "Identifie les sources de financement disponibles pour soutenir les interventions d'urgence en matière alimentaire et nutritionnelle, telles que les mécanismes nationaux (gouvernementaux), et les financements internationaux des partenaires techniques et financiers.",
+"description": {
+                "level1": "Le financement des interventions d'urgence SAN dépend exclusivement des contributions des partenaires internationaux = 1",
+                "level2": "La contribution du gouvernement sur le financement des interventions d'urgence SAN ne dépasse pas 30% = 2",
+                "level3": "Le gouvernement contribue pour 30% - 50% du financement des interventions d'urgence SAN = 3",
+                "level4": "Le gouvernement contribue pour 50% - 80% du financement des interventions d'urgence SAN = 4",
+                "level5": "La contribution du gouvernement sur le financement des interventions d'urgence SAN dépasse 80% des besoins de financement = 5"
+              }
+            },
+            {
+              "index": "323",
+              "text": "Les ressources financières sont-elles en place pour permettre une prévention et une réponse à temps ?",
+              "tooltip" : "Évalue si les ressources financières nécessaires sont disponibles et allouées en amont pour permettre une prévention efficace et une réponse rapide en cas de crise alimentaire et nutritionnelle, assurant ainsi une intervention en temps utile avant que la situation ne se détériore davantage.",
+"description": {
+                "level1": "Les ressources financières ne sont pas prépositionnées et dépendent entièrement de réaffection budgétaire et l'aide extérieure = 1",
+                "level2": "Les fonds prépositionnés, bien qu'existant, couvrent moins de 30% des besoins financiers et sont accessibles après une période de six mois = 2",
+                "level3": "Les fonds prépositionnés couvrent 30% à 50% des besoins financiers et deviennent accessibles dans une fourchette de trois à six mois = 3",
+                "level4": "Les fonds prépositionnés couvrent 50% à 80% des besoins financiers et deviennent accessibles dans une fourchette de trois à six mois = 4",
+                "level5": "Les fonds prépositionnés couvrent plus de 80% des besoins financiers et deviennent accessibles en moins de trois mois = 5"
+              }
+            },
+            {
+              "index": "324",
+              "text": "Les interventions sectorielles (agriculture, élevage, génération de revenus, ...) sont-elles flexibles pour appuyer les réponses aux crises alimentaires ?",
+              "tooltip" : "Évalue si les interventions sectorielles, telles que celles liées à l'agriculture, à l'élevage, sont suffisamment flexibles pour répondre rapidement aux crises alimentaires. Cela peut se faire par une augmentation du volume d'appui par bénéficiaire, l'introduction de nouvelles activités en réponse aux crises, et/ou le ciblage de nouveaux bénéficiaires en situation de crise alimentaire.",
+"description": {
+                "level1": "Aucune flexibilité des interventions sectorielles pour contribuer au financement de la réponse aux crises alimentaires et nutritionnelle = 1",
+                "level2": "Un nombre limité d'interventions sectorielles sont flexibles et allouent moins de 5% de leur budget; cette pratique est non institutionnalisée = 2",
+                "level3": "Certaines interventions sectorielles sont flexibles et allouent moins de 5% de leur budget; institutionnalisation en cours = 3",
+                "level4": "La plupart des interventions sectorielles sont flexibles et allouent plus 5% de leur budget à la réponse d'urgence SAN; institutionnalisée mais peu appliquée = 4",
+                "level5": "La flexibilité des interventions sectorielles est institutionnalisée; celles-ci allouent plus 5% de leur budget à la réponse d'urgence SAN = 5"
+              }
+            },
+            {
+              "index": "325",
+              "text": "Les interventions sectorielles (agriculture, élevage, génération de revenus, ...) financent-elles la réponse SAN à long terme en faveur des populations en crise ?",
+              "tooltip" : "Évalue si les interventions dans des secteurs comme l'agriculture et l'élevage intègrent des solutions durables pour faire face aux crises alimentaires et nutritionnelles. Ces solutions peuvent être incorporées dès la conception des projets, tout en assurant une flexibilité suffisante pour s'adapter aux enjeux à long terme. Cela inclut notamment l'ajustement des approches ou la réorientation des ressources pour répondre efficacement aux besoins évolutifs.",
+"description": {
+                "level1": "Aucune flexibilité des interventions sectorielles pour contribuer au financement de la réponse à long terme = 1",
+                "level2": "Un nombre limité d'interventions sectorielles sont flexibles et allouent moins de 5% de leur budget; cette pratique est non institutionnalisée = 2",
+                "level3": "Certaines interventions sectorielles sont flexibles et allouent moins de 5% de leur budget; institutionnalisation en cours = 3",
+                "level4": "La plupart des interventions sectorielles sont flexibles et allouent plus 5% de leur budget à la réponse long terme; institutionnalisée mais peu appliquée = 4",
+                "level5": "La flexibilité des interventions sectorielles est institutionnalisée; celles-ci allouent plus 5% de leur budget à la réponse long terme = 5"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "4 : Dispositif de gouvernance pour la prévention et de gestion des crises alimentaires et nutritionnelles, influence et redevabilité",
+      "subsections": [
+        {
+          "title": "4.1 Dispositif national et cadre politique de prévention et de gestion des crises alimentaires ",
+          "questions": [
+            {
+              "index": "411",
+              "text": "Existe t'il un dispositif national de prévention et de gestion des crises alimentaires fonctionnel ?",
+              "tooltip" : "Évalue si un dispositif national de prévention et de gestion des crises alimentaires est en place et fonctionne de manière efficace, incluant des mécanismes de surveillance, des plans d'intervention d'urgence et des ressources dédiées pour répondre rapidement aux situations de crise alimentaire à l'échelle nationale.",
+"description": {
+                "level1": "Il n'existe pas de dispostif national de prévention et de gestion des crises alimentaires et nutritionnelles = 1",
+                "level2": "Un dispositif national de prévention et de gestion des crises existe mais d'autres dispositifs fonctionnent de façon parallèle = 2",
+                "level3": "Le dispostif national de prévention et de gestion des crises fonctionne de manière irrégulière et ne mobilise pas tous les acteurs SAN = 3",
+                "level4": "Le dispostif national de prévention et de gestion des crises fonctionne de manière régulière et regroupe la plupart des acteurs = 4",
+                "level5": "Le dispostif national de prévention et de gestion des crises fonctionne de manière régulière et regroupe l'ensemble des acteurs = 5"
+              }
+            },
+            {
+              "index": "412",
+              "text": "Le dispositif national a-t-il des procédures établies pour la communication et la diffusion des résultats des analyses ainsi que des réponses ?",
+              "tooltip" : "Évalue si le dispositif national de gestion des crises alimentaires dispose de procédures claires et établies (calendrier, plateforme, responsable) pour la communication et la diffusion des résultats des analyses de la situation, ainsi que pour les réponses mises en place, afin de garantir une information fluide et une coordination efficace entre les différents acteurs (gouvernement, ONG, agences internationales, etc.).",
+"description": {
+                "level1": "Auncune procédure de communication des résultats des analyses n'est en place = 1",
+                "level2": "Le pays dispose de procédures de diffusion des résultats des analyses SAN mais celles-ci ne sont sont pas appliquées ou l'information n'est pas diffusée = 2",
+                "level3": "Des procédures d'information sont établies mais il existe une diffusion d'informations contradictoires, impliquant plusieurs acteurs = 3",
+                "level4": "La diffusion d'informations contradictoires est limitée à quelques cas isolés, la majorité des acteurs respectant les procédures établies = 4",
+                "level5": "Les procédures d'information SAN établies sont respectées par tous les acteurs qui reprennent la communication officielle de l'Etat = 5"
+              }
+            },
+            {
+              "index": "413",
+              "text": "Les recommandations du dispositif de prévention et de gestion sont-elles politiquement approuvées et effectivement mises en œuvre ?",
+              "tooltip" : "Évalue si les recommandations formulées par le dispositif national de prévention et de gestion des crises alimentaires, après avoir été validées par les autorités politiques, sont réellement traduites en actions concrètes et mises en œuvre de manière effective par les différents acteurs (gouvernement, ONG, agences internationales) pour prévenir et répondre aux crises alimentaires de manière appropriée et en temps voulu.",
+"description": {
+                "level1": "Les recommandations du dispostif de prévention et de gestion ne sont pas officellement approuvées par les décideurs politiques = 1",
+                "level2": "Les recommandations sont politiquement validées, mais ne sont pas mises en oeuvre par le gouvernement = 2",
+                "level3": "Les recommandations sont politiquement validées, mais le gouvernement ne joue pas un rôle prépondérant dans la mise en œuvre = 3",
+                "level4": "Les recommandations sont politiquement approuvées, et le gouvernement met en œuvre la majorité des actions décidées (50% à 80%) = 4",
+                "level5": "Les recommandations sont politiquement approuvées, et le gouvernement assure le lead et met en œuvre toutes les actions décidées (> 80%) = 5"
+              }
+            },
+            {
+              "index": "414",
+              "text": "Les actions de prévention des crises alimentaires et nutritionnelles sont-elles intégrées dans les stratégies sectorielles (Agric, élevage, emploi, nutrition) ?",
+              "tooltip" : "Évalue si les actions de prévention des crises alimentaires et nutritionnelles, telles que l'amélioration des techniques agricoles, la diversification des sources de revenus, l'accès à une nutrition adéquate et la gestion durable du bétail, sont spécifiquement intégrées dans les stratégies des secteurs comme l'agriculture, l'élevage, l'emploi et la nutrition. Cela permettrait de créer des synergies et d'assurer une réponse cohérente et proactive pour prévenir les crises et renforcer la résilience des populations.",
+"description": {
+                "level1": "Aucune mesure de prévention des crises n'est intégrée dans les stratégies sectorielles de prévention et gestion des crises = 1",
+                "level2": "Des mesures de prévention des crises sont incluses dans certaines stratégies sectorielles, mais avec une faible cohérence et mise en œuvre = 2",
+                "level3": "La prévention des crises est intégrée dans certaines stratégies sectorielles, avec une mise en œuvre couvrant entre 30% et 50% des zones à risque = 3",
+                "level4": "La prévention des crises est intégrée dans toutes les stratégies sectorielles ciblées, mises en oeuvre dans 50% à 80% des zones à risque = 4",
+                "level5": "La prévention des crises est intégrée dans toutes les stratégies sectorielles, couvrant plus de 80% des zones à risque = 5"
+              }
+            },
+            {
+              "index": "415",
+              "text": "La gestion des crises alimentaires et nutritionnelles est-elle intégrée dans les stratégies sectorielles du pays ?",
+              "tooltip" : "Évalue si la gestion des crises alimentaires et nutritionnelles fait partie intégrante des stratégies des différents secteurs du pays, comme l'agriculture, la santé, l'emploi, la nutrition et l'élevage, afin d'assurer une approche coordonnée et holistique pour prévenir et répondre efficacement aux crises alimentaires et nutritionnelles.",
+"description": {
+                "level1": "Aucune mesure de prévention nutritionnelle n'est intégrée dans les politiques ou cadre stratégique de prévention et gestion des crises = 1",
+                "level2": "Des mesures de prévention et de gestion des crises sont incluses dans certaines stratégies sectorielles, mais avec une faible cohérence et mise en œuvre = 2",
+                "level3": "La gestion des crises est intégrée dans certaines stratégies sectorielles, avec une mise en œuvre couvrant entre 30% et 50% des zones à risque = 3",
+                "level4": "La gestion des crises alimentaires et nutritionnelles, mise en oeuvre dans 50% à 80% des zones à risque = 4",
+                "level5": "Toutes les stratégies sectorielles ciblées incluent la gestion des crises alimentaires et nutritionnelles, mise en oeuvre dans 50% à 80% des zones à risque = 5"
+              }
+            }
+          ]
+        },
+        {
+          "title": "4.2 Coordination et concertation pour répondre aux crises alimentaires et nutritionnelles",
+          "questions": [
+            {
+              "index": "421",
+              "text": "Les concertations du dispositif de prévention et de gestion aboutissent elles à un consensus en matière de paquets de réponse aux crises alimentaires ?",
+              "tooltip" : "La question cherche à savoir si les discussions et collaborations entre les différents acteurs du dispositif de prévention et de gestion des crises alimentaires (gouvernement, ONG, agences internationales, etc.) mènent à un accord commun sur les interventions à mettre en place (quantité, valeur, durée et période) pour chaque type de bénéficiaires, afin de garantir une réponse optimale qui répond aux besoins des personnes affectées. Cela ne doit pas être basé sur les ressources disponibles mais les besoins.",
+"description": {
+                "level1": "Des concertations autour des options de prévention et de réponse aux crises ne sont pas tenues pour échanger sur les options et modalités = 1",
+                "level2": "Des concertations autour de la production de l'information et de la réponse sont tenues n'aboutissent pas à la définition de paquets de réponse consensuels = 2",
+                "level3": "Un consensus existe quant au choix des outils de prévention et de réponse aux crises, mais les paquets de réponse \"minimum\" restent indéfinis. = 3",
+                "level4": "Un consensus est établi autour du choix des outils de prévention et de réponse aux crises, mais certains paquets de réponse ne sont pas approuvés = 4",
+                "level5": "Un consensus est établi autour du choix des outils de prévention et de réponse aux crises, et tous les paquets de réponse sont élaborés de manière consensuelle = 5"
+              }
+            },
+            {
+              "index": "422",
+              "text": "Existe-t-il un plan unique ou plusieurs plans, initatives et programmes pour répondre aux crises alimentaires ?",
+              "tooltip" : "Vérifie s'il existe un seul plan global consolidé et consensuel ou plusieurs plusieurs plans en réponse aux crises alimentaires, initiatives et programmes distincts, mis en place par différents acteurs (gouvernement, ONG, agences internationales, etc.), pour répondre aux crises alimentaires, et comment ces efforts sont coordonnés pour garantir une réponse efficace et bien structurée.",
+"description": {
+                "level1": "Le pays ne dispose ni de plan de réponse, ni d'initiatives, ni de programmes adéquats pour faire face aux crises alimentaires et nutritionnellee = 1",
+                "level2": "Un ou plusieurs plans de réponse, programmes sensibles aux crises ou initiatives existent, mais ils sont faiblement mis en œuvre = 2",
+                "level3": "Plusieurs plans de réponse, programmes sensibles aux crises ou initiatives co-exstent, mais ils manquent de coordination et de complémentarité = 3",
+                "level4": "Plusieurs plans de réponse, programmes sensibles aux crises ou initiatives co-exstent, couvrant la plupart des aspects nécessaires à la gestion des crises = 4",
+                "level5": "Plusieurs plans de réponse, initiatives ou programmes complémentaires existent, couvrant efficacement tous les aspects de la gestion des crises alimentaires = 5"
+              }
+            },
+            {
+              "index": "423",
+              "text": "La mise en oeuvre et la coordination de la réponse s'appuient-elles sur une cartographie des interventions régulièrement mise à jour ?",
+              "tooltip" : "Évalue si la mise en œuvre et la coordination des réponses aux crises alimentaires sont basées sur une cartographie de l'ensemble des interventions pour garantir une bonne complémentarité et synchronie de la part des acteurs.",
+"description": {
+                "level1": "Non, une cartographie des interventions sensibles à la SAN n'existe pas ou n'est pas mise à jour = 1",
+                "level2": "Une cartographie des interventions est disponible mais n'est pas utilisée pour affiner les modalités d'exécution de la réponse = 2",
+                "level3": "Une cartographie des interventions est disponible dans certaines zones mais des synergies ne sont pas développées = 3",
+                "level4": "Une cartographie des interventions est disponible dans toutes les zones et les modalités d'interventions sont partiellement ajustées = 4",
+                "level5": "Une cartographie des interventions est disponible dans toutes les zones et les modalités d'interventions sont ajustées en conséquence = 5"
+              }
+            },
+            {
+              "index": "424",
+              "text": "Est-ce qu'une méthodologie consensuelle de ciblage géographique et individuel est mise en œuvre ?",
+              "tooltip" : "Évalue si une méthode commune, acceptée par tous les acteurs impliqués, est utilisée pour cibler les zones géographiques et les individus les plus vulnérables par exemple à travers le RNU ou des enquêtes), afin de s'assurer que les ressources et les interventions arrivent efficacement aux populations les plus en besoin lors des crises alimentaires.",
+"description": {
+                "level1": "Non, il n'existe pas de méthodologie consensuelle de ciblage géographique et individuel = 1",
+                "level2": "Non, plusieurs méthodologies non consensuelles coexistent et ne sont pas utilisées pour le ciblage géographique et individuel = 2",
+                "level3": "Oui, mais elles ne distinguent pas les zones et populations chroniques et les zones et populations en crise conjoncturelles; ou ne sont pas appliquées = 3",
+                "level4": "Oui, bien qu'elle fasse la distinction entre les zones et populations en situation chroniques et conjoncturelles, elles sont appliquées par quelques secteurs = 4",
+                "level5": "Oui, elles différencient les zones et personnes en état chronique et conjoncturel. Elles sont appliquées par les programmes structurels et la réponse d'urgence = 5"
+              }
+            },
+            {
+              "index": "425",
+              "text": "Est-ce que le pays dispose de plateforme(s) consensuelle(s) de ciblage individuel ?",
+              "tooltip" : "Évalue si le pays dispose de systèmes ou plateformes de transfert partagés et approuvés de distribution par tous les acteurs concernés (gouvernement, ONG, agences humanitaires...) pour coordonner et gérer la distribution d’aide alimentaire et nutritionnelle, afin de garantir que les ressources atteignent les populations vulnérables de manière efficace, transparente et sans chevauchement d'interventions.",
+"description": {
+                "level1": "Non, il n'existe pas plateforme(s) consensuelle(s) de ciblage individuel = 1",
+                "level2": "Non, plusieurs plateformes coexistent et ne sont pas utilisés pour le ciblage individuel = 2",
+                "level3": "Oui, plusieurs plateformes coexistent et sont utilisés par les différents secteurs d'intervention avec une faible intégration = 3",
+                "level4": "Le pays dispose de plateforme(s) consensuelles(s), interconnectée(s). Cependant, elles sont utilisées pour la réponse d'urgence et la protection sociale uniquement = 4",
+                "level5": "Le pays dispose de plateforme(s) consensuelle(s), interconnectée(s). Elle(s) est (sont) utilisée(s) par tous les secteurs = 5"
+              }
+            },
+            {
+              "index": "426",
+              "text": "Est-ce que le pays dispose de plateforme(s) consensuelle(s) de distribution ?",
+              "tooltip" : "Évalue si le pays dispose de systèmes ou plateformes de transfert partagés et approuvés de distribution par tous les acteurs concernés (gouvernement, ONG, agences humanitaires...) pour coordonner et gérer la distribution d’aide alimentaire et nutritionnelle, afin de garantir que les ressources atteignent les populations vulnérables de manière efficace, transparente et sans chevauchement d'interventions.",
+"description": {
+                "level1": "Non, il n'existe pas plateforme(s) consensuelle(s) de distribution = 1",
+                "level2": "Non, plusieurs plateformes coexistent et ne sont pas utilisés pour la distribution des paquets de réponse d'urgence et structurelle = 2",
+                "level3": "Oui, plusieurs plateformes de distribution coexistent et sont utilisées par les différents secteurs d'intervention avec une faible intégration = 3",
+                "level4": "Le pays dispose de plateforme(s) consensuelles(s), interconnectée(s). Cependant, elles sont utilisées pour la réponse d'urgence et la protection sociale uniquement = 4",
+                "level5": "Le pays dispose de plateforme(s) consensuelle(s), interconnectée(s). Elle(s) est (sont) utilisée(s) par tous les secteurs = 6"
+              }
+            }
+        ]
+      },
+      {
+        "title": "4.3 Suivi évaluation et redevalibité sur la sécurité alimentaire et nutritionnelle",
+        "questions": [
+          {
+            "index": "431",
+            "text": "Existe t'il des normes / indicateurs pour la veille sur les capacités de prévention et de gestion des crises alimentaires et nutritionnelles ?",
+            "tooltip" : "Évalue si des normes et des indicateurs ont été établis pour surveiller et évaluer les capacités du pays à prévenir et gérer les crises alimentaires et nutritionnelles, afin de garantir que les systèmes de réponse sont efficaces et prêts à intervenir en cas de besoin.",
+"description": {
+              "level1": "Non, il n'existe pas de standards / indicateurs de performance sur les capacités de prévention et de gestion des crises alimentaires = 1",
+              "level2": "Il y a des normes/indicateurs de performance sur les capacités de prévention et de gestion; ils ne font pas consensus et sont peu appliqués = 2",
+              "level3": "Des normes/indicateurs de performance sur les capacités de prévention et de gestion sont établis mais leur application est limitée = 3",
+              "level4": "Des normes/indicateurs de performance ont été définis et sont largement mis en œuvre dans la plupart des aspects de la réponse d'urgence = 4",
+              "level5": "Des normes/indicateurs de performance ont été définis et sont utilisés dans toutes les actions de prévention et de gestion des crises SAN = 5"
+            }
+          },
+          {
+            "index": "432",
+            "text": "Existe t'il des normes / indicateurs pour le suivi de la performance de la réponse d'urgence ?",
+            "tooltip" : "Évalue si des normes et des indicateurs ont été définis pour évaluer la performance des réponses d'urgence aux crises alimentaires et nutritionnelles, afin de mesurer leur efficacité, leur rapidité et leur impact sur les populations vulnérables.",
+"description": {
+              "level1": "Non, il n'existe pas de standards / indicateurs de performance de la réponse d'urgence = 1",
+              "level2": "Il y a des normes/indicateurs de performance pour la réponse d'urgence, cependant, ils ne font pas consensus et sont appliqués de manière limitée = 2",
+              "level3": "Des normes/indicateurs de performance pour la réponse d'urgence sont établis mais leur application est limitée = 3",
+              "level4": "Des normes/indicateurs de performance ont été définis et sont largement mis en œuvre dans la plupart des aspects de la réponse d'urgence = 4",
+              "level5": "Des normes/indicateurs de performance ont été définis et sont mis en œuvre dans toute la réponse d'urgence = 5"
+            }
+          },
+          {
+            "index": "433",
+            "text": "Un système de veille sur les capacités de prévention et de gestion des crises est-il opérationnel et ses recommandations mises en oeuvre ?",
+            "tooltip" : "Évalue si un système de surveillance est en place pour évaluer en continu les capacités du pays à prévenir et gérer les crises alimentaires et nutritionnelles, et si les recommandations issues de ce système sont effectivement appliquées pour améliorer la préparation et la réponse en cas de crise.",
+"description": {
+              "level1": "Non, il n'existe pas de système de veille sur les capacités de prévention et de gestion des crises alimentaires et nutritionnelles = 1",
+              "level2": "Plusieurs instruments de veille sur les capacités de prévention et de gestion des crises co-existent avec une uniformisation en cours = 2",
+              "level3": "Un système de veille sur les capacités de prévention et de gestion des crises est établi mais son fonctionnement est irrégulier = 3",
+              "level4": "Un système de veille sur les capacités de prévention et de gestion est fonctionnel mais les recommandations sont peu appliquées = 4",
+              "level5": "Un système de veille sur les capacités de prévention et de gestion est fonctionnel et les recommandations sont appliquées = 5"
+            }
+          },
+          {
+            "index": "434",
+            "text": "Un système de suivi de la performance de la réponse SAN est-il opérationnel et ses recommandations mises en oeuvre ?",
+            "tooltip" : "Évalue si un système est en place pour suivre l'efficacité de la réponse en matière de sécurité alimentaire et nutritionnelle (SAN) et si les recommandations issues de ce suivi sont effectivement appliquées pour améliorer la gestion et l'impact des interventions en cas de crise.",
+"description": {
+              "level1": "Non, il n'existe pas de système de suivi de la performance de la réponse aux crises alimentaires et nutritionnelles = 1",
+              "level2": "Plusieurs instruments de suivi de la performance de la réponse aux crises alimentaires et nutritionnelles co-existent avec une uniformisation en cours = 2",
+              "level3": "Un système de suivi de la performance de la réponse SAN est établi mais son fonctionnement est irrégulier = 3",
+              "level4": "Un système de suivi de la performance de la réponse SAN est fonctionnel mais les recommandations sont peu appliquées = 4",
+              "level5": "Un système de suivi de la performance de la réponse SAN est fonctionnel et les recommandations sont appliquées = 5"
+            }
+          },
+          {
+            "index": "435",
+            "text": "Y a-t-il un cadre d'interpellation de la société civile sur la redevabilité des interventions en sécurité alimentaire et nutrition ?",
+            "tooltip" : "Évalue s'il existe un cadre formel permettant à la société civile de jouer un rôle actif dans la surveillance et la responsabilisation des interventions en matière de sécurité alimentaire et nutritionnelle, afin d'assurer que ces interventions répondent aux besoins des populations et sont menées de manière transparente et efficace.",
+"description": {
+              "level1": "Non, il n'existe pas de cadre d'interpellation de la société civile sur la redevabilité des interventions de sécurité alimentaire et nutritionnelle = 1",
+              "level2": "Plusieurs instruments de suivi de la redevabilité des interventions de sécurité alimentaire et nutritionnelle co-existent avec une uniformisation en cours = 2",
+              "level3": "Un cadre d'interpellation de la société civile sur les interventions SAN existe, mais son fonctionnement est irrégulier = 3",
+              "level4": "Un cadre d'interpellation de la société civile sur les interventions est fonctionnel mais les recommandations sont peu appliquées = 4",
+              "level5": "Un dispositif de suivi de la redevabilité des interventions est fonctionnel et les recommandations sont appliquées = 5"
+            }
+          },
+          {
+            "index": "436",
+            "text": "Un système de veille et de suivi parlementaire des politiques, lois et programmes SAN est il fonctionnel et ses recommandations mises en oeuvre ?",
+            "tooltip" : "Évalue si un système de suivi et de veille parlementaire est en place pour évaluer l'efficacité des politiques, lois et programmes de sécurité alimentaire et nutritionnelle (SAN), et si les recommandations issues de ce système sont effectivement appliquées pour améliorer la mise en œuvre de ces initiatives.",
+"description": {
+              "level1": "Non, il n'existe pas de système de suivi parlementaire sur les politiques, lois et les prgrammes sensibles à la sécurité alimentaire et nutritionnelle = 1",
+              "level2": "Plusieurs instruments de suivi parlementaire sur les politiques, lois et les programmes sensibles co-existent avec une uniformisation en cours = 2",
+              "level3": "Un système de suivi parlementaire sur les politiques, lois et programmes est établi mais son fonctionnement est irrégulier = 3",
+              "level4": "Un système de suivi parlementaire sur les politiques, lois et programmes est fonctionnel mais les recommandations sont peu appliquées = 4",
+              "level5": "Un système de suivi parlementaire sur les politiques, lois et programmes est fonctionnel et les recommandations sont appliquées = 5"
+            }
+          }
+      ]
+    }
+    ]
+  }
+]

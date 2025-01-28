@@ -1,0 +1,469 @@
+.btn-white {
+  background: #c7c149 0% 0% no-repeat padding-box !important;
+  color: #fff !important;
+  font: normal normal bold 14px/16px Lato !important;
+}
+
+.no-gutters h3 {
+  font: normal normal bold 28px/42px Lato !important;
+  letter-spacing: 0px !important;
+  color: #c7c149 !important;
+  opacity: 1 !important;
+  margin-bottom: 0px !important;
+}
+
+.content date {
+  font: normal normal 900 32px/40px Lato !important;
+  letter-spacing: 0px !important;
+  color: #243d54 !important;
+  opacity: 1 !important;
+}
+
+.container {
+  width: 90%;       /* Adjust the width as necessary */
+  margin: 0 auto;   /* Center the container */
+  padding: 20px;    /* Padding around the contents */
+  align-items: center; /* Center children horizontally */
+}
+
+.event-details {
+  background-color: #f9f9f9;  /* Light background for the event details section */
+  border: 1px solid #ccc;     /* Border for the details container */
+  padding: 15px;              /* Padding inside the details section */
+  margin-top: 20px;           /* Space above the details section */
+  border-radius: 8px;         /* Optional: Rounded corners */
+}
+
+.event-image {
+  width: 100%;             /* Make the image responsive, adjust to the container width */
+  height: auto;            /* Maintain the aspect ratio */
+  /* max-width: 200px;        Maximum width of the image */
+  display: block;          /* Block display to force a new line */
+  margin: 0 auto;          /* Center the image horizontally */
+  /* border-radius: 8px;      Optional: Rounded corners for aesthetics */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);   /* Optional: Adds a subtle shadow for depth */
+  /* border: 1px solid #ddd;  Optional: A light border around the image */
+  /* padding: 5px;            Optional: Padding around the image inside the border */
+}
+
+.event-image-big {
+  width: auto;
+  height: 100%; /* Let the image fill the height of its container */
+  max-height: 100%; /* Prevents the image from overflowing */
+  max-width: 100%; /* Prevents the image from overflowing */
+  object-fit: cover; /* Ensures the image covers the container while maintaining aspect ratio */
+}
+
+.event-card.new-style {
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+  margin: 20px auto; /* Center the card horizontally with auto margins */
+  width: 100%; /* Adjust the width as necessary */
+  max-width: 1080px; /* Ensure the card doesn't exceed its intended size */
+  height: 58vh; /* Use viewport height to maintain responsiveness */
+  opacity: 1;
+  border: 0px solid #ddd;
+  border-radius: 8px;
+  justify-content: center; /* Centers content horizontally */
+  align-items: center; /* Centers content vertically within the row */
+  overflow: hidden; /* Ensure no overflow */
+}
+
+/* Style for the image container */
+.event-card-image-container {
+  flex: 1;
+  display: flex;
+  max-width: 100%; /* Ensure the container does not exceed its parent's width */
+  height: 30vw;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  overflow: hidden; /* Ensure the image does not overflow the container */
+  flex-direction: column; /* Stack children vertically */
+}
+
+/* Style for the content container */
+.event-card-content.new-style-content {
+  flex: 1; /* Adjust flex value to control the width ratio */
+  padding: 40px;
+  height: 30vw;
+  background: transparent;
+  opacity: 1;
+  position: relative;
+  display: flex;
+  background: #FAFAFA 0% 0% no-repeat padding-box;
+  flex-direction: column; /* Stack children vertically */
+  justify-content: center; /* Center children vertically */
+}
+
+
+.event-card-content.new-style-content::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #C2BE00;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+  z-index: -1; /* Keeps it behind the content */
+}
+
+.event-card-content.new-style-content:hover::before {
+  transform: scaleX(1);
+}
+
+.event-card-content.new-style-content:hover {
+  transform: scale(1.05); /* Slightly scale up the card */
+  background: #C2BE00 0% 0% no-repeat padding-box;
+  opacity: 1;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
+}
+
+.event-date {
+  margin-left: 40px 0;
+  margin-right: 40px 0;
+  text-align: left;
+  font: normal normal 900 24px/30px Lato;
+  letter-spacing: 0px;
+  color: #243D54;
+  opacity: 1;
+}
+
+.event-place {
+  margin-left: 40px 0;
+  margin-right: 40px 0;
+  text-align: left;
+  font: normal normal bold 30px/40px Helvetica Neue;
+  letter-spacing: 0px;
+  color: #C2BE00;
+  opacity: 1;
+}
+
+.event-card-content.new-style-content:hover .event-place {
+  margin-left: 40px 0;
+  margin-right: 40px 0;
+  text-align: left;
+  font: normal normal bold 2.4vw/2.5vw Helvetica Neue;
+  letter-spacing: 0px;
+  color: #FAFAFA;
+  opacity: 1;
+}
+
+.event-title {
+  margin: 40px 0;
+  text-align: left;
+  font: normal normal 900 1.4vw/2vw Lato;
+  letter-spacing: 0px;
+  color: #243D54;
+  /*text-transform: uppercase;*/
+  opacity: 1;
+}
+
+.event-description {
+  font-size: 1em;
+  color: #243d54;
+  margin-bottom: 20px;
+}
+
+.event-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.event-actions .btn {
+  background: #c7c149;
+  color: #fff;
+  padding: 10px 15px;
+  text-align: center;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+@media (max-width: 600px) {
+  .event-image {
+    max-width: 100%;     /* Allow the image to take up full width on small screens */
+    padding: 0;          /* Remove padding on small screens */
+    border: none;        /* Remove border on small screens */
+    box-shadow: none;    /* Remove shadow on small screens */
+  }
+}
+
+.events-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.event-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.past-event-card {
+  position: relative;
+  width: calc(33.333% - 20px); /* Adjusting for spacing between cards */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column; /* Ensures the footer is at the bottom */
+}
+
+.past-event-card img.event-image {
+  width: 100%;
+  height: 200px; /* Fixed height for the image */
+  object-fit: cover; /* Ensures the image covers the container without distortion */
+}
+
+.event-card-footer {
+  padding: 10px;
+  height: 50px;
+  justify-content: center;
+  background: #FAFAFA 0% 0% no-repeat padding-box;
+  opacity: 1;
+}
+
+.event-card-footer .more {
+  display: inline-block;
+  margin-top: 10px;
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.event-card-footer .more-arrow {
+  font-size: 1.2em;
+  /* margin: 5px; */
+  transition: transform 0.2s;
+}
+
+.event-card-footer .more:hover .more-arrow {
+  transform: translateX(5px);
+}
+
+.event-card-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* Takes all remaining space after the image */
+}
+
+.flex-spacer {
+  flex-grow: 1; /* Spacer that will push content to the bottom */
+}
+
+.event-card .btn {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.hr {
+  border: 1px solid #c7c149 !important;
+  opacity: 1 !important;
+  margin: '20px 0' !important;
+}
+
+.h1 {
+  font-weight: bold !important;
+}
+
+.col-sm-6.col-lg-8.content:hover {
+  color: #243d54 !important;
+}
+
+.cover {
+  display: flex;
+}
+
+.no-opportunities-message {
+  text-align: center;
+  margin-top: 100px;
+  margin-bottom: 100px;
+  font-size: 30px !important;
+  font-weight: bold;
+}
+
+.event-section {
+  margin-bottom: 50px;
+}
+
+.upcoming-events, .past-events {
+  /* top: 578px;
+  left: 0px;
+  width: 1920px;
+  height: 40px; */
+  font: normal normal bold 36px/42px Lato;
+  text-align: center;
+  letter-spacing: 0px;
+  color: #C2BE00;
+  opacity: 1;
+  margin: 20px 0 !important;
+  display: block !important;
+}
+
+.rectangle {
+  /* top: 674px;
+  left: 830px; */
+  display: block;
+  width: 260px;
+  height: 16px;
+  background: #C2BE00 0% 0% no-repeat padding-box;
+  opacity: 1;
+  margin: 20px auto;
+  margin-bottom: 50px 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.past-more {
+  display: block; /* Make it a block element */
+  text-align: center;
+  font: normal normal 900 16px/20px Lato;
+  letter-spacing: 0px;
+  color: #243D54;
+  text-transform: uppercase;
+  opacity: 1;
+  width: 100%; /* Ensure it takes the full width of the parent container */
+}
+
+.more {
+  position: absolute;
+  bottom: 40px;
+  right: 40px;
+  display: inline-flex;
+  align-items: center;
+  text-align: center;
+  font: normal normal 900 14px/16px Lato;
+  letter-spacing: 0px;
+  color: #243D54;
+  text-transform: uppercase;
+  opacity: 1;
+}
+
+.event-card-content.new-style-content:hover .more {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  display: inline-flex;
+  align-items: center;
+  text-align: center;
+  font: normal normal 900 32px/40px Lato;
+  letter-spacing: 0px;
+  color: #243D54;
+  text-transform: uppercase;
+  opacity: 1;  
+  transition: transform 1.5s ease, box-shadow 1.5s ease; /* Smooth transition */
+}
+
+.more-arrow {
+  margin-left: 5px;
+  background: transparent url('../../public/images/ARROW.png') 0% 0% no-repeat padding-box;
+  font-size: 20px;
+  opacity: 1;
+}
+
+.event-card-content.new-style-content:hover .more-arrow {
+  margin-left: 5px;
+  margin-right: 10px;
+  background: transparent url('../../public/images/ARROW.png') 0% 0% no-repeat padding-box;
+  font-size: 32px;
+  opacity: 1;
+  transition: transform 0.6s ease, box-shadow 0.6s ease; /* Smooth transition */
+}
+
+.rectangle-long {
+  width: 250px;
+  height: 7px;
+  background: #C2BE00 0% 0% no-repeat padding-box;
+  opacity: 1;  
+}
+
+
+
+
+.event-card-image-container-mini {
+  position: relative;
+  overflow: hidden;
+}
+
+.event-image-mini {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.event-hover-content-mini {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #C2BE00 0% 0% no-repeat padding-box;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  align-items: left;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  padding: 20px;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.event-card-image-container-mini:hover .event-image-mini {
+  transform: scale(1.1);
+}
+
+.event-card-image-container-mini:hover .event-hover-content-mini {
+  opacity: 1;
+}
+
+.event-title-mini {
+  margin-top: 10px 0;
+  text-align: left;
+  font: normal normal 900 12px/12px Lato;
+  letter-spacing: 0px;
+  color: #243D54;
+  /*text-transform: uppercase;*/
+  opacity: 1;
+}
+
+.event-date-mini {
+  text-align: left;
+  font: normal normal 900 12px/12px Lato;
+  letter-spacing: 0px;
+  color: #fff;
+  /*text-transform: uppercase;*/
+  opacity: 1;
+}
+
+.event-place-mini {
+  text-align: left;
+  font: normal normal bold 18px/24px Helvetica Neue;
+  letter-spacing: 0px;
+  color: #fff;
+  opacity: 1;
+}
+
+.event-date-mini,
+.event-place-mini,
+.event-title-mini {
+  margin: 10px 0;
+}
+
+.rectangle-long-mini {
+  width: 150px;
+  height: 3px;
+  background-color: #fff;
+  margin-bottom: 20px 0;
+}

@@ -1,0 +1,151 @@
+/* src/styles/Analysis.css */
+
+/* ------------------------------------
+   General Container Styles
+------------------------------------ */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px;
+  }
+  
+  /* ------------------------------------
+     Calendar Header Section
+  ------------------------------------ */
+  #calendar-header {
+    background-color: #f8f9fa; /* Light gray background */
+    padding: 20px;
+    border-bottom: 1px solid #e9ecef;
+  }
+  
+  #calendar-header .row {
+    display: flex;
+    align-items: center;
+  }
+  
+  #calendar-header .col-sm-12 {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  
+  #calendar-header h1 {
+    display: flex;
+    align-items: center;
+    margin: 0;
+  }
+  
+  /* ------------------------------------
+     Buttons Styling
+  ------------------------------------ */
+  #calendar-header .btn {
+    margin-right: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #007bff; /* Bootstrap Primary Color */
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  #calendar-header .btn:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+  }
+  
+  /* Optional: Styling for CaptureSectionScreenshot Button */
+  .capture-section-button {
+    margin-left: 10px;
+  }
+  
+  /* ------------------------------------
+     Projects Section (Tableau Embed)
+  ------------------------------------ */
+  #projects {
+    padding: 20px 0;
+  }
+  
+  #projects .row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  #projects .col-12 {
+    width: 100%;
+  }
+  
+  /* ------------------------------------
+     TableauEmbed Container Styles
+  ------------------------------------ */
+  .tableau-container {
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+    position: relative;
+  }
+  
+  .tableau-container > div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* ------------------------------------
+     Disclaimer Styling
+  ------------------------------------ */
+  .disclaimer {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #6c757d; /* Bootstrap Secondary Text Color */
+    text-align: center;
+  }
+  
+  /* ------------------------------------
+     Footer Styling
+  ------------------------------------ */
+  /* Assuming Footer has its own styles, add any necessary overrides or additional styles here */
+  
+  /* ------------------------------------
+     Responsive Design Adjustments
+  ------------------------------------ */
+  @media (max-width: 768px) {
+    #calendar-header {
+      padding: 15px;
+    }
+  
+    #calendar-header .btn {
+      padding: 8px 16px;
+      font-size: 14px;
+      margin-right: 8px;
+    }
+  
+    .tableau-container {
+      padding-bottom: 75%; /* 4:3 Aspect Ratio for smaller screens */
+    }
+  }
+  
+  @media (max-width: 576px) {
+    #calendar-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    #calendar-header .btn {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  
+    #calendar-header h1 {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .disclaimer {
+      font-size: 12px;
+    }
+  }
+  

@@ -1,0 +1,324 @@
+main {
+  background: #fff;
+  min-height: fit-content !important;
+}
+
+h1#post-h1 {
+  font: normal normal bold 45px/54px Lato;
+  color: #c2be00;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.date {
+  text-align: center;
+  font: normal normal 300 25px/30px Lato;
+  letter-spacing: 0px;
+  color: #020202;
+  opacity: 1;
+  margin: 20px 0;
+}
+
+.img-fluid.shad-img {
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  object-fit: cover !important;
+}
+
+.img-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.col-sm-3 h2 {
+  background: #f8eade;
+  font: normal normal 900 30px/45px Lato;
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin-bottom: 0px;
+}
+
+.list-group {
+  box-shadow: none;
+}
+
+.list-group-item {
+  background: #c2be00 !important;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.list-group-item.open {
+  background: #2b5366 !important;
+}
+
+.list-group-item .indicator {
+  position: absolute;
+  right: 10px; /* Adjust as needed */
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+}
+
+.list-group-item .indicator img {
+  width: 16px; /* Adjust the size as needed */
+  height: auto;
+  rotate: 180deg;
+}
+
+.list-group-item .indicator img.open {
+  transform: rotate(90deg);
+}
+
+.list-group-item a {
+  text-align: center;
+  font: normal normal 900 22px/40px Lato;
+  text-transform: uppercase !important;
+  display: flex;
+  justify-content: center;
+}
+
+.list-group-item:active {
+  background: #2b5366 !important;
+}
+
+.col-sm-9 .bl {
+  background: #FAFAFA 0% 0% no-repeat padding-box;
+  opacity: 1;
+  padding: 10%;
+}
+
+.bl h2 {
+  font: normal normal 900 32px/29px Lato;
+}
+
+#navbar-summary {
+  box-shadow: none;
+}
+
+.sticky-top h2 {
+  margin-bottom: 15px;
+}
+
+.excerpt-text {
+  width: 50%;
+  align-content: center;
+  text-align: justify;
+  font: normal normal 300 25px/30px Lato;
+  letter-spacing: 0px;
+  color: #2B5366;
+  opacity: 1;
+}
+
+.excerpt-text-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.place {
+  text-align: left;
+  font: normal normal 900 33px/30px Lato;
+  letter-spacing: 0px;
+  color: #C2BE00;
+  opacity: 1;
+}
+
+.type {
+  text-align: center;
+  font: normal normal bold 45px/54px Lato;
+  letter-spacing: 0px;
+  color: #C2BE00;
+  opacity: 1;
+}
+
+.rectangle {
+  width: 260px;
+  height: 16px;
+  background: #C2BE00 0% 0% no-repeat padding-box;
+  opacity: 1;
+  margin: 0 auto;
+}
+
+
+
+
+
+
+.event-image-big {
+  width: 50%;
+  height: 50%;
+  /* max-width: 540px;  */
+  /* max-height: 435px;  */
+  object-fit: cover; /* Ensure the image covers the container while maintaining aspect ratio */
+}
+
+.event-card.new-style {
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+  margin: 20px auto; /* Center the card horizontally with auto margins */
+  width: 100%; /* Adjust the width as necessary */
+  max-width: 1080px; /* Ensure the card doesn't exceed its intended size */
+  height: 45vh; /* Use viewport height to maintain responsiveness */
+  /* background: #FAFAFA 0% 0% no-repeat padding-box; */
+  opacity: 1;
+  border: 0px solid #ddd;
+  border-radius: 8px;
+  justify-content: center; /* Centers content horizontally */
+  align-items: center; /* Centers content vertically within the row */
+}
+
+/* Style for the image container */
+.event-card-image-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  overflow: hidden; /* Ensure the image does not overflow the container */
+  flex-direction: column; /* Stack children vertically */
+  justify-content: center; /* Center children vertically */
+}
+
+/* Style for the content container */
+.event-card-content.new-style-content {
+  flex: 1; /* Adjust flex value to control the width ratio */
+  padding: 40px;
+  background: transparent;
+  opacity: 1;
+  position: relative;
+  display: flex;
+  background: #FAFAFA 0% 0% no-repeat padding-box;
+  flex-direction: column; /* Stack children vertically */
+  justify-content: center; /* Center children vertically */
+}
+
+.event-date {
+  text-align: center;
+  font: normal normal 300 25px/30px Lato;
+  letter-spacing: 0px;
+  color: #020202;
+  opacity: 1;
+  margin: 23px 0;
+}
+
+.event-place {
+  margin-left: 40px 0;
+  margin-right: 40px 0;
+  text-align: left;
+  font: normal normal bold 30px/40px Helvetica Neue;
+  letter-spacing: 0px;
+  color: #C2BE00;
+  opacity: 1;
+}
+
+.event-title {
+  text-align: center;
+  font: normal normal bold 40px/50px Lato;
+  letter-spacing: 0px;
+  color: #C2BE00;
+  opacity: 1;
+  margin: 23px 0;
+}
+
+.event-description {
+  font-size: 1em;
+  color: #243d54;
+  margin-bottom: 20px;
+}
+
+.rectangle-long {
+  width: 250px;
+  height: 7px;
+  background: #C2BE00 0% 0% no-repeat padding-box;
+  opacity: 1;  
+}
+
+.rectangle-75 {
+  width: 674px;
+  height: 9px;
+  background: #C2BE00 0% 0% no-repeat padding-box;
+  opacity: 1;
+}
+
+.document-title {
+  text-align: left;
+  font: normal normal 900 24px/30px Lato;
+  letter-spacing: 0px;
+  color: #C2BE00 !important;
+  opacity: 1;
+}
+
+.document-item {
+  text-align: left;
+  font: normal normal 900 24px/30px Lato;
+  letter-spacing: 0px;
+  color: #C2BE00;
+  opacity: 1;
+}
+
+.document-author {
+  text-align: left;
+  font: normal normal bold 18px/20px Lato;
+  letter-spacing: 0px;
+  color: #000000;
+}
+
+.content-heading {
+  /* You can add any additional styling for h3 here */
+  /* For example, regular styling for on-screen display */
+  font-size: 1.2em;
+  margin-top: 2em;
+  margin-bottom: 0.5em;
+  text-align: left;
+  color: #243d54;
+}
+
+.content-list {
+  /* On-screen styles */
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+  margin-bottom: 1em;
+  list-style-type: disc; /* Default bullet style */
+}
+
+.content-list li {
+  /* On-screen styles for list items */
+  margin-bottom: 0.5em;
+}
+
+/* Center h3 headings and style lists when printing */
+@media print {
+  .content-heading {
+    text-align: left;
+    /* Optional: Adjust margins for better print layout */
+    margin-top: 1em;
+    margin-bottom: 1em;
+    /* Optional: Change font size or weight if needed */
+    font-size: 1.5em;
+    font-weight: bold;
+  }
+
+  .content-list {
+    /* Center the list or adjust as needed */
+    margin-left: 0; /* Remove left margin for better print alignment */
+    padding-left: 1em; /* Optional: Add some padding */
+    list-style-position: inside; /* Ensure bullets are inside the content area */
+  }
+
+  .content-list li {
+    /* Optional: Adjust list item styles for print */
+    margin-bottom: 0.5em;
+  }
+}

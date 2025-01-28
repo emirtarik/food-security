@@ -1,0 +1,101 @@
+.dropdown-menu {
+  width: 185.83px !important;
+  top: auto !important;
+  left: auto !important;
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+
+.search-dropdown {
+  width: 185.83px !important;
+}
+
+.document-detail-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Adjusts the width ratio of thumbnail and document info */
+  gap: 0px; /* Reduced margin between sections */
+  justify-items: center; /* Centers items horizontally within the grid columns */
+  padding: 5%;
+  margin: 0 auto; /* Centers the container itself */
+  max-width: 1000px; /* Limits the maximum width of the container */
+}
+
+.thumbnail-section {
+  display: flex;
+  width: 400px;
+  flex-direction: column;
+  align-items: center;
+  padding: 0px;
+}
+
+.thumbnail-img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.document-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0px;
+  max-width: 600px; /* Adjust the width of the document-info */
+}
+
+.document-info h2 {
+text-align: left;
+font: normal normal 900 24px/24px Lato;
+letter-spacing: 0px;
+color: #243D54;
+opacity: 1;
+}
+
+.document-info h3 {
+  text-align: left;
+  font: normal normal 300 20px/25px Lato;
+  letter-spacing: 0px;
+  color: #020202;
+  opacity: 1;
+  }
+
+.document-info p {
+  margin-bottom: 10px;
+  text-align: justify;
+}
+
+.list-header {
+  font: normal normal 900 16px/16px Lato;
+  letter-spacing: 0px;
+  color: #C7C149;
+}
+
+.list {
+  text-align: left;
+  font: normal normal 900 14px/14px Lato;
+  letter-spacing: 0px;
+  color: #334054;
+}
+
+@media (max-width: 768px) {
+  .document-detail-container {
+    grid-template-columns: 1fr; /* Stacks the sections vertically on smaller screens */
+  }
+
+  .thumbnail-section, .document-info {
+    width: 100%;
+  }
+}
+
+
+.rectangle {
+  width: 250px;
+  height: 7px;
+  background: #C2BE00 0% 0% no-repeat padding-box;
+  opacity: 1;
+}

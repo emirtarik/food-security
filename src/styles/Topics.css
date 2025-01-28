@@ -1,0 +1,34 @@
+article.nopad.mb-3 .article-thumb .screen,
+article.nopad.mb-3 .thumb .screen {
+  transform: none !important;
+  transition: none !important;
+  background: #243d54bf !important;
+  text-align: end !important;
+}
+
+.list-articles {
+  padding-bottom: 0 !important;
+  height: fit-content !important;
+}
+
+.list-articles a {
+  color: white;
+  bottom: 5px;
+  margin-right: 10px;
+  display: flow;
+  position: absolute;
+  right: 0;
+}
+
+.list-articles p {
+  color: white;
+  text-transform: uppercase;
+  font: normal normal 900 25px/32px Lato;
+  margin-bottom: 0;
+}
+
+article .thumb img {
+  width: 100% !important;
+  height: 36vh !important;
+  object-fit: cover !important;
+}

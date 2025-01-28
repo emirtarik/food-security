@@ -1,0 +1,26 @@
+[
+    {
+    "title": "Food and nutrition situation (FNS)",
+    "description": "Where are the vulnerable populations based?",
+    "buttonLabel": "Discover",
+    "link": "/info-analysis/",
+    "imageUrl": "/images/home-featured-1.png",
+    "colClass": "col-lg-4 col-xl-5"
+  },
+  {
+    "title": "Co-ordination",
+    "description": "Who does what, where and when?",
+    "buttonLabel": "Discover",
+    "link": "/response/",
+    "imageUrl": "/images/home-featured-2.jpg",
+    "colClass": "col-sm-6 col-lg-4 col-xl-5"
+  },
+  {
+    "title": "Best practices in building resilience",
+    "description": "",
+    "buttonLabel": "Discover",
+    "link": "/best-practice/",
+    "imageUrl": "/images/home-featured-3.jpg",
+    "colClass": "col-sm-6 col-lg-4 col-xl-2"
+  }
+]

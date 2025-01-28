@@ -1,0 +1,8 @@
+node_modules/
+build/
+public/
+
+.env.local
+.env
+package-lock.json
+package.json

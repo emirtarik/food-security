@@ -1,0 +1,287 @@
+[
+  {
+    "id": 12,
+    "en": {
+      "title": "Food and nutrition crisis 2025",
+      "img": {
+        "medium": "/uploads/2024/12/banner.jpg"
+      },
+      "excerpt": "",
+      "permalink": "/post/situation-alimentaire-et-nutritionnelle-2025"
+    },
+    "fr": {
+      "title": "Crise alimentaire et nutritionnelle 2025",
+      "img": {
+        "medium": "/uploads/2024/12/banner.jpg"
+      },
+      "excerpt": "",
+      "permalink": "/post/situation-alimentaire-et-nutritionnelle-2025"
+    }
+  },
+  {
+    "id": 14,
+    "en": {
+      "title": "Tribute to Dr. Mahalmoudou Hamadoun MAIGA",
+      "img": {
+        "medium": "/uploads/2024/10/tribute_maiga.jpg"
+      },
+      "excerpt": "",
+      "permalink": "/post/hommage-dr-mahamoudou-hamadoun-maiga"
+    },
+    "fr": {
+      "title": "Hommage au Dr Mahalmoudou Hamadoun MAIGA",
+      "img": {
+        "medium": "/uploads/2024/10/tribute_maiga.jpg"
+      },
+      "excerpt": "",
+      "permalink": "/post/hommage-dr-mahamoudou-hamadoun-maiga"
+    }
+  },
+  {
+    "id": 13,
+    "en": {
+      "title": "Tribute to Mr. Abel GBÈTOÉNONMON",
+      "img": {
+        "medium": "/uploads/2024/09/_DSF8798.jpg"
+      },
+      "excerpt": "",
+      "permalink": "/post/hommage-a-abel-gbetoenonmon-2024"
+    },
+    "fr": {
+      "title": "Hommage à Monsieur Abel GBÈTOÉNONMON",
+      "img": {
+        "medium": "/uploads/2024/09/_DSF8798.jpg"
+      },
+      "excerpt": "",
+      "permalink": "/post/hommage-a-abel-gbetoenonmon-2024"
+    }
+  },
+  {
+    "id": 12,
+    "en": {
+      "title": "Food and nutrition crisis 2024",
+      "img": {
+        "medium": "/uploads/2024/05/banner.jpg"
+      },
+      "excerpt": "",
+      "permalink": "/post/crise-alimentaire-et-nutritionnelle-2024"
+    },
+    "fr": {
+      "title": "Crise alimentaire et nutritionnelle 2024",
+      "img": {
+        "medium": "/uploads/2024/05/banner.jpg"
+      },
+      "excerpt": "",
+      "permalink": "/post/crise-alimentaire-et-nutritionnelle-2024"
+    }
+  },
+  {
+    "id": 1,
+    "en": {
+      "title": "In memory of Dr Djimé ADOUM, \"the Sahelian\"",
+      "img": {
+        "medium": "/uploads/2023/12/1000_Djime_CILSS.jpg"
+      },
+      "excerpt": "",
+      "permalink": "/post/in-memory-of-dr-djime-adoum-the-sahelian"
+    },
+    "fr": {
+      "title": "À la mémoire du Dr Djimé ADOUM, \"le Sahélien\"",
+      "img": {
+        "medium": "/uploads/2023/12/1000_Djime_CILSS.jpg"
+      },
+      "excerpt": "",
+      "permalink": "/post/in-memory-of-dr-djime-adoum-the-sahelian"
+    }
+  },
+  {
+    "id": 2,
+    "en": {
+      "title": "Food and nutrition crisis 2023",
+      "img": {
+        "medium": "/uploads/2023/06/T_shutterstock_1711045090_women_agadez_niger_katja-tsvetkova-800x378.jpg"
+      },
+      "excerpt": "",
+      "permalink": "/post/crise-alimentaire-et-nutritionnelle-2023"
+    },
+    "fr": {
+      "title": "Crise alimentaire et nutritionnelle 2023",
+      "img": {
+        "medium": "/uploads/2023/06/T_shutterstock_1711045090_women_agadez_niger_katja-tsvetkova-800x378.jpg"
+      },
+      "excerpt": "",
+      "permalink": "/post/crise-alimentaire-et-nutritionnelle-2023"
+    }
+  },
+  {
+    "id": 3,
+    "en": {
+      "title": "Operationalisation of the Humanitarian-Development-Peace Nexus",
+      "img": {
+        "medium": "/uploads/2022/08/IMG_1199-1-750x500.jpg"
+      },
+      "excerpt": "",
+      "permalink": "/post/operationalisation-of-the-humanitarian-development-peace-nexus"
+    },
+    "fr": {
+      "title": "Opérationnalisation du Nexus Humanitaire-Développement-Paix",
+      "img": {
+        "medium": "/uploads/2022/08/IMG_1199-1-750x500.jpg"
+      },
+      "excerpt": "",
+      "permalink": "/post/operationalisation-of-the-humanitarian-development-peace-nexus"
+    }
+  },
+  {
+    "id": 4,
+    "en": {
+      "title": "Food and nutrition crisis 2022",
+      "img": {
+        "medium": "/uploads/2022/02/Cover-event-750x500.jpg"
+      },
+      "excerpt": "",
+      "permalink": "/post/crise-alimentaire-et-nutritionnelle-2022"
+    },
+    "fr": {
+      "title": "Crise alimentaire et nutritionnelle 2022",
+      "img": {
+        "medium": "/uploads/2022/02/Cover-event-750x500.jpg"
+      },
+      "excerpt": "",
+      "permalink": "/post/crise-alimentaire-et-nutritionnelle-2022"
+    }
+  },
+  {
+    "id": 5,
+    "en": {
+      "title": "Coping with the 2021 food and nutrition crisis",
+      "img": {
+        "medium": "/uploads/2021/07/Crise2021-800x383.jpg"
+      },
+      "excerpt": "",
+      "permalink": "/post/coping-with-the-2021-food-and-nutrition-crisis"
+    },
+    "fr": {
+      "title": "Faire face à la crise alimentaire et nutritionnelle de 2021",
+      "img": {
+        "medium": "/uploads/2021/07/Crise2021-800x383.jpg"
+      },
+      "excerpt": "",
+      "permalink": "/post/coping-with-the-2021-food-and-nutrition-crisis"
+    }
+  },
+  {
+    "id": 6,
+    "en": {
+      "title": "Strengthening State leadership in food & nutrition security governance",
+      "img": {
+        "medium": "/uploads/2020/08/topic-page_EN-800x383.jpg"
+      },
+      "excerpt": "",
+      "permalink": "/post/le-leadership-des-etats-dans-la-gouvernance-de-la-securite-alimentaire-et-nutritionnelle2020"
+    },
+    "fr": {
+      "title": "Renforcer le leadership des États dans la gouvernance de la sécurité alimentaire et nutritionnelle",
+      "img": {
+        "medium": "/uploads/2020/08/topic-page_EN-800x383.jpg"
+      },
+      "excerpt": "",
+      "permalink": "/post/le-leadership-des-etats-dans-la-gouvernance-de-la-securite-alimentaire-et-nutritionnelle2020"
+    }
+  },
+  {
+    "id": 7,
+    "en": {
+      "title": "Pastoral situation in the context of COVID-19",
+      "img": {
+        "medium": "/uploads/2020/05/transhumance-theme-800x381.jpg"
+      },
+      "excerpt": "",
+      "permalink": "/post/situation-pastorale-face-au-covid-19"
+    },
+    "fr": {
+      "title": "Situation pastorale face au COVID-19",
+      "img": {
+        "medium": "/uploads/2020/05/transhumance-theme-800x381.jpg"
+      },
+      "excerpt": "",
+      "permalink": "/post/situation-pastorale-face-au-covid-19"
+    }
+  },
+  {
+    "id": 8,
+    "en": {
+      "title": "Food and nutrition crisis 2020",
+      "img": {
+        "medium": "/uploads/2020/04/FNS-COVID-19-800x382.jpg"
+      },
+      "excerpt": "",
+      "permalink": "/post/food-and-nutrition-crisis-2020"
+    },
+    "fr": {
+      "title": "Crise alimentaire et nutritionnelle 2020",
+      "img": {
+        "medium": "/uploads/2020/04/FNS-COVID-19-800x382.jpg"
+      },
+      "excerpt": "",
+      "permalink": "/post/food-and-nutrition-crisis-2020"
+    }
+  },
+  {
+    "id": 9,
+    "en": {
+      "title": "Strengthening food and nutrition security information systems",
+      "img": {
+        "medium": "/uploads/2019/08/FNS-SI-topics-800x382.jpg"
+      },
+      "excerpt": "",
+      "permalink": "/post/le-leadership-des-etats-dans-la-gouvernance-de-la-securite-alimentaire-et-nutritionnelle2019"
+    },
+    "fr": {
+      "title": "Renforcement des systèmes d'information sur la sécurité alimentaire et nutritionnelle",
+      "img": {
+        "medium": "/uploads/2019/08/FNS-SI-topics-800x382.jpg"
+      },
+      "excerpt": "",
+      "permalink": "/post/le-leadership-des-etats-dans-la-gouvernance-de-la-securite-alimentaire-et-nutritionnelle2019"
+    }
+  },
+  {
+    "id": 10,
+    "en": {
+      "title": "Global Alliance for Resilience (AGIR)",
+      "img": {
+        "medium": "/uploads/2018/04/topics-AGIR-800x383.jpg"
+      },
+      "excerpt": "",
+      "permalink": "/post/global-alliance-for-resilience-agir"
+    },
+    "fr": {
+      "title": "Alliance Globale pour la Résilience (AGIR)",
+      "img": {
+        "medium": "/uploads/2018/04/topics-AGIR-800x383.jpg"
+      },
+      "excerpt": "",
+      "permalink": "/post/global-alliance-for-resilience-agir"
+    }
+  },
+  {
+    "id": 11,
+    "en": {
+      "title": "The Charter for Food Crisis Prevention and Management (PREGEC)",
+      "img": {
+        "medium": "/uploads/2018/12/CHARTE-PREGEC_EN-1-800x390.jpg"
+      },
+      "excerpt": "",
+      "permalink": "/about/the-pregec-charter"
+    },
+    "fr": {
+      "title": "La Charte pour la prévention et la gestion des crises alimentaires (PREGEC)",
+      "img": {
+        "medium": "/uploads/2018/12/CHARTE-PREGEC_EN-1-800x390.jpg"
+      },
+      "excerpt": "",
+      "permalink": "/about/the-pregec-charter"
+    }
+  }
+]

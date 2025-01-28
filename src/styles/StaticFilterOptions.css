@@ -1,0 +1,107 @@
+/* StaticFilterOptions.css */
+.filter-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.label {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.dropdown-toggle {
+  padding: 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.dropdown-toggle:hover {
+  background-color: #f0f0f0;
+}
+
+.dropdown-menu {
+  border: 1px solid #ccc;
+  margin-top: 5px;
+  max-height: 150px;
+  overflow-y: auto;
+  margin-left: 15px;
+  margin-right: 15px;
+  width: 88.8% 
+}
+
+.dropdown-menu div {
+  padding: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: "Lato", sans-serif;
+}
+
+.dropdown-menu div:hover {
+  background-color: #f0f0f0;
+}
+
+.select-all-button {
+  background-color: #4caf50;
+  color: white;
+}
+
+.select-all-button:hover {
+  background-color: #45a049;
+  color: black;
+}
+
+.clear-all-button {
+  background-color: #f44336;
+  color: white;
+}
+
+.clear-all-button:hover {
+  background-color: #f44336;
+  color: black;
+}
+
+.label {
+  display: inline-block;
+  border: 2px solid green;
+  width: 50px;
+ /* Adjust the width to the desired size for a square */
+  height: 50px;
+ /* Adjust the height to the desired size for a square */
+  overflow: hidden;
+  padding: 5px;
+}
+
+.label img {
+  width: 100%;
+  height: 100%;
+  object-fit: scale-down;
+ /* This ensures the image covers the entire square */
+}
+
+.label:hover {
+  border-color: #fff;
+ /* Change border color on hover */
+  background-color: green;
+ /* Change background color on hover */
+  color: #fff;
+ /* Change text color on hover */
+  border: 2px solid green;
+}
+
+.label.highlighted {
+  border-color: #fff;
+ /* Change border color on hover */
+  background-color: green;
+ /* Change background color on hover */
+  color: #fff;
+ /* Change text color on hover */
+  border: 2px solid green;
+}
+
+.label svg{
+  width: 100%;
+  height: 100%;
+  object-fit: scale-down;
+ /* This ensures the image covers the entire square */
+}

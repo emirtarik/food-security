@@ -1,0 +1,142 @@
+[
+  {
+    "imgSrc": "/uploads/2017/12/ACF-1.jpg",
+    "imgAlt": "ACF",
+    "title": "ACF",
+    "subtitle": "Action contre la faim, bureau régional, Afrique de l'Ouest",
+    "link": "https://www.food-security.net/actor/action-contre-la-faim/"
+  },
+  {
+    "imgSrc": "/uploads/2019/05/afao.jpg",
+    "imgAlt": "AFAO-WAWA",
+    "title": "AFAO-WAWA",
+    "subtitle": "Association des femmes de l’Afrique de l’Ouest (AFAO)",
+    "link": "https://www.food-security.net/actor/association-des-femmes-de-lafrique-de-louest-afao0wawa/"
+  },
+  {
+    "imgSrc": "/uploads/2017/12/AFD.jpg",
+    "imgAlt": "AFD",
+    "title": "AFD",
+    "subtitle": "Agence française de développement (AFD)",
+    "link": "https://www.food-security.net/actor/afd/"
+  },
+  {
+    "imgSrc": "/uploads/2019/05/apess.jpg",
+    "imgAlt": "APESS",
+    "title": "APESS",
+    "subtitle": "Association pour la promotion de l’élevage au Sahel et en Savane (APESS)",
+    "link": "https://www.food-security.net/actor/apess/"
+  },
+  {
+    "imgSrc": "/uploads/2019/05/AREN.jpg",
+    "imgAlt": "AREN",
+    "title": "AREN",
+    "subtitle": "Association pour la redynamisation de l’élevage au Niger (AREN)",
+    "link": "https://www.food-security.net/actor/aren/"
+  },
+  {
+    "imgSrc": "/uploads/2017/11/CILSS-e-version.jpg",
+    "imgAlt": "CILSS",
+    "title": "CILSS",
+    "subtitle": "Comité permanent Inter-Etats de Lutte contre la Sécheresse dans le Sahel",
+    "link": "https://www.food-security.net/actor/cilss/"
+  },
+  {
+    "imgSrc": "/uploads/2019/11/SWAC.jpg",
+    "imgAlt": "CSAO/OCDE",
+    "title": "CSAO/OCDE",
+    "subtitle": "Club du Sahel et de l'Afrique de l'Ouest",
+    "link": "https://www.food-security.net/actor/csao-ocde/"
+  },
+  {
+    "imgSrc": "/uploads/2017/12/ecowas-1.jpg",
+    "imgAlt": "ECOWAS",
+    "title": "ECOWAS",
+    "subtitle": "",
+    "link": "https://www.food-security.net/actor/ecowas/"
+  },
+  {
+    "imgSrc": "/uploads/2017/12/eu.jpg",
+    "imgAlt": "EU",
+    "title": "EU",
+    "subtitle": "",
+    "link": "https://www.food-security.net/actor/eu/"
+  },
+  {
+    "imgSrc": "/uploads/2017/12/FAO.jpg",
+    "imgAlt": "FAO",
+    "title": "FAO",
+    "subtitle": "",
+    "link": "https://www.food-security.net/actor/fao/"
+  },
+  {
+    "imgSrc": "/uploads/2017/12/fewsnet.jpg",
+    "imgAlt": "FEWS NET",
+    "title": "FEWS NET",
+    "subtitle": "Réseau des systèmes d’alerte précoce contre la famine",
+    "link": "https://www.food-security.net/actor/fews-net/"
+  },
+  {
+    "imgSrc": "/uploads/2017/12/IFRC.jpg",
+    "imgAlt": "IFRC",
+    "title": "IFRC",
+    "subtitle": "",
+    "link": "https://www.food-security.net/actor/ifrc/"
+  },
+  {
+    "imgSrc": "/uploads/2017/12/ipc.jpg",
+    "imgAlt": "IPC",
+    "title": "IPC",
+    "subtitle": "",
+    "link": "https://www.food-security.net/actor/ipc/"
+  },
+  {
+    "imgSrc": "/uploads/2017/12/oxfam.jpg",
+    "imgAlt": "OXFAM",
+    "title": "OXFAM",
+    "subtitle": "",
+    "link": "https://www.food-security.net/actor/oxfam/"
+  },
+  {
+    "imgSrc": "/uploads/2017/12/save-the-children.jpg",
+    "imgAlt": "Save the Children",
+    "title": "Save the Children",
+    "subtitle": "Save the Children - Bureau régional, Afrique de l'Ouest et du Centre",
+    "link": "https://www.food-security.net/actor/save-the-children/"
+  },
+  {
+    "imgSrc": "/uploads/2019/11/EU-1.jpg",
+    "imgAlt": "UE",
+    "title": "UE",
+    "subtitle": "Union européenne",
+    "link": "https://www.food-security.net/actor/commission-europeenne/"
+  },
+  {
+    "imgSrc": "/uploads/2017/12/unicef.jpg",
+    "imgAlt": "UNICEF",
+    "title": "UNICEF",
+    "subtitle": "",
+    "link": "https://www.food-security.net/actor/unicef/"
+  },
+  {
+    "imgSrc": "/uploads/2017/12/uemoa.jpg",
+    "imgAlt": "UNMOA",
+    "title": "UNMOA",
+    "subtitle": "",
+    "link": "https://www.food-security.net/actor/unmoa/"
+  },
+  {
+    "imgSrc": "/uploads/2017/12/usaid.jpg",
+    "imgAlt": "USAID",
+    "title": "USAID",
+    "subtitle": "",
+    "link": "https://www.food-security.net/actor/usaid/"
+  },
+  {
+    "imgSrc": "/uploads/2017/12/WFP.jpg",
+    "imgAlt": "WPF",
+    "title": "WPF",
+    "subtitle": "",
+    "link": "https://www.food-security.net/actor/wpf/"
+  }
+]

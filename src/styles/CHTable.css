@@ -1,0 +1,68 @@
+.table2-container {
+  max-width: 100%; /* Prevent the table from exceeding its width */
+  min-width: 300px; /* Ensure a minimum width for readability */
+  height: auto; /* Adjust height based on content */
+  padding: 1%;
+  overflow: visible; /* Disable scrolling */
+  background-color: #ffffff; /* Background consistent with the theme */
+}
+
+.ch-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  border: none; /* Remove outer border */
+}
+
+.ch-table th,
+.ch-table td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.ch-table th {
+  background-color: #c2be00; /* Keep consistent with the Questionnaire style */
+  font-weight: bold;
+  color: #ffffff; /* White font color for header */
+}
+
+.ch-table td {
+  background-color: #f4dfcc; /* Match the Questionnaire background */
+  color: #243d54; /* Consistent font color for the text */
+}
+
+.ch-table tr:nth-child(even) td {
+  background-color: #f7f7f7; /* Lighten every other row for better readability */
+}
+
+.ch-table th:first-child,
+.ch-table td:first-child {
+  text-align: left;
+}
+
+.ch-table th.indicator {
+  background-color: #c2be00; /* Consistent header background */
+}
+
+.ch-table thead th {
+  background-color: #c2be00; /* Make header background consistent */
+  border-bottom: 2px solid #cccccc;
+}
+
+.ch-table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+.ch-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.ch-table td.empty {
+  background-color: #f9f9f9;
+  color: #ccc;
+  border: none; /* Remove border for empty cells */
+}

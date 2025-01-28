@@ -1,0 +1,29 @@
+a.btn.btn-primary{
+  border: 1px solid #FFF;
+  font: normal normal 300 12px/17px Lato;
+  max-width: 120px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-bottom: 30px;
+  display: flex !important;
+  justify-content: center;
+}
+
+iframe {
+  border: none;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  width: 64%;
+  height: 600px;
+}
+
+.Example__container__document {
+  display: contents;
+}
+
+.page-detail {
+  padding-bottom: 10px;
+}

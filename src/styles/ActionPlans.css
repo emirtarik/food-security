@@ -1,0 +1,158 @@
+/* src/styles/ActionPlans.css */
+
+/* Saved Action Plans Container */
+.saved-action-plans-container {
+    margin-top: 20px;
+    padding: 2%;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f5f5f5;
+    position: relative;
+    color: #333;
+  }
+  
+  /* Header with Title and Download Button */
+  .saved-action-plans-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .saved-action-plans-header h4 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #1d2f44;
+    margin: 0;
+  }
+  
+  .download-excel-button {
+    padding: 8px 16px;
+    background-color: #1d2f44; /* Dark Blue */
+    color: #FFFFFF;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .download-excel-button:hover {
+    background-color: #243D54; /* Slightly Lighter Blue */
+  }
+  
+  /* Section Group */
+  .section-group {
+    margin-bottom: 25px;
+  }
+  
+  .section-group h5 {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  /* Subsection Group */
+  .subsection-group {
+    margin-left: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .subsection-group h6 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 8px;
+  }
+  
+  /* Question Group */
+  .question-group {
+    margin-left: 20px;
+    margin-bottom: 15px;
+  }
+  
+  .question-group .question-title {
+    font-size: 1.0rem;
+    font-weight: bold;
+    color: #666;
+    margin-bottom: 5px;
+  }
+  
+  /* Table Wrapper to enable scrolling */
+  .table-wrapper {
+    max-height: 400px; /* Adjust as needed */
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  /* Action Plan Table Styling */
+  .action-plan-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .action-plan-table thead {
+    background-color: #1d2f44;
+    color: #fff;
+  }
+  
+  .action-plan-table th,
+  .action-plan-table td {
+    border: 1px solid #ddd;
+    padding: 12px 10px;
+    text-align: left;
+    font-size: 0.95rem;
+  }
+  
+  .action-plan-table th {
+    font-weight: bold;
+  }
+  
+  .action-plan-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  .action-plan-table tbody tr:hover {
+    background-color: #e6e6e6;
+  }
+  
+  /* Responsive Design */
+  @media screen and (max-width: 768px) {
+    .saved-action-plans-container {
+      padding: 15px;
+    }
+  
+    .saved-action-plans-header h4 {
+      font-size: 1.5rem;
+    }
+  
+    .download-excel-button {
+      padding: 6px 12px;
+      font-size: 0.9rem;
+    }
+  
+    .section-group h5 {
+      font-size: 1.2rem;
+    }
+  
+    .subsection-group h6 {
+      font-size: 1.0rem;
+    }
+  
+    .question-group .question-title {
+      font-size: 0.95rem;
+    }
+  
+    .action-plan-table th,
+    .action-plan-table td {
+      padding: 10px 8px;
+      font-size: 0.85rem;
+    }
+  
+    .table-wrapper {
+      max-height: 300px;
+    }
+  }
+  
