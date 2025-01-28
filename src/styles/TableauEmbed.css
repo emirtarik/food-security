@@ -1,14 +1,23 @@
+/* src/styles/TableauEmbed.css */
+
 .tableau-container {
-    width: 100%;
-    height: 0;
-    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-    position: relative;
+  width: 100%;
+  height: 800px; /* Set a fixed height or use responsive techniques */
+  position: relative;
+  border: 1px solid #ccc; /* Optional: Helps visualize the container */
+  background-color: #f9f9f9; /* Optional: Helps visualize the container */
+  margin-bottom: 20px;
+}
+
+/* Responsive Height (Optional) */
+@media (max-width: 768px) {
+  .tableau-container {
+    height: 600px;
   }
-  
-  .tableau-container > div {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+}
+
+@media (max-width: 480px) {
+  .tableau-container {
+    height: 400px;
   }
+}

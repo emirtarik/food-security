@@ -1,0 +1,26 @@
+/* src/styles/Disclaimer.css */
+
+.disclaimer-container {
+    background-color: #f8f9fa; /* Light grey background for distinction */
+    border-left: 4px solid #dc3545; /* Red border to indicate importance */
+    padding: 20px;
+    border-radius: 5px;
+    margin-top: 20px;
+  }
+  
+  .disclaimer-text {
+    color: #343a40; /* Dark grey text for readability */
+    margin-bottom: 10px;
+    font-size: 1rem;
+  }
+  
+  .disclaimer-link {
+    color: #dc3545; /* Red color to match the border */
+    text-decoration: underline;
+  }
+  
+  .disclaimer-content {
+    color: #6c757d; /* Medium grey for less emphasis */
+    font-size: 0.95rem;
+  }
+  

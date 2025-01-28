@@ -1,63 +1,46 @@
 // src/components/TableauEmbed.js
-import React, { useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
-import '../styles/TableauEmbed.css'; // Import the CSS file
+import React, { useEffect, useRef } from "react";
+import "../styles/TableauEmbed.css"; // Ensure this CSS file exists and is correctly linked
 
-const TableauEmbed = ({
-  url,
-  width = '100%',
-  height = '800px',
-  hideTabs = true,
-  hideToolbar = false,
-  onFirstInteractive = null,
-}) => {
-  const vizRef = useRef(null);
-  const viz = useRef(null);
+const tableauScriptURL = "https://public.tableau.com/javascripts/api/tableau-2.min.js";
+
+function TableauEmbed() {
+  const containerRef = useRef(null);
+  const vizRef = useRef(null); // To store the Viz instance
+  const url = "https://public.tableau.com/shared/PRFCDGTBP?:display_count=n&:origin=viz_share_link";
 
   useEffect(() => {
-    const initializeViz = () => {
-      if (viz.current) return;
-
-      const options = {
-        hideTabs,
-        hideToolbar,
-        width: '100%',
-        height: '100%',
-        onFirstInteractive: () => {
-          if (onFirstInteractive) onFirstInteractive();
-        },
-      };
-
-      viz.current = new window.tableau.Viz(vizRef.current, url, options);
+    // Function to initialize Tableau Viz
+    const initViz = () => {
+      if (vizRef.current) {
+        console.log("Viz instance already exists.");
+        return;
+      }
+      if (window.tableau) {
+        vizRef.current = new window.tableau.Viz(containerRef.current, url, {
+          width: "100%",
+          height: "800px", // Set a fixed height or adjust as needed
+          hideTabs: true,
+          hideToolbar: true,
+        });
+      } else {
+        console.error("Tableau API not loaded");
+      }
     };
 
-    if (!window.tableau) {
-      const script = document.createElement('script');
-      script.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
-      script.async = true;
-      script.onload = initializeViz;
-      document.body.appendChild(script);
-    } else {
-      initializeViz();
-    }
+    // Initialize Viz
+    initViz();
 
+    // Cleanup function to dispose of Viz instance on unmount
     return () => {
-      if (viz.current) viz.current.dispose();
+      if (vizRef.current) {
+        vizRef.current.dispose();
+        vizRef.current = null;
+      }
     };
-  }, [url, hideTabs, hideToolbar, onFirstInteractive]);
+  }, [url]); // Dependency array ensures this runs once per URL
 
-  return (
-    <div className="tableau-container">
-      <div ref={vizRef}></div>
-    </div>
-  );
-};
-
-TableauEmbed.propTypes = {
-  url: PropTypes.string.isRequired,
-  hideTabs: PropTypes.bool,
-  hideToolbar: PropTypes.bool,
-  onFirstInteractive: PropTypes.func,
-};
+  return <div ref={containerRef} className="tableau-container" />;
+}
 
 export default TableauEmbed;
