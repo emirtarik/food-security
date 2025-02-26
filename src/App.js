@@ -6,7 +6,7 @@ import Home from './pages/Home';
 import FourOFour from './pages/404';
 import Loading from './components/Loading';
 import TooltipTest from './components/TooltipTest'; // Adjust the path accordingly
-
+import MapView from './components/MapView'; // New import for the MapView component
 
 const LazyAnalysis = lazy(() => import('./pages/Analysis'));
 const LazyProjects = lazy(() => import('./pages/Projects'));
@@ -28,7 +28,6 @@ const LazyEventPage = lazy(() => import('./pages/EventPage'));
 const LazyLogin = lazy(() => import('./pages/Login'));
 const LazyDashboard = lazy(() => import('./pages/Dashboard'));
 const LazyQuestionnaire = lazy(() => import('./pages/Questionnaire')); // Import the Questionnaire page
-
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -145,10 +144,16 @@ export default function App() {
             }
           />
 
+          {/* New Route for the MapView */}
+          <Route
+            path="/mapview"
+            element={<MapView />}
+          />
+
           {/* Add a 404 route */}
           <Route path="*" element={<FourOFour />} />
         </Routes>
       </Router>
     </div>
   );
-};
+}

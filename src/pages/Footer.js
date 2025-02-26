@@ -5,6 +5,8 @@ import LogoUEMOA from "../assets/img/logo-uemoa.jpg";
 import LogoCILSS from "../assets/img/logo-cilss.png";
 import LogoSWAC from "../assets/img/logo-swac-oecd.png";
 import LogoSWAC_FR from "../assets/img/logo-swac-oecd-fr.png";
+import LogoEU from "../assets/img/EN_Co-fundedbytheEU_RGB_POS.png";
+import LogoEU_FR from "../assets/img/FR_Co-fundedbytheEU_RGB_POS.png";
 import { BASE_URL } from "../components/constant";
 import presData from "../data/presData.json";
 import { SocialMedia } from "./Header";
@@ -12,12 +14,15 @@ import { SocialMedia } from "./Header";
 const Footer = () => {
   const { currentLanguage } = useTranslationHook("misc");
   const [swacLogo, setSwacLogo] = useState(LogoSWAC);
+  const [euLogo, setEuLogo] = useState(LogoEU);
 
   useEffect(() => {
     if (currentLanguage === 'fr') {
       setSwacLogo(LogoSWAC_FR);
+      setEuLogo(LogoEU_FR);
     } else {
       setSwacLogo(LogoSWAC);
+      setEuLogo(LogoEU);
     }
   }, [currentLanguage]);
 
@@ -32,9 +37,10 @@ const Footer = () => {
     <footer className="footer" style={{ paddingTop: "0px" }}>
       <HomePres />
       <div className="container-fluid" style={{ paddingTop: "20px" }}>
-        <div className="row align-items-xl-center">
+        <div className="row align-items-xl-center"
+        style={{ justifyContent: "center" }}>
           <div className="col-sm-6">
-            <ul className="footer-logos list-unstyled d-flex align-items-center justify-content-start">
+            <ul className="footer-logos list-unstyled d-flex align-items-center center-logos">
               <li>
                 <a
                   href="https://www.cilss.int"
@@ -69,6 +75,15 @@ const Footer = () => {
                   rel="noreferrer noopener"
                 >
                   <img src={LogoUEMOA} alt="UEMOA" />
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://european-union.europa.eu/"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                >
+                  <img src={euLogo} alt="EU" />
                 </a>
               </li>
             </ul>

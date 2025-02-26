@@ -1,0 +1,50 @@
+/* src/components/RegionSelector.css */
+.region-selector {
+  border: 1px solid #ddd;
+  background: #fafafa;
+  padding: 16px;
+  border-radius: 4px;
+  max-width: 800px;
+  margin: 0 auto 16px auto;
+  font-family: 'Lato' sans-serif;
+}
+
+.region-selector h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 18px;
+  color: #333;
+}
+
+/* Flex layout to spread dropdowns horizontally */
+.region-selector-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.selector-group {
+  flex: 1 1 150px;
+}
+
+.selector-group label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: bold;
+  font-size: 14px;
+  color: #333;
+}
+
+.selector-group select {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}

@@ -1,0 +1,68 @@
+.comparison-table-container {
+  padding: 16px;
+  font-family: Arial, sans-serif;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  margin: 16px auto;
+  border-radius: 4px;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Flex container for the three tables */
+.triple-table-wrapper {
+  display: flex;
+  gap: 5px;  /* Reduced horizontal margin between tables */
+  justify-content: flex-start;
+  align-items: flex-start;
+  overflow-x: auto;
+}
+
+.table-block {
+  flex: 1 1 auto;
+}
+
+/* Specific styling for the left (region) table */
+.region-table {
+  min-width: 100px; /* Fixed width */
+  max-width: 100px;
+  overflow: hidden;
+}
+
+.table-block h4 {
+  margin-top: 0;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.comparison-table th,
+.comparison-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+  white-space: nowrap;
+  font-size: 14px;
+}
+
+.comparison-table th {
+  background: #efefef;
+  font-weight: bold;
+}
+
+.comparison-table tr:nth-child(even) {
+  background: #f5f5f5;
+}
+
+/* Optionally fix row height for alignment */
+.triple-table tbody tr {
+  height: 45px;
+}
+
+.difference-section {
+  margin-top: 20px;
+}

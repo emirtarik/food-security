@@ -70,7 +70,7 @@ const DynamicPost = ({ category, permalinkOverride }) => {
   console.log("Post content being used:", postContent);
 
   // Deconstruct the properties from postContent
-  const { img, date, title, content, sections } = postContent;
+  const { img, flag, date, title, content, sections } = postContent;
 
   const handleSectionClick = (sectionId) => {
     setOpenSection(openSection === sectionId ? null : sectionId);
@@ -267,6 +267,11 @@ const DynamicPost = ({ category, permalinkOverride }) => {
             </div>
           </div>
         </section>
+        {flag && (
+          <div className="post-flag-logo" style={{ textAlign: "center", marginTop: "40px" }}>
+            <img src={`${BASE_URL}${flag}`} alt="Flag logo" className="flag-logo" />
+          </div>
+        )}
       </main>
     </>
   );

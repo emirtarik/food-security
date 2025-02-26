@@ -13833,6 +13833,9 @@ div.wp-caption.alignnone {
     justify-content: flex-end;
   }
 }
+.center-logos {
+  justify-content: center !important;
+}
 .footer-nav a {
   font-size: 0.85rem !important;
 }
