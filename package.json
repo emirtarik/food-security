@@ -31,6 +31,7 @@
     "chart.js": "^4.4.4",
     "dayjs": "^1.11.10",
     "downshift": "^8.2.2",
+    "express": "^5.1.0",
     "file-saver": "^2.0.5",
     "highcharts": "^11.4.8",
     "highcharts-more": "^0.1.7",
@@ -63,7 +64,7 @@
     "xlsx": "^0.18.5"
   },
   "scripts": {
-    "start": "serve -s build",
+    "start": "node server.js",
     "build": "react-scripts build",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
