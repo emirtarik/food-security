@@ -17,10 +17,10 @@
   {
     "title": "Reléve des conclusions, 40e réunion annuelle",
     "img": "/uploads/2024/12/FR_2024-12_RPCA-Summary_of_conclusions.jpg",
-    "datecontent": "decembre 2024",
+    "datecontent": "décembre 2024",
     "bllink": "/documents/relévedesconclusions-december2024",
     "content": {
-      "Published": "decembre 2024",
+      "Published": "décembre 2024",
       "Description": "",
       "Countries": "Benin, Burkina Faso, Cabo Verde, Chad, CILSS area, Côte d'Ivoire, ECOWAS area, G5 Sahel area, Gambia, Ghana, Guinea, Guinea-Bissau, Liberia, Liptako-Gourma, Mali, Mauritania, Niger, Nigeria, Senegal, Sierra Leone, Togo",
       "Themes": "Agriculture & Value chains, Climate change & Adapation, Employment, Food security, Nutrition, Resilience, Rural-urbain, Social protection",
@@ -47,6 +47,7 @@
   {
     "title": "Reléve des conclusions, réunion restreinte",
     "img": "/uploads/2024/04/FR_2024-04_RPCA-Summary_of_conclusions.jpg",
+    "flag": "/images/FR_Co-fundedbytheEU_RGB_POS.png",
     "datecontent": "avril 2024",
     "bllink": "/documents/relévedesconclusions-avril2024",
     "content": {
@@ -62,6 +63,7 @@
   {
     "title": "Summary of conclusions, restricted meeting",
     "img": "/uploads/2024/04/EN_2024-04_RPCA-Summary_of_conclusions.jpg",
+    "flag": "/images/EN_Co-fundedbytheEU_RGB_POS.png",
     "datecontent": "April 2024",
     "bllink": "/documents/summaryofconclusions-april2024",
     "content": {
@@ -77,10 +79,11 @@
   {
     "title": "Note aux Décideurs",
     "img": "/uploads/2024/04/FR_2024-04_RPCA_NAD_Policy_Brief.jpg",
-    "datecontent": "April 2024",
+    "flag": "/images/FR_Co-fundedbytheEU_RGB_POS.png",
+    "datecontent": "avril 2024",
     "bllink": "/documents/noteauxdécideurs-april2024",
     "content": {
-      "Published": "April 2024",
+      "Published": "avril 2024",
       "Description": "",
       "Countries": "Benin, Burkina Faso, Cabo Verde, Chad, CILSS area, Côte d'Ivoire, ECOWAS area, G5 Sahel area, Gambia, Ghana, Guinea, Guinea-Bissau, Liberia, Liptako-Gourma, Mali, Mauritania, Niger, Nigeria, Senegal, Sierra Leone, Togo",
       "Themes": "Agriculture & Value chains, Climate change & Adapation, Employment, Food security, Nutrition, Resilience, Rural-urbain, Social protection",
@@ -92,6 +95,7 @@
   {
     "title": "Policy Brief",
     "img": "/uploads/2024/04/EN_2024-04_RPCA_NAD_Policy_Brief.jpg",
+    "flag": "/images/EN_Co-fundedbytheEU_RGB_POS.png",
     "datecontent": "April 2024",
     "bllink": "/documents/policybrief-april2024",
     "content": {
@@ -272,6 +276,7 @@
   {
     "title": "HDP-N Methodological guide for conducting the inclusive country diagnosis",
     "img": "/uploads/2023/01/Guide-Diagnostic-Inclusif_ENG-1-1-341x500.jpg",
+    "flag": "/images/EN_Co-fundedbytheEU_RGB_POS.png",
     "datecontent": "January 2023",
     "bllink": "/documents/hdpnmethodologicalguideforconductingtheinclusivecountrydiagnosis-january2023",
     "content": {
@@ -280,7 +285,7 @@
       "Countries": "CILSS area, ECOWAS area, UEMOA area",
       "Themes": "Agriculture & Value chains, Children & Youth, Employment, Food security, Livestock & Pastoralism, Resilience, Rural-urbain",
       "Scale": "Regional (West Africa)",
-      "Langs": "French"
+      "Langs": "English"
     },
     "permalink": "/uploads/2023/01/Guide-Diagnostic-Inclusif_ENG-1.pdf"
   },
@@ -331,7 +336,8 @@
   },
   {
     "title": "Summary of conclusions, 38th annual meeting",
-    "img": "/uploads/2022/12/RPCA-DEC2022_RELEVE-CONCLUSIONS_EN-1-1-354x500.jpg",
+    "img": "/uploads/2022/12/RPCA2022-DEC_RELEVE-CONCLUSIONS_EN.jpg",
+    "flag": "/images/EN_Co-fundedbytheEU_RGB_POS.png",
     "datecontent": "December 2022",
     "bllink": "/documents/summaryofconclusions-december2022",
     "content": {
@@ -342,7 +348,7 @@
       "Scale": "Regional (West Africa)",
       "Langs": "English"
     },
-    "permalink": "/uploads/2022/12/RPCA-DEC2022_RELEVE-CONCLUSIONS_EN-1.pdf"
+    "permalink": "/uploads/2022/12/RPCA2022-DEC_RELEVE-CONCLUSIONS_EN.pdf"
   },
   {
     "title": "Draft agenda",
@@ -407,22 +413,24 @@
   },
   {
     "title": "Reléve des conclusions, 38e réunion annuelle",
-    "img": "/uploads/2022/12/RPCA-2022-DEC_RELEVE-CONCLUSIONS_FR-1-1-356x500.jpg",
-    "datecontent": "decembre 2022",
+    "img": "/uploads/2022/12/RPCA2022-DEC_RELEVE-CONCLUSIONS_FR.jpg",
+    "flag": "/images/FR_Co-fundedbytheEU_RGB_POS.png",
+    "datecontent": "décembre 2022",
     "bllink": "/documents/relévedesconclusions-december2022",
     "content": {
-      "Published": "decembre 2022",
+      "Published": "décembre 2022",
       "Description": "",
       "Countries": "Benin, Burkina Faso, Cabo Verde, Chad, CILSS area, Côte d'Ivoire, ECOWAS area, G5 Sahel area, Gambia, Ghana, Guinea, Guinea-Bissau, Liberia, Liptako-Gourma, Mali, Mauritania, Niger, Nigeria, Senegal, Sierra Leone, Togo",
       "Themes": "Agriculture & Value chains, Climate change & Adapation, Employment, Food security, Nutrition, Resilience, Rural-urbain, Social protection",
       "Scale": "Regional (West Africa)",
       "Langs": "French"
     },
-    "permalink": "/uploads/2022/12/RPCA2022-DEC_RELEVE-CONCLUSIONS_FR-1.pdf"
+    "permalink": "/uploads/2022/12/RPCA2022-DEC_RELEVE-CONCLUSIONS_FR.pdf"
   },
   {
     "title": "4th Ordinary Session of the Steering committee, Summary of conclusions and décisions",
-    "img": "/uploads/2022/05/COR-RPCA-avril22_EN_-358x500.jpg",
+    "img": "/uploads/2022/05/COR-RPCA-summary_april_22_EN.jpg",
+    "flag": "/images/EN_Co-fundedbytheEU_RGB_POS.png",
     "datecontent": "April 2022",
     "bllink": "/documents/4thordinarysessionofthesteeringcommitteeconclusionsanddécisions-april2022",
     "content": {
@@ -433,11 +441,12 @@
       "Scale": "Regional (West Africa)",
       "Langs": "English"
     },
-    "permalink": "/uploads/2022/05/COR-RPCA-avril22_EN_F-.pdf"
+    "permalink": "/uploads/2022/05/COR-RPCA-summary_april_22_EN.pdf"
   },
   {
     "title": "4e session ordinaire du Comité d'orientation, Relevé des conclusions et décisions",
-    "img": "/uploads/2022/05/COR-RPCA-avril22-FR-358x500.jpg",
+    "img": "/uploads/2022/05/COR-RPCA-summary_april_22_FR.jpg",
+    "flag": "/images/FR_Co-fundedbytheEU_RGB_POS.png",
     "datecontent": "avril 2022",
     "bllink": "/documents/4thordinarysessionofthesteeringcommitteeconclusionsanddécisions-avril2022",
     "content": {
@@ -448,11 +457,12 @@
       "Scale": "Regional (West Africa)",
       "Langs": "French"
     },
-    "permalink": "/uploads/2022/05/COR-RPCA-avril22_FR-F.pdf"
+    "permalink": "/uploads/2022/05/COR-RPCA-summary_april_22_FR.pdf"
   },
   {
     "title": "RPCA Policy Brief 2022",
-    "img": "/uploads/2022/04/NAD2022_EN-1-352x500.jpg",
+    "img": "/uploads/2022/04/NAD2022_EN.jpg",
+    "flag": "/images/EN_Co-fundedbytheEU_RGB_POS.png",
     "datecontent": "April 2022",
     "bllink": "/documents/rpcapolicybrief2022-april2022",
     "content": {
@@ -461,9 +471,25 @@
       "Countries": "CILSS area, ECOWAS area, UEMOA area",
       "Themes": "Agriculture & Value chains, Food security, Markets, prices & trade, Nutrition, Resilience, Health",
       "Scale": "Regional (West Africa)",
-      "Langs": "French"
+      "Langs": "English"
     },
     "permalink": "/uploads/2022/04/NAD2022_EN.pdf"
+  },
+  {
+    "title": "RPCA Note aux Décideurs 2022",
+    "img": "/uploads/2022/04/NAD2022_FR.jpg",
+    "flag": "/images/FR_Co-fundedbytheEU_RGB_POS.png",
+    "datecontent": "avril 2022",
+    "bllink": "/documents/rpcanoteauxdecideurs2022-avril2022",
+    "content": {
+      "Published": "avril 2022",
+      "Description": "La région du Sahel et de l'Afrique de l'Ouest est confrontée à une crise alimentaire et nutritionnelle majeure pour la troisième année consécutive, avec 38,3 millions de personnes menacées pendant la période de soudure 2022. Les membres du RPCA ont appelé à une mobilisation pour agir rapidement face à l'urgence alimentaire et nutritionnelle, mais aussi à un engagement politique à long terme pour s'attaquer aux causes sous-jacentes des crises alimentaires et nutritionnelles. La note aux décideurs s'appuie sur les conclusions des réunions annuelle et restreinte, qui se sont tenues respectivement du 6 au 8 décembre 2022 et du 6 au 8 avril 2022. Elle présente deux messages clés et quelques implications majeures pour les organisations régionales (CEDEAO, UEMOA, CILSS).          Auteurs :     Secrétariat du CSAO/OCDE et CILSS",
+      "Countries": "CILSS area, ECOWAS area, UEMOA area",
+      "Themes": "Agriculture & Value chains, Food security, Markets, prices & trade, Nutrition, Resilience, Health",
+      "Scale": "Regional (West Africa)",
+      "Langs": "French"
+    },
+    "permalink": "/uploads/2022/04/NAD2022_FR.pdf"
   },
   {
     "title": "Sahel and West Africa: Unprecedent food and nutrition insecurity",
@@ -482,7 +508,8 @@
   },
   {
     "title": "Summary of conclusions, restricted meeting",
-    "img": "/uploads/2022/04/RPCA2022_RELEVE-CONCLUSIONS_EN-1-358x500.jpg",
+    "img": "/uploads/2022/04/RPCA2022_RELEVE-CONCLUSIONS_EN.jpg",
+    "flag": "/images/EN_Co-fundedbytheEU_RGB_POS.png",
     "datecontent": "April 2022",
     "bllink": "/documents/summaryofconclusionsrestrictedmeetingapril2022-april2022",
     "content": {
@@ -497,7 +524,8 @@
   },
   {
     "title": "Reléve des conclusions, réunion restreinte",
-    "img": "/uploads/2022/04/RPCA2022_RELEVE-CONCLUSIONS_FR-1-358x500.jpg",
+    "img": "/uploads/2022/04/RPCA2022_RELEVE-CONCLUSIONS_FR.jpg",
+    "flag": "/images/FR_Co-fundedbytheEU_RGB_POS.png",
     "datecontent": "avril 2022",
     "bllink": "/documents/relevedesconclusionsreunionrestreinte-avril2022",
     "content": {
@@ -513,17 +541,34 @@
   {
     "title": "Final communiqué, High level Consultation, 6 April 2022",
     "img": "/uploads/2022/04/Communique-Final-Sahel-Lake-Chad-High-Level-Event_EN-1-344x500.jpg",
+    "flag": "/images/EN_Co-fundedbytheEU_RGB_POS.png",
     "datecontent": "April 2022",
-    "bllink": "/documents/finalcommuniquéhighlevelconsultation6april2022-april2022",
+    "bllink": "/documents/EN-finalcommuniquéhighlevelconsultation6april2022-april2022",
     "content": {
       "Published": "April 2022",
       "Description": "The final communiqué of the high-level consultation initiated by the Sahel and West Africa Club (SWAC/OECD), the European Union (EU) and the Global Network Against Food Crises (GN) on 6 April 2022. ",
       "Countries": "CILSS area, ECOWAS area, G5 Sahel area, Liptako-Gourma, UEMOA area",
       "Themes": "Food security, Nutrition",
       "Scale": "Cross-border",
-      "Langs": "English, French"
+      "Langs": "English"
     },
     "permalink": "/uploads/2022/04/Communique-Final-Sahel-Lake-Chad-High-Level-Event_EN.pdf"
+  },
+  {
+    "title": "Communiqué final, Consultation à haut niveau, 6 avril 2022",
+    "img": "/uploads/2022/04/Communique-Final-Sahel-Lake-Chad-High-Level-Event_FR-1.jpg",
+    "flag": "/images/FR_Co-fundedbytheEU_RGB_POS.png",
+    "datecontent": "avril 2022",
+    "bllink": "/documents/FR-finalcommuniquéhighlevelconsultation6avril2022-avril2022",
+    "content": {
+      "Published": "avril 2022",
+      "Description": "Le communiqué final de la consultation de haut niveau initiée par le Club du Sahel et de l'Afrique de l'Ouest (CSAO/OCDE), l'Union européenne (UE) et le Réseau mondial contre les crises alimentaires (GN) le 6 avril 2022.",
+      "Countries": "CILSS area, ECOWAS area, G5 Sahel area, Liptako-Gourma, UEMOA area",
+      "Themes": "Food security, Nutrition",
+      "Scale": "Cross-border",
+      "Langs": "French"
+    },
+    "permalink": "/uploads/2022/04/Communique-Final-Sahel-Lake-Chad-High-Level-Event_FR.pdf"
   },
   {
     "title": "Statement by Francesca Di Mauro, spokesperson for the FTP-AGIR platform",
@@ -702,7 +747,7 @@
   },
   {
     "title": "Statement by the UN organisations",
-    "img": "/uploads/2021/12/Messages-cles-des-UNs-RPCA-Decembre-2021-1-385x500.jpg",
+    "img": "/uploads/2021/12/Messages-cles-des-UNs-RPCA-décembre-2021-1-385x500.jpg",
     "datecontent": "December 2021",
     "bllink": "/documents/statementbytheunorganisations-december2021",
     "content": {
@@ -713,7 +758,7 @@
       "Scale": "Regional (West Africa)",
       "Langs": "French"
     },
-    "permalink": "/uploads/2021/12/Messages-cles-des-UNs-RPCA-Decembre-2021.pdf"
+    "permalink": "/uploads/2021/12/Messages-cles-des-UNs-RPCA-décembre-2021.pdf"
   },
   {
     "title": "Speech by the Minister of Agricultural Development, Chad",
@@ -747,6 +792,7 @@
   {
     "title": "Rapport étude instruments PREGEC",
     "img": "/uploads/2021/12/Rapport-etude-instruments-PREGEC-final_F-1.jpg",
+    "flag": "/images/FR_Co-fundedbytheEU_RGB_POS.png",
     "datecontent": "December 2021",
     "bllink": "/documents/RapportetudeinstrumentsPREGEC-december2021",
     "content": {
@@ -793,10 +839,10 @@
   {
     "title": "Reléve des conclusions, 37e réunion annuelle",
     "img": "/uploads/2021/12/RPCA2021-DEC_RELEVE-CONCLUSIONS_FR-1.jpg",
-    "datecontent": "decembre 2021",
-    "bllink": "/documents/relevedesconclusions37ereunionannuelle-decembre2021",
+    "datecontent": "décembre 2021",
+    "bllink": "/documents/relevedesconclusions37ereunionannuelle-décembre2021",
     "content": {
-      "Published": "decembre 2021",
+      "Published": "décembre 2021",
       "Description": "",
       "Organizations": "SWAC/OECD",
       "Countries": "CILSS area, ECOWAS area, G5 Sahel area, Liptako-Gourma, UEMOA area",
@@ -1361,7 +1407,7 @@
     "content": {
       "Published": "December 2020",
       "Description": "This snapshot provides an overview of the food and nutrition situation in the Sahel and West Africa region and the outlook for 2021. For the second consecutive year, the region must prepare for a major food and nutrition crisis in 2021. Some 16.7 million people require immediate food assistance, including 9.2 million people in northern Nigeria. About 1 million people face an emergency situation (October-December 2020). The number of acutely food-insecure people could increase to 23.6 million during the next lean season (June-August 2021), reaching a new record high.        Authors :     SWAC/OECD Secretariat  ",
-      "Countries": "Benin, Burkina Faso, Chad, CILSS area, Côte d'Ivoire, ECOWAS area, Gambia, Ghana, Guinea-Bissau, Liberia, Mali, Mauritania, Niger, Nigeria, Region, Senegal, Sierra Leone, Togo, UEMOA area",
+      "Countries": "Benin, Burkina Faso, Chad, CILSS area, Côte d'Ivoire, ECOWAS area, Gambia, Ghana, Guinea-Bissau, Liberia, Mali, Mauritania, Niger, Nigeria, Senegal, Sierra Leone, Togo, UEMOA area",
       "Themes": "Agriculture & Value chains, Food security, Markets, prices & trade, Nutrition, Resilience",
       "Scale": "Regional (West Africa)",
       "Langs": "English, French"
@@ -1409,7 +1455,7 @@
       "Published": "December 2020",
       "Description": "Save the Children, Action Against Hunger and Oxfam have set up a consortium “Support to Food Crisis Prevention Systems” aimed at transferring their expertise to national and regional early warning systems (EWSs) and civil society organisations (CSOs). The consortium contributes to improving the quality, transparency and accountability of the food crisis prevention system. This USD 6.5 million initiative is funded by the European Union and USAID BHA until early 2023.",
       "Organizations": "Save the Children, Action against Hunger, Oxfam",
-      "Countries": "CILSS area, ECOWAS area, Region, UEMOA area",
+      "Countries": "CILSS area, ECOWAS area, UEMOA area",
       "Themes": "Agriculture & Value chains, Food security, Livestock & Pastoralism, Nutrition, Resilience",
       "Scale": "Regional (West Africa)",
       "Langs": "English"
@@ -1449,10 +1495,10 @@
   {
     "title": "Reléve des conclusions, 36e réunion annuelle",
     "img": "/uploads/2020/12/COV-RC-Dec2020_FR.jpg",
-    "datecontent": "decembre 2020",
-    "bllink": "/documents/relevedesconclusions36ereunionannuelle-decembre2020",
+    "datecontent": "décembre 2020",
+    "bllink": "/documents/relevedesconclusions36ereunionannuelle-décembre2020",
     "content": {
-      "Published": "decembre 2020",
+      "Published": "décembre 2020",
       "Description": "Lors de la 36e réunion annuelle du RPCA, qui s'est tenue le 3 décembre 2020, les membres du RPCA ont tiré la sonnette d'alarme pour une action politique et financière afin de faire face à une situation alimentaire et nutritionnelle sans précédent au Sahel et en Afrique de l'Ouest, qui a été fortement exacerbée par les effets combinés des crises sécuritaire, sanitaire et inflationniste : 16,7 millions de personnes ont besoin d'une assistance alimentaire et nutritionnelle immédiate, et ce nombre devrait atteindre 23,6 millions au cours de la prochaine période de soudure si des mesures appropriées ne sont pas prises.",
       "Themes": "Agriculture & Value chains, Food security, Nutrition, Resilience",
       "Scale": "Regional (West Africa)",
@@ -2547,10 +2593,10 @@
   {
     "title": "Reléve des conclusions, 35e réunion annuelle",
     "img": "/uploads/2019/12/summary-of-conclusions_FR.jpg",
-    "datecontent": "decembre 2019",
-    "bllink": "/documents/relevedesconclusions35ereunionannuelle-decembre2019",
+    "datecontent": "décembre 2019",
+    "bllink": "/documents/relevedesconclusions35ereunionannuelle-décembre2019",
     "content": {
-      "Published": "decembre 2019",
+      "Published": "décembre 2019",
       "Description": "La 35e réunion annuelle du RPCA s'est tenue le 9 décembre 2019 au Centre de conférences de l'OCDE à Paris. Elle a porté exclusivement sur la situation agricole, alimentaire et nutritionnelle, dans un contexte difficile puisque la crise sécuritaire continue d'aggraver les vulnérabilités alimentaires et nutritionnelles. Les membres du RPCA ont examiné les résultats provisoires de la campagne agropastorale 2019-20, les marchés alimentaires, l'environnement macroéconomique et son impact sur la situation alimentaire et nutritionnelle de la région, en particulier pendant la prochaine période de soudure (juin-août 2020). Dans leur résumé des conclusions, ils ont recommandé d'accélérer la mise en œuvre des recommandations de la deuxième évaluation externe de la Charte du PREGEC, et d'investir progressivement davantage dans des réponses structurelles qui s'attaquent aux causes profondes des crises alimentaires et nutritionnelles.",
       "Themes": "Agriculture & Value chains, Food security, Nutrition",
       "Scale": "Regional (West Africa)",
@@ -2876,10 +2922,10 @@
   {
     "title": "Reléve des conclusions, 34e réunion annuelle",
     "img": "/uploads/2018/12/releve-conclusions.jpg",
-    "datecontent": "decembre 2018",
-    "bllink": "/documents/relevedesconclusions34ereunionannuelle-decembre2018",
+    "datecontent": "décembre 2018",
+    "bllink": "/documents/relevedesconclusions34ereunionannuelle-décembre2018",
     "content": {
-      "Published": "decembre 2018",
+      "Published": "décembre 2018",
       "Description": "Messages et décisions clés de la 34e réunion annuelle du RPCA, qui s'est tenue du 3 au 5 décembre 2018 à Banjul, en Gambie.La réunion a rassemblé quelque 250 participants, dont des hauts représentants de gouvernements africains, des organisations intergouvernementales (OIG), des groupes de la société civile, des membres du secteur privé ainsi que des partenaires techniques et financiers. Les membres du RPCA ont examiné les résultats provisoires de la campagne agropastorale 2018-19, la mise en œuvre des plans de réponse et ont réfléchi à l'infestation de chenilles légionnaires an. Ils ont également mis l'accent sur et, tout en réfléchissant longuement aux différentes manières de mettre à l'échelle les meilleures pratiques en matière de nutrition. La réunion a également été l'occasion pour le Réseau de discuter de la mise en œuvre des recommandations de la deuxième évaluation externe de la Charte de prévention et de gestion des crises alimentaires (Charte PREGEC). Enfin, les membres du RPCA ont eu l'occasion d'en apprendre davantage sur l'expérience du gouvernement sénégalais en matière de résilience alimentaire et nutritionnelle pour ses citoyens les plus vulnérables. La 35e réunion annuelle aura lieu à Conakry, en Guinée.",
       "Countries": "Gambia",
       "Langs": "French",
@@ -3312,9 +3358,9 @@
   },
   {
     "title": "Charter for Food Crisis Prevention and Management (PREGEC Charter)",
-    "img": "/uploads/2019/07/charter-cov_EN.jpg",
+    "img": "/uploads/old/Charter_EN.png",
     "datecontent": "December 2012",
-    "bllink": "/documents/charterforfoodcrisispreventionandmanagementpregeccharter-december2012",
+    "bllink": "/documents/PREGEC-charter-dec2012",
     "content": {
       "Published": "December 2012",
       "Description": "In response to the Sahel’s severe droughts, the region adopted a Charter to improve the co-ordination and effectiveness of food aid in 1990. This code of good conduct has revolutionised co-operation between beneficiary countries and their partners. In particular, it has helped reduce in-kind food aid that often disrupted the local food economy. Current food crises are more complex and multi-faceted than in the past. The region’s population has doubled. Nearly half of the West Africans live in urban areas. And global markets have an increasingly important role to play. The Charter has been revised so that it can adapt to the region’s profound transformations. In 2012, the 17 States of the region and their partners adopted the Charter for the Prevention and Management of Food Crises – also called  PREGEC Charter. The PREGEC Charter addresses the root causes of food crises. It now covers all of the region’s countries and integrates new stakeholders including NGOs and the private sector. The Charter calls on signatories to strengthen information systems and dialogue platforms, and to ensure that interventions are coherent.   ",
@@ -3323,7 +3369,37 @@
       "Scale": "Local, National, Regional (West Africa), Global",
       "Langs": "English"
     },
-    "permalink": "/uploads/2018/12/Charter_EN.pdf"
+    "permalink": "/uploads/old/Charter_EN.pdf"
+  },
+  {
+    "title": "Charte pour la Prévention et la Gestion des Crises Alimentaires (Charte PREGEC)",
+    "img": "/uploads/old/Charte_FR.png",
+    "datecontent": "December 2012",
+    "bllink": "/documents/charte-PREGEC-dec2012",
+    "content": {
+      "Published": "décembre 2012",
+      "Description": "En réponse aux graves sécheresses du Sahel, la région a adopté en 1990 une charte visant à améliorer la coordination et l'efficacité de l'aide alimentaire. Ce code de bonne conduite a révolutionné la coopération entre les pays bénéficiaires et leurs partenaires. Il a notamment permis de réduire l'aide alimentaire en nature qui perturbait souvent l'économie alimentaire locale. Les crises alimentaires actuelles sont plus complexes et multiformes que par le passé. La population de la région a doublé. Près de la moitié des Africains de l'Ouest vivent dans des zones urbaines. Et les marchés mondiaux ont un rôle de plus en plus important à jouer. La Charte a été révisée pour s'adapter aux profondes transformations de la région. En 2012, les 17 États de la région et leurs partenaires ont adopté la Charte pour la prévention et la gestion des crises alimentaires, également appelée Charte du PREGEC. La Charte PREGEC s'attaque aux causes profondes des crises alimentaires. Elle couvre désormais tous les pays de la région et intègre de nouvelles parties prenantes, dont les ONG et le secteur privé. La charte invite les signataires à renforcer les systèmes d'information et les plates-formes de dialogue et à veiller à la cohérence des interventions.",
+      "Countries": "Benin, Burkina Faso, Cabo Verde, Chad, CILSS area, Côte d'Ivoire, ECOWAS area, G5 Sahel area, Gambia, Ghana, Guinea, Guinea-Bissau, Liberia, Mali, Mauritania, Niger, Nigeria, Senegal, Sierra Leone, Togo, UEMOA area",
+      "Themes": "Agriculture & Value chains, Food security, Nutrition, Resilience, SDGs, Social protection",
+      "Scale": "Local, National, Regional (West Africa), Global",
+      "Langs": "French"
+    },
+    "permalink": "/uploads/old/Charter_FR.pdf"
+  },
+  {
+    "title": "Carta de Prevenção e Gestão das Crises Alimentares (Carta PREGEC)",
+    "img": "/uploads/old/Carta_POR.png",
+    "datecontent": "dezembro 2012",
+    "bllink": "/documents/carta-PREGEC-dez2012",
+    "content": {
+      "Published": "dezembro 2012",
+      "Description": "Em resposta às graves secas do Sahel, a região adoptou, em 1990, uma Carta para melhorar a coordenação e a eficácia da ajuda alimentar. Este código de boa conduta revolucionou a cooperação entre os países beneficiários e os seus parceiros. Contribuiu, nomeadamente, para reduzir a ajuda alimentar em espécie, que frequentemente perturbava a economia alimentar local. As actuais crises alimentares são mais complexas e multifacetadas do que no passado. A população da região duplicou. Quase metade dos habitantes da África Ocidental vive em zonas urbanas. E os mercados globais têm um papel cada vez mais importante a desempenhar. A Carta foi revista para se adaptar às profundas transformações da região. Em 2012, os 17 Estados da região e os seus parceiros adoptaram a Carta para a Prevenção e Gestão das Crises Alimentares - também designada por Carta PREGEC. A Carta PREGEC aborda as causas profundas das crises alimentares. Abrange agora todos os países da região e integra novas partes interessadas, incluindo ONG e o sector privado. A Carta apela aos signatários para que reforcem os sistemas de informação e as plataformas de diálogo e para que assegurem a coerência das intervenções.",
+      "Countries": "Benin, Burkina Faso, Cabo Verde, Chad, CILSS area, Côte d'Ivoire, ECOWAS area, G5 Sahel area, Gambia, Ghana, Guinea, Guinea-Bissau, Liberia, Mali, Mauritania, Niger, Nigeria, Senegal, Sierra Leone, Togo, UEMOA area",
+      "Themes": "Agriculture & Value chains, Food security, Nutrition, Resilience, SDGs, Social protection",
+      "Scale": "Local, National, Regional (West Africa), Global",
+      "Langs": "Portuguese"
+    },
+    "permalink": "/uploads/old/Carta_POR.pdf"
   },
   {
     "title": "AGIR : Methodological Guide for Inclusive National Dialogue Processes",
@@ -3550,5 +3626,275 @@
       "Langs": "French"
     },
     "permalink": "/uploads/2020/08/1985-Renforcement-du-R%C3%A9seau.pdf"
+  },
+  {
+    "title": "1990 - Charte de l'aide alimentaire",
+    "img": "/uploads/old/1990 Charte aide alimentaire.png",
+    "datecontent": "février 1990",
+    "bllink": "/documents/charte-de-laide-alimentaire-fev1990",
+    "content": {
+      "Published": "février 1990",
+      "Description": "",
+      "Countries": "Burkina Faso, Chad, CILSS area, Mali, Mauritania, Niger, Senegal",
+      "Themes": "Agriculture & Value chains, Food security, Nutrition",
+      "Scale": "Regional (West Africa)",
+      "Langs": "French"
+    },
+    "permalink": "/uploads/old/1990 Charte aide alimentaire.pdf"
+  },
+  {
+    "title": "1991 - Evaluation Charte Sahel",
+    "img": "/uploads/old/1991 Evaluation Charte Sahel.png",
+    "datecontent": "novembre 1991",
+    "bllink": "/documents/evaluation-charte-sahel-nov1991",
+    "content": {
+      "Published": "novembre 1991",
+      "Description": "",
+      "Countries": "Burkina Faso, Chad, CILSS area, Mali, Mauritania, Niger, Senegal",
+      "Themes": "Agriculture & Value chains, Food security, Nutrition",
+      "Scale": "Regional (West Africa)",
+      "Langs": "French"
+    },
+    "permalink": "/uploads/old/1991 Evaluation Charte Sahel.pdf"
+  },
+  {
+    "title": "1993 - Evaluation Charte Sahel",
+    "img": "/uploads/old/1993 Evaluation Charte Sahel.png",
+    "datecontent": "avril 1993",
+    "bllink": "/documents/evaluation-charte-sahel-avr1993",
+    "content": {
+      "Published": "avril 1993",
+      "Description": "",
+      "Countries": "Burkina Faso, Chad, CILSS area, Mali, Mauritania, Niger, Senegal",
+      "Themes": "Agriculture & Value chains, Food security, Nutrition",
+      "Scale": "Regional (West Africa)",
+      "Langs": "French"
+    },
+    "permalink": "/uploads/old/1993 Evaluation Charte Sahel.pdf"
+  },
+  {
+    "title": "1994 - Evaluation Charte Sahel",
+    "img": "/uploads/old/1994 Evaluation Charte SN - NG - TC - BF - CV.png",
+    "datecontent": "janvier 1994",
+    "bllink": "/documents/evaluation-charte-sahel-jan1994",
+    "content": {
+      "Published": "janvier 1994",
+      "Description": "",
+      "Countries": "Burkina Faso, Chad, Côte d'Ivoire, Niger, Senegal",
+      "Themes": "Agriculture & Value chains, Food security, Nutrition",
+      "Scale": "Regional (West Africa)",
+      "Langs": "French"
+    },
+    "permalink": "/uploads/old/1994 Evaluation Charte SN - NG - TC - BF - CV.pdf"
+  },
+  {
+    "title": "1995 - Evaluation Charte Sahel",
+    "img": "/uploads/old/1995 Evaluation Charte BF - ML - MA - manque NG - SN - TC.png",
+    "datecontent": "janvier 1995",
+    "bllink": "/documents/evaluation-charte-sahel-jan1995",
+    "content": {
+      "Published": "janvier 1995",
+      "Description": "",
+      "Countries": "Burkina Faso, Chad, CILSS area, Mali, Mauritania, Niger, Senegal",
+      "Themes": "Agriculture & Value chains, Food security, Nutrition",
+      "Scale": "Regional (West Africa)",
+      "Langs": "French"
+    },
+    "permalink": "/uploads/old/1995 Evaluation Charte BF - ML - MA - manque NG - SN - TC.pdf"
+  },
+  {
+    "title": "1998 - Evaluation Charte Mauritanie",
+    "img": "/uploads/old/1998 Evaluation Charte Mauritanie.png",
+    "datecontent": "janvier 1998",
+    "bllink": "/documents/evaluation-charte-mauritanie-jan1998",
+    "content": {
+      "Published": "janvier 1998",
+      "Description": "",
+      "Countries": "Mauritania",
+      "Themes": "Agriculture & Value chains, Food security, Nutrition",
+      "Scale": "Regional (West Africa)",
+      "Langs": "French"
+    },
+    "permalink": "/uploads/old/1998 Evaluation Charte Mauritanie.pdf"
+  },
+  {
+    "title": "1998 - Evaluation Charte Niger",
+    "img": "/uploads/old/1998 Evaluation Charte Niger.png",
+    "datecontent": "janvier 1998",
+    "bllink": "/documents/evaluation-charte-niger-jan1998",
+    "content": {
+      "Published": "janvier 1998",
+      "Description": "",
+      "Countries": "Niger",
+      "Themes": "Agriculture & Value chains, Food security, Nutrition",
+      "Scale": "Regional (West Africa)",
+      "Langs": "French"
+    },
+    "permalink": "/uploads/old/1998 Evaluation Charte Niger.pdf"
+  },
+  {
+    "title": "1998 - Evaluation Charte Sénégal",
+    "img": "/uploads/old/1998 Evaluation Charte Senegal.png",
+    "datecontent": "janvier 1998",
+    "bllink": "/documents/evaluation-charte-senegal-jan1998",
+    "content": {
+      "Published": "janvier 1998",
+      "Description": "",
+      "Countries": "Senegal",
+      "Themes": "Agriculture & Value chains, Food security, Nutrition",
+      "Scale": "Regional (West Africa)",
+      "Langs": "French"
+    },
+    "permalink": "/uploads/old/1998 Evaluation Charte Senegal.pdf"
+  },
+  {
+    "title": "1998 - Evaluation Charte Tchad",
+    "img": "/uploads/old/1998 Evaluation Charte Tchad.png",
+    "datecontent": "janvier 1998",
+    "bllink": "/documents/evaluation-charte-tchad-jan1998",
+    "content": {
+      "Published": "janvier 1998",
+      "Description": "",
+      "Countries": "Chad",
+      "Themes": "Agriculture & Value chains, Food security, Nutrition",
+      "Scale": "Regional (West Africa)",
+      "Langs": "French"
+    },
+    "permalink": "/uploads/old/1998 Evaluation Charte Tchad.pdf"
+  },
+  {
+    "title": "1999 - Evaluation Charte Mauritanie",
+    "img": "/uploads/old/1999 Evaluation Charte Mauritanie.png",
+    "datecontent": "janvier 1999",
+    "bllink": "/documents/evaluation-charte-mauritanie-jan1999",
+    "content": {
+      "Published": "janvier 1999",
+      "Description": "",
+      "Countries": "Mauritania",
+      "Themes": "Agriculture & Value chains, Food security, Nutrition",
+      "Scale": "Regional (West Africa)",
+      "Langs": "French"
+    },
+    "permalink": "/uploads/old/1999 Evaluation Charte Mauritanie.pdf"
+  },
+  {
+    "title": "1999 - Evaluation Charte Tchad",
+    "img": "/uploads/old/1999 Evaluation Charte Tchad.png",
+    "datecontent": "janvier 1999",
+    "bllink": "/documents/evaluation-charte-tchad-jan1999",
+    "content": {
+      "Published": "janvier 1999",
+      "Description": "",
+      "Countries": "Chad",
+      "Themes": "Agriculture & Value chains, Food security, Nutrition",
+      "Scale": "Regional (West Africa)",
+      "Langs": "French"
+    },
+    "permalink": "/uploads/old/1999 Evaluation Charte Tchad.pdf"
+  },
+  {
+    "title": "2001 - Evaluation Charte BF-NG-TC",
+    "img": "/uploads/old/2001 Evaluation Charte BF - NG - TC.png",
+    "datecontent": "novembre 2001",
+    "bllink": "/documents/evaluation-charte-bf-ng-tc-nov2001",
+    "content": {
+      "Published": "novembre 2001",
+      "Description": "",
+      "Countries": "Burkina Faso, Chad, Niger",
+      "Themes": "Agriculture & Value chains, Food security, Nutrition",
+      "Scale": "Regional (West Africa)",
+      "Langs": "French"
+    },
+    "permalink": "/uploads/old/2001 Evaluation Charte BF - NG - TC.pdf"
+  },
+  {
+    "title": "Communiqué des Ministres Final Charte PREGEC",
+    "img": "/uploads/old/Communique des Ministres Final Charte PREGEC- FR.png",
+    "datecontent": "novembre 2011",
+    "bllink": "/documents/communique-des-ministres-final-charte-pregec-fr-nov2011",
+    "content": {
+      "Published": "novembre 2011",
+      "Description": "",
+      "Countries": "Benin, Burkina Faso, Cabo Verde, Chad, CILSS area, Côte d'Ivoire, ECOWAS area, G5 Sahel area, Gambia, Ghana, Guinea, Guinea-Bissau, Liberia, Mali, Mauritania, Niger, Nigeria, Senegal, Sierra Leone, Togo, UEMOA area",
+      "Themes": "Agriculture & Value chains, Food security, Nutrition",
+      "Scale": "Regional (West Africa)",
+      "Langs": "French"
+    },
+    "permalink": "/uploads/old/Communique des Ministres Final Charte PREGEC- FR.pdf"
+  },
+  {
+    "title": "Ministers' Communiqué Final PREGEC Charter",
+    "img": "/uploads/old/Communique des Ministres Final PREGEC Charter- ENG.png",
+    "datecontent": "November 2011",
+    "bllink": "/documents/communique-des-ministres-final-charte-pregec-en-nov2011",
+    "content": {
+      "Published": "November 2011",
+      "Description": "",
+      "Countries": "Benin, Burkina Faso, Cabo Verde, Chad, CILSS area, Côte d'Ivoire, ECOWAS area, G5 Sahel area, Gambia, Ghana, Guinea, Guinea-Bissau, Liberia, Mali, Mauritania, Niger, Nigeria, Senegal, Sierra Leone, Togo, UEMOA area",
+      "Themes": "Agriculture & Value chains, Food security, Nutrition",
+      "Scale": "Regional (West Africa)",
+      "Langs": "English"
+    },
+    "permalink": "/uploads/old/Communique des Ministres Final PREGEC Charter- ENG.pdf"
+  },
+  {
+    "title": "Rapport de la Réunion des Experts, Charte PREGEC",
+    "img": "/uploads/old/Rapport finale Charte PREGEC réunion des ExpertsNov 2011-FR.png",
+    "datecontent": "novembre 2011",
+    "bllink": "/documents/rapport-de-la-reunion-des-experts-charte-pregec-fr-nov2011",
+    "content": {
+      "Published": "novembre 2011",
+      "Description": "",
+      "Countries": "Benin, Burkina Faso, Cabo Verde, Chad, CILSS area, Côte d'Ivoire, ECOWAS area, G5 Sahel area, Gambia, Ghana, Guinea, Guinea-Bissau, Liberia, Mali, Mauritania, Niger, Nigeria, Senegal, Sierra Leone, Togo, UEMOA area",
+      "Themes": "Agriculture & Value chains, Food security, Nutrition",
+      "Scale": "Regional (West Africa)",
+      "Langs": "French"
+    },
+    "permalink": "/uploads/old/Rapport finale Charte PREGEC réunion des ExpertsNov 2011-FR.pdf"
+  },
+  {
+    "title": "Report of the Meeting of Experts, PREGEC Charter",
+    "img": "/uploads/old/Report of the Meeting of Experts PREGEC Charter  Nov 2011-EN.png",
+    "datecontent": "November 2011",
+    "bllink": "/documents/rapport-de-la-reunion-des-experts-charte-pregec-en-nov2011",
+    "content": {
+      "Published": "November 2011",
+      "Description": "",
+      "Countries": "Benin, Burkina Faso, Cabo Verde, Chad, CILSS area, Côte d'Ivoire, ECOWAS area, G5 Sahel area, Gambia, Ghana, Guinea, Guinea-Bissau, Liberia, Mali, Mauritania, Niger, Nigeria, Senegal, Sierra Leone, Togo, UEMOA area",
+      "Themes": "Agriculture & Value chains, Food security, Nutrition",
+      "Scale": "Regional (West Africa)",
+      "Langs": "English"
+    },
+    "permalink": "/uploads/old/Report of the Meeting of Experts PREGEC Charter  Nov 2011-EN.pdf"
+  },
+  {
+    "title": "2e évaluation externe de la Charte PREGEC - document complet",
+    "img": "/uploads/old/seconde-evaluation-externe-de-la-charte-pregec.png",
+    "datecontent": "décembre 2018",
+    "bllink": "/documents/seconde-evaluation-externe-de-la-charte-pregec-dec2018",
+    "content": {
+      "Published": "décembre 2018",
+      "Description": "La seconde évaluation externe de la Charte PREGEC porte sur « l’analyse de la performance et de l’efficacité de la réponse aux crises alimentaires et nutritionnelles ». L’évaluation avait deux objectifs spécifiques : 1) évaluer la pertinence/consistance du plan de réponse en lien avec la situation réelle de terrain ; 2) évaluer l’efficacité du dispositif de gouvernance des réponses aux crises alimentaires et nutritionnelles. Réalisée par le Bureau Easy4Dev, l’évaluation s’est construite autour d’études sur un échantillon de sept pays : Burkina Faso, Gambie, Mali, Niger, Nigéria, Sénégal et Tchad.",
+      "Countries": "Burkina Faso, Chad, Gambia, Mali, Niger, Nigeria, Senegal",
+      "Themes": "Agriculture & Value chains, Food security, Nutrition",
+      "Scale": "Regional (West Africa)",
+      "Langs": "French"
+    },
+    "permalink": "/uploads/old/seconde-evaluation-externe-de-la-charte-pregec.pdf"
+  },
+  {
+    "title": "2e évaluation de la Charte PREGEC - messages et recommandations",
+    "img": "/uploads/old/FR-recommandations_charte.png",
+    "datecontent": "novembre 2018",
+    "bllink": "/documents/2e-evaluation-de-la-charte-pregec-messages-et-recommandations-nov2018",
+    "content": {
+      "Published": "novembre 2018",
+      "Description": "La deuxième évaluation externe de la Charte PREGEC est consacrée à  l’analyse de la performance et de l’efficacité de la réponse aux crises alimentaires et nutritionnelles. L’évaluation avait deux objectifs spécifiques : 1) évaluer la pertinence/consistance du plan de réponse en lien avec la situation réelle de terrain ; 2) évaluer l’efficacité du dispositif de gouvernance des réponses aux crises alimentaires et nutritionnelles. Réalisée par le Bureau Easy4Dev, l’évaluation s’est construite autour d’études sur un échantillon de sept pays : Burkina Faso, Gambie, Mali, Niger, Nigéria, Sénégal et Tchad.",
+      "Countries": "Burkina Faso, Chad, Gambia, Mali, Niger, Nigeria, Senegal",
+      "Themes": "Nutrition, Resilience, Social protection, Food security",
+      "Scale": "Regional (West Africa)",
+      "Langs": "French"
+    },
+    "permalink": "/uploads/old/FR-recommandations_charte.pdf"
   }
 ]

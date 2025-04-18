@@ -39,6 +39,9 @@ export default function SubHeader() {
         <a className="nav-link" href={`${BASE_URL}/resources/multimedia`}>
           {t("Multimedia")}
         </a>
+        <a className="nav-link" href={`${BASE_URL}/resources/archive`}>
+          {t("Archive")}
+        </a>
       </>
     );
   } else if (secondToLastPart === "about" || lastPart === "about") {
@@ -57,9 +60,9 @@ export default function SubHeader() {
         <a className="nav-link" href={`${BASE_URL}/about/members`}>
           {t("Members")}
         </a>
-        <a className="nav-link" href={`${BASE_URL}/about/remarks`}>
+        {/* <a className="nav-link" href={`${BASE_URL}/about/remarks`}>
           {t("Remarks")}
-        </a>
+        </a> */}
       </>
     );
   } else if (

@@ -77,7 +77,7 @@ const Footer = () => {
                   <img src={LogoUEMOA} alt="UEMOA" />
                 </a>
               </li>
-              <li>
+              {/* <li>
                 <a
                   href="https://european-union.europa.eu/"
                   target="_blank"
@@ -85,7 +85,7 @@ const Footer = () => {
                 >
                   <img src={euLogo} alt="EU" />
                 </a>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>

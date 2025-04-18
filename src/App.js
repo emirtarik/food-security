@@ -14,6 +14,7 @@ const LazyToolkit = lazy(() => import('./pages/Toolkit'));
 const LazyInstuments = lazy(() => import('./pages/Toolkits/SetofInstruments'));
 const LazyCGovSAN = lazy(() => import('./pages/Toolkits/CGovSAN'));
 const LazyResources = lazy(() => import('./pages/Resources'));
+const LazyArchive = lazy(() => import('./pages/Resources/Archive'));  // NEW: Import Archive page
 const LazyDocuments = lazy(() => import('./pages/Resources/Documents'));
 const LazyDocumentDetail = lazy(() => import('./pages/Resources/DocumentDetail'));
 const LazyMaps = lazy(() => import('./pages/Resources/MapStatic'));
@@ -40,7 +41,7 @@ export default function App() {
     const loggedInStatus = localStorage.getItem('isLoggedIn') === 'true';
     const storedCountry = localStorage.getItem('country');
     const storedRole = localStorage.getItem('role');
-    
+
     setIsLoggedIn(loggedInStatus);
     setCountry(storedCountry);
     setRole(storedRole);
@@ -48,11 +49,11 @@ export default function App() {
 
   const handleLogin = (status, userRole, userCountry) => {
     setIsLoggedIn(status);
-    setRole(userRole); 
-    setCountry(userCountry); 
+    setRole(userRole);
+    setCountry(userCountry);
 
     // Save login state to localStorage
-    localStorage.setItem('isLoggedIn', status ? 'true' : 'false'); // Store as a string
+    localStorage.setItem('isLoggedIn', status ? 'true' : 'false');
     localStorage.setItem('country', userCountry);
     localStorage.setItem('role', userRole);
   };
@@ -67,49 +68,55 @@ export default function App() {
       <Router basename="/">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route 
-            path="/login" 
-            element={isLoggedIn ? (
-              <Navigate to="/questionnaire/section1" replace />
-            ) : (
-              <Suspense fallback={<Loading />}>
-                <LazyLogin onLogin={handleLogin} />
-              </Suspense>
-            )} 
+          <Route
+            path="/login"
+            element={
+              isLoggedIn ? (
+                <Navigate to="/questionnaire/section1" replace />
+              ) : (
+                <Suspense fallback={<Loading />}>
+                  <LazyLogin onLogin={handleLogin} />
+                </Suspense>
+              )
+            }
           />
-          <Route 
-            path="/questionnaire/:section" 
-            element={isLoggedIn ? (
-              <Suspense fallback={<Loading />}>
-                <LazyQuestionnaire 
-                  role={role} 
-                  country={country} 
-                  onSubmit={handleQuestionnaireSubmit}
-                  setIsLoggedIn={setIsLoggedIn} // Pass down the state setters as props
-                  setRole={setRole}
-                  setCountry={setCountry}
-                />
-              </Suspense>
-            ) : (
-              <Navigate to="/login" replace />
-            )}
+          <Route
+            path="/questionnaire/:section"
+            element={
+              isLoggedIn ? (
+                <Suspense fallback={<Loading />}>
+                  <LazyQuestionnaire
+                    role={role}
+                    country={country}
+                    onSubmit={handleQuestionnaireSubmit}
+                    setIsLoggedIn={setIsLoggedIn} // Pass down the state setters as props
+                    setRole={setRole}
+                    setCountry={setCountry}
+                  />
+                </Suspense>
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
           />
-          <Route 
-            path="/dashboard" 
-            element={isLoggedIn ? (
-              <Suspense fallback={<Loading />}>
-                <LazyDashboard 
-                  responses={submittedResponses} 
-                  role={role} // Pass the role to Dashboard
-                  country={country} 
-                  setIsLoggedIn={setIsLoggedIn}
-                  setRole={setRole}
-                  setCountry={setCountry}
-                />
-              </Suspense>
-            ) : (
-              <Navigate to="/login" replace />
-            )}
+          <Route
+            path="/dashboard"
+            element={
+              isLoggedIn ? (
+                <Suspense fallback={<Loading />}>
+                  <LazyDashboard
+                    responses={submittedResponses}
+                    role={role} // Pass the role to Dashboard
+                    country={country}
+                    setIsLoggedIn={setIsLoggedIn}
+                    setRole={setRole}
+                    setCountry={setCountry}
+                  />
+                </Suspense>
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
           />
           <Route path="/analysis-and-response" element={<Suspense fallback={<Loading />}><LazyAnalysis /></Suspense>} />
           <Route path="/analysis" element={<Suspense fallback={<Loading />}><LazyAnalysis /></Suspense>} />
@@ -119,7 +126,13 @@ export default function App() {
           <Route path="/analysis-and-response/toolkit" element={<Suspense fallback={<Loading />}><LazyToolkit /></Suspense>} />
           <Route path="/analysis-and-response/toolkit/set-of-instruments" element={<Suspense fallback={<Loading />}><LazyInstuments /></Suspense>} />
           <Route path="/analysis-and-response/toolkit/c-gov-san" element={<Suspense fallback={<Loading />}><LazyCGovSAN /></Suspense>} />
+          
           <Route path="/resources" element={<Suspense fallback={<Loading />}><LazyResources /></Suspense>} />
+          <Route path="/resources/archive" element={  // NEW: Archive route
+            <Suspense fallback={<Loading />}>
+              <LazyArchive />
+            </Suspense>
+          } />
           <Route path="/resources/documents" element={<Suspense fallback={<Loading />}><LazyDocuments /></Suspense>} />
           <Route path="/documents/:bllink" element={<Suspense fallback={<Loading />}><LazyDocumentDetail /></Suspense>} />
           <Route path="/resources/maps" element={<Suspense fallback={<Loading />}><LazyMaps /></Suspense>} />
@@ -133,7 +146,7 @@ export default function App() {
           <Route path="/about/:permalink" element={<Suspense fallback={<Loading />}><LazyAbout /></Suspense>} />
           <Route path="/post/:permalink" element={<Suspense fallback={<Loading />}><LazyPosts /></Suspense>} />
           <Route path="/event-and-opportunities/event/:year/:permalink" element={<Suspense fallback={<Loading />}><LazyEventPage /></Suspense>} />
-          
+
           {/* Add the TooltipTest Route */}
           <Route
             path="/tooltip-test"

@@ -11,41 +11,21 @@ import { useTranslationHook } from "../i18n";
 import "../styles/Analysis.css";
 
 export default function Analysis() {
-  const { t } = useTranslationHook("misc");
+  const { t } = useTranslationHook("analysis");
   const projectsSectionRef = useRef(null);
 
   // Tabs state: "map" or "comparison"
   const [activeTab, setActiveTab] = useState("map");
 
-  // Define available time periods as extracted from csv_files.
-  const timePeriodOptions = [
-    "PJune-2025",
-    "October-2024",
-    "March-2024",
-    "October-2022",
-    "March-2022",
-    "October-2021",
-    "March-2021",
-    "March-2020",
-    "October-2019",
-    "March-2019",
-    "October-2018",
-    "October-2017",
-    "March-2017",
-    "October-2016",
-    "March-2016",
-    "March-2015",
-    "March-2014"
-  ];
-
   // Selected region and period data from RegionSelector.
+  // Initially, we set empty defaults so RegionSelector can derive its own defaults.
   const [selectedRegionData, setSelectedRegionData] = useState({
     region: { admin0: "", admin1: "", admin2: "" },
-    period1: "March-2024",
-    period2: "October-2024"
+    period1: "",
+    period2: ""
   });
 
-  // Fetch geojson features for region selection.
+  // Fetch geojson features for region selection from combined.geojson.
   const [geojsonFeatures, setGeojsonFeatures] = useState([]);
 
   useEffect(() => {
@@ -55,14 +35,14 @@ export default function Analysis() {
   }, []);
 
   useEffect(() => {
-    // Fetch the GeoJSON file and extract features.
-    fetch("/data/admin2.geojson")
+    // Fetch the combined GeoJSON file and extract its features.
+    fetch("/data/combined.geojson")
       .then(response => response.json())
       .then(data => {
         // Assuming the GeoJSON file has a 'features' array.
         setGeojsonFeatures(data.features);
       })
-      .catch(error => console.error("Error loading GeoJSON:", error));
+      .catch(error => console.error("Error loading combined GeoJSON:", error));
   }, []);
 
   return (
@@ -77,13 +57,13 @@ export default function Analysis() {
                 className={activeTab === "map" ? "tab-button active-tab" : "tab-button"}
                 onClick={() => setActiveTab("map")}
               >
-                Map
+                {t("map")}
               </button>
               <button
                 className={activeTab === "comparison" ? "tab-button active-tab" : "tab-button"}
                 onClick={() => setActiveTab("comparison")}
               >
-                Comparison
+                {t("comparison")}
               </button>
             </div>
             <div className="tab-content">
@@ -94,7 +74,6 @@ export default function Analysis() {
                   <RegionSelector 
                     geojsonData={geojsonFeatures} 
                     onSelect={setSelectedRegionData} 
-                    timePeriodOptions={timePeriodOptions} 
                   />
                   <ComparisonTable
                     regionSelection={selectedRegionData.region}

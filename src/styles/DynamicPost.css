@@ -49,6 +49,7 @@ h1#post-h1 {
 
 .list-group-item {
   background: #c2be00 !important;
+  font: normal normal 900 16px / 24px Lato !important;
   margin-top: 5px;
   margin-bottom: 5px;
   position: relative;
@@ -82,7 +83,7 @@ h1#post-h1 {
 
 .list-group-item a {
   text-align: center;
-  font: normal normal 900 22px/40px Lato;
+  font: normal normal 900 16px / 24px Lato !important;
   text-transform: uppercase !important;
   display: flex;
   justify-content: center;
@@ -309,6 +310,47 @@ h1#post-h1 {
   height: auto;
 }
 
+/* New container to hold image and text side by side */
+.post-wrapper {
+  display: flex;
+  flex-wrap: nowrap;       /* Allow wrapping for smaller screens */
+  align-items: flex-start;
+  gap: 20px;
+  margin: 20px auto;
+  max-width: 1080px;      /* or any other max width as required */
+}
+
+/* Image container for additional control if needed */
+.post-image-container {
+  flex: 1 1 50%;       /* The image takes up around 40% of the width */
+  max-width: 50%;
+}
+
+.post-image {
+  width: 100%;         /* Ensure it fills the container */
+  height: auto;        /* Maintain aspect ratio */
+  object-fit: cover;
+}
+
+/* Content container styling */
+.post-content {
+  flex: 1 1 60%;       /* Content occupies 60% of the width */
+  max-width: 60%;
+  text-align: justify;
+  margin-left: 2%;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .post-wrapper {
+    flex-direction: column;
+  }
+  .post-image-container, .post-content {
+    max-width: 100%;
+    flex: 1 1 100%;
+  }
+}
+
 
 /* Center h3 headings and style lists when printing */
 @media print {
@@ -333,4 +375,36 @@ h1#post-h1 {
     /* Optional: Adjust list item styles for print */
     margin-bottom: 0.5em;
   }
+}
+
+/* Styles for the content rendered with dangerouslySetInnerHTML */
+.post-html-content {
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.post-html-content p {
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.post-html-content ul {
+  margin: 16px 0;
+  padding-left: 20px;
+}
+
+.post-html-content li {
+  margin-bottom: 8px;
+}
+
+.post-html-content h2,
+.post-html-content h3 {
+  margin: 24px 0 16px;
+  font-weight: bold;
+}
+
+/* You can add additional selectors if needed */
+.section-content {
+  /* Override or add spacing if needed for sections */
+  margin-top: 20px;
 }

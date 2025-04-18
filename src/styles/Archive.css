@@ -1,0 +1,120 @@
+/* Archive.css */
+
+.archive-section {
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+.archive-header {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.archive-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #243d54;
+  margin-bottom: 20px;
+}
+
+.search-results h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #243d54;
+  margin: 20px 0;
+  text-align: center;
+}
+
+/* Style for the arrow icon used in the year title */
+.arrow-icon {
+  width: 40px;
+  height: 40px;
+  background-color: #243d54;
+  display: inline-block;
+  padding: 3px;
+  border-radius: 50%;
+  object-fit: contain;
+  margin-left: 10px;
+  transition: transform 0.3s ease;
+}
+
+.year-group {
+  margin-bottom: 40px;
+}
+
+.year-title {
+  font-size: 5rem;
+  font-weight: bold;
+  color: #243d54;
+  margin-bottom: 15px;
+  cursor: pointer;
+  position: relative;
+  padding-left: 30px;
+}
+
+/* Arrow indicator for foldable years */
+.year-title::before {
+  position: absolute;
+  left: 0;
+  transition: transform 0.3s;
+}
+
+/* When a year group is expanded, the arrow rotates */
+.year-group.expanded .year-title::before {
+  transform: rotate(90deg);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.archive-item {
+  flex: 0 0 30%;
+  width: 30%;
+  height: auto;
+  margin: 15px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease;
+}
+
+.archive-post:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(194, 190, 0, 0.4);
+}
+
+.archive-post {
+  background: #243d54;
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+}
+
+.archive-post-date {
+  font-size: 1.1rem;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+.archive-post-title {
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: #ffffff;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .archive-item {
+    flex: 0 0 45%;
+    max-width: 45%;
+  }
+}
+
+@media (max-width: 480px) {
+  .archive-item {
+    flex: 0 0 90%;
+    max-width: 90%;
+  }
+}

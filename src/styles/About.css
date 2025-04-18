@@ -47,7 +47,7 @@
     flex-direction: column;
     justify-content: center;
     padding: 0px;
-    max-width: 600px; /* Adjust the width of the document-info */
+    max-width: 100%;
 }
   
 .document-info h2 {
@@ -122,6 +122,21 @@
   gap: 20px;
 }
 
+.blue-box {
+  height: 250px;
+  background-color: #243D54; /* Blue color */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  margin: 5px;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 24px;
+}
+
 .green-box {
   height: 250px;
   background-color: #C2BE00; /* Green color */
@@ -186,4 +201,15 @@
   
   .document-container:hover .document-overlay {
     background: rgba(0, 0, 0, 0.7);
+  }
+
+  .custom-link {
+    color: #243D54;         /* A strong blue color */
+    font-weight: bold;
+    text-decoration: underline;
+    transition: color 0.3s ease;
+  }
+  
+  .custom-link:hover {
+    color: #37628a;         /* Darker on hover */
   }

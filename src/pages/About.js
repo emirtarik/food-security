@@ -5,6 +5,7 @@ import SubHeader from './SubHeader';
 import Footer from './Footer';
 import NotFound from './NotFound';
 import aboutPageData from '../data/aboutPageData.json';
+import MarkdownContent from '../components/MarkdownContent';
 import picPlaceholder from "../assets/picture-placeholder.png";
 import picRPCA from "../assets/img/about_rpca.jpg";
 import { useTranslationHook } from '../i18n';
@@ -14,6 +15,19 @@ const renderContentWithLineBreaks = (content) => {
   return content.split('\n').map((line, index) => (
     <p key={index}>{line}</p>
   ));
+};
+
+const LinkRenderer = ({ href, children }) => {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="custom-link"
+    >
+      {children}
+    </a>
+  );
 };
 
 const WhoAreWe = () => {
@@ -124,6 +138,65 @@ const History = () => {
   );
 };
 
+const Pregec = () => {
+  const { t, currentLanguage } = useTranslationHook(["misc"]);
+  const markdownFile = currentLanguage === 'fr'
+    ? "/markdown/the-pregec-charter-fr.md"
+    : "/markdown/the-pregec-charter.md";
+  const pageData = aboutPageData.find(page => page.permalink === "/about/the-pregec-charter");
+
+  if (!pageData) {
+    return <NotFound />;
+  }
+
+  const content = currentLanguage === 'fr' ? pageData.fr : pageData.en;
+  const documents = content.documents || [];
+
+  return (
+    <div>
+      <Header />
+      <SubHeader />
+      <section className="container page-detail">
+        <h1 className="title">
+          {currentLanguage === 'fr' ? "La Charte PREGEC" : "The PREGEC Charter"}
+        </h1>
+        <h2 className="rectangle"></h2>
+        <div className="document-detail-container row">
+          <div className="col-md-6 document-info">
+            <MarkdownContent file={markdownFile} />
+          </div>
+        </div>
+        <div className="box-container">
+          {documents.map((doc, index) => (
+            <div 
+              className="blue-box video-container" 
+              key={index}
+              style={{ 
+                backgroundImage: `url(${doc.thumbnail})`, 
+                backgroundPosition: "center",
+                backgroundSize: "cover"
+              }}
+            >
+              <a 
+                href={doc.link} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                style={{ textDecoration: "none", color: "inherit", width: "100%", height: "100%" }}
+              >
+                <div className="video-overlay">
+                  {doc.title}
+                </div>
+              </a>
+            </div>
+          ))}
+        </div>
+      </section>
+      <Footer />
+    </div>
+  );
+};
+
+
 const About = () => {
   const { permalink } = useParams();
 
@@ -132,6 +205,8 @@ const About = () => {
       return <WhoAreWe />;
     case "history":
       return <History />;
+    case "the-pregec-charter":
+      return <Pregec />;
     default:
       return (
         <div>

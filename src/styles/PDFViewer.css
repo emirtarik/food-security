@@ -1,0 +1,52 @@
+/* Container for the entire PDF viewer */
+.pdf-viewer {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border: 1px solid #ccc;
+  margin: 20px auto;
+  max-width: 1000px;
+  overflow: auto;  /* Enables scrolling if content exceeds the container */
+  text-align: center;
+}
+
+/* Toolbar styling */
+.pdf-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.pdf-toolbar button {
+  margin: 5px;
+  padding: 5px 10px;
+  border: 1px solid #007bff;
+  background-color: #fff;
+  color: #007bff;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.pdf-toolbar button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pdf-toolbar span {
+  margin: 0 10px;
+  font-size: 14px;
+}
+
+/* Container for PDF pages – displays pages side by side */
+.pdf-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 0 auto;
+}
+
+/* Hide the react-pdf text layer to prevent unwanted text output */
+.react-pdf__Page__textContent {
+  display: none;
+}

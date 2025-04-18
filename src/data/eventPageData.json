@@ -2,32 +2,50 @@
   {
     "ID": 30,
     "en": {
-      "img": "",
+      "img": "/uploads/2025/04/RPCA-April-2025-SavethedateEN.png",
       "date": "15/04/25",
       "place": "Paris, France",
-      "title": "",
-      "type": "",
-      "excerpt": "Check back in soon for more information on the next event!",
+      "title": "RPCA restricted meeting 2025",
+      "type": "RPCA restricted meeting",
+      "excerpt": "The Restricted Meeting of the Food Crisis Prevention Network (RPCA) will take place on 15-16 April 2025 in a hybrid format at the OECD Conference Centre in Paris, France, and via videoconference (Zoom). \nNetwork members will assess the food and nutrition situation (FNS) in the region, based on the final results of the 2024-25 agropastoral season and the functioning of agricultural markets at regional and international levels. Discussions will also focus on the impacts of security-related violence and sociopolitical unrest, which have exacerbated the region’s prolonged food and nutrition crisis. \nThe meeting will serve as a platform to review lessons learned from the 2024 food crisis response and examine strategic plans for 2025 interventions. Additionally, participants will analyse the ongoing reform of the RPCA, including innovations and adaptation measures needed to address evolving geopolitical and financial challenges.",
       "sections": [
-
+        {
+          "id": "rub-0",
+          "title": "Key documents",
+          "documents": [
+            {
+              "title": "Draft agenda",
+              "link": "/uploads/2025/04/EN_RPCA_Draft Agenda.pdf"
+            }
+          ]
+        }
       ]
     },
     "fr": {
-      "img": "",
+      "img": "/uploads/2025/04/RPCA-April-2025-SavethedateFR.png",
       "date": "15/04/25",
       "place": "Paris, France",
-      "title": "",
-      "type": "",
-      "excerpt": "Revenez bientôt pour plus d'informations sur le prochain événement !",
+      "title": "Réunion restreinte du RPCA 2025",
+      "type": "Réunion restreinte du RPCA",
+      "excerpt": "La réunion restreinte du Réseau de prévention des crises alimentaires (RPCA) se tiendra les 15 et 16 avril 2025 dans un format hybride au Centre de conférences de l'OCDE à Paris, France, et par vidéoconférence (Zoom). \nLes membres du réseau évalueront la situation alimentaire et nutritionnelle (FNS) dans la région, sur la base des résultats finaux de la saison agropastorale 2024-25 et du fonctionnement des marchés agricoles aux niveaux régional et international. Les discussions porteront également sur les impacts de la violence liée à la sécurité et des troubles sociopolitiques, qui ont exacerbé la crise alimentaire et nutritionnelle prolongée de la région. \nLa réunion servira de plateforme pour examiner les leçons tirées de la réponse à la crise alimentaire de 2024 et les plans stratégiques pour les interventions de 2025. En outre, les participants analyseront la réforme en cours du RPCA, y compris les innovations et les mesures d'adaptation nécessaires pour faire face à l'évolution des défis géopolitiques et financiers.",
       "sections": [
-
+        {
+          "id": "rub-0",
+          "title": "Documents clés",
+          "documents": [
+            {
+              "title": "Projet d'ordre du jour",
+              "link": "/uploads/2025/04/FR_RPCA_Projet d'ordre du jour.pdf"
+            }
+          ]
+        }
       ]
     },
     "year": "2025",
     "has_content": false,
     "permalink": "next-event",
     "date_start": "15/04/25",
-    "date_end": "17/04/25",
+    "date_end": "16/04/25",
     "zipDownload": null
   },
   {

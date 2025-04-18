@@ -2,6 +2,7 @@
 .region-selector {
   border: 1px solid #ddd;
   background: #fafafa;
+  color: #000000;
   padding: 16px;
   border-radius: 4px;
   max-width: 800px;
@@ -13,7 +14,6 @@
   margin-top: 0;
   margin-bottom: 12px;
   font-size: 18px;
-  color: #333;
 }
 
 /* Flex layout to spread dropdowns horizontally */

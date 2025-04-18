@@ -175,7 +175,7 @@ export const SocialMedia = () => {
         <ul className="socials-top list-inline d-flex">
           <li className="socials list-inline-item">
             <a
-              href="http://www.twitter.com/rpca_network"
+              href="http://www.x.com/rpca_network"
               target="_blank"
               rel="noreferrer noopener"
             >
@@ -244,6 +244,7 @@ export const GenerateSecondLevel = (firstLevel) => {
       return [
         { text: t("Documents"), href: `${BASE_URL}/resources/documents` },
         { text: t("Multimedia"), href: `${BASE_URL}/resources/multimedia` },
+        { text: t("Archive"), href: `${BASE_URL}/resources/archive` },
       ];
     case t("Agenda"):
       return [
@@ -259,7 +260,7 @@ export const GenerateSecondLevel = (firstLevel) => {
         { text: t("History"), href: `${BASE_URL}/about/history` },
         { text: t("PREGEC"), href: `${BASE_URL}/about/the-pregec-charter` },
         { text: t("Members"), href: `${BASE_URL}/about/members` },
-        { text: t("Remarks"), href: `${BASE_URL}/about/remarks` },
+        // { text: t("Remarks"), href: `${BASE_URL}/about/remarks` },
       ];
     case t("Home"):
       return [];

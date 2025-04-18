@@ -8,11 +8,13 @@ const resources = {
     misc: require("./data/locales/en/misc.json"),
     slideDataLeft: require("./data/locales/en/slideDataLeft.json"),
     slideDataRight: require("./data/locales/en/slideDataRight.json"),
+    analysis: require("./data/locales/en/analysis.json") // new analysis namespace for EN
   },
   fr: {
     misc: require("./data/locales/fr/misc.json"),
     slideDataLeft: require("./data/locales/fr/slideDataLeft.json"),
     slideDataRight: require("./data/locales/fr/slideDataRight.json"),
+    analysis: require("./data/locales/fr/analysis.json") // new analysis namespace for FR
   },
 };
 
@@ -54,7 +56,7 @@ export function useTranslationHook(namespace) {
     return () => {
       i18n.off("languageChanged", handleLanguageChange);
     };
-  }, []);
+  }, [i18n]);
 
   // Function to explicitly change the language
   const changeLanguage = (lang) => {

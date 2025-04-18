@@ -99,3 +99,14 @@ opacity: 1;
   background: #C2BE00 0% 0% no-repeat padding-box;
   opacity: 1;
 }
+
+.document-flag {
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.document-flag .flag-logo {
+  max-width: 80%;
+  height: auto;
+}

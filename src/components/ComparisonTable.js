@@ -1,8 +1,8 @@
 // src/components/ComparisonTable.js
 import React, { useEffect, useState } from 'react';
 import '../styles/ComparisonTable.css';
+import { useTranslationHook } from "../i18n";
 
-// Define a severity mapping for classification.
 const classificationSeverity = {
   "Non analysée": 0,
   "Phase 1 : minimal": 1,
@@ -12,6 +12,15 @@ const classificationSeverity = {
   "inaccessible": 5
 };
 
+const classificationColor = {
+  "Non analysée": "#ffffff",
+  "Phase 1 : minimal": "#d3f3d4",
+  "Phase 2 : sous pression": "#ffe252",
+  "Phase 3 : crises": "#fa890f",
+  "Phase 4 : urgence": "#eb3333",
+  "inaccessible": "#cccccc"
+};
+
 const severityToClassification = (sev) => {
   for (let key in classificationSeverity) {
     if (classificationSeverity[key] === sev) return key;
@@ -19,7 +28,6 @@ const severityToClassification = (sev) => {
   return "Unknown";
 };
 
-// Aggregates an array of feature properties.
 const aggregateFeatures = (features) => {
   let totalPop = 0;
   let totalPh2 = 0;
@@ -31,6 +39,7 @@ const aggregateFeatures = (features) => {
     const sev = classificationSeverity[cl] !== undefined ? classificationSeverity[cl] : 0;
     if (sev > maxSeverity) maxSeverity = sev;
 
+    // Since population is already in thousands, we simply parse.
     const pop = parseFloat(f["Population totale"]) || 0;
     const ph2 = parseFloat(f["Population totale en Ph 2"]) || 0;
     const ph3 = parseFloat(f["Population totale en Ph 3 à 5"]) || 0;
@@ -47,14 +56,11 @@ const aggregateFeatures = (features) => {
   };
 };
 
-// Groups data based on region selection.
-// regionSelection is an object { admin0, admin1, admin2 } where empty strings mean "all".
 const groupDataByRegion = (data, regionSelection) => {
   const { admin0, admin1, admin2 } = regionSelection;
   const groups = {};
 
   if (admin0 && !admin1) {
-    // Only admin0 selected: group by admin1.
     data.forEach(f => {
       if (f.admin0Name === admin0) {
         const key = f.admin1Name || "Unknown Region";
@@ -63,7 +69,6 @@ const groupDataByRegion = (data, regionSelection) => {
       }
     });
   } else if (admin0 && admin1 && !admin2) {
-    // admin0 and admin1 selected: group by admin2.
     data.forEach(f => {
       if (f.admin0Name === admin0 && f.admin1Name === admin1) {
         const key = f.admin2Name || "Unknown District";
@@ -72,7 +77,6 @@ const groupDataByRegion = (data, regionSelection) => {
       }
     });
   } else if (admin0 && admin1 && admin2) {
-    // All three selected: single group.
     const filtered = data.filter(f =>
       f.admin0Name === admin0 &&
       f.admin1Name === admin1 &&
@@ -82,7 +86,6 @@ const groupDataByRegion = (data, regionSelection) => {
       groups[admin2] = filtered;
     }
   } else {
-    // If no region is selected, group by admin0.
     data.forEach(f => {
       const key = f.admin0Name || "Unknown Country";
       groups[key] = groups[key] || [];
@@ -94,152 +97,215 @@ const groupDataByRegion = (data, regionSelection) => {
 
 const ComparisonTable = ({
   regionSelection = { admin0: "", admin1: "", admin2: "" },
-  period1,
-  period2
+  period1,  // e.g., "October-2024"
+  period2   // e.g., "PJune-2025"
 }) => {
+  const { t } = useTranslationHook("analysis");
+  const { t: tMisc } = useTranslationHook("misc");
   const [dataPeriod1, setDataPeriod1] = useState([]);
   const [dataPeriod2, setDataPeriod2] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch data for both periods.
+  // Helper: format number with thousands separators.
+  const formatNumber = (num) => {
+    const n = typeof num === "number" ? num : parseFloat(num);
+    return isNaN(n) ? num : n.toLocaleString();
+  };
+
+  // Helper function to translate classification values.
+  const translateClassification = (classification, t) => {
+    switch (classification) {
+      case "Non analysée":
+        return t("nonAnalyzed");
+      case "Phase 1 : minimal":
+        return t("phase1");
+      case "Phase 2 : sous pression":
+        return t("phase2");
+      case "Phase 3 : crises":
+        return t("phase3");
+      case "Phase 4 : urgence":
+        return t("phase4");
+      case "Phase 5 : famine":
+        return t("phase5");
+      case "inaccessible":
+        return t("inaccessible");
+      default:
+        return classification || t("unknownClassification");
+    }
+  };
+
+
+  // Fetch the combined geojson and extract period-specific data.
   useEffect(() => {
-    const fetchData = async (period) => {
+    const fetchData = async () => {
       try {
-        const res = await fetch(`/data/joined_admin2_${period}.geojson`);
+        const res = await fetch(`/data/combined.geojson`);
         const geojson = await res.json();
-        return geojson.features.map(f => f.properties);
+        const extractPeriodData = (features, period) => {
+          return features.map(f => {
+            const p = f.properties;
+            return {
+              admin0Name: p.admin0Name,
+              admin1Name: p.admin1Name,
+              admin2Name: p.admin2Name,
+              classification: p[`classification_${period}`],
+              "Population totale": p[`population_total_${period}`],
+              "Population totale en Ph 2": p[`population_ph2_${period}`],
+              "Population totale en Ph 3 à 5": p[`population_ph3_${period}`]
+            };
+          });
+        };
+        const d1 = extractPeriodData(geojson.features, period1);
+        const d2 = extractPeriodData(geojson.features, period2);
+        setDataPeriod1(d1);
+        setDataPeriod2(d2);
+        setLoading(false);
       } catch (error) {
-        console.error(`Error fetching data for ${period}:`, error);
-        return [];
+        console.error('Error fetching combined geojson:', error);
+        setLoading(false);
       }
     };
-
-    const loadAllData = async () => {
-      setLoading(true);
-      const d1 = await fetchData(period1);
-      const d2 = await fetchData(period2);
-      setDataPeriod1(d1);
-      setDataPeriod2(d2);
-      setLoading(false);
-    };
-    loadAllData();
+    fetchData();
   }, [period1, period2]);
 
   if (loading) {
-    return <div className="comparison-table-container">Loading comparison data...</div>;
+    return <div className="comparison-table-container">{t("loadingComparisonData")}</div>;
   }
 
-  // Group data based on region selection.
   const grouped1 = groupDataByRegion(dataPeriod1, regionSelection);
   const grouped2 = groupDataByRegion(dataPeriod2, regionSelection);
 
-  // Build a rows array. Each row is one region.
   const rowKeys = Object.keys(grouped1);
   const rows = rowKeys.map(regionName => {
     const agg1 = aggregateFeatures(grouped1[regionName]);
     const agg2 = grouped2[regionName] ? aggregateFeatures(grouped2[regionName]) : null;
     
-    // Classification change logic.
     const sev1 = classificationSeverity[agg1.classification] ?? 0;
     const sev2 = agg2 ? (classificationSeverity[agg2.classification] ?? 0) : -1;
-    let classificationChange = "No change";
+    let classificationChange = t("noChange");
     if (!agg2) {
-      classificationChange = "N/A";
+      classificationChange = t("nA");
     } else if (sev2 > sev1) {
-      classificationChange = "Worse";
+      classificationChange = t("worse");
     } else if (sev2 < sev1) {
-      classificationChange = "Better";
+      classificationChange = t("better");
     }
 
     return {
       region: regionName,
       classification1: agg1.classification,
-      population1: agg1.pop,
-      popPh2_1: agg1.ph2,
-      popPh3_1: agg1.ph3,
-      classification2: agg2 ? agg2.classification : "N/A",
-      population2: agg2 ? agg2.pop : 0,
-      popPh2_2: agg2 ? agg2.ph2 : 0,
-      popPh3_2: agg2 ? agg2.ph3 : 0,
+      population1: formatNumber(agg1.pop),
+      popPh2_1: formatNumber(agg1.ph2),
+      popPh3_1: formatNumber(agg1.ph3),
+      classification2: agg2 ? agg2.classification : t("nA"),
+      population2: agg2 ? formatNumber(agg2.pop) : "0",
+      popPh2_2: agg2 ? formatNumber(agg2.ph2) : "0",
+      popPh3_2: agg2 ? formatNumber(agg2.ph3) : "0",
       classificationChange
     };
   });
 
+  const cellStyle = (classification) => ({
+    backgroundColor: classificationColor[classification] || '#ffffff'
+  });
+
   return (
-    <div className="comparison-table-container">
-      <h3>Comparison Table</h3>
-      <p>Comparing data for periods: {period1} vs {period2}</p>
+    <div style={{ position: 'relative' }}>
+      <div className="comparison-table-container">
+        <h3>{t("comparisonTableTitle")}</h3>
+        <p>{t("comparingDataForPeriods")}: {period1} vs {period2} {t("inThousands")}</p>
 
-      <div className="triple-table-wrapper">
-        {/* Left Table: Regions */}
-        <div className="table-block region-table">
-          <h4>Regions</h4>
-          <table className="comparison-table triple-table">
-            <thead>
-              <tr>
-                <th>Region</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row, i) => (
-                <tr key={i}>
-                  <td>{row.region}</td>
+        <div className="triple-table-wrapper">
+          {/* Left Table: Regions */}
+          <div className="table-block region-table">
+            <h4>{t("regions")}</h4>
+            <table className="comparison-table triple-table">
+              <thead>
+                <tr>
+                  <th>{t("region")}</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {rows.map((row, i) => (
+                  <tr key={i}>
+                    <td>{row.region}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Middle Table: Period1 Data */}
+          <div className="table-block">
+            <h4>{t("dataFor")} {period1} {t("inThousands")}</h4>
+            <table className="comparison-table triple-table">
+              <thead>
+                <tr>
+                  <th>{t("classification")}</th>
+                  <th>{t("population")}</th>
+                  <th>{t("populationPh2")}</th>
+                  <th>{t("populationPh3")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((row, i) => (
+                  <tr key={i}>
+                    <td style={cellStyle(row.classification1)}>
+                      {translateClassification(row.classification1, t)}
+                    </td>
+                    <td>{row.population1}</td>
+                    <td>{row.popPh2_1}</td>
+                    <td>{row.popPh3_1}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Right Table: Period2 Data + Change */}
+          <div className="table-block">
+            <h4>{t("dataFor")} {period2} {t("inThousands")}</h4>
+            <table className="comparison-table triple-table">
+              <thead>
+                <tr>
+                  <th>{t("classification")}</th>
+                  <th>{t("population")}</th>
+                  <th>{t("populationPh2")}</th>
+                  <th>{t("populationPh3")}</th>
+                  <th>{t("change")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((row, i) => (
+                  <tr key={i}>
+                    <td style={cellStyle(row.classification2)}>
+                      {translateClassification(row.classification2, t)}
+                    </td>
+                    <td>{row.population2}</td>
+                    <td>{row.popPh2_2}</td>
+                    <td>{row.popPh3_2}</td>
+                    <td>{row.classificationChange}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-
-        {/* Middle Table: Period1 Data */}
-        <div className="table-block">
-          <h4>Data for {period1}</h4>
-          <table className="comparison-table triple-table">
-            <thead>
-              <tr>
-                <th>Classification</th>
-                <th>Population</th>
-                <th>Pop Ph 2</th>
-                <th>Pop Ph 3-5</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row, i) => (
-                <tr key={i}>
-                  <td>{row.classification1}</td>
-                  <td>{row.population1}</td>
-                  <td>{row.popPh2_1}</td>
-                  <td>{row.popPh3_1}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Right Table: Period2 Data + Change */}
-        <div className="table-block">
-          <h4>Data for {period2}</h4>
-          <table className="comparison-table triple-table">
-            <thead>
-              <tr>
-                <th>Classification</th>
-                <th>Population</th>
-                <th>Pop Ph 2</th>
-                <th>Pop Ph 3-5</th>
-                <th>Change</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row, i) => (
-                <tr key={i}>
-                  <td>{row.classification2}</td>
-                  <td>{row.population2}</td>
-                  <td>{row.popPh2_2}</td>
-                  <td>{row.popPh3_2}</td>
-                  <td>{row.classificationChange}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="mask-overlay" style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(255, 255, 255, 0.96)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000,
+          fontSize: '1.5rem',
+          fontWeight: 'bold'
+        }}>
+          {tMisc("underRenovation")}
         </div>
       </div>
     </div>
