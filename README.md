@@ -1,70 +1,43 @@
-# Getting Started with Create React App
+# Food Security Prevention Network Website
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This repository contains the **React** frontend for the Food Security Prevention Network (FSPN), an initiative of the **Sahel and West Africa Club (SWAC)** at the **Organisation for Economic Co-operation and Development (OECD)**. It is built as part of the broader **rpca** project, leveraging custom tooling and instructions to deliver a modern, accessible, and maintainable web platform.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## Table of Contents
 
-### `npm start`
+1. [Features](#features)  
+2. [Tech Stack](#tech-stack)  
+3. [Prerequisites](#prerequisites)  
+4. [Getting Started](#getting-started)  
+   - [Installation](#installation)  
+   - [Running Locally](#running-locally)  
+   - [Building for Production](#building-for-production)  
+5. [Project Structure](#project-structure)  
+6. [Scripts](#scripts)  
+7. [Contributing](#contributing)  
+8. [License & Acknowledgements](#license--acknowledgements)  
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Features
 
-### `npm test`
+- **Interactive Data Dashboards**: Visualize food security indicators, trends, and risk maps.  
+- **Resource Library**: Browse publications, policy briefs, and case studies curated by SWAC-OECD.  
+- **Responsive Design**: Optimized for desktop, tablet, and mobile devices.  
+- **Localization-ready**: Framework in place to support multiple languages.  
+- **Dynamic Routing**: Powered by React Router for smooth page transitions.  
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Tech Stack
 
-### `npm run build`
+- **Core**: React (v18+), React Router  
+- **Styling**: Tailwind CSS, modular CSS  
+- **State Management**: Context API (with Future-ready hooks for Redux if needed)  
+- **Build**: Vite (or Create React App if you prefer)  
+- **Testing**: Jest & React Testing Library  
+- **CI/CD**: GitHub Actions — auto-deploy on merge to `main`  
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Prerequisites
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- **Node.js** v16 or higher  
+- **npm** v8 or higher (or **yarn** v1.22+)  
