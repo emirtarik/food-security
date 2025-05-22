@@ -30,6 +30,9 @@ function Dashboard({ setIsLoggedIn, setRole, setCountry }) {
   const [averageScore, setAverageScore] = useState(0); 
   const [sectionAverages, setSectionAverages] = useState({}); 
   const [subsectionAverages, setSubsectionAverages] = useState({}); 
+  const [apiPerformanceScore, setApiPerformanceScore] = useState();
+  const [apiFinancingNeed, setApiFinancingNeed] = useState();
+  const [apiFinancingMobilized, setApiFinancingMobilized] = useState();
   const [noData, setNoData] = useState(false); 
 
   // New states for savedActionPlans and questionComments
@@ -104,13 +107,16 @@ function Dashboard({ setIsLoggedIn, setRole, setCountry }) {
             },
           });
 
-          const { responses, savedActionPlans: fetchedSavedActionPlans, questionComments: fetchedQuestionComments } = data;
+          const {responses, savedActionPlans: fetchedSavedActionPlans, questionComments: fetchedQuestionComments, performanceScore: rawPerfScore, financingNeed: rawFinNeed, financingMobilized: rawFinMobilized} = data;          
           console.log('Fetched responses:', responses); // Log fetched responses to check if data is received correctly
-
+          console.log('Fetched metrics:', {performanceScore: rawPerfScore, financingNeed:   rawFinNeed, financingMobilized: rawFinMobilized});
           if (responses && Object.keys(responses).length > 0) {
             setStoredResponses(responses);
             setSavedActionPlans(fetchedSavedActionPlans || {});
             setQuestionComments(fetchedQuestionComments || {}); // Set questionComments
+            setApiPerformanceScore(rawPerfScore != null ? Number(rawPerfScore) : undefined);
+            setApiFinancingNeed(rawFinNeed != null ? Number(rawFinNeed) : undefined);
+            setApiFinancingMobilized(rawFinMobilized != null ? Number(rawFinMobilized) : undefined);
             setNoData(false);
           } else {
             setNoData(true);
@@ -310,9 +316,9 @@ function Dashboard({ setIsLoggedIn, setRole, setCountry }) {
             <div className="performance-table-container">
               <PerformanceTable 
                 country={country}
-                performanceScore={savedActionPlans.performanceScore || 80}
-                financingNeed={savedActionPlans.financingNeed || 200}
-                financingMobilized={savedActionPlans.financingMobilized || 35}
+                performanceScore={apiPerformanceScore}
+                financingNeed={apiFinancingNeed}
+                financingMobilized={apiFinancingMobilized}
               />
             </div>
           </div>

@@ -117,7 +117,15 @@ h1#post-h1 {
   text-align: justify;
   font: normal normal 300 25px/30px Lato;
   letter-spacing: 0px;
-  color: #2B5366;
+  color: #000000;
+  opacity: 1;
+}
+
+.post-html-content p {
+  align-content: center;
+  text-align: justify;
+  letter-spacing: 0px;
+  color: #000000;
   opacity: 1;
 }
 
@@ -403,8 +411,15 @@ h1#post-h1 {
   font-weight: bold;
 }
 
-/* You can add additional selectors if needed */
-.section-content {
-  /* Override or add spacing if needed for sections */
-  margin-top: 20px;
+.section-content p {
+  color: #000000;
+}
+.section-content h1,
+.section-content h2,
+.section-content h3 {
+  color: #243D54;
+}
+
+.section-content a {
+  color: #C2BE00;
 }

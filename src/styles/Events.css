@@ -84,7 +84,7 @@
 .event-card-content.new-style-content {
   flex: 1; /* Adjust flex value to control the width ratio */
   padding: 40px;
-  height: 30vw;
+  height: auto;
   background: transparent;
   opacity: 1;
   position: relative;
@@ -119,13 +119,14 @@
   opacity: 1;
   position: relative;
   transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
+  padding: 5%;
 }
 
 .event-date {
   margin-left: 40px 0;
   margin-right: 40px 0;
   text-align: left;
-  font: normal normal 900 24px/30px Lato;
+  font: normal normal 900 0.8vw/0.8vw Lato;
   letter-spacing: 0px;
   color: #243D54;
   opacity: 1;
@@ -135,7 +136,7 @@
   margin-left: 40px 0;
   margin-right: 40px 0;
   text-align: left;
-  font: normal normal bold 30px/40px Helvetica Neue;
+  font: normal normal bold 1.2vw/1.3vw Helvetica Neue;
   letter-spacing: 0px;
   color: #C2BE00;
   opacity: 1;
@@ -145,7 +146,7 @@
   margin-left: 40px 0;
   margin-right: 40px 0;
   text-align: left;
-  font: normal normal bold 2.4vw/2.5vw Helvetica Neue;
+  font: normal normal bold 1.6vw/1.7vw Helvetica Neue;
   letter-spacing: 0px;
   color: #FAFAFA;
   opacity: 1;
@@ -154,7 +155,7 @@
 .event-title {
   margin: 40px 0;
   text-align: left;
-  font: normal normal 900 1.4vw/2vw Lato;
+  font: normal normal 900 1vw/1.1vw Lato;
   letter-spacing: 0px;
   color: #243D54;
   /*text-transform: uppercase;*/
@@ -328,12 +329,12 @@
 
 .more {
   position: absolute;
-  bottom: 40px;
-  right: 40px;
+  bottom: 80px;
+  right: 20px;
   display: inline-flex;
   align-items: center;
   text-align: center;
-  font: normal normal 900 14px/16px Lato;
+  font: normal normal 900 0.8vw/0.8vw Lato;
   letter-spacing: 0px;
   color: #243D54;
   text-transform: uppercase;
@@ -342,14 +343,14 @@
 
 .event-card-content.new-style-content:hover .more {
   position: absolute;
-  bottom: 20px;
+  bottom: 40px;
   right: 20px;
-  margin-right: 20px;
-  margin-bottom: 20px;
+  margin-right: 60px;
+  margin-bottom: 60px;
   display: inline-flex;
   align-items: center;
   text-align: center;
-  font: normal normal 900 32px/40px Lato;
+  font: normal normal 900 1.1vw/1.1vw Lato;
   letter-spacing: 0px;
   color: #243D54;
   text-transform: uppercase;

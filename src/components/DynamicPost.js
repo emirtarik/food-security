@@ -8,42 +8,7 @@ import picPlaceholder from "../assets/picture-placeholder.png";
 import arrowIcon from "../assets/arow.png";
 import "../styles/DynamicPost.css";
 import { marked } from 'marked';
-
-// Helper function to adjust file links
-const fixFileLinks = (html) => {
-  if (!html) return html;
-  let replaced = html;
-  replaced = replaced.replace(
-    /http:\/\/www\.food-security\.net\/wp-content\/uploads\//g,
-    "/uploads/"
-  );
-  replaced = replaced.replace(
-    /https:\/\/www\.food-security\.net\/wp-content\/uploads\//g,
-    "/uploads/"
-  );
-  replaced = replaced.replace(
-    /https:\/\/www\.food-security\.net\/document\//g,
-    "http://localhost:3000/document/"
-  );
-  replaced = replaced.replace(
-    /http:\/\/www\.food-security\.net\/document\//g,
-    "http://localhost:3000/document/"
-  );
-  return replaced;
-};
-
-// Utility to fetch and convert Markdown content to HTML
-const fetchAndConvertMarkdown = async (path) => {
-  try {
-    const response = await fetch(path);
-    const mdContent = await response.text();
-    const html = marked(mdContent);
-    return fixFileLinks(html);
-  } catch (error) {
-    console.error("Error fetching markdown from", path, error);
-    return "";
-  }
-};
+import { fetchAndConvertMarkdown, fixFileLinks } from '../utils/markdown';
 
 const SimpleSubHeader = () => {
   const { t } = useTranslationHook(["misc"]);

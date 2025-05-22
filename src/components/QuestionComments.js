@@ -45,7 +45,7 @@ function QuestionComments({ questionComments }) {
   return (
     <div className="question-comments-container">
       <div className="saved-action-plans-header">
-        <h4>Commentaires des Questions</h4>
+        <h4>Commentaires des questions</h4>
       </div>
       {Object.keys(groupedComments).length === 0 ? (
         <p>Aucun commentaire n'a été enregistré.</p>

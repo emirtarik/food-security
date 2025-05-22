@@ -110,14 +110,14 @@ function ActionPlans({ savedActionPlans }) {
   return (
     <div className="saved-action-plans-container">
       <div className="saved-action-plans-header">
-        <h4>Plan d'action</h4>
+        <h4>Actions recommandées</h4>
         <button type="button" onClick={handleDownloadExcel} className="download-excel-button">
           Télécharger Excel
         </button>
       </div>
 
       {Object.keys(groupedPlans).length === 0 ? (
-        <p>Aucun plan d'action n'a encore été enregistré.</p>
+        <p>Aucun action recommandée n'a encore été enregistré.</p>
       ) : (
         // Iterate through grouped plans by section
         Object.entries(groupedPlans).map(([section, plans]) => (

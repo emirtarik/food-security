@@ -11,6 +11,9 @@ import picPlaceholder from "../assets/picture-placeholder.png";
 import arrowIcon from "../assets/arow.png";
 import "../styles/EventPage.css";
 
+import { marked } from 'marked';
+import { fetchAndConvertMarkdown, fixFileLinks } from '../utils/markdown';
+
 const SimpleSubHeader = () => {
   const { t, currentLanguage } = useTranslationHook(["misc"]);
   const navigate = useNavigate();
@@ -18,7 +21,11 @@ const SimpleSubHeader = () => {
   return (
     <div className="row">
       <div className="col-md-12" style={{ color: "#243d54" }}>
-        <button onClick={() => navigate('/event-and-opportunities/event?search=')} className="btn btn-link" style={{ padding: "10px", marginTop: "3px"}}>
+        <button
+          onClick={() => navigate('/event-and-opportunities/event?search=')}
+          className="btn btn-link"
+          style={{ padding: "10px", marginTop: "3px" }}
+        >
           &larr; {t("Back to events")}
         </button>
       </div>
@@ -33,7 +40,7 @@ const EventCardPage = ({ event }) => {
     console.log("Language change detected, re-rendering component");
   }, [currentLanguage]);
 
-  const eventData = event[currentLanguage] || event["en"]; // Fallback to English if current language data is unavailable
+  const eventData = event[currentLanguage] || event["en"];
 
   return (
     <div className="event-card new-style">
@@ -48,9 +55,7 @@ const EventCardPage = ({ event }) => {
         <p className="event-date">
           {t("from")} {event.date_start} {t("to")} {event.date_end}
         </p>
-        <h3 className="event-place">
-          {eventData.place} {/* <br /> {eventData.type} */}
-        </h3>
+        <h3 className="event-place">{eventData.place}</h3>
         <div className="rectangle-long"></div>
         <p className="event-title">{eventData.title}</p>
         <div className="event-actions">
@@ -78,33 +83,86 @@ const EventPage = ({ category, permalinkOverride }) => {
   const { t, currentLanguage } = useTranslationHook(["misc"]);
   const permalink = permalinkOverride || urlPermalink;
 
-  // Access the events array directly from the imported eventPageData
+  // Load and find event data
   const data = eventPageData;
+  const event = data.find((e) => e.permalink === permalink);
 
-  // Find the event using the permalink
-  const event = data.find((event) => event.permalink === permalink);
-
-  // State to manage which section is currently open
+  // State hooks (always declared in same order)
   const [openSection, setOpenSection] = useState(
-    event?.sections ? event.sections[0]?.id : null
+    event?.sections?.[0]?.id || null
   );
+  const [excerptHtml, setExcerptHtml] = useState(null);
+  const [sectionHtml, setSectionHtml] = useState({});
 
-  // Re-render whenever currentLanguage changes
+  // Re-render log when language or event changes
   useEffect(() => {
+    if (!event) return;
     console.log("Language change detected, re-rendering component");
-  }, [currentLanguage]);
+  }, [currentLanguage, event]);
 
+  // Convert excerpt to HTML (Markdown or plain text)
+  useEffect(() => {
+    if (!event || !event[currentLanguage]) return;
+    const eventData = event[currentLanguage] || event["en"];
+    const { excerpt, isMarkdown, markdownPath } = eventData;
+    if (!excerpt) {
+      setExcerptHtml(null);
+      return;
+    }
+    if (isMarkdown) {
+      if (markdownPath) {
+        fetchAndConvertMarkdown(markdownPath).then((html) => setExcerptHtml(html));
+      } else {
+        setExcerptHtml(fixFileLinks(marked(excerpt)));
+      }
+    } else {
+      const html = excerpt
+        .split("\n")
+        .map((line) => `<p>${line}</p>`)
+        .join("");
+      setExcerptHtml(html);
+    }
+  }, [event, currentLanguage]);
+
+  // Convert each section's content to HTML
+  useEffect(() => {
+    if (!event || !event[currentLanguage]?.sections) return;
+    const eventData = event[currentLanguage] || event["en"];
+    const { sections, isMarkdown } = eventData;
+    const loadSections = async () => {
+      const htmlMap = {};
+      for (const section of sections) {
+        if (isMarkdown && section.isMarkdown) {
+          if (section.markdownPath) {
+            htmlMap[section.id] = await fetchAndConvertMarkdown(
+              section.markdownPath
+            );
+          } else {
+            htmlMap[section.id] = fixFileLinks(
+              marked(section.content || '')
+            );
+          }
+        } else {
+          htmlMap[section.id] = (section.content || '')
+            .split("\n")
+            .map((line) => `<p>${line}</p>`)
+            .join("");
+        }
+      }
+      setSectionHtml(htmlMap);
+    };
+    loadSections();
+  }, [event, currentLanguage]);
+
+  // Early return for missing event
   if (!event) {
     console.warn("Event not found for permalink:", permalink);
     return <NotFound />;
   }
 
-  // Retrieve the correct language content or fallback to English
+  // Prepare data for rendering
   const eventData = event[currentLanguage] || event["en"];
-  console.log("Event data being used:", eventData);
-
-  // Deconstruct the properties from eventData
-  const { img, place, title, type, excerpt, sections } = eventData;
+  const { img, place, title, type, sections } = eventData;
   const { date_start, date_end } = event;
 
   const handleSectionClick = (sectionId) => {
@@ -118,59 +176,88 @@ const EventPage = ({ category, permalinkOverride }) => {
       <section className="container page-detail" id="event-page">
         {type && <p className="type">{type}</p>}
         <div className="rectangle"></div>
-        {date_start && date_end && <p className="date"> {t("from")} {date_start} {t("to")} {date_end}</p>}
+        {date_start && date_end && (
+          <p className="date">
+            {t("from")} {date_start} {t("to")} {date_end}
+          </p>
+        )}
         <div className="row">
           <div className="col-sm-12">
-            <EventCardPage event={event} /> {/* Pass event as prop */}
+            <EventCardPage event={event} />
             <div className="mt-4"></div>
-            {place && <p className="place" style={{marginTop: "100px"}}>{place}</p>}
-            {excerpt && (
-              <div className="excerpt-text" style={{marginTop: "30px"}}>
-                {excerpt.split("\n").map((line, index) => (
-                    <p key={index}>{line}</p>
-                  ))}
-              </div>
+            {place && (
+              <p className="place" style={{ marginTop: "100px" }}>
+                {place}
+              </p>
+            )}
+            {excerptHtml && (
+              <div
+                className="excerpt-text"
+                style={{ marginTop: "30px" }}
+                dangerouslySetInnerHTML={{ __html: excerptHtml }}
+              />
             )}
             {sections && (
-                <div className="row" style={{ marginTop: "100px" }}>
-                  <div className="col-sm-3">
-                    <div className="sticky-top">
-                      <h2>{t("summary")}</h2>
-                      <ul className="list-group" id="navbar-summary">
-                        {sections.map((section) => (
-                          <li key={section.id} className={`list-group-item ${openSection === section.id ? "open" : ""}`}>
-                            <a href={`#${section.id}`} onClick={() => handleSectionClick(section.id)}>
-                              {section.title}
-                              <span className="indicator">
-                                <img src={arrowIcon} alt="indicator" className={openSection === section.id ? "open" : ""} />
-                              </span>
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+              <div className="row" style={{ marginTop: "100px" }}>
+                <div className="col-sm-3">
+                  <div className="sticky-top">
+                    <h2>{t("summary")}</h2>
+                    <ul className="list-group" id="navbar-summary">
+                      {sections.map((section) => (
+                        <li
+                          key={section.id}
+                          className={`list-group-item ${
+                            openSection === section.id ? "open" : ""
+                          }`}
+                        >
+                          <a
+                            href={`#${section.id}`}
+                            onClick={() => handleSectionClick(section.id)}
+                          >
+                            {section.title}
+                            <span className="indicator">
+                              <img
+                                src={arrowIcon}
+                                alt="indicator"
+                                className={
+                                  openSection === section.id ? "open" : ""
+                                }
+                              />
+                            </span>
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                  <div
-                    className="col-sm-9"
-                    data-spy="scroll"
-                    data-target="#navbar-summary"
-                  >
-                    {sections.map((section) => (
-                      <div key={section.id} className="bl" id={section.id} style={{ display: openSection === section.id ? 'block' : 'none' }}>
-                        <h2>{section.title}</h2>
-                        {section.content &&
-                          section.content
-                            .split("\n")
-                            .map((line, index) => <p key={index}>{line}</p>)}
-                        {section.image && (
-                          <img
-                            src={section.image}
-                            className="alignnone size-medium wp-image-6034"
-                            alt=""
-                            width="800"
-                            height="354"
-                          />
-                        )}
+                </div>
+                <div
+                  className="col-sm-9"
+                  data-spy="scroll"
+                  data-target="#navbar-summary"
+                >
+                  {sections.map((section) => (
+                    <div
+                      key={section.id}
+                      className="bl"
+                      id={section.id}
+                      style={{ display: openSection === section.id ? 'block' : 'none' }}
+                    >
+                      <h2>{section.title}</h2>
+                      {sectionHtml[section.id] && (
+                        <div
+                          className="section-content"
+                          dangerouslySetInnerHTML={{ __html: sectionHtml[section.id] }}
+                        />
+                      )}
+                      {section.image && (
+                        <img
+                          src={section.image}
+                          className="alignnone size-medium wp-image-6034"
+                          alt=""
+                          width="800"
+                          height="354"
+                        />
+                      )}
                       {section.documents && (
                         <div>
                           <ul>

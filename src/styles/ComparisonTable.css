@@ -7,7 +7,7 @@
   margin: 16px auto;
   border-radius: 4px;
   max-width: 100%;
-  overflow-x: auto;
+  overflow: visible;
 }
 
 /* Flex container for the three tables */
@@ -16,18 +16,22 @@
   gap: 5px;  /* Reduced horizontal margin between tables */
   justify-content: flex-start;
   align-items: flex-start;
-  overflow-x: auto;
+  overflow: visible;
 }
 
 .table-block {
   flex: 1 1 auto;
+  overflow: visible;
+}
+.table-block td {
+  overflow: visible;
 }
 
 /* Specific styling for the left (region) table */
 .region-table {
   min-width: 100px; /* Fixed width */
   max-width: 100px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .table-block h4 {
@@ -67,3 +71,43 @@
 .difference-section {
   margin-top: 20px;
 }
+
+.popup-aggregated-box {
+  display: inline-block;
+  margin-left: 0.5em;
+  vertical-align: middle;
+}
+
+.popup-aggregated {
+  position: relative;
+  display: inline-block;
+  font-size: 1em;
+  cursor: help;
+}
+
+/* Tooltip text */
+.popup-aggregated::after {
+  content: attr(data-tooltip);
+  visibility: hidden;
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  text-align: center;
+  border-radius: 3px;
+  padding: 0.25em 0.5em;
+  white-space: nowrap;
+  font-size: 1.25em;
+
+  /* Position above the icon */
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* Show tooltip on hover */
+.popup-aggregated:hover::after {
+  visibility: visible;
+}
+

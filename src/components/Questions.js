@@ -229,7 +229,7 @@ function Questions({
 
                             {/* Per-Question Action Plan Section */}
                             <div className="per-question-action-plan-container">
-                              <h5>Plan d'action</h5>
+                              <h5>Actions recommandées</h5>
                               {actionPlansPerQuestion[key]?.map((plan, index) => (
                                 <div key={index} className="action-plan-row">
                                   <div className="input-container">

@@ -262,3 +262,29 @@ h1#post-h1 {
   letter-spacing: 0px;
   color: #000000;
 }
+
+.md-image-figure {
+  text-align: center;
+}
+
+.md-image-figure img {
+  max-width: 100%;
+  height: auto;
+}
+
+.md-download-btn {
+  margin-top: 0.5rem;
+}
+
+.section-content p {
+  color: #000000;
+}
+.section-content h1,
+.section-content h2,
+.section-content h3 {
+  color: #005a9e;
+}
+
+.section-content a {
+  color: #C2BE00;
+}

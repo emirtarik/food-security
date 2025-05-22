@@ -9,7 +9,8 @@ const classificationSeverity = {
   "Phase 2 : sous pression": 2,
   "Phase 3 : crises": 3,
   "Phase 4 : urgence": 4,
-  "inaccessible": 5
+  "Phase 5 : famine": 5,
+  "inaccessible": 6
 };
 
 const classificationColor = {
@@ -18,6 +19,7 @@ const classificationColor = {
   "Phase 2 : sous pression": "#ffe252",
   "Phase 3 : crises": "#fa890f",
   "Phase 4 : urgence": "#eb3333",
+  "Phase 5 : famine": "#60090b",
   "inaccessible": "#cccccc"
 };
 
@@ -28,33 +30,54 @@ const severityToClassification = (sev) => {
   return "Unknown";
 };
 
+const parseNumber = (value) => {
+  const str = String(value).replace(/,/g, '');
+  const num = parseFloat(str);
+  return isNaN(num) ? 0 : num;
+};
+
 const aggregateFeatures = (features) => {
-  let totalPop = 0;
-  let totalPh2 = 0;
-  let totalPh3 = 0;
+  // 1) Split out admin-2 vs admin-1 matches
+  const atAdmin2 = features.filter(f => f.matchLevel === 2);
+  const atAdmin1 = features.filter(f => f.matchLevel === 1);
+
+  // 2) Decide which set to sum
+  let toSum, usedLevel;
+  if (atAdmin2.length > 0) {
+    toSum = atAdmin2;
+    usedLevel = 2;
+  } else if (atAdmin1.length > 0) {
+    toSum = [ atAdmin1[0] ];   // only one aggregate row
+    usedLevel = 1;
+  } else {
+    toSum = [];
+    usedLevel = 0;             // no data
+  }
+
+  // 3) Sum + max‐severity as before
+  let totalPop    = 0;
+  let totalPh2    = 0;
+  let totalPh3    = 0;
   let maxSeverity = -1;
 
-  features.forEach(f => {
-    const cl = f["classification"];
-    const sev = classificationSeverity[cl] !== undefined ? classificationSeverity[cl] : 0;
+  toSum.forEach(f => {
+    const sev = classificationSeverity[f.classification] ?? 0;
     if (sev > maxSeverity) maxSeverity = sev;
 
-    // Since population is already in thousands, we simply parse.
-    const pop = parseFloat(f["Population totale"]) || 0;
-    const ph2 = parseFloat(f["Population totale en Ph 2"]) || 0;
-    const ph3 = parseFloat(f["Population totale en Ph 3 à 5"]) || 0;
-    totalPop += pop;
-    totalPh2 += ph2;
-    totalPh3 += ph3;
+    totalPop += parseNumber(f["Population totale"]);
+    totalPh2  += parseNumber(f["Population totale en Ph 2"]);
+    totalPh3  += parseNumber(f["Population totale en Ph 3 à 5"]);
   });
 
   return {
     classification: severityToClassification(maxSeverity),
-    pop: totalPop,
-    ph2: totalPh2,
-    ph3: totalPh3
+    pop:         Math.trunc(totalPop / 1000),
+    ph2:         Math.trunc(totalPh2  / 1000),
+    ph3:         Math.trunc(totalPh3  / 1000),
+    aggregatedAtAdmin1:  usedLevel === 1
   };
 };
+
 
 const groupDataByRegion = (data, regionSelection) => {
   const { admin0, admin1, admin2 } = regionSelection;
@@ -64,16 +87,14 @@ const groupDataByRegion = (data, regionSelection) => {
     data.forEach(f => {
       if (f.admin0Name === admin0) {
         const key = f.admin1Name || "Unknown Region";
-        groups[key] = groups[key] || [];
-        groups[key].push(f);
+        (groups[key] = groups[key] || []).push(f);
       }
     });
   } else if (admin0 && admin1 && !admin2) {
     data.forEach(f => {
       if (f.admin0Name === admin0 && f.admin1Name === admin1) {
         const key = f.admin2Name || "Unknown District";
-        groups[key] = groups[key] || [];
-        groups[key].push(f);
+        (groups[key] = groups[key] || []).push(f);
       }
     });
   } else if (admin0 && admin1 && admin2) {
@@ -88,8 +109,7 @@ const groupDataByRegion = (data, regionSelection) => {
   } else {
     data.forEach(f => {
       const key = f.admin0Name || "Unknown Country";
-      groups[key] = groups[key] || [];
-      groups[key].push(f);
+      (groups[key] = groups[key] || []).push(f);
     });
   }
   return groups;
@@ -97,8 +117,8 @@ const groupDataByRegion = (data, regionSelection) => {
 
 const ComparisonTable = ({
   regionSelection = { admin0: "", admin1: "", admin2: "" },
-  period1,  // e.g., "October-2024"
-  period2   // e.g., "PJune-2025"
+  period1,
+  period2
 }) => {
   const { t } = useTranslationHook("analysis");
   const { t: tMisc } = useTranslationHook("misc");
@@ -106,104 +126,94 @@ const ComparisonTable = ({
   const [dataPeriod2, setDataPeriod2] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Helper: format number with thousands separators.
+  // Helper: format number (drop decimals, add separators)
   const formatNumber = (num) => {
-    const n = typeof num === "number" ? num : parseFloat(num);
-    return isNaN(n) ? num : n.toLocaleString();
+    let n = typeof num === 'number' ? num : parseNumber(num);
+    if (isNaN(n)) return num;
+    n = Math.trunc(n);
+    return n.toLocaleString();
   };
 
-  // Helper function to translate classification values.
   const translateClassification = (classification, t) => {
     switch (classification) {
-      case "Non analysée":
-        return t("nonAnalyzed");
-      case "Phase 1 : minimal":
-        return t("phase1");
-      case "Phase 2 : sous pression":
-        return t("phase2");
-      case "Phase 3 : crises":
-        return t("phase3");
-      case "Phase 4 : urgence":
-        return t("phase4");
-      case "Phase 5 : famine":
-        return t("phase5");
-      case "inaccessible":
-        return t("inaccessible");
-      default:
-        return classification || t("unknownClassification");
+      case "Non analysée":   return t("nonAnalyzed");
+      case "Phase 1 : minimal":     return t("phase1");
+      case "Phase 2 : sous pression": return t("phase2");
+      case "Phase 3 : crises":       return t("phase3");
+      case "Phase 4 : urgence":      return t("phase4");
+      case "Phase 5 : famine":       return t("phase5");
+      case "inaccessible":           return t("inaccessible");
+      default:                     return classification || t("unknownClassification");
     }
   };
 
-
-  // Fetch the combined geojson and extract period-specific data.
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await fetch(`/data/combined.geojson`);
         const geojson = await res.json();
-        const extractPeriodData = (features, period) => {
-          return features.map(f => {
+        const extractPeriod = (features, period) =>
+          features.map(f => {
             const p = f.properties;
             return {
               admin0Name: p.admin0Name,
               admin1Name: p.admin1Name,
               admin2Name: p.admin2Name,
-              classification: p[`classification_${period}`],
-              "Population totale": p[`population_total_${period}`],
+              matchLevel: p[`level_${period}`],
+              classification:    p[`classification_${period}`],
+              "Population totale":         p[`population_total_${period}`],
               "Population totale en Ph 2": p[`population_ph2_${period}`],
               "Population totale en Ph 3 à 5": p[`population_ph3_${period}`]
             };
           });
-        };
-        const d1 = extractPeriodData(geojson.features, period1);
-        const d2 = extractPeriodData(geojson.features, period2);
-        setDataPeriod1(d1);
-        setDataPeriod2(d2);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching combined geojson:', error);
+        setDataPeriod1(extractPeriod(geojson.features, period1));
+        setDataPeriod2(extractPeriod(geojson.features, period2));
+      } catch (err) {
+        console.error('Error fetching combined.geojson:', err);
+      } finally {
         setLoading(false);
       }
     };
     fetchData();
   }, [period1, period2]);
 
-  if (loading) {
-    return <div className="comparison-table-container">{t("loadingComparisonData")}</div>;
-  }
+  if (loading) return <div className="comparison-table-container">{t("loadingComparisonData")}</div>;
 
   const grouped1 = groupDataByRegion(dataPeriod1, regionSelection);
   const grouped2 = groupDataByRegion(dataPeriod2, regionSelection);
 
-  const rowKeys = Object.keys(grouped1);
-  const rows = rowKeys.map(regionName => {
+  const rows = Object.keys(grouped1).map(regionName => {
     const agg1 = aggregateFeatures(grouped1[regionName]);
     const agg2 = grouped2[regionName] ? aggregateFeatures(grouped2[regionName]) : null;
-    
+
     const sev1 = classificationSeverity[agg1.classification] ?? 0;
     const sev2 = agg2 ? (classificationSeverity[agg2.classification] ?? 0) : -1;
-    let classificationChange = t("noChange");
-    if (!agg2) {
-      classificationChange = t("nA");
-    } else if (sev2 > sev1) {
-      classificationChange = t("worse");
-    } else if (sev2 < sev1) {
-      classificationChange = t("better");
-    }
+
+    let change = t("noChange");
+    if (!agg2)      change = t("nA");
+    else if (sev2 > sev1)  change = t("worse");
+    else if (sev2 < sev1)  change = t("better");
 
     return {
-      region: regionName,
-      classification1: agg1.classification,
-      population1: formatNumber(agg1.pop),
-      popPh2_1: formatNumber(agg1.ph2),
-      popPh3_1: formatNumber(agg1.ph3),
-      classification2: agg2 ? agg2.classification : t("nA"),
-      population2: agg2 ? formatNumber(agg2.pop) : "0",
-      popPh2_2: agg2 ? formatNumber(agg2.ph2) : "0",
-      popPh3_2: agg2 ? formatNumber(agg2.ph3) : "0",
-      classificationChange
+      region:           regionName,
+      classification1:  agg1.classification,
+      population1:      formatNumber(agg1.pop),
+      popPh2_1:         formatNumber(agg1.ph2),
+      popPh3_1:         formatNumber(agg1.ph3),
+      aggregated1:      agg1.aggregatedAtAdmin1,
+
+      classification2:  agg2 ? agg2.classification : t("nA"),
+      population2:      agg2 ? formatNumber(agg2.pop) : "0",
+      popPh2_2:         agg2 ? formatNumber(agg2.ph2) : "0",
+      popPh3_2:         agg2 ? formatNumber(agg2.ph3) : "0",
+      aggregated2:      agg2 ? agg2.aggregatedAtAdmin1 : false,
+
+      aggregated:        agg1.aggregatedAtAdmin1 || (agg2?.aggregatedAtAdmin1 ?? false),
+
+      classificationChange: change
     };
   });
+
 
   const cellStyle = (classification) => ({
     backgroundColor: classificationColor[classification] || '#ffffff'
@@ -228,7 +238,17 @@ const ComparisonTable = ({
               <tbody>
                 {rows.map((row, i) => (
                   <tr key={i}>
-                    <td>{row.region}</td>
+                    <td>
+                      {row.aggregated && (
+                        <span
+                          className="popup-aggregated"
+                          data-tooltip={t("dataAggregated")}
+                        >
+                          ⚠️
+                        </span>
+                      )}
+                      {' '}{row.region}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -248,7 +268,7 @@ const ComparisonTable = ({
                 </tr>
               </thead>
               <tbody>
-                {rows.map((row, i) => (
+                {rows.map((row,i) => (
                   <tr key={i}>
                     <td style={cellStyle(row.classification1)}>
                       {translateClassification(row.classification1, t)}
@@ -291,7 +311,7 @@ const ComparisonTable = ({
             </table>
           </div>
         </div>
-        <div className="mask-overlay" style={{
+        {/* <div className="mask-overlay" style={{
           position: 'absolute',
           top: 0,
           left: 0,
@@ -306,7 +326,7 @@ const ComparisonTable = ({
           fontWeight: 'bold'
         }}>
           {tMisc("underRenovation")}
-        </div>
+        </div> */}
       </div>
     </div>
   );

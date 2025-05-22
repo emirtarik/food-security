@@ -1,6 +1,7 @@
 // src/components/MapView.jsx
 import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
+import html2canvas from 'html2canvas';
 import { useTranslationHook } from "../i18n";
 import '../styles/MapView.css';
 
@@ -32,10 +33,35 @@ const tilesetConfig = {
   ]
 };
 
+const EXPORT_VIEW = {
+  center: [0.47, 14.38],   // [lon, lat]
+  zoom: 3.9,        // between 0–22
+};
+// Optional: override export size if you need a different resolution than your on-screen map:
+const EXPORT_WIDTH = 1200, EXPORT_HEIGHT = 800;
+
+const INSETS = [
+  {
+    id:     'inset-cabo',
+    center: [-24.0, 16.0],
+    zoom:   5,
+    size:   [180, 120],
+    style:  { bottom: '30px', right: '16px' }
+  },
+  {
+    id:     'inset-gambia',
+    center: [-15.3, 13.4],
+    zoom:   5.5,
+    size:   [200,  60],
+    style:  { bottom: '30px', right:'232px' }
+  }
+];
+
 const MapView = () => {
   const { t } = useTranslationHook("analysis");
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
+  const insetMapsRef = useRef({});
   
   // Ref to hold the latest selected date.
   const currentDateRef = useRef(null);
@@ -103,6 +129,10 @@ const MapView = () => {
     currentDateRef.current = currentDate;
   }, [currentDate]);
   
+  
+
+  
+
   // State for the fill opacity (default 0.9)
   const [fillOpacity, setFillOpacity] = useState(0.9);
 
@@ -145,6 +175,7 @@ const MapView = () => {
       map.setPaintProperty(layerId, 'fill-opacity', fillOpacity);
     }
   }, [fillOpacity, isMapLoaded]);
+  
 
   useEffect(() => {
     // Initialize the Mapbox map.
@@ -157,7 +188,7 @@ const MapView = () => {
     mapRef.current = map;
 
     // Add navigation controls.
-    map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+    // map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
 
     map.on('load', () => {
       setIsMapLoaded(true);
@@ -233,6 +264,8 @@ const MapView = () => {
         },
         insertionLayerId
       );
+
+      
 
       // Create a popup for hover interactions.
       const popup = new mapboxgl.Popup({
@@ -365,6 +398,13 @@ const MapView = () => {
           paint: tile.feature && tile.feature.paint ? tile.feature.paint : {},
         });
       });
+
+      // create inset maps
+      INSETS.forEach(({id,center,zoom})=>{
+        const inset = new mapboxgl.Map({ container:id, style:map.getStyle(), center, zoom, interactive:false, attributionControl:false });
+        inset.on('load',()=> map.getStyle().layers.forEach(l=>inset.addLayer(l,l.id)) );
+        insetMapsRef.current[id] = inset;
+      });
   
       // Bring the custom layers to the top.
       const customLayers = ["admin0-8pm03x", "admin1-8mekeg", "admin2-b942h4"];
@@ -378,8 +418,143 @@ const MapView = () => {
     return () => map.remove();
   }, []);
 
+  useEffect(() => {
+    if (!isMapLoaded) return;
+  
+    // Build the same expression you use on the main map:
+    const classificationField = `classification_${currentDateRef.current}`;
+    const fillColorExpression = [
+      'match',
+      ['get', classificationField],
+      'Non analysée', '#ffffff',
+      'Phase 1 : minimal', '#d3f3d4',
+      'Phase 2 : sous pression', '#ffe252',
+      'Phase 3 : crises', '#fa890f',
+      'Phase 4 : urgence', '#eb3333',
+      'Phase 5 : famine', '#60090b',
+      'inaccessible', '#cccccc',
+      /* default */ '#ffffff'
+    ];
+  
+    // Gather main map + all inset maps
+    const maps = [
+      mapRef.current,
+      ...Object.values(insetMapsRef.current)
+    ];
+  
+    maps.forEach((m) => {
+      // only update if that map has your fill layer
+      if (!m || !m.getLayer('admin-boundaries-fill')) return;
+  
+      // update color + opacity in one shot
+      m.setPaintProperty('admin-boundaries-fill', 'fill-color', fillColorExpression);
+      m.setPaintProperty('admin-boundaries-fill', 'fill-opacity', fillOpacity);
+    });
+  }, [currentDate, fillOpacity, isMapLoaded]);
+  
+  const handleExportPNG = () => {
+    const map = mapRef.current;
+    if (!map || !isDataLoaded) return;
+
+    // 1) Save current camera
+    const prevCenter = map.getCenter();
+    const prevZoom   = map.getZoom();
+
+    // 2) Resize map container
+    const container = map.getContainer();
+    const origStyle = {
+      width:  container.style.width,
+      height: container.style.height
+    };
+    container.style.width  = `${EXPORT_WIDTH}px`;
+    container.style.height = `${EXPORT_HEIGHT}px`;
+    map.resize();
+
+    map.once('idle', () => {
+      // 3) Jump to fixed view
+      map.jumpTo({ center: EXPORT_VIEW.center, zoom: EXPORT_VIEW.zoom, essential: true });
+
+      map.once('idle', async () => {
+        const ratio = window.devicePixelRatio;
+        const exportCanvas = document.createElement('canvas');
+        exportCanvas.width  = EXPORT_WIDTH * ratio;
+        exportCanvas.height = EXPORT_HEIGHT * ratio;
+        const ctx = exportCanvas.getContext('2d');
+        ctx.scale(ratio, ratio);
+
+        // 4) Draw main map
+        ctx.drawImage(map.getCanvas(), 0, 0, EXPORT_WIDTH, EXPORT_HEIGHT);
+
+        // 5) Draw insets
+        INSETS.forEach(({ id, size: [w, h], style }) => {
+          const insetCanvas = insetMapsRef.current[id].getCanvas();
+          const rect = mapContainerRef.current.getBoundingClientRect();
+          const x = style.left
+            ? parseInt(style.left)
+            : rect.width - w - parseInt(style.right);
+          const y = style.top
+            ? parseInt(style.top)
+            : rect.height - h - parseInt(style.bottom);
+          ctx.drawImage(insetCanvas, x, y, w, h);
+        });
+
+        // 6) Draw legend overlay
+        const legendEl = mapContainerRef.current.querySelector('.legend');
+        if (legendEl) {
+          // Rasterize legend DIV
+          const legendCanvas = await html2canvas(legendEl, {
+            backgroundColor: null,
+            scale: ratio
+          });
+          // Figure out its position relative to map container
+          const legendRect = legendEl.getBoundingClientRect();
+          const containerRect = mapContainerRef.current.getBoundingClientRect();
+          const lx = legendRect.left - containerRect.left;
+          const ly = legendRect.top  - containerRect.top;
+          // Draw it onto our export canvas
+          ctx.drawImage(
+            legendCanvas,
+            lx * ratio,
+            ly * ratio,
+            legendRect.width * ratio,
+            legendRect.height * ratio
+          );
+        }
+
+        // 7) Download PNG
+        exportCanvas.toBlob(blob => {
+          const url = URL.createObjectURL(blob);
+          const a   = document.createElement('a');
+          a.href    = url;
+          a.download = `food-crisis-map_${currentDate}.png`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+
+          // 8) Restore original size & view
+          container.style.width  = origStyle.width;
+          container.style.height = origStyle.height;
+          map.resize();
+          map.jumpTo({
+            center: [prevCenter.lng, prevCenter.lat],
+            zoom:   prevZoom,
+            essential: true
+          });
+        }, 'image/png');
+      });
+    });
+  };
+
   return (
     <div className="map-view-container">
+      <button
+        className="export-button"
+        onClick={handleExportPNG}
+        disabled={!isDataLoaded}
+      >
+        {isDataLoaded ? 'Download PNG' : 'Loading…'}
+      </button>
       {/* Loading overlay */}
       {!isDataLoaded && (
         <div className="loading-overlay">
@@ -388,6 +563,21 @@ const MapView = () => {
         </div>
       )}
       <div ref={mapContainerRef} className="map-container" />
+      {/* Inset maps */}
+      {INSETS.map(({ id, size: [w, h], style }) => (
+        <div
+          key={id}
+          id={id}
+          style={{
+            position: 'absolute',
+            width:  `${w}px`,
+            height: `${h}px`,
+            background: '#fff',
+            border: '2px solid #333',
+            ...style
+          }}
+        />
+      ))}
       
       {/* Timebar / Date Slider and Opacity Slider */}
       <div className="timebar">

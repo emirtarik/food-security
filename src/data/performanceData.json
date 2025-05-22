@@ -1,25 +1,112 @@
 {
-    "Senegal": {
-      "years": [2019, 2020, 2021, 2022, 2023],
-      "metrics": {
-        "Performance du système d'information (Score CH)": ["60%", "75%", "75%", "80%", "80%"],
-        "Population analysée (million)": [13, 16.7, 17.2, 17.73, 17.8],
-        "Nombre de personnes en phase CH 3-5 (million)": [0.2, 0.4, 0.3, 0.7, 0.8],
-        "Proportion de personnes analysées en phase CH 3-5 (%)": ["1%", "3%", "2%", "4%", "4%"],
-        "Nombre de zones analysées": [42, 45, 45, 45, 45],
-        "Nombre de zones en phase CH 3-5": [34, 37, 41, 39, 42],
-        "Besoin de financement (million USD)": [150, 180, 200, 190, 200],
-        "Financement mobilisé (%)": ["65%", "75%", "55%", "60%", "35%"]
-      },
-      "annualChanges": {
-        "Evolution du système d'information (Score CH)": ["-", "15%", "0%", "5%", "0%"],
-        "Evolution personnes en phase CH 3-5": ["-", 3.7, 0.5, 0.5, 0.1],
-        "Evoluation personnes en phase CH 3-5 (%)": ["-", "1%", "-1%", "2%", "1%"],
-        "Evolution du nombre de zones en phase CH 3-5": ["-", 3, 4, -2, 3],
-        "Evolution du nombre de zones en phase CH 3-5 (%)": ["-", "9%", "11%", "-5%", "8%"],
-        "Evolution du besoin de financement couvert": ["-", "10%", "-20%", "5%", "-25%"],
-        "Gap de financement": [52.5, 45, 90, 76, 130]
-      }
+  "Senegal": {
+    "years": [2021, 2022, 2023, 2024, 2025],
+    "metrics": {
+      "Performance du système d'information (Score CH)": [],
+      "Population analysée (million)": [17.2, 18.3, 17.9, 18, "-"],
+      "Nombre de personnes en phase CH 3-5 (million)": [0.3, 0.5, 0.7, 0.3, "-"],
+      "Proportion de personnes analysées en phase CH 3-5 (%)": ["1.7%", "3%", "3.8%", "1.6%", "-"],
+      "Nombre de zones analysées": [45, 45, 45, 45, "-"],
+      "Nombre de zones en phase CH 3-5": [0, 2, 0, 0, "-"],
+      "Besoin de financement (million USD)": [],
+      "Financement mobilisé (%)": []
+    },
+    "annualChanges": {
+      "Evolution du système d'information (Score CH)": [],
+      "Evolution personnes en phase CH 3-5": ["-", "0.2", "0.2", "-0.4", "-"],
+      "Evoluation personnes en phase CH 3-5 (%)": ["-", "1.3%", "0.8%", "-2.2%", "-"],
+      "Evolution du nombre de zones en phase CH 3-5": ["-", "2", "-2", "0", "-"],
+      "Evolution du nombre de zones en phase CH 3-5 (%)": ["-", "-", "-100%", "-", "-"],
+      "Evolution du besoin de financement couvert": [],
+      "Gap de financement": []
+    }
+  },
+  "Mali": {
+    "years": [2021, 2022, 2023, 2024, 2025],
+    "metrics": {
+      "Performance du système d'information (Score CH)": [],
+      "Population analysée (million)": [21.1, "-", 22.3, 22.9, "-"],
+      "Nombre de personnes en phase CH 3-5 (million)": [0.9, "-", 0.8, 0.8, "-"],
+      "Proportion de personnes analysées en phase CH 3-5 (%)": ["4.1%", "-", "3.6%", "3.5%", "-"],
+      "Nombre de zones analysées": [57, "-", 56, 56, "-"],
+      "Nombre de zones en phase CH 3-5": [6, "-", 3, 9, "-"],
+      "Besoin de financement (million USD)": [],
+      "Financement mobilisé (%)": []
+    },
+    "annualChanges": {
+      "Evolution du système d'information (Score CH)": [],
+      "Evolution personnes en phase CH 3-5": ["-", "-", "0.2", "0.6", "-"],
+      "Evoluation personnes en phase CH 3-5 (%)": ["-", "-", "-0.5%", "0.1%", "-"],
+      "Evolution du nombre de zones en phase CH 3-5": ["-", "-", "-3", "6", "-"],
+      "Evolution du nombre de zones en phase CH 3-5 (%)": ["-", "-", "-50%", "300%", "-"],
+      "Evolution du besoin de financement couvert": [],
+      "Gap de financement": []
+    }
+  },
+  "Burkina Faso": {
+    "years": [2021, 2022, 2023, 2024, 2025],
+    "metrics": {
+      "Performance du système d'information (Score CH)": [],
+      "Population analysée (million)": [21.7, 21.3, 22.3, 22.3, "-"],
+      "Nombre de personnes en phase CH 3-5 (million)": [2.1, 2.4, 2.2, 1.7, "-"],
+      "Proportion de personnes analysées en phase CH 3-5 (%)": ["9.6%", "11.1%", "9.8%", "7.8%", "-"],
+      "Nombre de zones analysées": [45, 53, 51, 45, "-"],
+      "Nombre de zones en phase CH 3-5": [9, 15, 15, 8, "-"],
+      "Besoin de financement (million USD)": [],
+      "Financement mobilisé (%)": []
+    },
+    "annualChanges": {
+      "Evolution du système d'information (Score CH)": [],
+      "Evolution personnes en phase CH 3-5": ["-", "0.3", "-0.2", "-0.5", "-"],
+      "Evoluation personnes en phase CH 3-5 (%)": ["-", "1.5%", "-1.3%", "-2.0%", "-"],
+      "Evolution du nombre de zones en phase CH 3-5": ["-", "6", "0", "-7", "-"],
+      "Evolution du nombre de zones en phase CH 3-5 (%)": ["-", "66.7%", "0%", "-46.7%", "-"],
+      "Evolution du besoin de financement couvert": [],
+      "Gap de financement": []
+    }
+  },
+  "Niger": {
+    "years": [2021, 2022, 2023, 2024, 2025],
+    "metrics": {
+      "Performance du système d'information (Score CH)": [],
+      "Population analysée (million)": [23.3, 24.9, 25.9, 26.2, "-"],
+      "Nombre de personnes en phase CH 3-5 (million)": [1.6, 3.3, 2.5, "-", "-"],
+      "Proportion de personnes analysées en phase CH 3-5 (%)": ["7.0%", "13.4%", "9.7%", "-", "-"],
+      "Nombre de zones analysées": [74, 75, 78, "-", "-"],
+      "Nombre de zones en phase CH 3-5": [14, 22, 14, "-", "-"],
+      "Besoin de financement (million USD)": [],
+      "Financement mobilisé (%)": []
+    },
+    "annualChanges": {
+      "Evolution du système d'information (Score CH)": ["-"],
+      "Evolution personnes en phase CH 3-5": ["-", "1.7", "-0.8", "-", "-"],
+      "Evoluation personnes en phase CH 3-5 (%)": ["-", "6.4%", "-3.7%", "-", "-"],
+      "Evolution du nombre de zones en phase CH 3-5": ["-", "8", "-8", "-", "-"],
+      "Evolution du nombre de zones en phase CH 3-5 (%)": ["-", "57.1%", "-36.4%", "-", "-"],
+      "Evolution du besoin de financement couvert": [],
+      "Gap de financement": []
+    }
+  },
+  "Mauritania": {
+    "years": [2021, 2022, 2023, 2024, 2025],
+    "metrics": {
+      "Performance du système d'information (Score CH)": [],
+      "Population analysée (million)": [4.3, 4.4, 3.5, 4.6, 4.9],
+      "Nombre de personnes en phase CH 3-5 (million)": [0.2, 0.9, 0.3, 0.3, 0.4],
+      "Proportion de personnes analysées en phase CH 3-5 (%)": ["5.1%", "20.2%", "7.7%", "6.9%", "7.4%"],
+      "Nombre de zones analysées": [48, 48, 48, 46, 55],
+      "Nombre de zones en phase CH 3-5": [0, 16, 0, 2, 0],
+      "Besoin de financement (million USD)": [],
+      "Financement mobilisé (%)": []
+    },
+    "annualChanges": {
+      "Evolution du système d'information (Score CH)": ["-"],
+      "Evolution personnes en phase CH 3-5": ["-", "0.7", "-0.6", "0", "0.1"],
+      "Evoluation personnes en phase CH 3-5 (%)": ["-", "15.1%", "-12.5%", "0%", "0.5%"],
+      "Evolution du nombre de zones en phase CH 3-5": ["-", "16", "-16", "2", "-2"],
+      "Evolution du nombre de zones en phase CH 3-5 (%)": ["-", "-", "-100%", "-", "-100"],
+      "Evolution du besoin de financement couvert": [],
+      "Gap de financement": []
     }
   }
-  
+}
