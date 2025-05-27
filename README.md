@@ -1,6 +1,6 @@
 # Food Security Prevention Network Website
 
-This repository contains the **React** frontend for the [Food Security Prevention Network](food-security.net) (RPCA), an initiative of the **Sahel and West Africa Club (SWAC)** at the **Organisation for Economic Co-operation and Development (OECD)**. It is built as part of the broader **RPCA** project, leveraging custom tooling and instructions to deliver a modern, accessible, and maintainable web platform. 
+This repository contains the **React** frontend for the [Food Security Prevention Network](www.food-security.net) (RPCA), an initiative of the **Sahel and West Africa Club (SWAC)** at the **Organisation for Economic Co-operation and Development (OECD)**. It is built as part of the broader **RPCA** project, leveraging custom tooling and instructions to deliver a modern, accessible, and maintainable web platform. 
 
 ---
 
