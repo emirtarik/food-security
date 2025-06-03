@@ -229,10 +229,13 @@ const ComparisonTable = ({
   };
 
   const handleRegionClick = async (admin0Name, isSubRow) => {
-    if (isSubRow || regionSelection.admin1 || regionSelection.admin2) {
-      return; // Click is on a sub-row or view is already admin1/admin2 specific
+    // If a specific country (admin0) is already selected in regionSelection,
+    // or if the click is on an admin1/admin2 sub-row, do nothing.
+    if (regionSelection.admin0 || isSubRow) {
+      return;
     }
 
+    // Proceed with toggling expansion for admin0 level in general view
     const isCurrentlyExpanded = expandedAdmin0s[admin0Name];
     setExpandedAdmin0s(prev => ({ ...prev, [admin0Name]: !prev[admin0Name] }));
 
@@ -377,21 +380,18 @@ const ComparisonTable = ({
               </thead>
               <tbody>
                 {displayRows.map((row, i) => {
-                  const isExpandable = !row.isSubRow && !row.isPlaceholder && !regionSelection.admin1 && !regionSelection.admin2;
-                  const isClickable = isExpandable || (row.isSubRow && !row.isPlaceholder); // Admin0s are clickable to expand, Admin1s might be for other actions later
+                  // A row can be expanded if it's an Admin0 row, not a placeholder, and no Admin0 is yet selected in regionSelection
+                  const canExpandThisRow = !regionSelection.admin0 && !row.isSubRow && !row.isPlaceholder;
 
                   let rowClass = "";
                   if (row.isSubRow) {
-                    // Admin1 rows are only added if their parent is expanded, so they should always get 'expanded'
-                    // The placeholder row also uses admin1-row for styling but won't animate initially
                     rowClass = `admin1-row ${!row.isPlaceholder ? 'expanded' : ''}`;
                   } else {
                     rowClass = 'admin0-row';
                   }
 
-                  let tdClass = isClickable ? 'clickable-row' : 'non-clickable-row';
-                  if (row.isPlaceholder && row.isSubRow) tdClass = 'non-clickable-row';
-
+                  // TD is clickable if the row can be expanded
+                  const tdClass = canExpandThisRow ? 'clickable-row' : 'non-clickable-row';
 
                   return (
                     <tr key={i} className={rowClass}>
@@ -400,7 +400,9 @@ const ComparisonTable = ({
                         onClick={() => handleRegionClick(row.region, row.isSubRow || row.isPlaceholder)}
                       >
                         <span className="indicator-span">
-                          {isExpandable ? (expandedAdmin0s[row.region] ? '▼' : '▶') : "\u00A0"}
+                          {canExpandThisRow
+                            ? expandedAdmin0s[row.region] ? '- ' : '+ '
+                            : "\u00A0"}
                         </span>
                         {row.aggregated && !row.isSubRow && (
                           <span
