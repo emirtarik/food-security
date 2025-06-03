@@ -48,7 +48,7 @@
 .comparison-table th,
 .comparison-table td {
   border: 1px solid #ccc;
-  padding: 8px;
+  padding: 8px; /* Default padding, will be used by .admin1-row.expanded td */
   text-align: left;
   white-space: nowrap;
   font-size: 14px;
@@ -65,7 +65,7 @@
 
 /* Optionally fix row height for alignment */
 .triple-table tbody tr {
-  height: 45px;
+  /* height: 45px; Default height is okay, line-height will manage collapse */
 }
 
 .difference-section {
@@ -111,3 +111,45 @@
   visibility: visible;
 }
 
+/* Styles for row types and transitions */
+.admin0-row td {
+  /* Base style for admin0 rows, if any specific needed beyond default td */
+}
+
+.admin1-row td {
+  padding-left: 25px !important; /* Indentation */
+  /* Initial state for transition (collapsed) */
+  padding-top: 0px;
+  padding-bottom: 0px;
+  line-height: 0;
+  opacity: 0;
+  transform: translateY(-10px); /* Optional: start slightly above */
+  transition: opacity 0.3s ease-out, line-height 0.3s ease-out,
+              padding-top 0.3s ease-out, padding-bottom 0.3s ease-out,
+              transform 0.3s ease-out;
+  overflow: hidden; /* Helps clip content during transition */
+}
+
+.admin1-row.expanded td {
+  /* Final state for transition (expanded) */
+  padding-top: 8px; /* Default table cell padding */
+  padding-bottom: 8px; /* Default table cell padding */
+  line-height: normal; /* Default line height, or specific if needed e.g. 1.4em */
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.clickable-row {
+  cursor: pointer;
+}
+
+.non-clickable-row {
+  cursor: default;
+}
+
+.indicator-span {
+  margin-right: 5px;
+  display: inline-block; /* Ensures proper spacing */
+  width: 10px; /* Allocate space for the icon to prevent text shift */
+  text-align: center;
+}
