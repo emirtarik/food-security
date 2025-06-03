@@ -133,6 +133,67 @@ const groupDataByRegion = (data, regionSelection) => {
   return groups;
 };
 
+const getAdmin1DataForCountry = async (
+  admin0Name,
+  dataPeriod1,
+  dataPeriod2,
+  period1,
+  period2,
+  formatNumber,
+  translateClassification,
+  t
+) => {
+  const admin1DataP1 = dataPeriod1.filter(f => f.admin0Name === admin0Name);
+  const admin1DataP2 = dataPeriod2.filter(f => f.admin0Name === admin0Name);
+
+  const groupedP1Admin1s = {};
+  admin1DataP1.forEach(f => {
+    const key = f.admin1Name || "Unknown Region";
+    (groupedP1Admin1s[key] = groupedP1Admin1s[key] || []).push(f);
+  });
+
+  const groupedP2Admin1s = {};
+  admin1DataP2.forEach(f => {
+    const key = f.admin1Name || "Unknown Region";
+    (groupedP2Admin1s[key] = groupedP2Admin1s[key] || []).push(f);
+  });
+
+  const admin1Rows = Object.keys(groupedP1Admin1s).map(admin1Name => {
+    const agg1 = aggregateFeatures(groupedP1Admin1s[admin1Name]);
+    const agg2Features = groupedP2Admin1s[admin1Name] || [];
+    const agg2 = agg2Features.length > 0 ? aggregateFeatures(agg2Features) : null;
+
+    const sev1 = classificationSeverity[agg1.classification] ?? 0;
+    const sev2 = agg2 ? (classificationSeverity[agg2.classification] ?? 0) : -1;
+
+    let change = t("noChange");
+    if (!agg2)      change = t("nA");
+    else if (sev2 > sev1)  change = t("worse");
+    else if (sev2 < sev1)  change = t("better");
+
+    return {
+      region:           admin1Name,
+      classification1:  agg1.classification,
+      population1:      formatNumber(agg1.pop),
+      popPh2_1:         formatNumber(agg1.ph2),
+      popPh3_1:         formatNumber(agg1.ph3),
+      aggregated1:      agg1.aggregatedAtAdmin1,
+
+      classification2:  agg2 ? agg2.classification : t("nA"),
+      population2:      agg2 ? formatNumber(agg2.pop) : "0",
+      popPh2_2:         agg2 ? formatNumber(agg2.ph2) : "0",
+      popPh3_2:         agg2 ? formatNumber(agg2.ph3) : "0",
+      aggregated2:      agg2 ? agg2.aggregatedAtAdmin1 : false,
+
+      aggregated:        agg1.aggregatedAtAdmin1 || (agg2?.aggregatedAtAdmin1 ?? false),
+      classificationChange: change,
+      isSubRow: true // Flag to identify these as admin1 sub-rows
+    };
+  });
+
+  return admin1Rows;
+};
+
 const ComparisonTable = ({
   regionSelection = { admin0: "", admin1: "", admin2: "" },
   period1,
@@ -143,6 +204,8 @@ const ComparisonTable = ({
   const [dataPeriod1, setDataPeriod1] = useState([]);
   const [dataPeriod2, setDataPeriod2] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [expandedAdmin0s, setExpandedAdmin0s] = useState({});
+  const [admin1SubRowsData, setAdmin1SubRowsData] = useState({});
 
   // Helper: format number (drop decimals, add separators)
   const formatNumber = (num) => {
@@ -162,6 +225,36 @@ const ComparisonTable = ({
       case "Phase 5 : famine":       return t("phase5");
       case "inaccessible":           return t("inaccessible");
       default:                     return classification || t("unknownClassification");
+    }
+  };
+
+  const handleRegionClick = async (admin0Name, isSubRow) => {
+    if (isSubRow || regionSelection.admin1 || regionSelection.admin2) {
+      return; // Click is on a sub-row or view is already admin1/admin2 specific
+    }
+
+    const isCurrentlyExpanded = expandedAdmin0s[admin0Name];
+    setExpandedAdmin0s(prev => ({ ...prev, [admin0Name]: !prev[admin0Name] }));
+
+    // If expanding and data not yet fetched
+    if (!isCurrentlyExpanded && !admin1SubRowsData[admin0Name]) {
+      try {
+        const fetchedData = await getAdmin1DataForCountry(
+          admin0Name,
+          dataPeriod1,
+          dataPeriod2,
+          period1,
+          period2,
+          formatNumber,
+          translateClassification,
+          t
+        );
+        setAdmin1SubRowsData(prev => ({ ...prev, [admin0Name]: fetchedData }));
+      } catch (error) {
+        console.error("Error fetching admin1 data:", error);
+        // Optionally reset expansion state or show error to user
+        setExpandedAdmin0s(prev => ({ ...prev, [admin0Name]: false }));
+      }
     }
   };
 
@@ -200,7 +293,7 @@ const ComparisonTable = ({
   const grouped1 = groupDataByRegion(dataPeriod1, regionSelection);
   const grouped2 = groupDataByRegion(dataPeriod2, regionSelection);
 
-  const rows = Object.keys(grouped1).map(regionName => {
+  const baseRows = Object.keys(grouped1).map(regionName => {
     const agg1 = aggregateFeatures(grouped1[regionName]);
     const agg2 = grouped2[regionName] ? aggregateFeatures(grouped2[regionName]) : null;
 
@@ -227,11 +320,40 @@ const ComparisonTable = ({
       aggregated2:      agg2 ? agg2.aggregatedAtAdmin1 : false,
 
       aggregated:        agg1.aggregatedAtAdmin1 || (agg2?.aggregatedAtAdmin1 ?? false),
-
-      classificationChange: change
+      classificationChange: change,
+      level: 0, // Indicates an Admin0 row
+      isSubRow: false
     };
   });
 
+  const displayRows = [];
+  baseRows.forEach(baseRow => {
+    displayRows.push(baseRow);
+    // If this admin0 row is expanded and we are in country-level view
+    if (
+      expandedAdmin0s[baseRow.region] &&
+      !regionSelection.admin1 &&
+      !regionSelection.admin2
+    ) {
+      const subRows = admin1SubRowsData[baseRow.region];
+      if (subRows) {
+        subRows.forEach(subRow => {
+          displayRows.push({ ...subRow, level: 1, isSubRow: true });
+        });
+      } else {
+        // Placeholder for when data is not yet loaded
+        displayRows.push({
+          region: t("loadingAdmin1Data"),
+          classification1: "", population1: "", popPh2_1: "", popPh3_1: "",
+          classification2: "", population2: "", popPh2_2: "", popPh3_2: "",
+          classificationChange: "",
+          level: 1,
+          isSubRow: true,
+          isPlaceholder: true // Added a flag for placeholder
+        });
+      }
+    }
+  });
 
   const cellStyle = (classification) => ({
     backgroundColor: classificationColor[classification] || '#ffffff'
@@ -254,21 +376,45 @@ const ComparisonTable = ({
                 </tr>
               </thead>
               <tbody>
-                {rows.map((row, i) => (
-                  <tr key={i}>
-                    <td>
-                      {row.aggregated && (
-                        <span
-                          className="popup-aggregated"
-                          data-tooltip={t("dataAggregated")}
-                        >
-                          ⚠️
+                {displayRows.map((row, i) => {
+                  const isExpandable = !row.isSubRow && !row.isPlaceholder && !regionSelection.admin1 && !regionSelection.admin2;
+                  const isClickable = isExpandable || (row.isSubRow && !row.isPlaceholder); // Admin0s are clickable to expand, Admin1s might be for other actions later
+
+                  let rowClass = "";
+                  if (row.isSubRow) {
+                    // Admin1 rows are only added if their parent is expanded, so they should always get 'expanded'
+                    // The placeholder row also uses admin1-row for styling but won't animate initially
+                    rowClass = `admin1-row ${!row.isPlaceholder ? 'expanded' : ''}`;
+                  } else {
+                    rowClass = 'admin0-row';
+                  }
+
+                  let tdClass = isClickable ? 'clickable-row' : 'non-clickable-row';
+                  if (row.isPlaceholder && row.isSubRow) tdClass = 'non-clickable-row';
+
+
+                  return (
+                    <tr key={i} className={rowClass}>
+                      <td
+                        className={tdClass}
+                        onClick={() => handleRegionClick(row.region, row.isSubRow || row.isPlaceholder)}
+                      >
+                        <span className="indicator-span">
+                          {isExpandable ? (expandedAdmin0s[row.region] ? '▼' : '▶') : "\u00A0"}
                         </span>
-                      )}
-                      {' '}{row.region}
-                    </td>
-                  </tr>
-                ))}
+                        {row.aggregated && !row.isSubRow && (
+                          <span
+                            className="popup-aggregated"
+                            data-tooltip={t("dataAggregated")}
+                          >
+                            ⚠️
+                          </span>
+                        )}
+                        {' '}{row.region}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -286,10 +432,10 @@ const ComparisonTable = ({
                 </tr>
               </thead>
               <tbody>
-                {rows.map((row,i) => (
+                {displayRows.map((row,i) => (
                   <tr key={i}>
-                    <td style={cellStyle(row.classification1)}>
-                      {translateClassification(row.classification1, t)}
+                    <td style={row.isPlaceholder ? {} : cellStyle(row.classification1)}>
+                      {row.isPlaceholder ? "" : translateClassification(row.classification1, t)}
                     </td>
                     <td>{row.population1}</td>
                     <td>{row.popPh2_1}</td>
@@ -314,10 +460,10 @@ const ComparisonTable = ({
                 </tr>
               </thead>
               <tbody>
-                {rows.map((row, i) => (
+                {displayRows.map((row, i) => (
                   <tr key={i}>
-                    <td style={cellStyle(row.classification2)}>
-                      {translateClassification(row.classification2, t)}
+                    <td style={row.isPlaceholder ? {} : cellStyle(row.classification2)}>
+                      {row.isPlaceholder ? "" : translateClassification(row.classification2, t)}
                     </td>
                     <td>{row.population2}</td>
                     <td>{row.popPh2_2}</td>
