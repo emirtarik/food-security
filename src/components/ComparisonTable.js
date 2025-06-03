@@ -424,7 +424,7 @@ const ComparisonTable = ({
           {/* Middle Table: Period1 Data */}
           <div className="table-block">
             <h4>{t("dataFor")} {period1} {t("inThousands")}</h4>
-            <table className="comparison-table triple-table">
+            <table className="comparison-table data-table-4col triple-table">
               <thead>
                 <tr>
                   <th>{t("classification")}</th>
@@ -451,7 +451,7 @@ const ComparisonTable = ({
           {/* Right Table: Period2 Data + Change */}
           <div className="table-block">
             <h4>{t("dataFor")} {period2} {t("inThousands")}</h4>
-            <table className="comparison-table triple-table">
+            <table className="comparison-table data-table-5col triple-table">
               <thead>
                 <tr>
                   <th>{t("classification")}</th>

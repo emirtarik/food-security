@@ -1,3 +1,8 @@
+/* -------------------------------------------------------------
+   1) CONTAINER & FLEX SETUP
+   ------------------------------------------------------------- */
+
+/* (unchanged) */
 .comparison-table-container {
   padding: 16px;
   font-family: "Lato", sans-serif;
@@ -7,146 +12,231 @@
   margin: 16px auto;
   border-radius: 4px;
   max-width: 100%;
-  overflow: visible; /* Keep this if needed for popups/tooltips inside container */
+  overflow: visible; /* keep if you rely on popups/tooltips */
 }
 
-/* Flex container for the three tables */
+/* The wrapper that holds the three table‐blocks */
 .triple-table-wrapper {
   display: flex;
   gap: 5px;
   justify-content: flex-start;
   align-items: flex-start;
-  /* overflow: visible; Let individual tables handle their overflow if needed */
+  width: 100%;
 }
 
+/* Each “block” (region / period1 / period2) is a flex child */
 .table-block {
-  flex: 1 1 0px; /* Default: allow grow, allow shrink, base width 0 to distribute remaining space */
-  overflow: visible; /* Allow tooltips/popups from within the block to show */
+  /* Allow the two data blocks to grow and share remaining space equally */
+  flex: 1 1 0px;
+  overflow: visible;
 }
 
-/* Specific styling for the left (region) table block */
+/* The REGION block must be exactly 200 px wide, always */
 .region-table {
-  flex: 0 0 200px; /* Do not grow, do not shrink, base width 200px */
-  /* overflow: visible; is inherited */
+  flex: 0 0 150px; /* do not grow, do not shrink, fixed 200px */
+  overflow: visible;
 }
 
-.table-block h4 {
-  margin-top: 0;
-  font-size: 16px;
-  margin-bottom: 8px;
-}
 
+/* -------------------------------------------------------------
+   2) BASIC TABLE STYLING + FIXED LAYOUT
+   ------------------------------------------------------------- */
+
+/* Force all .comparison-table to use a “fixed” layout even if 
+   their internal columns differ in number. 
+   This ensures consistent column‐width distribution. 
+*/
 .comparison-table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed; /* Apply fixed table layout */
+  table-layout: fixed; /* important */
 }
 
+/* Borders, padding, etc. */
 .comparison-table th,
 .comparison-table td {
   border: 1px solid #ccc;
   padding: 8px;
   text-align: left;
-  font-size: 14px;
-  /* Default white-space will be normal now, overridden specifically below */
-}
+  font-size: 12px;
+  box-sizing: border-box; /* ensure padding is counted inside width */
 
-.comparison-table th {
-  background: #efefef;
-  font-weight: bold;
-  white-space: nowrap; /* Keep headers from wrapping */
-}
+  height: 48px;
 
-/* TDs within the region table: nowrap and ellipsis for overflow */
-.region-table .comparison-table td {
+  /* Center the text vertically within that 48px */
+  vertical-align: middle;
+
+  /* Prevent any wrapping that could force a taller row */
   white-space: nowrap;
-  overflow: hidden;
+  overflow: visible;
   text-overflow: ellipsis;
 }
 
-/* TDs in other tables (data tables): allow wrapping */
-.table-block:not(.region-table) .comparison-table td {
-  white-space: normal;
+/* Header row background + no wrapping on headers */
+.comparison-table th {
+  background: #efefef;
+  font-weight: bold;
+  white-space: nowrap;
 }
 
 
+/* EVEN/ODD row striping (same as before) */
 .comparison-table tr:nth-child(even) {
   background: #f5f5f5;
 }
 
-/* Styles for row types and transitions */
-.admin0-row td {
-  /* Base style for admin0 rows */
+
+/* -------------------------------------------------------------
+   3) REGION‐TABLE SPECIFICS (left‐most column)
+   ------------------------------------------------------------- */
+
+/* Make the one “region” column itself 170px, including its padding/border */
+.region-table .comparison-table {
+  table-layout: fixed;     /* ensure it honors explicit widths */
+  width: 100%;             /* so the <table> spans all 170px of its container */
+}
+.region-table .comparison-table th,
+.region-table .comparison-table td {
+  width: 150px;            /* force that single column to occupy exactly 170px */
+  box-sizing: border-box;  /* include padding & border in that 170px */
+  white-space: nowrap;     /* prevent the region name text from wrapping */
+  overflow: hidden;        /* trim overflow if the name is >170px */
+  text-overflow: ellipsis; /* show “…” if it does overflow */
+  font-weight: bold; /* make region names bold */
 }
 
-/* Admin1 rows inherit td styling from their respective table context (region or data) */
-/* Transition styles for admin1 rows (applies to all their TDs) */
-.admin1-row td {
-  /* Indentation is applied via padding-left on the first td if needed, or a specific class.
-     The fixed padding-left: 25px !important was on all admin1-row td, let's refine this.
-     If it's only for the first cell (region name) in an admin1 row: */
-  /* padding-left: 25px !important; */ /* This was here, but might be too broad */
+/* ------------------------------
+   PERIOD 1 (4‐column table)
+   (Classification, Population, PopPh2, PopPh3)
+   ------------------------------ */
 
-  /* Initial state for transition (collapsed) */
-  padding-top: 0px;
-  padding-bottom: 0px;
-  line-height: 0;
-  opacity: 0;
-  transform: translateY(-10px);
-  transition: opacity 0.3s ease-out, line-height 0.3s ease-out,
-              padding-top 0.3s ease-out, padding-bottom 0.3s ease-out,
-              transform 0.3s ease-out;
+/* COLUMN 1: Classification (200px, no wrap) */
+.data-table-4col th:nth-child(1),
+.data-table-4col td:nth-child(1) {
+  width: 160px;
+  white-space: nowrap;  /* prevent wrapping */
+}
+
+/* COLUMN 2: Population (100px) */
+.data-table-4col th:nth-child(2),
+.data-table-4col td:nth-child(2) {
+  width: 70px;
+}
+
+/* COLUMN 3: Population Ph2 (100px) */
+.data-table-4col th:nth-child(3),
+.data-table-4col td:nth-child(3) {
+  width: 70px;
+}
+
+/* COLUMN 4: Population Ph3 (100px) */
+.data-table-4col th:nth-child(4),
+.data-table-4col td:nth-child(4) {
+  width: 70px;
+}
+
+/* Ensure the numeric cells can still show their full numbers */
+.data-table-4col td {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+
+
+/* ------------------------------
+   PERIOD 2 (5‐column table)
+   (Classification, Population, PopPh2, PopPh3, Change)
+   ------------------------------ */
+
+/* COLUMN 1: Classification (200px, no wrap) */
+.data-table-5col th:nth-child(1),
+.data-table-5col td:nth-child(1) {
+  width: 160px;
+  white-space: nowrap;  /* prevent wrapping */
+}
+
+/* COLUMN 2: Population (100px) */
+.data-table-5col th:nth-child(2),
+.data-table-5col td:nth-child(2) {
+  width: 70px;
+}
+
+/* COLUMN 3: Population Ph2 (100px) */
+.data-table-5col th:nth-child(3),
+.data-table-5col td:nth-child(3) {
+  width: 70px;
+}
+
+/* COLUMN 4: Population Ph3 (100px) */
+.data-table-5col th:nth-child(4),
+.data-table-5col td:nth-child(4) {
+  width: 70px;
+}
+
+/* COLUMN 5: Change (200px, no wrap) */
+.data-table-5col th:nth-child(5),
+.data-table-5col td:nth-child(5) {
+  width: 160px;
+  white-space: nowrap;  /* prevent wrapping */
+}
+
+.data-table-5col td {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+
+
+/* -------------------------------------------------------------
+   6) EXPANDED/COLLAPSED ANIMATIONS FOR SUBTABLE
+   ------------------------------------------------------------- */
+
+/* The sub‐table container is initially hidden (max-height: 0), 
+   then when we add “.expanded” it grows to show. */
+.subtable {
   overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s ease;
 }
 
-/* Specifically for the first TD (region name) of an admin1 row for indentation */
-.admin1-row td:first-child {
-    padding-left: 25px !important;
-}
-
-
-.admin1-row.expanded td {
-  /* Final state for transition (expanded) - padding will be inherited from parent table context */
-  padding-top: 8px; /* Explicitly set to match general td padding */
-  padding-bottom: 8px; /* Explicitly set to match general td padding */
-  line-height: normal;
-  opacity: 1;
-  transform: translateY(0);
-}
-/* Ensure first-child indentation is maintained for expanded admin1 rows */
-.admin1-row.expanded td:first-child {
-    padding-left: 25px !important;
+/* Once we give it the “.expanded” class in JSX, it slides open */
+.subtable.expanded {
+  max-height: 2000px; /* some large enough value to fit your sub‐tables */
 }
 
 
-.clickable-row {
-  cursor: pointer;
+/* A tiny bit of margin so the sub‐table doesn’t butt up flush */
+.subtable.expanded {
+  margin-top: 12px;
 }
 
-.non-clickable-row {
-  cursor: default;
-}
 
-.indicator-span {
-  margin-right: 5px;
+/* -------------------------------------------------------------
+   7) INDICATOR ARROW ROTATION (optional)
+   ------------------------------------------------------------- */
+
+/* Rotate the little “▶” when a region is open */
+.expand-arrow {
   display: inline-block;
-  width: 10px;
-  text-align: center;
+  transition: transform 0.2s ease;
+}
+.expand-arrow.open {
+  transform: rotate(90deg);
 }
 
-.popup-aggregated-box {
-  display: inline-block;
-  margin-left: 0.5em;
-  vertical-align: middle;
-}
 
+/* -------------------------------------------------------------
+   8) TOOLTIP FOR “⚠️” (unchanged from yours)
+   ------------------------------------------------------------- */
 .popup-aggregated {
   position: relative;
   display: inline-block;
+  z-index: 10;
   font-size: 1em;
   cursor: help;
 }
-
 .popup-aggregated::after {
   content: attr(data-tooltip);
   visibility: hidden;
@@ -158,12 +248,20 @@
   white-space: nowrap;
   font-size: 1.25em;
   position: absolute;
-  bottom: 125%;
-  left: 50%;
+  transform: translateX(-20%);
+  transition: visibility 0.2s ease-in-out;
   pointer-events: none;
-  z-index: 1000;
+  z-index: 9999;
+  overflow: visible;
 }
-
 .popup-aggregated:hover::after {
   visibility: visible;
+  overflow: visible;
+}
+
+
+/* Add this to ComparisonTable.css */
+
+.admin1-row td:first-child {
+  padding-left: 40px;  /* or 25px, 30px—whatever indentation you prefer */
 }
