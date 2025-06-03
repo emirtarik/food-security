@@ -37,24 +37,40 @@ const parseNumber = (value) => {
 };
 
 const aggregateFeatures = (features) => {
-  // 1) Split out admin-2 vs admin-1 matches
+  // 1) Partition out true admin-2 vs. admin-1 fallback
   const atAdmin2 = features.filter(f => f.matchLevel === 2);
   const atAdmin1 = features.filter(f => f.matchLevel === 1);
 
-  // 2) Decide which set to sum
   let toSum, usedLevel;
   if (atAdmin2.length > 0) {
+    // if any admin-2, just sum those
     toSum = atAdmin2;
     usedLevel = 2;
+
   } else if (atAdmin1.length > 0) {
-    toSum = [ atAdmin1[0] ];   // only one aggregate row
-    usedLevel = 1;
+    // No admin-2 at all → we only have admin-1 rollups.
+    // But: if features cover multiple admin-1 units (i.e. country-level grouping),
+    // we want one record *per distinct* admin-1, not just the first.
+
+    // Build a map keyed by admin1Name → single aggregate row
+    const uniq = {};
+    atAdmin1.forEach(f => {
+      uniq[f.admin1Name] = f;
+    });
+
+    // toSum is either
+    //  • [ that one row ]       — if you only had one admin1 in this group
+    //  • [ row1, row2, row3… ]  — if you’re at country level and have many admin1s
+    toSum      = Object.values(uniq);
+    usedLevel  = 1;
+
   } else {
-    toSum = [];
-    usedLevel = 0;             // no data
+    // no data at all
+    toSum      = [];
+    usedLevel  = 0;
   }
 
-  // 3) Sum + max‐severity as before
+  // 2) Sum + max‐severity
   let totalPop    = 0;
   let totalPh2    = 0;
   let totalPh3    = 0;
@@ -69,14 +85,16 @@ const aggregateFeatures = (features) => {
     totalPh3  += parseNumber(f["Population totale en Ph 3 à 5"]);
   });
 
+  // 3) Divide by 1000 for “thousands”, drop decimals, and return
   return {
-    classification: severityToClassification(maxSeverity),
-    pop:         Math.trunc(totalPop / 1000),
-    ph2:         Math.trunc(totalPh2  / 1000),
-    ph3:         Math.trunc(totalPh3  / 1000),
-    aggregatedAtAdmin1:  usedLevel === 1
+    classification:     severityToClassification(maxSeverity),
+    pop:                Math.trunc(totalPop / 1000),
+    ph2:                Math.trunc(totalPh2  / 1000),
+    ph3:                Math.trunc(totalPh3  / 1000),
+    aggregatedAtAdmin1: usedLevel === 1
   };
 };
+
 
 
 const groupDataByRegion = (data, regionSelection) => {
