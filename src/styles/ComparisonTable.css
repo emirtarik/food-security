@@ -7,31 +7,27 @@
   margin: 16px auto;
   border-radius: 4px;
   max-width: 100%;
-  overflow: visible;
+  overflow: visible; /* Keep this if needed for popups/tooltips inside container */
 }
 
 /* Flex container for the three tables */
 .triple-table-wrapper {
   display: flex;
-  gap: 5px;  /* Reduced horizontal margin between tables */
+  gap: 5px;
   justify-content: flex-start;
   align-items: flex-start;
-  overflow: visible;
+  /* overflow: visible; Let individual tables handle their overflow if needed */
 }
 
 .table-block {
-  flex: 1 1 auto;
-  overflow: visible;
-}
-.table-block td {
-  overflow: visible;
+  flex: 1 1 0px; /* Default: allow grow, allow shrink, base width 0 to distribute remaining space */
+  overflow: visible; /* Allow tooltips/popups from within the block to show */
 }
 
-/* Specific styling for the left (region) table */
+/* Specific styling for the left (region) table block */
 .region-table {
-  min-width: 100px; /* Fixed width */
-  max-width: 100px;
-  overflow: visible;
+  flex: 0 0 200px; /* Do not grow, do not shrink, base width 200px */
+  /* overflow: visible; is inherited */
 }
 
 .table-block h4 {
@@ -43,33 +39,99 @@
 .comparison-table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed; /* Apply fixed table layout */
 }
 
 .comparison-table th,
 .comparison-table td {
   border: 1px solid #ccc;
-  padding: 8px; /* Default padding, will be used by .admin1-row.expanded td */
+  padding: 8px;
   text-align: left;
-  white-space: nowrap;
   font-size: 14px;
+  /* Default white-space will be normal now, overridden specifically below */
 }
 
 .comparison-table th {
   background: #efefef;
   font-weight: bold;
+  white-space: nowrap; /* Keep headers from wrapping */
 }
+
+/* TDs within the region table: nowrap and ellipsis for overflow */
+.region-table .comparison-table td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* TDs in other tables (data tables): allow wrapping */
+.table-block:not(.region-table) .comparison-table td {
+  white-space: normal;
+}
+
 
 .comparison-table tr:nth-child(even) {
   background: #f5f5f5;
 }
 
-/* Optionally fix row height for alignment */
-.triple-table tbody tr {
-  /* height: 45px; Default height is okay, line-height will manage collapse */
+/* Styles for row types and transitions */
+.admin0-row td {
+  /* Base style for admin0 rows */
 }
 
-.difference-section {
-  margin-top: 20px;
+/* Admin1 rows inherit td styling from their respective table context (region or data) */
+/* Transition styles for admin1 rows (applies to all their TDs) */
+.admin1-row td {
+  /* Indentation is applied via padding-left on the first td if needed, or a specific class.
+     The fixed padding-left: 25px !important was on all admin1-row td, let's refine this.
+     If it's only for the first cell (region name) in an admin1 row: */
+  /* padding-left: 25px !important; */ /* This was here, but might be too broad */
+
+  /* Initial state for transition (collapsed) */
+  padding-top: 0px;
+  padding-bottom: 0px;
+  line-height: 0;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease-out, line-height 0.3s ease-out,
+              padding-top 0.3s ease-out, padding-bottom 0.3s ease-out,
+              transform 0.3s ease-out;
+  overflow: hidden;
+}
+
+/* Specifically for the first TD (region name) of an admin1 row for indentation */
+.admin1-row td:first-child {
+    padding-left: 25px !important;
+}
+
+
+.admin1-row.expanded td {
+  /* Final state for transition (expanded) - padding will be inherited from parent table context */
+  padding-top: 8px; /* Explicitly set to match general td padding */
+  padding-bottom: 8px; /* Explicitly set to match general td padding */
+  line-height: normal;
+  opacity: 1;
+  transform: translateY(0);
+}
+/* Ensure first-child indentation is maintained for expanded admin1 rows */
+.admin1-row.expanded td:first-child {
+    padding-left: 25px !important;
+}
+
+
+.clickable-row {
+  cursor: pointer;
+}
+
+.non-clickable-row {
+  cursor: default;
+}
+
+.indicator-span {
+  margin-right: 5px;
+  display: inline-block;
+  width: 10px;
+  text-align: center;
 }
 
 .popup-aggregated-box {
@@ -85,7 +147,6 @@
   cursor: help;
 }
 
-/* Tooltip text */
 .popup-aggregated::after {
   content: attr(data-tooltip);
   visibility: hidden;
@@ -96,60 +157,13 @@
   padding: 0.25em 0.5em;
   white-space: nowrap;
   font-size: 1.25em;
-
-  /* Position above the icon */
   position: absolute;
   bottom: 125%;
   left: 50%;
-  
   pointer-events: none;
   z-index: 1000;
 }
 
-/* Show tooltip on hover */
 .popup-aggregated:hover::after {
   visibility: visible;
-}
-
-/* Styles for row types and transitions */
-.admin0-row td {
-  /* Base style for admin0 rows, if any specific needed beyond default td */
-}
-
-.admin1-row td {
-  padding-left: 25px !important; /* Indentation */
-  /* Initial state for transition (collapsed) */
-  padding-top: 0px;
-  padding-bottom: 0px;
-  line-height: 0;
-  opacity: 0;
-  transform: translateY(-10px); /* Optional: start slightly above */
-  transition: opacity 0.3s ease-out, line-height 0.3s ease-out,
-              padding-top 0.3s ease-out, padding-bottom 0.3s ease-out,
-              transform 0.3s ease-out;
-  overflow: hidden; /* Helps clip content during transition */
-}
-
-.admin1-row.expanded td {
-  /* Final state for transition (expanded) */
-  padding-top: 8px; /* Default table cell padding */
-  padding-bottom: 8px; /* Default table cell padding */
-  line-height: normal; /* Default line height, or specific if needed e.g. 1.4em */
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.clickable-row {
-  cursor: pointer;
-}
-
-.non-clickable-row {
-  cursor: default;
-}
-
-.indicator-span {
-  margin-right: 5px;
-  display: inline-block; /* Ensures proper spacing */
-  width: 10px; /* Allocate space for the icon to prevent text shift */
-  text-align: center;
 }
