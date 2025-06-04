@@ -42,6 +42,8 @@
     "worse": "Détérioration",
     "better": "Amélioration",
     "analysisOfChange": "Analyse des Évolutions",
-    "zoneChangeHeader": "Évolution Zones Analysées",
-    "populationChangeHeader": "Évolution Population Analysée"
+    "zoneChangeHeader": "Évol. Zones Ph3+",
+    "populationChangeHeader": "Évol. Pop. Ph3+",
+    "loadingAdmin1Data": "Chargement données Admin1...",
+    "loadingAdmin2Data": "Chargement données Admin2..."
   }

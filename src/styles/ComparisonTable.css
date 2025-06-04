@@ -259,9 +259,11 @@
   overflow: visible;
 }
 
+/* Indentation for Admin1 and Admin2 rows */
+.comparison-table tbody tr.admin1-row > td:first-child {
+  padding-left: 20px;
+}
 
-/* Add this to ComparisonTable.css */
-
-.admin1-row td:first-child {
-  padding-left: 40px;  /* or 25px, 30px—whatever indentation you prefer */
+.comparison-table tbody tr.admin2-row > td:first-child {
+  padding-left: 40px;
 }

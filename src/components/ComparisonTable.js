@@ -55,29 +55,26 @@ const parseNumber = (value) => {
 
 const aggregateFeatures = (features) => {
   const atAdmin2 = features.filter(f => f.matchLevel === 2);
-  const atAdmin1 = features.filter(f => f.matchLevel === 1); // These are Admin2 features with matchLevel 1
+  const atAdmin1 = features.filter(f => f.matchLevel === 1);
 
-  let toSum; // For population and severity aggregation
+  let populatingFeatures;
   let usedLevel;
-  let actualAdmin2sConsideredForCount; // For numberOfAnalyzedUnits
+  let actualAdmin2sConsideredForCount;
 
   if (atAdmin2.length > 0) {
-    toSum = atAdmin2;
+    populatingFeatures = atAdmin2;
     usedLevel = 2;
     actualAdmin2sConsideredForCount = atAdmin2;
   } else if (atAdmin1.length > 0) {
-    // Original logic for toSum for population aggregation if only matchLevel 1 admin2s are present
     const uniq = {};
     atAdmin1.forEach(f => {
-      // This assumes f.admin1Name is present and correctly identifies the Admin1 unit
-      // to which this Admin2-level data (with matchLevel 1) belongs.
-      uniq[f.admin1Name] = f; // Takes the last admin2 feature as representative for that admin1Name's population
+      uniq[f.admin1Name] = f;
     });
-    toSum = Object.values(uniq); // For populating sums based on representative Admin2s
+    populatingFeatures = Object.values(uniq);
     usedLevel = 1;
-    actualAdmin2sConsideredForCount = atAdmin1; // For counting all Admin2s with matchLevel 1
+    actualAdmin2sConsideredForCount = atAdmin1;
   } else {
-    toSum = [];
+    populatingFeatures = [];
     usedLevel = 0;
     actualAdmin2sConsideredForCount = [];
   }
@@ -86,21 +83,29 @@ const aggregateFeatures = (features) => {
   let totalPh2 = 0;
   let totalPh3 = 0;
   let maxSeverity = -1;
+  let numberOfZonesInPh3Plus = 0;
 
-  toSum.forEach(f => {
-    const sev = classificationSeverity[f.classification] ?? 0;
-    if (sev > maxSeverity) maxSeverity = sev;
+  populatingFeatures.forEach(f => {
+    const severityValue = classificationSeverity[f.classification];
+    if (severityValue !== undefined) {
+      if (severityValue > maxSeverity) {
+        maxSeverity = severityValue;
+      }
+      if (severityValue >= 3 && severityValue <= 5) {
+        numberOfZonesInPh3Plus++;
+      }
+    }
+
     totalPop += parseNumber(f["Population totale"]);
     totalPh2  += parseNumber(f["Population totale en Ph 2"]);
     totalPh3  += parseNumber(f["Population totale en Ph 3 à 5"]);
   });
 
-  // If toSum was empty, or all classifications were invalid, ensure maxSeverity is at least 0 ("Non analysée")
-  if (maxSeverity === -1 && toSum.length === 0) {
+  if (maxSeverity === -1 && populatingFeatures.length === 0) {
+      maxSeverity = 0;
+  } else if (maxSeverity === -1 && populatingFeatures.length > 0) {
       maxSeverity = 0;
   }
-  // If toSum was not empty but all classifications were invalid, maxSeverity would be 0 from the loop.
-  // If toSum was not empty and there were valid classifications, maxSeverity would be > 0.
 
   return {
     classification:     severityToClassification(maxSeverity),
@@ -108,8 +113,10 @@ const aggregateFeatures = (features) => {
     ph2:                Math.trunc(totalPh2  / 1000),
     ph3:                Math.trunc(totalPh3  / 1000),
     aggregatedAtAdmin1: usedLevel === 1,
+    rawTotalPop: totalPop,
+    rawPh3Pop: totalPh3,
     numberOfAnalyzedUnits: actualAdmin2sConsideredForCount.length,
-    rawPop:             totalPop
+    numberOfZonesInPh3Plus: numberOfZonesInPh3Plus,
   };
 };
 
@@ -188,18 +195,12 @@ const getAdmin1DataForCountry = async (
     else if (sev2 > sev1)  change = t("worse");
     else if (sev2 < sev1)  change = t("better");
 
-    const units1 = agg1.numberOfAnalyzedUnits;
-    const rawPop1 = agg1.rawPop;
-    const units2 = agg2 ? agg2.numberOfAnalyzedUnits : 0;
-    const rawPop2 = agg2 ? agg2.rawPop : 0;
-
-    const zoneChange = units2 - units1;
-    const populationChange = rawPop2 - rawPop1; // Raw difference
-
-    const populationChangeInThousands = Math.trunc(populationChange / 1000); // Value for display
+    const populationChange = (agg2 ? agg2.rawPh3Pop : 0) - agg1.rawPh3Pop;
+    const populationChangeInThousands = Math.trunc(populationChange / 1000);
+    const zoneChange = (agg2 ? agg2.numberOfZonesInPh3Plus : 0) - agg1.numberOfZonesInPh3Plus;
 
     const zoneChangeVisuals = getChangeVisuals(zoneChange);
-    const populationChangeVisuals = getChangeVisuals(populationChange); // Visuals based on raw change
+    const populationChangeVisuals = getChangeVisuals(populationChange);
 
     return {
       region:           admin1Name,
@@ -208,30 +209,124 @@ const getAdmin1DataForCountry = async (
       popPh2_1:         formatNumber(agg1.ph2),
       popPh3_1:         formatNumber(agg1.ph3),
       aggregated1:      agg1.aggregatedAtAdmin1,
-      rawPop1:          rawPop1,
-      units1:           units1,
+      rawPop1:          agg1.rawTotalPop,
+      units1:           agg1.numberOfAnalyzedUnits,
+      rawPh3Pop1:       agg1.rawPh3Pop,
+      zonesInPh3Plus1:  agg1.numberOfZonesInPh3Plus,
+      admin0NameParent: admin0Name,
+
 
       classification2:  agg2 ? agg2.classification : t("nA"),
       population2:      agg2 ? formatNumber(agg2.pop) : "0",
       popPh2_2:         agg2 ? formatNumber(agg2.ph2) : "0",
       popPh3_2:         agg2 ? formatNumber(agg2.ph3) : "0",
       aggregated2:      agg2 ? agg2.aggregatedAtAdmin1 : false,
-      rawPop2:          rawPop2,
-      units2:           units2,
+      rawPop2:          agg2 ? agg2.rawTotalPop : 0,
+      units2:           agg2 ? agg2.numberOfAnalyzedUnits : 0,
+      rawPh3Pop2:       agg2 ? agg2.rawPh3Pop : 0,
+      zonesInPh3Plus2:  agg2 ? agg2.numberOfZonesInPh3Plus : 0,
 
       aggregated:        agg1.aggregatedAtAdmin1 || (agg2?.aggregatedAtAdmin1 ?? false),
       classificationChange: change,
       zoneChange:       zoneChange,
-      populationChange: populationChange, // Keep raw value for visuals and logic
-      populationChangeInThousands: populationChangeInThousands, // New field for display
+      populationChange: populationChange,
+      populationChangeInThousands: populationChangeInThousands,
       zoneChangeVisuals: zoneChangeVisuals,
       populationChangeVisuals: populationChangeVisuals,
-      isSubRow: true // Flag to identify these as admin1 sub-rows
+      isSubRow: true
     };
   });
 
   return admin1Rows;
 };
+
+const getAdmin2DataForAdmin1 = async (
+  admin0Name,
+  admin1Name,
+  dataPeriod1,
+  dataPeriod2,
+  period1,
+  period2,
+  formatNumber,
+  translateClassification,
+  t
+) => {
+  const admin2DataP1 = dataPeriod1.filter(f => f.admin0Name === admin0Name && f.admin1Name === admin1Name);
+  const admin2DataP2 = dataPeriod2.filter(f => f.admin0Name === admin0Name && f.admin1Name === admin1Name);
+
+  const groupedP1Admin2s = {};
+  admin2DataP1.forEach(f => {
+    const key = f.admin2Name || "Unknown District";
+    (groupedP1Admin2s[key] = groupedP1Admin2s[key] || []).push(f);
+  });
+
+  const groupedP2Admin2s = {};
+  admin2DataP2.forEach(f => {
+    const key = f.admin2Name || "Unknown District";
+    (groupedP2Admin2s[key] = groupedP2Admin2s[key] || []).push(f);
+  });
+
+  const allAdmin2Keys = new Set([...Object.keys(groupedP1Admin2s), ...Object.keys(groupedP2Admin2s)]);
+
+  const admin2Rows = Array.from(allAdmin2Keys).map(admin2Name => {
+    const featuresP1 = groupedP1Admin2s[admin2Name] || [];
+    const featuresP2 = groupedP2Admin2s[admin2Name] || [];
+
+    const agg1 = aggregateFeatures(featuresP1);
+    const agg2 = featuresP2.length > 0 ? aggregateFeatures(featuresP2) : null;
+
+    const sev1 = classificationSeverity[agg1.classification] ?? 0;
+    const sev2 = agg2 ? (classificationSeverity[agg2.classification] ?? 0) : -1;
+
+    let change = t("noChange");
+    if (!agg2)      change = t("nA");
+    else if (sev2 > sev1)  change = t("worse");
+    else if (sev2 < sev1)  change = t("better");
+
+    const populationChange = (agg2 ? agg2.rawPh3Pop : 0) - agg1.rawPh3Pop;
+    const populationChangeInThousands = Math.trunc(populationChange / 1000);
+    const zoneChange = (agg2 ? agg2.numberOfZonesInPh3Plus : 0) - agg1.numberOfZonesInPh3Plus;
+
+    const zoneChangeVisuals = getChangeVisuals(zoneChange);
+    const populationChangeVisuals = getChangeVisuals(populationChange);
+
+    return {
+      region:           admin2Name,
+      classification1:  agg1.classification,
+      population1:      formatNumber(agg1.pop),
+      popPh2_1:         formatNumber(agg1.ph2),
+      popPh3_1:         formatNumber(agg1.ph3),
+      aggregated1:      agg1.aggregatedAtAdmin1,
+      rawPop1:          agg1.rawTotalPop,
+      units1:           agg1.numberOfAnalyzedUnits,
+      rawPh3Pop1:       agg1.rawPh3Pop,
+      zonesInPh3Plus1:  agg1.numberOfZonesInPh3Plus,
+      admin0NameParent: admin0Name,
+      admin1NameParent: admin1Name,
+
+      classification2:  agg2 ? agg2.classification : t("nA"),
+      population2:      agg2 ? formatNumber(agg2.pop) : "0",
+      popPh2_2:         agg2 ? formatNumber(agg2.ph2) : "0",
+      popPh3_2:         agg2 ? formatNumber(agg2.ph3) : "0",
+      aggregated2:      agg2 ? agg2.aggregatedAtAdmin1 : false,
+      rawPop2:          agg2 ? agg2.rawTotalPop : 0,
+      units2:           agg2 ? agg2.numberOfAnalyzedUnits : 0,
+      rawPh3Pop2:       agg2 ? agg2.rawPh3Pop : 0,
+      zonesInPh3Plus2:  agg2 ? agg2.numberOfZonesInPh3Plus : 0,
+
+      classificationChange: change,
+      zoneChange:       zoneChange,
+      populationChange: populationChange,
+      populationChangeInThousands: populationChangeInThousands,
+      zoneChangeVisuals: zoneChangeVisuals,
+      populationChangeVisuals: populationChangeVisuals,
+      level: 2,
+      isSubRow: true
+    };
+  });
+  return admin2Rows;
+};
+
 
 const ComparisonTable = ({
   regionSelection = { admin0: "", admin1: "", admin2: "" },
@@ -245,8 +340,11 @@ const ComparisonTable = ({
   const [loading, setLoading] = useState(true);
   const [expandedAdmin0s, setExpandedAdmin0s] = useState({});
   const [admin1SubRowsData, setAdmin1SubRowsData] = useState({});
+  const [expandedAdmin1s, setExpandedAdmin1s] = useState({});
+  const [admin2SubRowsData, setAdmin2SubRowsData] = useState({});
+  const [loadingAdmin2Key, setLoadingAdmin2Key] = useState(null);
 
-  // Helper: format number (drop decimals, add separators)
+
   const formatNumber = (num) => {
     let n = typeof num === 'number' ? num : parseNumber(num);
     if (isNaN(n)) return num;
@@ -267,38 +365,50 @@ const ComparisonTable = ({
     }
   };
 
-  const handleRegionClick = async (admin0Name, isSubRow) => {
-    // If a specific country (admin0) is already selected in regionSelection,
-    // or if the click is on an admin1/admin2 sub-row, do nothing.
-    if (regionSelection.admin0 || isSubRow) {
-      return;
-    }
+  const handleAdmin0RowClick = async (admin0Name) => {
+    if (regionSelection.admin0) return; // Don't allow expand if a country is globally filtered
 
-    // Proceed with toggling expansion for admin0 level in general view
     const isCurrentlyExpanded = expandedAdmin0s[admin0Name];
     setExpandedAdmin0s(prev => ({ ...prev, [admin0Name]: !prev[admin0Name] }));
 
-    // If expanding and data not yet fetched
     if (!isCurrentlyExpanded && !admin1SubRowsData[admin0Name]) {
       try {
         const fetchedData = await getAdmin1DataForCountry(
-          admin0Name,
-          dataPeriod1,
-          dataPeriod2,
-          period1,
-          period2,
-          formatNumber,
-          translateClassification,
-          t
+          admin0Name, dataPeriod1, dataPeriod2, period1, period2,
+          formatNumber, translateClassification, t
         );
         setAdmin1SubRowsData(prev => ({ ...prev, [admin0Name]: fetchedData }));
       } catch (error) {
         console.error("Error fetching admin1 data:", error);
-        // Optionally reset expansion state or show error to user
-        setExpandedAdmin0s(prev => ({ ...prev, [admin0Name]: false }));
+        setExpandedAdmin0s(prev => ({ ...prev, [admin0Name]: false })); // Revert expansion on error
       }
     }
   };
+
+  const handleAdmin1RowClick = async (admin0NameParent, admin1Name) => {
+    if (regionSelection.admin1) return; // Don't allow expand if an admin1 is globally filtered
+
+    const key = `${admin0NameParent}_${admin1Name}`;
+    const isCurrentlyExpanded = expandedAdmin1s[key];
+    setExpandedAdmin1s(prev => ({ ...prev, [key]: !prev[key] }));
+
+    if (!isCurrentlyExpanded && !admin2SubRowsData[key]) {
+      setLoadingAdmin2Key(key);
+      try {
+        const fetchedData = await getAdmin2DataForAdmin1(
+          admin0NameParent, admin1Name, dataPeriod1, dataPeriod2, period1, period2,
+          formatNumber, translateClassification, t
+        );
+        setAdmin2SubRowsData(prev => ({ ...prev, [key]: fetchedData }));
+      } catch (error) {
+        console.error(`Error fetching admin2 data for ${key}:`, error);
+        setExpandedAdmin1s(prev => ({ ...prev, [key]: false })); // Revert expansion on error
+      } finally {
+        setLoadingAdmin2Key(null);
+      }
+    }
+  };
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -347,18 +457,12 @@ const ComparisonTable = ({
     else if (sev2 > sev1)  change = t("worse");
     else if (sev2 < sev1)  change = t("better");
 
-    const units1 = agg1.numberOfAnalyzedUnits;
-    const rawPop1 = agg1.rawPop;
-    const units2 = agg2 ? agg2.numberOfAnalyzedUnits : 0;
-    const rawPop2 = agg2 ? agg2.rawPop : 0;
-
-    const zoneChange = units2 - units1;
-    const populationChange = rawPop2 - rawPop1; // Raw difference
-
-    const populationChangeInThousands = Math.trunc(populationChange / 1000); // Value for display
+    const populationChange = (agg2 ? agg2.rawPh3Pop : 0) - agg1.rawPh3Pop;
+    const populationChangeInThousands = Math.trunc(populationChange / 1000);
+    const zoneChange = (agg2 ? agg2.numberOfZonesInPh3Plus : 0) - agg1.numberOfZonesInPh3Plus;
 
     const zoneChangeVisuals = getChangeVisuals(zoneChange);
-    const populationChangeVisuals = getChangeVisuals(populationChange); // Visuals based on raw change
+    const populationChangeVisuals = getChangeVisuals(populationChange);
 
     return {
       region:           regionName,
@@ -367,57 +471,81 @@ const ComparisonTable = ({
       popPh2_1:         formatNumber(agg1.ph2),
       popPh3_1:         formatNumber(agg1.ph3),
       aggregated1:      agg1.aggregatedAtAdmin1,
-      rawPop1:          rawPop1,
-      units1:           units1,
+      rawPop1:          agg1.rawTotalPop,
+      units1:           agg1.numberOfAnalyzedUnits,
+      rawPh3Pop1:       agg1.rawPh3Pop,
+      zonesInPh3Plus1:  agg1.numberOfZonesInPh3Plus,
 
       classification2:  agg2 ? agg2.classification : t("nA"),
       population2:      agg2 ? formatNumber(agg2.pop) : "0",
       popPh2_2:         agg2 ? formatNumber(agg2.ph2) : "0",
       popPh3_2:         agg2 ? formatNumber(agg2.ph3) : "0",
       aggregated2:      agg2 ? agg2.aggregatedAtAdmin1 : false,
-      rawPop2:          rawPop2,
-      units2:           units2,
+      rawPop2:          agg2 ? agg2.rawTotalPop : 0,
+      units2:           agg2 ? agg2.numberOfAnalyzedUnits : 0,
+      rawPh3Pop2:       agg2 ? agg2.rawPh3Pop : 0,
+      zonesInPh3Plus2:  agg2 ? agg2.numberOfZonesInPh3Plus : 0,
 
       aggregated:        agg1.aggregatedAtAdmin1 || (agg2?.aggregatedAtAdmin1 ?? false),
       classificationChange: change,
       zoneChange:       zoneChange,
-      populationChange: populationChange, // Keep raw value for visuals and logic
-      populationChangeInThousands: populationChangeInThousands, // New field for display
+      populationChange: populationChange,
+      populationChangeInThousands: populationChangeInThousands,
       zoneChangeVisuals: zoneChangeVisuals,
       populationChangeVisuals: populationChangeVisuals,
-      level: 0, // Indicates an Admin0 row
+      level: 0,
       isSubRow: false
     };
   });
 
   const displayRows = [];
   baseRows.forEach(baseRow => {
-    displayRows.push(baseRow);
-    // If this admin0 row is expanded and we are in country-level view
-    if (
-      expandedAdmin0s[baseRow.region] &&
-      !regionSelection.admin1 &&
-      !regionSelection.admin2
-    ) {
-      const subRows = admin1SubRowsData[baseRow.region];
-      if (subRows) {
-        subRows.forEach(subRow => {
-          displayRows.push({ ...subRow, level: 1, isSubRow: true });
+    displayRows.push(baseRow); // Add Admin0 row
+    const admin0Key = baseRow.region; // Admin0 name is the key for admin1SubRowsData
+
+    if (expandedAdmin0s[admin0Key] && !regionSelection.admin1 && !regionSelection.admin2) {
+      const admin1Rows = admin1SubRowsData[admin0Key];
+      if (admin1Rows) {
+        admin1Rows.forEach(admin1Row => {
+          displayRows.push({ ...admin1Row, level: 1, isSubRow: true }); // Add Admin1 row
+          const admin1Key = `${admin1Row.admin0NameParent}_${admin1Row.region}`;
+
+          if (expandedAdmin1s[admin1Key]) {
+            const admin2Rows = admin2SubRowsData[admin1Key];
+            if (admin2Rows) {
+              admin2Rows.forEach(admin2Row => {
+                displayRows.push({ ...admin2Row, level: 2, isSubRow: true }); // Add Admin2 row
+              });
+            } else if (loadingAdmin2Key === admin1Key) {
+              displayRows.push({
+                region: t("loadingAdmin2Data"), // New translation key needed
+                classification1: "", population1: "", popPh2_1: "", popPh3_1: "",
+                classification2: "", population2: "", popPh2_2: "", popPh3_2: "",
+                classificationChange: "",
+                zoneChange: 0, populationChange: 0, populationChangeInThousands: 0,
+                rawPop1: 0, units1: 0, rawPh3Pop1: 0, zonesInPh3Plus1: 0,
+                rawPop2: 0, units2: 0, rawPh3Pop2: 0, zonesInPh3Plus2: 0,
+                zoneChangeVisuals: { direction: 'neutral', color: 'default'},
+                populationChangeVisuals: { direction: 'neutral', color: 'default'},
+                level: 2, isSubRow: true, isPlaceholder: true,
+                admin0NameParent: admin1Row.admin0NameParent,
+                admin1NameParent: admin1Row.region
+              });
+            }
+          }
         });
-      } else {
-        // Placeholder for when data is not yet loaded
+      } else { // Admin1 data not yet loaded for this Admin0
         displayRows.push({
           region: t("loadingAdmin1Data"),
           classification1: "", population1: "", popPh2_1: "", popPh3_1: "",
           classification2: "", population2: "", popPh2_2: "", popPh3_2: "",
           classificationChange: "",
-          // Ensure placeholders also have these fields to avoid rendering errors
-          zoneChange: 0, populationChange: 0,
+          zoneChange: 0, populationChange: 0, populationChangeInThousands: 0,
+          rawPop1: 0, units1: 0, rawPh3Pop1: 0, zonesInPh3Plus1: 0,
+          rawPop2: 0, units2: 0, rawPh3Pop2: 0, zonesInPh3Plus2: 0,
           zoneChangeVisuals: { direction: 'neutral', color: 'default'},
           populationChangeVisuals: { direction: 'neutral', color: 'default'},
-          level: 1,
-          isSubRow: true,
-          isPlaceholder: true // Added a flag for placeholder
+          level: 1, isSubRow: true, isPlaceholder: true
         });
       }
     }
@@ -445,31 +573,46 @@ const ComparisonTable = ({
               </thead>
               <tbody>
                 {displayRows.map((row, i) => {
-                  // A row can be expanded if it's an Admin0 row, not a placeholder, and no Admin0 is yet selected in regionSelection
-                  const canExpandThisRow = !regionSelection.admin0 && !row.isSubRow && !row.isPlaceholder;
+                  const canExpandThisRow = !row.isPlaceholder && (
+                    (row.level === 0 && !regionSelection.admin0) ||
+                    (row.level === 1 && !regionSelection.admin1 && !regionSelection.admin2) // Admin1 can expand if no admin1/2 is globally filtered
+                  );
 
                   let rowClass = "";
-                  if (row.isSubRow) {
-                    rowClass = `admin1-row ${!row.isPlaceholder ? 'expanded' : ''}`;
-                  } else {
-                    rowClass = 'admin0-row';
-                  }
+                  if (row.level === 2) { rowClass = 'admin2-row'; }
+                  else if (row.level === 1) { rowClass = `admin1-row ${expandedAdmin1s[`${row.admin0NameParent}_${row.region}`] && !row.isPlaceholder ? 'expanded' : ''}`; }
+                  else { rowClass = `admin0-row ${expandedAdmin0s[row.region] && !row.isPlaceholder ? 'expanded' : ''}`; }
+                  if (row.isPlaceholder) rowClass += ' placeholder-row';
 
-                  // TD is clickable if the row can be expanded
                   const tdClass = canExpandThisRow ? 'clickable-row' : 'non-clickable-row';
+
+                  let indicator = "\u00A0";
+                  if (canExpandThisRow) {
+                    if (row.level === 0) {
+                       indicator = expandedAdmin0s[row.region] ? '- ' : '+ ';
+                    } else if (row.level === 1) {
+                       const admin1Key = `${row.admin0NameParent}_${row.region}`;
+                       indicator = expandedAdmin1s[admin1Key] ? '- ' : '+ ';
+                    }
+                  }
 
                   return (
                     <tr key={i} className={rowClass}>
                       <td
                         className={tdClass}
-                        onClick={() => handleRegionClick(row.region, row.isSubRow || row.isPlaceholder)}
+                        onClick={() => {
+                          if (row.isPlaceholder) return;
+                          if (row.level === 0) {
+                            handleAdmin0RowClick(row.region);
+                          } else if (row.level === 1) {
+                            handleAdmin1RowClick(row.admin0NameParent, row.region);
+                          }
+                        }}
                       >
                         <span className="indicator-span">
-                          {canExpandThisRow
-                            ? expandedAdmin0s[row.region] ? '- ' : '+ '
-                            : "\u00A0"}
+                          {indicator}
                         </span>
-                        {row.aggregated && !row.isSubRow && (
+                        {row.aggregated && !row.isSubRow && row.level === 0 && (
                           <span
                             className="popup-aggregated"
                             data-tooltip={t("dataAggregated")}
@@ -516,7 +659,6 @@ const ComparisonTable = ({
           {/* Right Table: Period2 Data */}
           <div className="table-block">
             <h4>{t("dataFor")} {period2} {t("inThousands")}</h4>
-            {/* Class adjusted from data-table-5col to data-table-4col */}
             <table className="comparison-table data-table-4col triple-table">
               <thead>
                 <tr>
@@ -524,7 +666,6 @@ const ComparisonTable = ({
                   <th>{t("population")}</th>
                   <th>{t("populationPh2")}</th>
                   <th>{t("populationPh3")}</th>
-                  {/* Removed <th>{t("change")}</th> */}
                 </tr>
               </thead>
               <tbody>
@@ -536,7 +677,6 @@ const ComparisonTable = ({
                     <td>{row.population2}</td>
                     <td>{row.popPh2_2}</td>
                     <td>{row.popPh3_2}</td>
-                    {/* Removed <td>{row.classificationChange}</td> */}
                   </tr>
                 ))}
               </tbody>
@@ -545,25 +685,22 @@ const ComparisonTable = ({
 
           {/* New Fourth Table Block: Analysis of Change */}
           <div className="table-block">
-            <h4>{t("analysisOfChange")}</h4> {/* New translation key */}
-            <table className="comparison-table data-table-2col triple-table"> {/* Adjust class if needed */}
+            <h4>{t("analysisOfChange")}</h4>
+            <table className="comparison-table data-table-2col triple-table">
               <thead>
                 <tr>
-                  <th>{t("zoneChangeHeader")}</th> {/* New translation key */}
-                  <th>{t("populationChangeHeader")}</th> {/* New translation key */}
+                  <th>{t("zoneChangeHeader")}</th>
+                  <th>{t("populationChangeHeader")}</th>
                 </tr>
               </thead>
               <tbody>
                 {displayRows.map((row, i) => {
-                  // Ensure row.zoneChangeVisuals and row.populationChangeVisuals exist to prevent errors
-                  // Also check for row.isPlaceholder to avoid trying to access properties on placeholder text
                   const zoneVisuals = !row.isPlaceholder && row.zoneChangeVisuals ? row.zoneChangeVisuals : { direction: 'neutral', color: 'default' };
                   const popVisuals = !row.isPlaceholder && row.populationChangeVisuals ? row.populationChangeVisuals : { direction: 'neutral', color: 'default' };
                   const zoneArrow = getArrowSymbol(zoneVisuals.direction);
                   const popArrow = getArrowSymbol(popVisuals.direction);
 
                   const zoneChangeText = row.isPlaceholder ? "" : row.zoneChange;
-                  // Use populationChangeInThousands for display
                   const populationChangeText = row.isPlaceholder ? "" : row.populationChangeInThousands;
 
                   return (
@@ -581,22 +718,7 @@ const ComparisonTable = ({
             </table>
           </div>
         </div>
-        {/* <div className="mask-overlay" style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(255, 255, 255, 0.96)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1000,
-          fontSize: '1.5rem',
-          fontWeight: 'bold'
-        }}>
-          {tMisc("underRenovation")}
-        </div> */}
+        {/* <div className="mask-overlay" style={{ ... }}> ... </div> */}
       </div>
     </div>
   );
