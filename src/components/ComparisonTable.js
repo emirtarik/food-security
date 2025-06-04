@@ -54,56 +54,61 @@ const parseNumber = (value) => {
 };
 
 const aggregateFeatures = (features) => {
-  // 1. Determine Feature Sets
-  const atAdmin2Features = features.filter(f => f.matchLevel === 2);
-  const atAdmin1Features = features.filter(f => f.matchLevel === 1);
+  const atAdmin2 = features.filter(f => f.matchLevel === 2);
+  const atAdmin1 = features.filter(f => f.matchLevel === 1); // These are Admin2 features with matchLevel 1
 
-  // 2. Choose Features for Population Summing and Severity Determination
-  let populatingFeatures;
+  let toSum; // For population and severity aggregation
   let usedLevel;
+  let actualAdmin2sConsideredForCount; // For numberOfAnalyzedUnits
 
-  if (atAdmin2Features.length > 0) {
-    populatingFeatures = atAdmin2Features;
+  if (atAdmin2.length > 0) {
+    toSum = atAdmin2;
     usedLevel = 2;
-  } else if (atAdmin1Features.length > 0) {
-    populatingFeatures = atAdmin1Features;
+    actualAdmin2sConsideredForCount = atAdmin2;
+  } else if (atAdmin1.length > 0) {
+    // Original logic for toSum for population aggregation if only matchLevel 1 admin2s are present
+    const uniq = {};
+    atAdmin1.forEach(f => {
+      // This assumes f.admin1Name is present and correctly identifies the Admin1 unit
+      // to which this Admin2-level data (with matchLevel 1) belongs.
+      uniq[f.admin1Name] = f; // Takes the last admin2 feature as representative for that admin1Name's population
+    });
+    toSum = Object.values(uniq); // For populating sums based on representative Admin2s
     usedLevel = 1;
+    actualAdmin2sConsideredForCount = atAdmin1; // For counting all Admin2s with matchLevel 1
   } else {
-    populatingFeatures = [];
+    toSum = [];
     usedLevel = 0;
+    actualAdmin2sConsideredForCount = [];
   }
 
-  // 3. Choose Features for Counting (same as populatingFeatures in this revised logic)
-  const countingFeatures = populatingFeatures;
+  let totalPop = 0;
+  let totalPh2 = 0;
+  let totalPh3 = 0;
+  let maxSeverity = -1;
 
-  // 4. Aggregation Logic
-  let totalPop    = 0;
-  let totalPh2    = 0;
-  let totalPh3    = 0;
-  let maxSeverity = -1; // Start with -1 to ensure any valid severity (0-6) is greater
-
-  populatingFeatures.forEach(f => {
-    const sev = classificationSeverity[f.classification] ?? 0; // Default to 0 if classification is undefined
+  toSum.forEach(f => {
+    const sev = classificationSeverity[f.classification] ?? 0;
     if (sev > maxSeverity) maxSeverity = sev;
-
     totalPop += parseNumber(f["Population totale"]);
     totalPh2  += parseNumber(f["Population totale en Ph 2"]);
     totalPh3  += parseNumber(f["Population totale en Ph 3 à 5"]);
   });
 
-  if (populatingFeatures.length === 0) { // if no features, maxSeverity should reflect "Non analysée" or similar
+  // If toSum was empty, or all classifications were invalid, ensure maxSeverity is at least 0 ("Non analysée")
+  if (maxSeverity === -1 && toSum.length === 0) {
       maxSeverity = 0;
   }
+  // If toSum was not empty but all classifications were invalid, maxSeverity would be 0 from the loop.
+  // If toSum was not empty and there were valid classifications, maxSeverity would be > 0.
 
-
-  // 5. Return Object
   return {
     classification:     severityToClassification(maxSeverity),
     pop:                Math.trunc(totalPop / 1000),
     ph2:                Math.trunc(totalPh2  / 1000),
     ph3:                Math.trunc(totalPh3  / 1000),
     aggregatedAtAdmin1: usedLevel === 1,
-    numberOfAnalyzedUnits: countingFeatures.length,
+    numberOfAnalyzedUnits: actualAdmin2sConsideredForCount.length,
     rawPop:             totalPop
   };
 };
@@ -189,10 +194,12 @@ const getAdmin1DataForCountry = async (
     const rawPop2 = agg2 ? agg2.rawPop : 0;
 
     const zoneChange = units2 - units1;
-    const populationChange = rawPop2 - rawPop1;
+    const populationChange = rawPop2 - rawPop1; // Raw difference
+
+    const populationChangeInThousands = Math.trunc(populationChange / 1000); // Value for display
 
     const zoneChangeVisuals = getChangeVisuals(zoneChange);
-    const populationChangeVisuals = getChangeVisuals(populationChange);
+    const populationChangeVisuals = getChangeVisuals(populationChange); // Visuals based on raw change
 
     return {
       region:           admin1Name,
@@ -215,7 +222,8 @@ const getAdmin1DataForCountry = async (
       aggregated:        agg1.aggregatedAtAdmin1 || (agg2?.aggregatedAtAdmin1 ?? false),
       classificationChange: change,
       zoneChange:       zoneChange,
-      populationChange: populationChange,
+      populationChange: populationChange, // Keep raw value for visuals and logic
+      populationChangeInThousands: populationChangeInThousands, // New field for display
       zoneChangeVisuals: zoneChangeVisuals,
       populationChangeVisuals: populationChangeVisuals,
       isSubRow: true // Flag to identify these as admin1 sub-rows
@@ -345,10 +353,12 @@ const ComparisonTable = ({
     const rawPop2 = agg2 ? agg2.rawPop : 0;
 
     const zoneChange = units2 - units1;
-    const populationChange = rawPop2 - rawPop1;
+    const populationChange = rawPop2 - rawPop1; // Raw difference
+
+    const populationChangeInThousands = Math.trunc(populationChange / 1000); // Value for display
 
     const zoneChangeVisuals = getChangeVisuals(zoneChange);
-    const populationChangeVisuals = getChangeVisuals(populationChange);
+    const populationChangeVisuals = getChangeVisuals(populationChange); // Visuals based on raw change
 
     return {
       region:           regionName,
@@ -371,7 +381,8 @@ const ComparisonTable = ({
       aggregated:        agg1.aggregatedAtAdmin1 || (agg2?.aggregatedAtAdmin1 ?? false),
       classificationChange: change,
       zoneChange:       zoneChange,
-      populationChange: populationChange,
+      populationChange: populationChange, // Keep raw value for visuals and logic
+      populationChangeInThousands: populationChangeInThousands, // New field for display
       zoneChangeVisuals: zoneChangeVisuals,
       populationChangeVisuals: populationChangeVisuals,
       level: 0, // Indicates an Admin0 row
@@ -552,8 +563,8 @@ const ComparisonTable = ({
                   const popArrow = getArrowSymbol(popVisuals.direction);
 
                   const zoneChangeText = row.isPlaceholder ? "" : row.zoneChange;
-                  const populationChangeText = row.isPlaceholder ? "" : row.populationChange;
-
+                  // Use populationChangeInThousands for display
+                  const populationChangeText = row.isPlaceholder ? "" : row.populationChangeInThousands;
 
                   return (
                     <tr key={i}>
