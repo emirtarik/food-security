@@ -40,6 +40,8 @@
     "noChange": "No change",
     "worse": "Deteriorating",
     "better": "Improving",
-    "nA": "N/A"
+    "nA": "N/A",
+    "analysisOfChange": "Analysis of Change",
+    "zoneChangeHeader": "Analyzed Zones Change",
+    "populationChangeHeader": "Analyzed Population Change"
   }
-  

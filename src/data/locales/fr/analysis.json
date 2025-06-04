@@ -40,6 +40,8 @@
     "change": "Changement",
     "noChange": "Pas de changement",
     "worse": "Détérioration",
-    "better": "Amélioration"
+    "better": "Amélioration",
+    "analysisOfChange": "Analyse des Évolutions",
+    "zoneChangeHeader": "Évolution Zones Analysées",
+    "populationChangeHeader": "Évolution Population Analysée"
   }
-  
