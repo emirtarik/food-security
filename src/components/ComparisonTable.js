@@ -489,8 +489,10 @@ const ComparisonTable = ({
       aggregated:        agg1.aggregatedAtAdmin1 || (agg2?.aggregatedAtAdmin1 ?? false),
       classificationChange: change,
       zoneChange:       zoneChange,
-      populationChange: populationChange,
-      populationChangeInThousands: populationChangeInThousands,
+
+      populationChange: populationChange, // Keep raw value for visuals and logic
+      populationChangeInThousands: formatNumber(populationChangeInThousands), // New field for display
+
       zoneChangeVisuals: zoneChangeVisuals,
       populationChangeVisuals: populationChangeVisuals,
       level: 0,
