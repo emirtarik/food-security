@@ -42,6 +42,6 @@
     "worse": "Détérioration",
     "better": "Amélioration",
     "analysisOfChange": "Analyse des Évolutions",
-    "zoneChangeHeader": "Évolution Zones Analysées",
-    "populationChangeHeader": "Évolution Population Analysée"
+    "zoneChangeHeader": "Zones",
+    "populationChangeHeader": "Pop. (en milliers)"
   }

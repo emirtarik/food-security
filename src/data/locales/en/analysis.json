@@ -42,6 +42,6 @@
     "better": "Improving",
     "nA": "N/A",
     "analysisOfChange": "Analysis of Change",
-    "zoneChangeHeader": "Analyzed Zones Change",
-    "populationChangeHeader": "Analyzed Population Change"
+    "zoneChangeHeader": "Zones",
+    "populationChangeHeader": "Pop. (in thousands)"
   }

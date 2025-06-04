@@ -382,7 +382,7 @@ const ComparisonTable = ({
       classificationChange: change,
       zoneChange:       zoneChange,
       populationChange: populationChange, // Keep raw value for visuals and logic
-      populationChangeInThousands: populationChangeInThousands, // New field for display
+      populationChangeInThousands: formatNumber(populationChangeInThousands), // New field for display
       zoneChangeVisuals: zoneChangeVisuals,
       populationChangeVisuals: populationChangeVisuals,
       level: 0, // Indicates an Admin0 row
