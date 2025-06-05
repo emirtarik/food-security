@@ -30,12 +30,11 @@ const severityToClassification = (sev) => {
   return "Unknown";
 };
 
-// Helper function to determine arrow direction and color for changes
 const getChangeVisuals = (changeValue) => {
   if (changeValue > 0) {
-    return { direction: 'up', color: 'red' }; // Positive change is red
+    return { direction: 'up', color: 'red' };
   } else if (changeValue < 0) {
-    return { direction: 'down', color: 'green' }; // Negative change is green
+    return { direction: 'down', color: 'green' };
   }
   return { direction: 'neutral', color: 'default' };
 };
@@ -45,6 +44,12 @@ const getArrowSymbol = (direction) => {
   if (direction === 'down') return '▼ ';
   if (direction === 'neutral') return '– ';
   return '';
+};
+
+const formatPercentage = (value, decimalPlaces = 1) => {
+  if (value === null || value === undefined) return "N/A";
+  if (typeof value !== 'number' || isNaN(value) || !isFinite(value)) return "N/A";
+  return value.toFixed(decimalPlaces) + "%";
 };
 
 const parseNumber = (value) => {
@@ -202,6 +207,16 @@ const getAdmin1DataForCountry = async (
     const zoneChangeVisuals = getChangeVisuals(zoneChange);
     const populationChangeVisuals = getChangeVisuals(populationChange);
 
+    const ph3OfTotalPercent1 = agg1.rawTotalPop > 0 ? (agg1.rawPh3Pop / agg1.rawTotalPop) * 100 : 0;
+    const ph3OfTotalPercent2 = (agg2 && agg2.rawTotalPop > 0) ? (agg2.rawPh3Pop / agg2.rawTotalPop) * 100 : 0;
+
+    let ph3PopulationPercentChange = 0;
+    if (agg1.rawPh3Pop !== 0) {
+      ph3PopulationPercentChange = (populationChange / agg1.rawPh3Pop) * 100;
+    } else if (populationChange !== 0) {
+      ph3PopulationPercentChange = null;
+    }
+
     return {
       region:           admin1Name,
       classification1:  agg1.classification,
@@ -213,8 +228,8 @@ const getAdmin1DataForCountry = async (
       units1:           agg1.numberOfAnalyzedUnits,
       rawPh3Pop1:       agg1.rawPh3Pop,
       zonesInPh3Plus1:  agg1.numberOfZonesInPh3Plus,
+      ph3OfTotalPercent1: ph3OfTotalPercent1,
       admin0NameParent: admin0Name,
-
 
       classification2:  agg2 ? agg2.classification : t("nA"),
       population2:      agg2 ? formatNumber(agg2.pop) : "0",
@@ -225,12 +240,14 @@ const getAdmin1DataForCountry = async (
       units2:           agg2 ? agg2.numberOfAnalyzedUnits : 0,
       rawPh3Pop2:       agg2 ? agg2.rawPh3Pop : 0,
       zonesInPh3Plus2:  agg2 ? agg2.numberOfZonesInPh3Plus : 0,
+      ph3OfTotalPercent2: ph3OfTotalPercent2,
 
       aggregated:        agg1.aggregatedAtAdmin1 || (agg2?.aggregatedAtAdmin1 ?? false),
       classificationChange: change,
       zoneChange:       zoneChange,
       populationChange: populationChange,
       populationChangeInThousands: populationChangeInThousands,
+      ph3PopulationPercentChange: ph3PopulationPercentChange,
       zoneChangeVisuals: zoneChangeVisuals,
       populationChangeVisuals: populationChangeVisuals,
       isSubRow: true
@@ -290,6 +307,16 @@ const getAdmin2DataForAdmin1 = async (
     const zoneChangeVisuals = getChangeVisuals(zoneChange);
     const populationChangeVisuals = getChangeVisuals(populationChange);
 
+    const ph3OfTotalPercent1 = agg1.rawTotalPop > 0 ? (agg1.rawPh3Pop / agg1.rawTotalPop) * 100 : 0;
+    const ph3OfTotalPercent2 = (agg2 && agg2.rawTotalPop > 0) ? (agg2.rawPh3Pop / agg2.rawTotalPop) * 100 : 0;
+
+    let ph3PopulationPercentChange = 0;
+    if (agg1.rawPh3Pop !== 0) {
+      ph3PopulationPercentChange = (populationChange / agg1.rawPh3Pop) * 100;
+    } else if (populationChange !== 0) {
+      ph3PopulationPercentChange = null;
+    }
+
     return {
       region:           admin2Name,
       classification1:  agg1.classification,
@@ -301,6 +328,7 @@ const getAdmin2DataForAdmin1 = async (
       units1:           agg1.numberOfAnalyzedUnits,
       rawPh3Pop1:       agg1.rawPh3Pop,
       zonesInPh3Plus1:  agg1.numberOfZonesInPh3Plus,
+      ph3OfTotalPercent1: ph3OfTotalPercent1,
       admin0NameParent: admin0Name,
       admin1NameParent: admin1Name,
 
@@ -313,11 +341,13 @@ const getAdmin2DataForAdmin1 = async (
       units2:           agg2 ? agg2.numberOfAnalyzedUnits : 0,
       rawPh3Pop2:       agg2 ? agg2.rawPh3Pop : 0,
       zonesInPh3Plus2:  agg2 ? agg2.numberOfZonesInPh3Plus : 0,
+      ph3OfTotalPercent2: ph3OfTotalPercent2,
 
       classificationChange: change,
       zoneChange:       zoneChange,
       populationChange: populationChange,
       populationChangeInThousands: populationChangeInThousands,
+      ph3PopulationPercentChange: ph3PopulationPercentChange,
       zoneChangeVisuals: zoneChangeVisuals,
       populationChangeVisuals: populationChangeVisuals,
       level: 2,
@@ -389,7 +419,7 @@ const ComparisonTable = ({
     const admin1RowData = (admin1SubRowsData[admin0NameParent] || []).find(r => r.region === admin1Name);
     const isExpandableAdmin1 = admin1RowData && !admin1RowData.aggregated1;
 
-    if (regionSelection.admin1 || !isExpandableAdmin1) { // Check if globally filtered or not expandable based on P1 aggregation
+    if (regionSelection.admin1 || !isExpandableAdmin1) {
         return;
     }
 
@@ -469,6 +499,16 @@ const ComparisonTable = ({
     const zoneChangeVisuals = getChangeVisuals(zoneChange);
     const populationChangeVisuals = getChangeVisuals(populationChange);
 
+    const ph3OfTotalPercent1 = agg1.rawTotalPop > 0 ? (agg1.rawPh3Pop / agg1.rawTotalPop) * 100 : 0;
+    const ph3OfTotalPercent2 = (agg2 && agg2.rawTotalPop > 0) ? (agg2.rawPh3Pop / agg2.rawTotalPop) * 100 : 0;
+
+    let ph3PopulationPercentChange = 0;
+    if (agg1.rawPh3Pop !== 0) {
+      ph3PopulationPercentChange = (populationChange / agg1.rawPh3Pop) * 100;
+    } else if (populationChange !== 0) {
+      ph3PopulationPercentChange = null;
+    }
+
     return {
       region:           regionName,
       classification1:  agg1.classification,
@@ -480,6 +520,7 @@ const ComparisonTable = ({
       units1:           agg1.numberOfAnalyzedUnits,
       rawPh3Pop1:       agg1.rawPh3Pop,
       zonesInPh3Plus1:  agg1.numberOfZonesInPh3Plus,
+      ph3OfTotalPercent1: ph3OfTotalPercent1,
 
       classification2:  agg2 ? agg2.classification : t("nA"),
       population2:      agg2 ? formatNumber(agg2.pop) : "0",
@@ -490,12 +531,14 @@ const ComparisonTable = ({
       units2:           agg2 ? agg2.numberOfAnalyzedUnits : 0,
       rawPh3Pop2:       agg2 ? agg2.rawPh3Pop : 0,
       zonesInPh3Plus2:  agg2 ? agg2.numberOfZonesInPh3Plus : 0,
+      ph3OfTotalPercent2: ph3OfTotalPercent2,
 
       aggregated:        agg1.aggregatedAtAdmin1 || (agg2?.aggregatedAtAdmin1 ?? false),
       classificationChange: change,
       zoneChange:       zoneChange,
       populationChange: populationChange,
       populationChangeInThousands: populationChangeInThousands,
+      ph3PopulationPercentChange: ph3PopulationPercentChange,
       zoneChangeVisuals: zoneChangeVisuals,
       populationChangeVisuals: populationChangeVisuals,
       level: 0,
@@ -528,9 +571,9 @@ const ComparisonTable = ({
                 classification1: "", population1: "", popPh2_1: "", popPh3_1: "",
                 classification2: "", population2: "", popPh2_2: "", popPh3_2: "",
                 classificationChange: "",
-                zoneChange: 0, populationChange: 0, populationChangeInThousands: 0,
-                rawPop1: 0, units1: 0, rawPh3Pop1: 0, zonesInPh3Plus1: 0,
-                rawPop2: 0, units2: 0, rawPh3Pop2: 0, zonesInPh3Plus2: 0,
+                zoneChange: 0, populationChange: 0, populationChangeInThousands: 0, ph3PopulationPercentChange: 0,
+                rawPop1: 0, units1: 0, rawPh3Pop1: 0, zonesInPh3Plus1: 0, ph3OfTotalPercent1: 0,
+                rawPop2: 0, units2: 0, rawPh3Pop2: 0, zonesInPh3Plus2: 0, ph3OfTotalPercent2: 0,
                 zoneChangeVisuals: { direction: 'neutral', color: 'default'},
                 populationChangeVisuals: { direction: 'neutral', color: 'default'},
                 level: 2, isSubRow: true, isPlaceholder: true,
@@ -546,9 +589,9 @@ const ComparisonTable = ({
           classification1: "", population1: "", popPh2_1: "", popPh3_1: "",
           classification2: "", population2: "", popPh2_2: "", popPh3_2: "",
           classificationChange: "",
-          zoneChange: 0, populationChange: 0, populationChangeInThousands: 0,
-          rawPop1: 0, units1: 0, rawPh3Pop1: 0, zonesInPh3Plus1: 0,
-          rawPop2: 0, units2: 0, rawPh3Pop2: 0, zonesInPh3Plus2: 0,
+          zoneChange: 0, populationChange: 0, populationChangeInThousands: 0, ph3PopulationPercentChange: 0,
+          rawPop1: 0, units1: 0, rawPh3Pop1: 0, zonesInPh3Plus1: 0, ph3OfTotalPercent1: 0,
+          rawPop2: 0, units2: 0, rawPh3Pop2: 0, zonesInPh3Plus2: 0, ph3OfTotalPercent2: 0,
           zoneChangeVisuals: { direction: 'neutral', color: 'default'},
           populationChangeVisuals: { direction: 'neutral', color: 'default'},
           level: 1, isSubRow: true, isPlaceholder: true
@@ -618,7 +661,7 @@ const ComparisonTable = ({
                         <span className="indicator-span">
                           {indicator}
                         </span>
-                        {row.aggregated && !row.isSubRow && row.level === 0 && ( // Show warning only for Admin0 aggregated rows
+                        {row.aggregated && !row.isSubRow && row.level === 0 && (
                           <span
                             className="popup-aggregated"
                             data-tooltip={t("dataAggregated")}
@@ -658,7 +701,7 @@ const ComparisonTable = ({
                             } else if (row.level === 2) {
                                 showClassificationCell = true;
                             } else if (row.level === 1) {
-                                const p1IsNA = row.classification1 === t("nA") || row.classification1 === t("noData"); // Consider noData as well
+                                const p1IsNA = row.classification1 === t("nA") || row.classification1 === t("noData");
                                 const isAggregatedEndpointAdmin1 = row.aggregated1 || (p1IsNA && row.aggregated2);
                                 showClassificationCell = isAggregatedEndpointAdmin1;
                             }
@@ -675,7 +718,7 @@ const ComparisonTable = ({
                         })()}
                         <td>{row.population1}</td>
                         <td>{row.popPh2_1}</td>
-                        <td>{row.popPh3_1}</td>
+                        <td>{row.isPlaceholder ? row.popPh3_1 : `${row.popPh3_1} (${formatPercentage(row.ph3OfTotalPercent1, 1)})`}</td>
                         </tr>
                     );
                 })}
@@ -719,7 +762,7 @@ const ComparisonTable = ({
                         )}
                         <td>{row.population2}</td>
                         <td>{row.popPh2_2}</td>
-                        <td>{row.popPh3_2}</td>
+                        <td>{row.isPlaceholder ? row.popPh3_2 : `${row.popPh3_2} (${formatPercentage(row.ph3OfTotalPercent2, 1)})`}</td>
                         </tr>
                     );
                 })}
@@ -745,7 +788,8 @@ const ComparisonTable = ({
                   const popArrow = getArrowSymbol(popVisuals.direction);
 
                   const zoneChangeText = row.isPlaceholder ? "" : row.zoneChange;
-                  const populationChangeText = row.isPlaceholder ? "" : row.populationChangeInThousands;
+                  const populationChangeInThousandsText = row.isPlaceholder ? "" : row.populationChangeInThousands;
+                  const ph3PopulationPercentChangeText = row.isPlaceholder ? "" : formatPercentage(row.ph3PopulationPercentChange, 1);
 
                   return (
                     <tr key={i}>
@@ -753,7 +797,7 @@ const ComparisonTable = ({
                         {zoneArrow}{zoneChangeText}
                       </td>
                       <td style={{ color: popVisuals.color === 'default' ? 'inherit' : popVisuals.color }}>
-                        {popArrow}{populationChangeText}
+                        {popArrow}{`${populationChangeInThousandsText} (${ph3PopulationPercentChangeText})`}
                       </td>
                     </tr>
                   );
