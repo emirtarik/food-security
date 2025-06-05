@@ -33,9 +33,9 @@ const severityToClassification = (sev) => {
 // Helper function to determine arrow direction and color for changes
 const getChangeVisuals = (changeValue) => {
   if (changeValue > 0) {
-    return { direction: 'up', color: 'green' };
+    return { direction: 'up', color: 'red' }; // Positive change is red
   } else if (changeValue < 0) {
-    return { direction: 'down', color: 'red' };
+    return { direction: 'down', color: 'green' }; // Negative change is green
   }
   return { direction: 'neutral', color: 'default' };
 };
@@ -366,7 +366,7 @@ const ComparisonTable = ({
   };
 
   const handleAdmin0RowClick = async (admin0Name) => {
-    if (regionSelection.admin0) return; // Don't allow expand if a country is globally filtered
+    if (regionSelection.admin0) return;
 
     const isCurrentlyExpanded = expandedAdmin0s[admin0Name];
     setExpandedAdmin0s(prev => ({ ...prev, [admin0Name]: !prev[admin0Name] }));
@@ -380,13 +380,18 @@ const ComparisonTable = ({
         setAdmin1SubRowsData(prev => ({ ...prev, [admin0Name]: fetchedData }));
       } catch (error) {
         console.error("Error fetching admin1 data:", error);
-        setExpandedAdmin0s(prev => ({ ...prev, [admin0Name]: false })); // Revert expansion on error
+        setExpandedAdmin0s(prev => ({ ...prev, [admin0Name]: false }));
       }
     }
   };
 
   const handleAdmin1RowClick = async (admin0NameParent, admin1Name) => {
-    if (regionSelection.admin1) return; // Don't allow expand if an admin1 is globally filtered
+    const admin1RowData = (admin1SubRowsData[admin0NameParent] || []).find(r => r.region === admin1Name);
+    const isExpandableAdmin1 = admin1RowData && !admin1RowData.aggregated1;
+
+    if (regionSelection.admin1 || !isExpandableAdmin1) { // Check if globally filtered or not expandable based on P1 aggregation
+        return;
+    }
 
     const key = `${admin0NameParent}_${admin1Name}`;
     const isCurrentlyExpanded = expandedAdmin1s[key];
@@ -402,7 +407,7 @@ const ComparisonTable = ({
         setAdmin2SubRowsData(prev => ({ ...prev, [key]: fetchedData }));
       } catch (error) {
         console.error(`Error fetching admin2 data for ${key}:`, error);
-        setExpandedAdmin1s(prev => ({ ...prev, [key]: false })); // Revert expansion on error
+        setExpandedAdmin1s(prev => ({ ...prev, [key]: false }));
       } finally {
         setLoadingAdmin2Key(null);
       }
@@ -489,10 +494,8 @@ const ComparisonTable = ({
       aggregated:        agg1.aggregatedAtAdmin1 || (agg2?.aggregatedAtAdmin1 ?? false),
       classificationChange: change,
       zoneChange:       zoneChange,
-
-      populationChange: populationChange, // Keep raw value for visuals and logic
-      populationChangeInThousands: formatNumber(populationChangeInThousands), // New field for display
-
+      populationChange: populationChange,
+      populationChangeInThousands: populationChangeInThousands,
       zoneChangeVisuals: zoneChangeVisuals,
       populationChangeVisuals: populationChangeVisuals,
       level: 0,
@@ -502,25 +505,26 @@ const ComparisonTable = ({
 
   const displayRows = [];
   baseRows.forEach(baseRow => {
-    displayRows.push(baseRow); // Add Admin0 row
-    const admin0Key = baseRow.region; // Admin0 name is the key for admin1SubRowsData
+    displayRows.push(baseRow);
+    const admin0Key = baseRow.region;
 
     if (expandedAdmin0s[admin0Key] && !regionSelection.admin1 && !regionSelection.admin2) {
       const admin1Rows = admin1SubRowsData[admin0Key];
       if (admin1Rows) {
         admin1Rows.forEach(admin1Row => {
-          displayRows.push({ ...admin1Row, level: 1, isSubRow: true }); // Add Admin1 row
+          displayRows.push({ ...admin1Row, level: 1, isSubRow: true });
           const admin1Key = `${admin1Row.admin0NameParent}_${admin1Row.region}`;
+          const isExpandableAdmin1 = !admin1Row.aggregated1;
 
-          if (expandedAdmin1s[admin1Key]) {
+          if (isExpandableAdmin1 && expandedAdmin1s[admin1Key]) {
             const admin2Rows = admin2SubRowsData[admin1Key];
             if (admin2Rows) {
               admin2Rows.forEach(admin2Row => {
-                displayRows.push({ ...admin2Row, level: 2, isSubRow: true }); // Add Admin2 row
+                displayRows.push({ ...admin2Row, level: 2, isSubRow: true });
               });
             } else if (loadingAdmin2Key === admin1Key) {
               displayRows.push({
-                region: t("loadingAdmin2Data"), // New translation key needed
+                region: t("loadingAdmin2Data"),
                 classification1: "", population1: "", popPh2_1: "", popPh3_1: "",
                 classification2: "", population2: "", popPh2_2: "", popPh3_2: "",
                 classificationChange: "",
@@ -536,7 +540,7 @@ const ComparisonTable = ({
             }
           }
         });
-      } else { // Admin1 data not yet loaded for this Admin0
+      } else {
         displayRows.push({
           region: t("loadingAdmin1Data"),
           classification1: "", population1: "", popPh2_1: "", popPh3_1: "",
@@ -575,46 +579,46 @@ const ComparisonTable = ({
               </thead>
               <tbody>
                 {displayRows.map((row, i) => {
-                  const canExpandThisRow = !row.isPlaceholder && (
-                    (row.level === 0 && !regionSelection.admin0) ||
-                    (row.level === 1 && !regionSelection.admin1 && !regionSelection.admin2) // Admin1 can expand if no admin1/2 is globally filtered
-                  );
+                  let isExpandable = false;
+                  let isExpanded = false;
+                  let clickHandler = () => {};
+
+                  if (!row.isPlaceholder) {
+                    if (row.level === 0 && !regionSelection.admin0) {
+                      isExpandable = true;
+                      isExpanded = expandedAdmin0s[row.region];
+                      clickHandler = () => handleAdmin0RowClick(row.region);
+                    } else if (row.level === 1 && !regionSelection.admin1 && !regionSelection.admin2 && !row.aggregated1) {
+                      isExpandable = true;
+                      const admin1Key = `${row.admin0NameParent}_${row.region}`;
+                      isExpanded = expandedAdmin1s[admin1Key];
+                      clickHandler = () => handleAdmin1RowClick(row.admin0NameParent, row.region);
+                    }
+                  }
+                  const tdClass = isExpandable ? 'clickable-row' : 'non-clickable-row';
+
 
                   let rowClass = "";
                   if (row.level === 2) { rowClass = 'admin2-row'; }
-                  else if (row.level === 1) { rowClass = `admin1-row ${expandedAdmin1s[`${row.admin0NameParent}_${row.region}`] && !row.isPlaceholder ? 'expanded' : ''}`; }
-                  else { rowClass = `admin0-row ${expandedAdmin0s[row.region] && !row.isPlaceholder ? 'expanded' : ''}`; }
+                  else if (row.level === 1) { rowClass = `admin1-row ${isExpanded && !row.isPlaceholder ? 'expanded' : ''}`; }
+                  else { rowClass = `admin0-row ${isExpanded && !row.isPlaceholder ? 'expanded' : ''}`; }
                   if (row.isPlaceholder) rowClass += ' placeholder-row';
 
-                  const tdClass = canExpandThisRow ? 'clickable-row' : 'non-clickable-row';
-
                   let indicator = "\u00A0";
-                  if (canExpandThisRow) {
-                    if (row.level === 0) {
-                       indicator = expandedAdmin0s[row.region] ? '- ' : '+ ';
-                    } else if (row.level === 1) {
-                       const admin1Key = `${row.admin0NameParent}_${row.region}`;
-                       indicator = expandedAdmin1s[admin1Key] ? '- ' : '+ ';
-                    }
+                  if (isExpandable) {
+                    indicator = isExpanded ? '- ' : '+ ';
                   }
 
                   return (
                     <tr key={i} className={rowClass}>
                       <td
                         className={tdClass}
-                        onClick={() => {
-                          if (row.isPlaceholder) return;
-                          if (row.level === 0) {
-                            handleAdmin0RowClick(row.region);
-                          } else if (row.level === 1) {
-                            handleAdmin1RowClick(row.admin0NameParent, row.region);
-                          }
-                        }}
+                        onClick={clickHandler}
                       >
                         <span className="indicator-span">
                           {indicator}
                         </span>
-                        {row.aggregated && !row.isSubRow && row.level === 0 && (
+                        {row.aggregated && !row.isSubRow && row.level === 0 && ( // Show warning only for Admin0 aggregated rows
                           <span
                             className="popup-aggregated"
                             data-tooltip={t("dataAggregated")}
@@ -644,16 +648,37 @@ const ComparisonTable = ({
                 </tr>
               </thead>
               <tbody>
-                {displayRows.map((row,i) => (
-                  <tr key={i}>
-                    <td style={row.isPlaceholder ? {} : cellStyle(row.classification1)}>
-                      {row.isPlaceholder ? "" : translateClassification(row.classification1, t)}
-                    </td>
-                    <td>{row.population1}</td>
-                    <td>{row.popPh2_1}</td>
-                    <td>{row.popPh3_1}</td>
-                  </tr>
-                ))}
+                {displayRows.map((row,i) => {
+                    return (
+                        <tr key={i}>
+                        {(() => {
+                            let showClassificationCell = false;
+                            if (row.isPlaceholder) {
+                                showClassificationCell = false;
+                            } else if (row.level === 2) {
+                                showClassificationCell = true;
+                            } else if (row.level === 1) {
+                                const p1IsNA = row.classification1 === t("nA") || row.classification1 === t("noData"); // Consider noData as well
+                                const isAggregatedEndpointAdmin1 = row.aggregated1 || (p1IsNA && row.aggregated2);
+                                showClassificationCell = isAggregatedEndpointAdmin1;
+                            }
+
+                            if (showClassificationCell) {
+                                return (
+                                <td style={row.isPlaceholder ? {} : cellStyle(row.classification1)}>
+                                    {row.isPlaceholder ? "" : translateClassification(row.classification1, t)}
+                                </td>
+                                );
+                            } else {
+                                return <td></td>;
+                            }
+                        })()}
+                        <td>{row.population1}</td>
+                        <td>{row.popPh2_1}</td>
+                        <td>{row.popPh3_1}</td>
+                        </tr>
+                    );
+                })}
               </tbody>
             </table>
           </div>
@@ -671,16 +696,33 @@ const ComparisonTable = ({
                 </tr>
               </thead>
               <tbody>
-                {displayRows.map((row, i) => (
-                  <tr key={i}>
-                    <td style={row.isPlaceholder ? {} : cellStyle(row.classification2)}>
-                      {row.isPlaceholder ? "" : translateClassification(row.classification2, t)}
-                    </td>
-                    <td>{row.population2}</td>
-                    <td>{row.popPh2_2}</td>
-                    <td>{row.popPh3_2}</td>
-                  </tr>
-                ))}
+                {displayRows.map((row, i) => {
+                    let showClassificationCell = false;
+                     if (row.isPlaceholder) {
+                        showClassificationCell = false;
+                    } else if (row.level === 2) {
+                        showClassificationCell = true;
+                    } else if (row.level === 1) {
+                        const p1IsNA = row.classification1 === t("nA") || row.classification1 === t("noData");
+                        const isAggregatedEndpointAdmin1 = row.aggregated1 || (p1IsNA && row.aggregated2);
+                        showClassificationCell = isAggregatedEndpointAdmin1;
+                    }
+
+                    return (
+                        <tr key={i}>
+                        {showClassificationCell ? (
+                            <td style={row.isPlaceholder ? {} : cellStyle(row.classification2)}>
+                            {row.isPlaceholder ? "" : translateClassification(row.classification2, t)}
+                            </td>
+                        ) : (
+                            <td></td>
+                        )}
+                        <td>{row.population2}</td>
+                        <td>{row.popPh2_2}</td>
+                        <td>{row.popPh3_2}</td>
+                        </tr>
+                    );
+                })}
               </tbody>
             </table>
           </div>
