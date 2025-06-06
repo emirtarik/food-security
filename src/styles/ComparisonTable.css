@@ -132,7 +132,8 @@
 /* COLUMN 4: Population Ph3 (100px) */
 .data-table-4col th:nth-child(4),
 .data-table-4col td:nth-child(4) {
-  width: 70px;
+  width: 90px;
+  white-space: nowrap;
 }
 
 /* Ensure the numeric cells can still show their full numbers */
@@ -152,7 +153,7 @@
 /* COLUMN 1: Classification (200px, no wrap) */
 .data-table-5col th:nth-child(1),
 .data-table-5col td:nth-child(1) {
-  width: 160px;
+  width: 150px;
   white-space: nowrap;  /* prevent wrapping */
 }
 
@@ -171,7 +172,8 @@
 /* COLUMN 4: Population Ph3 (100px) */
 .data-table-5col th:nth-child(4),
 .data-table-5col td:nth-child(4) {
-  width: 70px;
+  width: 90px;
+  white-space: nowrap;
 }
 
 /* COLUMN 5: Change (200px, no wrap) */

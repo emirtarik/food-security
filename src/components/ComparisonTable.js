@@ -42,12 +42,12 @@ const getChangeVisuals = (changeValue) => {
 const getArrowSymbol = (direction) => {
   if (direction === 'up') return '▲ ';
   if (direction === 'down') return '▼ ';
-  if (direction === 'neutral') return '– ';
+  if (direction === 'neutral') return ' ';
   return '';
 };
 
 const formatPercentage = (value, decimalPlaces = 1) => {
-  if (value === null || value === undefined) return "N/A";
+  if (value === null || value === undefined) return "—";
   if (typeof value !== 'number' || isNaN(value) || !isFinite(value)) return "N/A";
   return value.toFixed(decimalPlaces) + "%";
 };
@@ -246,7 +246,7 @@ const getAdmin1DataForCountry = async (
       classificationChange: change,
       zoneChange:       zoneChange,
       populationChange: populationChange,
-      populationChangeInThousands: populationChangeInThousands,
+      populationChangeInThousands: formatNumber(populationChangeInThousands),
       ph3PopulationPercentChange: ph3PopulationPercentChange,
       zoneChangeVisuals: zoneChangeVisuals,
       populationChangeVisuals: populationChangeVisuals,
@@ -346,7 +346,7 @@ const getAdmin2DataForAdmin1 = async (
       classificationChange: change,
       zoneChange:       zoneChange,
       populationChange: populationChange,
-      populationChangeInThousands: populationChangeInThousands,
+      populationChangeInThousands: formatNumber(populationChangeInThousands),
       ph3PopulationPercentChange: ph3PopulationPercentChange,
       zoneChangeVisuals: zoneChangeVisuals,
       populationChangeVisuals: populationChangeVisuals,
@@ -537,7 +537,7 @@ const ComparisonTable = ({
       classificationChange: change,
       zoneChange:       zoneChange,
       populationChange: populationChange,
-      populationChangeInThousands: populationChangeInThousands,
+      populationChangeInThousands: formatNumber(populationChangeInThousands),
       ph3PopulationPercentChange: ph3PopulationPercentChange,
       zoneChangeVisuals: zoneChangeVisuals,
       populationChangeVisuals: populationChangeVisuals,
