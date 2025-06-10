@@ -42,8 +42,8 @@
     "better": "Improving",
     "nA": "N/A",
     "analysisOfChange": "Analysis of Change",
-    "zoneChangeHeader": "Change in Ph3+ Zones",
-    "populationChangeHeader": "Change in Ph3+ Population",
+    "zoneChangeHeader": "Ph3+ Zones",
+    "populationChangeHeader": "Ph3+ Population",
     "loadingAdmin1Data": "Loading Admin1 data...",
     "loadingAdmin2Data": "Loading Admin2 data..."
   }

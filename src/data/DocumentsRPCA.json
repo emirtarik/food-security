@@ -1,7 +1,40 @@
 [
   {
+    "title": "RPCA Policy Brief 2025",
+    "img": "/uploads/2025/04/EN-NAD-2025.png",
+    "flag": "/images/EN_Co-fundedbytheEU_RGB_POS.png",
+    "datecontent": "April 2025",
+    "bllink": "/documents/policybrief-april2025",
+    "content": {
+      "Published": "April 2025",
+      "Description": "",
+      "Countries": "Benin, Burkina Faso, Cabo Verde, Chad, CILSS area, Côte d'Ivoire, ECOWAS area, G5 Sahel area, Gambia, Ghana, Guinea, Guinea-Bissau, Liberia, Liptako-Gourma, Mali, Mauritania, Niger, Nigeria, Senegal, Sierra Leone, Togo",
+      "Themes": "Agriculture & Value chains, Climate change & Adapation, Employment, Food security, Nutrition, Resilience, Rural-urbain, Social protection",
+      "Scale": "Regional (West Africa)",
+      "Langs": "English"
+    },
+    "permalink": "/uploads/2025/04/EN-NAD-2025.pdf"
+  },
+  {
+    "title": "RPCA Note aux Décideurs 2025",
+    "img": "/uploads/2025/04/FR-NAD-2025.png",
+    "flag": "/images/FR_Co-fundedbytheEU_RGB_POS.png",
+    "datecontent": "avril 2025",
+    "bllink": "/documents/noteauxdecideurs-avril2025",
+    "content": {
+      "Published": "avril 2025",
+      "Description": "",
+      "Countries": "Benin, Burkina Faso, Cabo Verde, Chad, CILSS area, Côte d'Ivoire, ECOWAS area, G5 Sahel area, Gambia, Ghana, Guinea, Guinea-Bissau, Liberia, Liptako-Gourma, Mali, Mauritania, Niger, Nigeria, Senegal, Sierra Leone, Togo",
+      "Themes": "Agriculture & Value chains, Climate change & Adapation, Employment, Food security, Nutrition, Resilience, Rural-urbain, Social protection",
+      "Scale": "Regional (West Africa)",
+      "Langs": "French"
+    },
+    "permalink": "/uploads/2025/04/FR-NAD-2025.pdf"
+  },
+  {
     "title": "Summary of conclusions, RPCA restricted meeting 2025",
     "img": "/uploads/2025/04/2025-04 RPCA - Summary of conclusions - EN.png",
+    "flag": "/images/EN_Co-fundedbytheEU_RGB_POS.png",
     "datecontent": "April 2025",
     "bllink": "/documents/summaryofconclusions-april2025",
     "content": {
@@ -17,6 +50,7 @@
   {
     "title": "Reléve des conclusions, RPCA réunion restreinte 2025",
     "img": "/uploads/2025/04/2025-04 RPCA - Summary of conclusions - FR.png",
+    "flag": "/images/FR_Co-fundedbytheEU_RGB_POS.png",
     "datecontent": "avril 2025",
     "bllink": "/documents/relévedesconclusions-avril2025",
     "content": {
@@ -107,7 +141,7 @@
     "permalink": "/uploads/2024/04/EN_2024-04_RPCA-Summary_of_conclusions.pdf"
   },
   {
-    "title": "Note aux Décideurs",
+    "title": "RPCA Note aux Décideurs 2024",
     "img": "/uploads/2024/04/FR_2024-04_RPCA_NAD_Policy_Brief.jpg",
     "flag": "/images/FR_Co-fundedbytheEU_RGB_POS.png",
     "datecontent": "avril 2024",
@@ -123,7 +157,7 @@
     "permalink": "/uploads/2024/04/FR_2024-04_RPCA_NAD_Policy_Brief.pdf"
   },
   {
-    "title": "Policy Brief",
+    "title": "RPCA Policy Brief 2024",
     "img": "/uploads/2024/04/EN_2024-04_RPCA_NAD_Policy_Brief.jpg",
     "flag": "/images/EN_Co-fundedbytheEU_RGB_POS.png",
     "datecontent": "April 2024",
@@ -229,7 +263,7 @@
     "permalink": "/uploads/2023/06/Press-Release-PREGEC-Abuja-June-2023.pdf"
   },
   {
-    "title": "Policy Brief",
+    "title": "RPCA Policy Brief 2023",
     "img": "/uploads/2023/05/NAD_2023_EN-1-352x500.jpg",
     "datecontent": "May 2023",
     "bllink": "/documents/policybrief-may2023",
