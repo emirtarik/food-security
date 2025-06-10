@@ -712,25 +712,47 @@ const ComparisonTable = ({
                     return (
                         <tr key={i}>
                         {(() => {
-                            let showClassificationCell = false;
                             if (row.isPlaceholder) {
-                                showClassificationCell = false;
-                            } else if (row.level === 2) {
-                                showClassificationCell = true;
+                                return <td></td>;
+                            }
+
+                            let showActualClassification = false;
+                            if (row.level === 2) {
+                                showActualClassification = true;
                             } else if (row.level === 1) {
                                 const p1IsNA = row.classification1 === t("nA") || row.classification1 === t("noData");
                                 const isAggregatedEndpointAdmin1 = row.aggregated1 || (p1IsNA && row.aggregated2);
-                                showClassificationCell = isAggregatedEndpointAdmin1;
+                                showActualClassification = isAggregatedEndpointAdmin1;
                             }
 
-                            if (showClassificationCell) {
+                            if (showActualClassification) {
                                 return (
-                                <td style={row.isPlaceholder ? {} : cellStyle(row.classification1)}>
-                                    {row.isPlaceholder ? "" : translateClassification(row.classification1, t)}
+                                <td style={cellStyle(row.classification1)}>
+                                    {translateClassification(row.classification1, t)}
                                 </td>
                                 );
                             } else {
-                                return <td></td>;
+                                let showExpandCue = false;
+                                if (row.level === 0) {
+                                    const isAdmin0Expandable = !regionSelection.admin0 && !row.isSubRow;
+                                    if (isAdmin0Expandable) {
+                                        showExpandCue = true;
+                                    }
+                                } else if (row.level === 1) {
+                                    const isExpandableToAdmin2 = !row.aggregated1;
+                                    if (isExpandableToAdmin2) {
+                                        showExpandCue = true;
+                                    }
+                                }
+                                if (showExpandCue) {
+                                    return (
+                                        <td>
+                                        <span className="expand-cue">{t("expandToSeeMoreClassification")}</span>
+                                        </td>
+                                    );
+                                } else {
+                                    return <td></td>;
+                                }
                             }
                         })()}
                         <td>{row.population1}</td>
@@ -757,26 +779,51 @@ const ComparisonTable = ({
               </thead>
               <tbody>
                 {displayRows.map((row, i) => {
-                    let showClassificationCell = false;
-                     if (row.isPlaceholder) {
-                        showClassificationCell = false;
-                    } else if (row.level === 2) {
-                        showClassificationCell = true;
-                    } else if (row.level === 1) {
-                        const p1IsNA = row.classification1 === t("nA") || row.classification1 === t("noData");
-                        const isAggregatedEndpointAdmin1 = row.aggregated1 || (p1IsNA && row.aggregated2);
-                        showClassificationCell = isAggregatedEndpointAdmin1;
-                    }
-
                     return (
                         <tr key={i}>
-                        {showClassificationCell ? (
-                            <td style={row.isPlaceholder ? {} : cellStyle(row.classification2)}>
-                            {row.isPlaceholder ? "" : translateClassification(row.classification2, t)}
-                            </td>
-                        ) : (
-                            <td></td>
-                        )}
+                        {(() => {
+                            if (row.isPlaceholder) {
+                                return <td></td>;
+                            }
+                            let showActualClassification = false;
+                            if (row.level === 2) {
+                                showActualClassification = true;
+                            } else if (row.level === 1) {
+                                const p2IsNA = row.classification2 === t("nA") || row.classification2 === t("noData");
+                                const isAggregatedEndpointAdmin1ForP2 = row.aggregated2 || (p2IsNA && row.aggregated1);
+                                showActualClassification = isAggregatedEndpointAdmin1ForP2;
+                            }
+
+                            if (showActualClassification) {
+                                return (
+                                <td style={cellStyle(row.classification2)}>
+                                    {translateClassification(row.classification2, t)}
+                                </td>
+                                );
+                            } else {
+                                let showExpandCue = false;
+                                if (row.level === 0) {
+                                    const isAdmin0Expandable = !regionSelection.admin0 && !row.isSubRow;
+                                    if (isAdmin0Expandable) {
+                                        showExpandCue = true;
+                                    }
+                                } else if (row.level === 1) {
+                                    const isExpandableToAdmin2 = !row.aggregated1;
+                                    if (isExpandableToAdmin2) {
+                                        showExpandCue = true;
+                                    }
+                                }
+                                if (showExpandCue) {
+                                    return (
+                                        <td>
+                                        <span className="expand-cue">{t("expandToSeeMoreClassification")}</span>
+                                        </td>
+                                    );
+                                } else {
+                                    return <td></td>;
+                                }
+                            }
+                        })()}
                         <td>{row.population2}</td>
                         <td>{row.popPh2_2}</td>
                         <td>{row.isPlaceholder ? row.popPh3_2 : `${row.popPh3_2} (${formatPercentage(row.ph3OfTotalPercent2, 1)})`}</td>
@@ -839,3 +886,5 @@ const ComparisonTable = ({
 };
 
 export default ComparisonTable;
+
+[end of src/components/ComparisonTable.js]
