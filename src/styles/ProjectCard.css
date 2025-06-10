@@ -1,0 +1,61 @@
+.project-card {
+  background-color: #fff;
+  border: 1px solid #e0e0e0; /* Lighter border */
+  border-radius: 8px;
+  padding: 16px;
+  margin: 0; /* Margin will be handled by the grid gap */
+  /* width: 300px; */ /* Width will be handled by the grid system */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Softer shadow */
+  transition: box-shadow 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+}
+
+.project-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Enhanced shadow on hover */
+}
+
+.project-card-image-container {
+  width: 100%;
+  height: 200px; /* Slightly taller image area */
+  overflow: hidden;
+  margin-bottom: 16px; /* Increased space below image */
+  border-radius: 4px; /* Rounded corners for the image container */
+}
+
+.project-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures image covers the area, cropping if necessary */
+  display: block; /* Remove any extra space below image */
+}
+
+.project-card-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Allows content to fill space, useful for consistent card height if needed */
+}
+
+.project-title {
+  font-size: 1.15em; /* Slightly adjusted */
+  font-weight: 600; /* Semibold */
+  margin-bottom: 10px; /* Increased space */
+  color: #333;
+}
+
+.project-status,
+.project-recipient,
+.project-funding-agency {
+  font-size: 0.875em; /* Slightly adjusted */
+  margin-bottom: 6px; /* Increased space */
+  color: #555; /* Slightly lighter text color for details */
+  line-height: 1.4;
+}
+
+/* Add a specific class for labels if desired, or style paragraphs directly */
+.project-status strong,
+.project-recipient strong,
+.project-funding-agency strong {
+  font-weight: 500; /* Medium weight for labels */
+  color: #333;
+}

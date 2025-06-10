@@ -1,22 +1,120 @@
-/* src/styles/Projects.css */
+/* Styles for the Projects page */
 
-.projects-page {
-    color: #333;
+.projects-page-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px; /* Increased gap for better separation */
+  padding: 24px; /* Increased padding for the overall page */
+  max-width: 1600px; /* Max width for very large screens */
+  margin: 0 auto; /* Center page content */
+}
+
+/* Styling for the MapViewProjects component's wrapper if needed, or assume MapViewProjects handles its own height */
+/* For example, if MapViewProjects is wrapped in a div:
+.map-view-projects-wrapper {
+  height: 400px; // Or aspect-ratio
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+*/
+
+.filters-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px; /* Slightly increased gap */
+  padding: 20px; /* Increased padding */
+  margin-bottom: 24px; /* Increased margin */
+  background-color: #f8f9fa; /* Lighter background */
+  border: 1px solid #e9ecef; /* Lighter border */
+  border-radius: 8px;
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Allow items to grow and fill space */
+  min-width: 180px; /* Increased min-width for better spacing */
+}
+
+.filter-item label {
+  margin-bottom: 6px; /* Increased space */
+  font-weight: 500; /* Medium weight */
+  font-size: 0.9em;
+  color: #343a40; /* Darker label color */
+}
+
+.filter-item input,
+.filter-item select {
+  padding: 10px; /* Increased padding for inputs/selects */
+  border: 1px solid #ced4da; /* Standard bootstrap-like border color */
+  border-radius: 4px;
+  font-size: 0.95em;
+  /* min-width is on .filter-item, so inputs/selects will fill that */
+}
+
+.projects-list-container {
+  /* Container for the "Projects" title and the grid */
+}
+
+.projects-list-container h2 {
+  font-size: 1.8em; /* Larger title */
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.projects-grid {
+  display: grid;
+  /* Ensure minmax has a reasonable minimum, e.g., 280px for smaller cards or 320px for larger */
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px; /* Increased gap between cards */
+  /* padding: 20px 0; */ /* Padding moved to .projects-page-container or specific sections */
+}
+
+/* Placeholder for loading and no-projects messages */
+.projects-list-container > p {
+  text-align: center;
+  font-size: 1.1em; /* Slightly adjusted */
+  color: #6c757d; /* Bootstrap's muted text color */
+  margin-top: 40px;
+  padding: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) { /* Adjust breakpoint as needed */
+  .filter-item {
+    min-width: calc(33.333% - 20px); /* Example: 3 items per row on medium screens */
   }
-  
-  .projects-message-container {
-    /* Custom styles if needed */
+}
+
+@media (max-width: 768px) {
+  .projects-page-container {
+    padding: 16px; /* Reduced padding on smaller screens */
   }
-  
-  @media (max-width: 768px) {
-    .disclaimer-container {
-      padding: 15px;
-    }
+  .filters-container {
+    gap: 16px; /* Reduce gap for stacked items */
+    flex-direction: column; /* Stack filters vertically */
   }
-  
-  @media (max-width: 576px) {
-    .disclaimer-container {
-      padding: 10px;
-    }
+  .filter-item {
+    min-width: 100%; /* Full width for stacked filter items */
   }
-  
+  .filter-item input,
+  .filter-item select {
+    width: 100%; /* Make input fields take full width */
+  }
+  .projects-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Smaller min for cards on mobile */
+    gap: 16px;
+  }
+}
+
+@media (max-width: 576px) {
+  .projects-list-container h2 {
+    font-size: 1.5em; /* Smaller title on very small screens */
+  }
+   .projects-grid {
+    grid-template-columns: 1fr; /* Single column on very small screens */
+  }
+}

@@ -1,31 +1,164 @@
-// src/pages/Projects.js
-import React from "react";
-import Header from "./Header";
-import SubHeader from "./SubHeader";
-import Footer from "./Footer";
-import Disclaimer from "../components/Disclaimer";
-import { useTranslationHook } from "../i18n";
-import "../styles/Projects.css"; // Optional: For any additional custom styles
+import React, { useState, useEffect, useMemo } from 'react';
+import Header from './Header.js';
+import SubHeader from './SubHeader.js';
+import Footer from './Footer.js';
+import MapViewProjects from '../components/MapViewProjects.js';
+import ProjectCard from '../components/ProjectCard.js';
+import projectDataPlaceholder from '../data/projects.json';
+import '../styles/Projects.css';
 
-export default function Projects() {
-  const { t } = useTranslationHook("misc"); // Initialize translation hook
+const Projects = () => {
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filters, setFilters] = useState({
+    donor: '',
+    status: '',
+    fundingAgency: '',
+    implementingAgency: '',
+    recipient: '',
+    startYear: '',
+    endYear: '',
+    budgetUSD: '',
+  });
+
+  useEffect(() => {
+    setProjects(projectDataPlaceholder);
+    setLoading(false);
+  }, []);
+
+  const handleFilterChange = (filterName, value) => {
+    setFilters(prev => ({ ...prev, [filterName]: value }));
+  };
+
+  const filteredProjects = useMemo(() => {
+    let tempProjects = [...projects];
+
+    if (filters.donor) {
+      tempProjects = tempProjects.filter(p => p.donor?.toLowerCase().includes(filters.donor.toLowerCase()));
+    }
+    if (filters.status && filters.status !== "All") {
+      tempProjects = tempProjects.filter(p => p.status === filters.status);
+    }
+    if (filters.fundingAgency) {
+      tempProjects = tempProjects.filter(p => p.fundingAgency?.toLowerCase().includes(filters.fundingAgency.toLowerCase()));
+    }
+    if (filters.implementingAgency) {
+      tempProjects = tempProjects.filter(p => p.implementingAgency?.toLowerCase().includes(filters.implementingAgency.toLowerCase()));
+    }
+    if (filters.recipient) {
+      tempProjects = tempProjects.filter(p => p.recipient?.toLowerCase().includes(filters.recipient.toLowerCase()));
+    }
+    if (filters.startYear) {
+      const startYearVal = parseInt(filters.startYear);
+      if (!isNaN(startYearVal)) {
+        tempProjects = tempProjects.filter(p => p.start && new Date(p.start).getFullYear() >= startYearVal);
+      }
+    }
+    if (filters.endYear) {
+      const endYearVal = parseInt(filters.endYear);
+      if (!isNaN(endYearVal)) {
+        tempProjects = tempProjects.filter(p => p.end && new Date(p.end).getFullYear() <= endYearVal);
+      }
+    }
+    if (filters.budgetUSD && filters.budgetUSD !== "All") {
+      switch (filters.budgetUSD) {
+        case "<1M USD":
+          tempProjects = tempProjects.filter(p => typeof p.budgetUSD === 'number' && p.budgetUSD < 1000000);
+          break;
+        case "1M<5M USD":
+          tempProjects = tempProjects.filter(p => typeof p.budgetUSD === 'number' && p.budgetUSD >= 1000000 && p.budgetUSD < 5000000);
+          break;
+        case "5M<10M USD":
+          tempProjects = tempProjects.filter(p => typeof p.budgetUSD === 'number' && p.budgetUSD >= 5000000 && p.budgetUSD < 10000000);
+          break;
+        case "10M<100M USD":
+          tempProjects = tempProjects.filter(p => typeof p.budgetUSD === 'number' && p.budgetUSD >= 10000000 && p.budgetUSD < 100000000);
+          break;
+        case ">100M USD":
+          tempProjects = tempProjects.filter(p => typeof p.budgetUSD === 'number' && p.budgetUSD >= 100000000);
+          break;
+        case "Other":
+          tempProjects = tempProjects.filter(p => typeof p.budgetUSD !== 'number' || p.budgetUSD === null);
+          break;
+        default:
+          break;
+      }
+    }
+    return tempProjects;
+  }, [projects, filters]);
 
   return (
-    <div className="projects-page">
+    <div>
       <Header />
-      <SubHeader />
-
-      {/* Main Content */}
-      <div className="container my-5">
-        <div className="row justify-content-center">
-          <div className="col-md-8 text-center">
-            <h2 className="mb-4">{t("projectsUnderRenovation")}</h2>
-            <p className="lead">{t("checkBackLater")}</p>
+      <SubHeader /> {/* Assuming Projects page might have a SubHeader, adjust as needed */}
+      <div className="projects-page-container">
+        <MapViewProjects />
+        <div className="filters-container">
+          <div className="filter-item">
+            <label htmlFor="donor">Donor:</label>
+            <input type="text" id="donor" value={filters.donor} onChange={(e) => handleFilterChange('donor', e.target.value)} />
+          </div>
+          <div className="filter-item">
+            <label htmlFor="status">Status:</label>
+            <select id="status" value={filters.status} onChange={(e) => handleFilterChange('status', e.target.value)}>
+              <option value="All">All</option>
+              <option value="Planned">Planned</option>
+              <option value="Ongoing">Ongoing</option>
+              <option value="Completed">Completed</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+          </div>
+          <div className="filter-item">
+            <label htmlFor="fundingAgency">Funding Agency:</label>
+            <input type="text" id="fundingAgency" value={filters.fundingAgency} onChange={(e) => handleFilterChange('fundingAgency', e.target.value)} />
+          </div>
+          <div className="filter-item">
+            <label htmlFor="implementingAgency">Implementing Agency:</label>
+            <input type="text" id="implementingAgency" value={filters.implementingAgency} onChange={(e) => handleFilterChange('implementingAgency', e.target.value)} />
+          </div>
+          <div className="filter-item">
+            <label htmlFor="recipient">Recipient:</label>
+            <input type="text" id="recipient" value={filters.recipient} onChange={(e) => handleFilterChange('recipient', e.target.value)} />
+          </div>
+          <div className="filter-item">
+            <label htmlFor="startYear">Start Year:</label>
+            <input type="number" id="startYear" value={filters.startYear} onChange={(e) => handleFilterChange('startYear', e.target.value)} />
+          </div>
+          <div className="filter-item">
+            <label htmlFor="endYear">End Year:</label>
+            <input type="number" id="endYear" value={filters.endYear} onChange={(e) => handleFilterChange('endYear', e.target.value)} />
+          </div>
+          <div className="filter-item">
+            <label htmlFor="budgetUSD">Budget (USD):</label>
+            <select id="budgetUSD" value={filters.budgetUSD} onChange={(e) => handleFilterChange('budgetUSD', e.target.value)}>
+              <option value="All">All</option>
+              <option value="<1M USD">&lt;1M USD</option>
+              <option value="1M<5M USD">1M &lt; 5M USD</option>
+              <option value="5M<10M USD">5M &lt; 10M USD</option>
+              <option value="10M<100M USD">10M &lt; 100M USD</option>
+              <option value=">100M USD">&gt;100M USD</option>
+              <option value="Other">Other</option>
+            </select>
           </div>
         </div>
+        <div className="projects-list-container">
+          <h2>Projects</h2>
+          {loading ? (
+            <p>Loading projects...</p>
+          ) : filteredProjects.length === 0 ? (
+            <p>No projects found matching your criteria.</p>
+          ) : (
+            <div className="projects-grid">
+              {filteredProjects.map(project => (
+                <ProjectCard project={project} key={project.id} />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
-
       <Footer />
     </div>
   );
-}
+};
+
+export default Projects;
