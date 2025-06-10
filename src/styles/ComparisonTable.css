@@ -269,3 +269,10 @@
 .comparison-table tbody tr.admin2-row > td:first-child {
   padding-left: 40px;
 }
+
+/* Styling for the "Expand to see more" cue */
+.expand-cue {
+  font-style: italic;
+  color: #555; /* Medium-dark gray */
+  font-size: 0.9em; /* Slightly smaller */
+}
