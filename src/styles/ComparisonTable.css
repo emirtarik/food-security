@@ -268,6 +268,7 @@
 
 .comparison-table tbody tr.admin2-row > td:first-child {
   padding-left: 40px;
+  font-weight: 100;
 }
 
 /* Styling for the "Expand to see more" cue */

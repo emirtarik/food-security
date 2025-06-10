@@ -886,5 +886,3 @@ const ComparisonTable = ({
 };
 
 export default ComparisonTable;
-
-[end of src/components/ComparisonTable.js]
