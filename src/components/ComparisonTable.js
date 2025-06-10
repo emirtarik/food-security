@@ -192,8 +192,12 @@ const getAdmin1DataForCountry = async (
     const agg2Features = groupedP2Admin1s[admin1Name] || [];
     const agg2 = agg2Features.length > 0 ? aggregateFeatures(agg2Features) : null;
 
-    const sev1 = classificationSeverity[agg1.classification] ?? 0;
-    const sev2 = agg2 ? (classificationSeverity[agg2.classification] ?? 0) : -1;
+    const classificationP1 = agg1.classification;
+    const classificationP2 = agg2 ? agg2.classification : null;
+    const isNonAnalyseeInAnyPeriod = classificationP1 === "Non analysée" || classificationP2 === "Non analysée";
+
+    const sev1 = classificationSeverity[classificationP1] ?? 0;
+    const sev2 = classificationP2 ? (classificationSeverity[classificationP2] ?? 0) : -1;
 
     let change = t("noChange");
     if (!agg2)      change = t("nA");
@@ -219,7 +223,7 @@ const getAdmin1DataForCountry = async (
 
     return {
       region:           admin1Name,
-      classification1:  agg1.classification,
+      classification1:  classificationP1,
       population1:      formatNumber(agg1.pop),
       popPh2_1:         formatNumber(agg1.ph2),
       popPh3_1:         formatNumber(agg1.ph3),
@@ -231,7 +235,7 @@ const getAdmin1DataForCountry = async (
       ph3OfTotalPercent1: ph3OfTotalPercent1,
       admin0NameParent: admin0Name,
 
-      classification2:  agg2 ? agg2.classification : t("nA"),
+      classification2:  classificationP2,
       population2:      agg2 ? formatNumber(agg2.pop) : "0",
       popPh2_2:         agg2 ? formatNumber(agg2.ph2) : "0",
       popPh3_2:         agg2 ? formatNumber(agg2.ph3) : "0",
@@ -242,6 +246,7 @@ const getAdmin1DataForCountry = async (
       zonesInPh3Plus2:  agg2 ? agg2.numberOfZonesInPh3Plus : 0,
       ph3OfTotalPercent2: ph3OfTotalPercent2,
 
+      isNonAnalyseeInAnyPeriod: isNonAnalyseeInAnyPeriod,
       aggregated:        agg1.aggregatedAtAdmin1 || (agg2?.aggregatedAtAdmin1 ?? false),
       classificationChange: change,
       zoneChange:       zoneChange,
@@ -292,8 +297,12 @@ const getAdmin2DataForAdmin1 = async (
     const agg1 = aggregateFeatures(featuresP1);
     const agg2 = featuresP2.length > 0 ? aggregateFeatures(featuresP2) : null;
 
-    const sev1 = classificationSeverity[agg1.classification] ?? 0;
-    const sev2 = agg2 ? (classificationSeverity[agg2.classification] ?? 0) : -1;
+    const classificationP1 = agg1.classification;
+    const classificationP2 = agg2 ? agg2.classification : null;
+    const isNonAnalyseeInAnyPeriod = classificationP1 === "Non analysée" || classificationP2 === "Non analysée";
+
+    const sev1 = classificationSeverity[classificationP1] ?? 0;
+    const sev2 = classificationP2 ? (classificationSeverity[classificationP2] ?? 0) : -1;
 
     let change = t("noChange");
     if (!agg2)      change = t("nA");
@@ -319,7 +328,7 @@ const getAdmin2DataForAdmin1 = async (
 
     return {
       region:           admin2Name,
-      classification1:  agg1.classification,
+      classification1:  classificationP1,
       population1:      formatNumber(agg1.pop),
       popPh2_1:         formatNumber(agg1.ph2),
       popPh3_1:         formatNumber(agg1.ph3),
@@ -332,7 +341,7 @@ const getAdmin2DataForAdmin1 = async (
       admin0NameParent: admin0Name,
       admin1NameParent: admin1Name,
 
-      classification2:  agg2 ? agg2.classification : t("nA"),
+      classification2:  classificationP2,
       population2:      agg2 ? formatNumber(agg2.pop) : "0",
       popPh2_2:         agg2 ? formatNumber(agg2.ph2) : "0",
       popPh3_2:         agg2 ? formatNumber(agg2.ph3) : "0",
@@ -343,6 +352,7 @@ const getAdmin2DataForAdmin1 = async (
       zonesInPh3Plus2:  agg2 ? agg2.numberOfZonesInPh3Plus : 0,
       ph3OfTotalPercent2: ph3OfTotalPercent2,
 
+      isNonAnalyseeInAnyPeriod: isNonAnalyseeInAnyPeriod,
       classificationChange: change,
       zoneChange:       zoneChange,
       populationChange: populationChange,
@@ -484,8 +494,12 @@ const ComparisonTable = ({
     const agg1 = aggregateFeatures(grouped1[regionName]);
     const agg2 = grouped2[regionName] ? aggregateFeatures(grouped2[regionName]) : null;
 
-    const sev1 = classificationSeverity[agg1.classification] ?? 0;
-    const sev2 = agg2 ? (classificationSeverity[agg2.classification] ?? 0) : -1;
+    const classificationP1 = agg1.classification;
+    const classificationP2 = agg2 ? agg2.classification : null;
+    const isNonAnalyseeInAnyPeriod = classificationP1 === "Non analysée" || classificationP2 === "Non analysée";
+
+    const sev1 = classificationSeverity[classificationP1] ?? 0;
+    const sev2 = classificationP2 ? (classificationSeverity[classificationP2] ?? 0) : -1;
 
     let change = t("noChange");
     if (!agg2)      change = t("nA");
@@ -511,7 +525,7 @@ const ComparisonTable = ({
 
     return {
       region:           regionName,
-      classification1:  agg1.classification,
+      classification1:  classificationP1,
       population1:      formatNumber(agg1.pop),
       popPh2_1:         formatNumber(agg1.ph2),
       popPh3_1:         formatNumber(agg1.ph3),
@@ -522,7 +536,7 @@ const ComparisonTable = ({
       zonesInPh3Plus1:  agg1.numberOfZonesInPh3Plus,
       ph3OfTotalPercent1: ph3OfTotalPercent1,
 
-      classification2:  agg2 ? agg2.classification : t("nA"),
+      classification2:  classificationP2,
       population2:      agg2 ? formatNumber(agg2.pop) : "0",
       popPh2_2:         agg2 ? formatNumber(agg2.ph2) : "0",
       popPh3_2:         agg2 ? formatNumber(agg2.ph3) : "0",
@@ -533,6 +547,7 @@ const ComparisonTable = ({
       zonesInPh3Plus2:  agg2 ? agg2.numberOfZonesInPh3Plus : 0,
       ph3OfTotalPercent2: ph3OfTotalPercent2,
 
+      isNonAnalyseeInAnyPeriod: isNonAnalyseeInAnyPeriod,
       aggregated:        agg1.aggregatedAtAdmin1 || (agg2?.aggregatedAtAdmin1 ?? false),
       classificationChange: change,
       zoneChange:       zoneChange,
@@ -574,6 +589,7 @@ const ComparisonTable = ({
                 zoneChange: 0, populationChange: 0, populationChangeInThousands: 0, ph3PopulationPercentChange: 0,
                 rawPop1: 0, units1: 0, rawPh3Pop1: 0, zonesInPh3Plus1: 0, ph3OfTotalPercent1: 0,
                 rawPop2: 0, units2: 0, rawPh3Pop2: 0, zonesInPh3Plus2: 0, ph3OfTotalPercent2: 0,
+                isNonAnalyseeInAnyPeriod: false,
                 zoneChangeVisuals: { direction: 'neutral', color: 'default'},
                 populationChangeVisuals: { direction: 'neutral', color: 'default'},
                 level: 2, isSubRow: true, isPlaceholder: true,
@@ -592,6 +608,7 @@ const ComparisonTable = ({
           zoneChange: 0, populationChange: 0, populationChangeInThousands: 0, ph3PopulationPercentChange: 0,
           rawPop1: 0, units1: 0, rawPh3Pop1: 0, zonesInPh3Plus1: 0, ph3OfTotalPercent1: 0,
           rawPop2: 0, units2: 0, rawPh3Pop2: 0, zonesInPh3Plus2: 0, ph3OfTotalPercent2: 0,
+          isNonAnalyseeInAnyPeriod: false,
           zoneChangeVisuals: { direction: 'neutral', color: 'default'},
           populationChangeVisuals: { direction: 'neutral', color: 'default'},
           level: 1, isSubRow: true, isPlaceholder: true
@@ -793,12 +810,21 @@ const ComparisonTable = ({
 
                   return (
                     <tr key={i}>
-                      <td style={{ color: zoneVisuals.color === 'default' ? 'inherit' : zoneVisuals.color }}>
-                        {zoneArrow}{zoneChangeText}
-                      </td>
-                      <td style={{ color: popVisuals.color === 'default' ? 'inherit' : popVisuals.color }}>
-                        {popArrow}{`${populationChangeInThousandsText} (${ph3PopulationPercentChangeText})`}
-                      </td>
+                      {row.isNonAnalyseeInAnyPeriod && !row.isPlaceholder ? (
+                        <>
+                          <td>N/A</td>
+                          <td>N/A</td>
+                        </>
+                      ) : (
+                        <>
+                          <td style={{ color: zoneVisuals.color === 'default' ? 'inherit' : zoneVisuals.color }}>
+                            {zoneArrow}{zoneChangeText}
+                          </td>
+                          <td style={{ color: popVisuals.color === 'default' ? 'inherit' : popVisuals.color }}>
+                            {popArrow}{`${populationChangeInThousandsText} (${ph3PopulationPercentChangeText})`}
+                          </td>
+                        </>
+                      )}
                     </tr>
                   );
                 })}
