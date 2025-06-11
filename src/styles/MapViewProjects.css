@@ -1,106 +1,17 @@
-/* MapView.css */
+/* Styles for MapViewProjects component */
 .map-view-container {
-  position: relative;
+  position: relative; /* Needed for absolute positioning of overlays */
   width: 100%;
-  height: 100vh;
+  height: 70vh; /* Default height, can be adjusted */
+  min-height: 500px; /* Minimum height */
+  display: flex; /* Use flexbox to manage children */
+  flex-direction: column; /* Stack children vertically */
 }
 
 .map-container {
-  width: 100%;
-  height: 100%;
-}
-
-
-
-/* Timebar styling */
-.timebar {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  background: rgba(255, 255, 255, 0.95);
-  padding: 12px;
-  border-radius: 4px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-  z-index: 10;
-  font-family: Lato, sans-serif;
-}
-
-.date-selector {
-  margin-bottom: 8px;
-  width: 250px;
-}
-
-.active-date {
-  font-weight: bold;
-  margin-right: 10px;
-}
-
-.date-selector input[type="range"] {
+  flex-grow: 1; /* Map container takes available space */
   width: 100%;
 }
-
-.opacity-control {
-  display: flex;
-  align-items: center;
-  margin-top: 8px;
-}
-
-.opacity-control label {
-  margin-right: 5px;
-  font-size: 13px;
-}
-
-.opacity-control input[type="range"] {
-  margin-right: 5px;
-  width: 100px;
-}
-
-/* Legend styling */
-.legend {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  background: rgba(255, 255, 255, 0.95);
-  padding: 10px;
-  border-radius: 4px;
-  font-size: 12px;
-  color: #333;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-  z-index: 10;
-  font-family: Lato, sans-serif;
-}
-
-.legend h4 {
-  margin: 0 0 5px 0;
-  font-size: 14px;
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 3px;
-}
-
-.legend-color-box {
-  width: 12px;
-  height: 12px;
-  margin-right: 5px;
-  border: 1px solid #999;
-}
-
-.custom-popup {
-  /* font-family: 'Lato', sans-serif;
-  font-size: 14px; */
-  background: #fff;
-  padding: 0px;          /* Increased padding for better spacing */
-  /* border-radius: 4px; */
-  /* box-shadow: 0 1px 2px rgba(0,0,0,0.15); */
-  min-width: 350px;       /* Ensure a minimum width for content */
-  max-width: 500px;       /* Optional: constrain maximum width */
-  overflow-wrap: break-word; /* Prevent text overflow */
-  opacity: 0.95;
-}
-
 
 .loading-overlay {
   position: absolute;
@@ -108,142 +19,96 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.8);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 10; /* Ensure it's above the map */
 }
 
 .spinner {
+  border: 5px solid #f3f3f3; /* Light grey */
+  border-top: 5px solid #3498db; /* Blue */
+  border-radius: 50%;
   width: 50px;
   height: 50px;
-  border: 5px solid #ccc;
-  border-top-color: #1a73e8;
-  border-radius: 50%;
   animation: spin 1s linear infinite;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
-.popup-content {
-  padding: 10px;
-  font-family: 'Lato', sans-serif;
-  min-width: 300px;
-  max-width: 400px;
-  border-radius: 4px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.15);
-  overflow-wrap: break-word;
+.loading-overlay h1 {
+  font-size: 1.2em;
+  color: #333;
 }
 
-.popup-header-flag {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.popup-header {
-  margin: 0;
-  font-size: 20px;
-  font-weight: bold;
-  color: #000000;
-  text-align: center;
-  flex: 1;
-}
-
-.popup-flag {
-  flex: 0;
-  margin-left: 10px;
-}
-
-.popup-flag img {
-  max-width: 60px;
-  height: auto;
-  display: block;
-}
-
-/* New subheader box for classification with background color */
-.popup-subheader-box {
-  padding: 5px;
-  border-radius: 5px;
-  margin-bottom: 15px;
-}
-
-.popup-subheader {
-  margin: 0;
-  font-size: 18px;
-  font-weight: bold;
-  color: #000000;
-  text-align: center;
-}
-
-.popup-details {
-  /* Ensures details span full width */
-  display: block;
-  width: 100%;
-  font-weight: bold;
-  font-size: 18px;
-  color: black;
-}
-
-.popup-info {
-  margin: 0 0 4px 0; /* Reduced margin between <p> elements */
-  line-height: 1.2;   /* Reduced line height */
-  font-size: 16px;
-  text-align: left;
-}
-
-.popup-aggregated {
-  margin-bottom: 5px;
-  font-size: 12px;   /* Increased font size */
-  font-weight: bold; /* Bold text */
-  color: #000000;
-  /* color: #ff0000; */
-  text-align: center;
-}
-
-.popup-aggregated-box {
-  padding: 5px;
-  border-radius: 5px;
-  margin-bottom: 15px;
-  background-color: rgba(255, 0, 0, 0.5); /* Red with 50% opacity */
-  width: 80%;   /* Adjust width as needed */
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.popup-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.popup-table td {
-  padding: 4px 8px;
-  vertical-align: top;
-  font-size: 16px;
-}
-
-.popup-table td:first-child {
-  text-align: left;
-  font-weight: bold;
-}
-
-.export-button {
+/* Legend Styles */
+.legend-container {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
-  z-index: 10;
-  padding: 0.5rem 1rem;
-  background: white;
-  border: 1px solid #ccc;
-  cursor: pointer;
+  bottom: 20px;
+  left: 10px;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 10px 15px;
+  border-radius: 5px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  z-index: 1; /* Above map but below loading overlay if active */
+  font-family: Arial, sans-serif;
+  font-size: 0.9em;
 }
-.export-button:disabled {
-  opacity: 0.5;
-  cursor: default;
+
+.legend-container h4 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 1em;
+  font-weight: bold;
+  color: #333;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.legend-color {
+  width: 18px;
+  height: 18px;
+  border: 1px solid #ccc;
+  margin-right: 8px;
+  flex-shrink: 0; /* Prevent shrinking */
+}
+
+.legend-label {
+  color: #555;
+}
+
+/* Ensure Mapbox popups are styled correctly if default styles are overridden elsewhere */
+.mapboxgl-popup {
+  z-index: 10 !important; /* Ensure popups are above other map elements */
+}
+
+.mapboxgl-popup-content {
+  font-family: 'Arial', sans-serif;
+  padding: 8px 12px !important;
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-radius: 4px !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2) !important;
+  font-size: 0.85em;
+  line-height: 1.4;
+}
+
+.mapboxgl-popup-content strong {
+  font-weight: bold;
+  color: #333;
+}
+
+.mapboxgl-popup-close-button {
+  font-size: 1.2em;
+  padding: 2px 5px;
+  color: #777;
 }

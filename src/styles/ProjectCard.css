@@ -1,61 +1,132 @@
+/* Styles for ProjectCard component */
+
 .project-card {
-  background-color: #fff;
-  border: 1px solid #e0e0e0; /* Lighter border */
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
   border-radius: 8px;
-  padding: 16px;
-  margin: 0; /* Margin will be handled by the grid gap */
-  /* width: 300px; */ /* Width will be handled by the grid system */
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Softer shadow */
-  transition: box-shadow 0.3s ease-in-out;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
+  margin-bottom: 20px; /* Or rely on grid gap */
+  overflow: hidden; /* Ensures content respects border radius */
+  transition: box-shadow 0.3s ease-in-out;
+  height: 100%; /* Make card fill the grid cell height */
 }
 
 .project-card:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Enhanced shadow on hover */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.project-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex; /* Make the link behave like the card for flex purposes */
+  flex-direction: column;
+  height: 100%; /* Ensure link takes full height of card */
 }
 
 .project-card-image-container {
   width: 100%;
-  height: 200px; /* Slightly taller image area */
-  overflow: hidden;
-  margin-bottom: 16px; /* Increased space below image */
-  border-radius: 4px; /* Rounded corners for the image container */
+  height: 200px; /* Fixed height for image container */
+  overflow: hidden; /* Ensures image respects container bounds */
+  background-color: #f0f0f0; /* Background for when image is loading or missing */
 }
 
 .project-image {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Ensures image covers the area, cropping if necessary */
-  display: block; /* Remove any extra space below image */
+  object-fit: cover; /* Cover ensures the image fills the container, cropping if necessary */
+  display: block; /* Remove extra space below image */
 }
 
 .project-card-content {
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  flex-grow: 1; /* Allows content to fill space, useful for consistent card height if needed */
+  flex-grow: 1; /* Allows content to fill available space */
 }
 
 .project-title {
-  font-size: 1.15em; /* Slightly adjusted */
-  font-weight: 600; /* Semibold */
-  margin-bottom: 10px; /* Increased space */
+  font-size: 1.3em; /* Slightly larger */
+  font-weight: 700; /* Bolder */
   color: #333;
+  margin-top: 0; /* Remove default margin */
+  margin-bottom: 12px; /* Increased space below title */
 }
 
-.project-status,
-.project-recipient,
-.project-funding-agency {
-  font-size: 0.875em; /* Slightly adjusted */
-  margin-bottom: 6px; /* Increased space */
-  color: #555; /* Slightly lighter text color for details */
+.project-meta-item {
+  font-size: 0.85em; /* Slightly smaller for meta items */
+  color: #555; /* Slightly darker for better readability */
+  margin-bottom: 6px; /* Consistent spacing */
+  display: flex; /* For potential icon alignment */
+  align-items: center; /* Align icon and text */
   line-height: 1.4;
 }
 
-/* Add a specific class for labels if desired, or style paragraphs directly */
-.project-status strong,
-.project-recipient strong,
-.project-funding-agency strong {
-  font-weight: 500; /* Medium weight for labels */
-  color: #333;
+.project-meta-item strong {
+  font-weight: 600; /* Medium bold for labels */
+  margin-right: 5px;
+  color: #444;
+  flex-shrink: 0; /* Prevent label from shrinking */
+}
+
+.project-duration {
+  font-size: 0.8em;
+  color: #777;
+  margin-bottom: 8px;
+}
+
+.project-budget {
+  font-size: 0.9em;
+  font-weight: 500;
+  color: #007bff; /* Highlight budget */
+  margin-bottom: 10px;
+}
+
+.project-comments {
+  font-size: 0.8em;
+  color: #6c757d; /* Muted color */
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+  max-height: 5.4em; /* Approx 3-4 lines depending on line-height */
+  overflow-y: auto;
+  line-height: 1.4em;
+}
+
+.project-card-footer {
+  margin-top: auto; /* Pushes the footer to the bottom */
+  padding-top: 10px; /* Space above the footer elements */
+}
+
+.project-learn-more {
+  display: inline-block;
+  padding: 8px 15px;
+  background-color: #007bff;
+  color: white !important; /* Ensure text is white */
+  text-align: center;
+  text-decoration: none !important; /* Ensure no underline */
+  border-radius: 4px;
+  transition: background-color 0.2s ease-in-out;
+  /* align-self: flex-start; Align button to the start if it's directly in a flex container */
+}
+
+.project-learn-more:hover {
+  background-color: #0056b3;
+  color: white !important;
+}
+
+/* Fallback for when there's no image and no placeholder image is used via JS */
+.project-card-image-container.no-image-fallback {
+  height: 200px; /* Or a minimal height like 100px if preferred */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f0f0;
+}
+
+.project-image-placeholder-text {
+  color: #888;
+  font-size: 0.9em;
+  text-align: center;
 }
