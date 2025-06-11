@@ -10,21 +10,48 @@ import '../styles/Projects.css';
 const Projects = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  // Initialize filters with "All" as default for new dropdowns
   const [filters, setFilters] = useState({
-    donor: '',
-    status: '',
+    donor: 'All',
+    status: 'All',
     fundingAgency: '',
     implementingAgency: '',
-    recipient: '',
-    startYear: '',
-    endYear: '',
-    budgetUSD: '',
+    recipient: 'All',
+    startYear: 'All',
+    endYear: 'All',
+    budgetUSD: 'All',
   });
 
   useEffect(() => {
-    setProjects(projectDataPlaceholder);
+    // Handle potential BOM character in donor key
+    const cleanedProjects = projectDataPlaceholder.map(p => ({
+      ...p,
+      donor: p['\uFEFFdonor'] || p.donor,
+    }));
+    setProjects(cleanedProjects);
     setLoading(false);
   }, []);
+
+  // Generate unique options for dropdowns
+  const donorOptions = useMemo(() => {
+    const donors = new Set(projects.map(p => p.donor).filter(Boolean));
+    return ["All", ...Array.from(donors).sort()];
+  }, [projects]);
+
+  const recipientOptions = useMemo(() => {
+    const recipients = new Set(projects.map(p => p.recipient).filter(Boolean));
+    return ["All", ...Array.from(recipients).sort()];
+  }, [projects]);
+
+  const startYearOptions = useMemo(() => {
+    const years = new Set(projects.map(p => p.start ? new Date(p.start).getFullYear() : null).filter(Boolean));
+    return ["All", ...Array.from(years).sort((a, b) => a - b)];
+  }, [projects]);
+
+  const endYearOptions = useMemo(() => {
+    const years = new Set(projects.map(p => p.end ? new Date(p.end).getFullYear() : null).filter(Boolean));
+    return ["All", ...Array.from(years).sort((a, b) => a - b)];
+  }, [projects]);
 
   const handleFilterChange = (filterName, value) => {
     setFilters(prev => ({ ...prev, [filterName]: value }));
@@ -33,8 +60,9 @@ const Projects = () => {
   const filteredProjects = useMemo(() => {
     let tempProjects = [...projects];
 
-    if (filters.donor) {
-      tempProjects = tempProjects.filter(p => p.donor?.toLowerCase().includes(filters.donor.toLowerCase()));
+    // Updated filtering logic for dropdowns
+    if (filters.donor && filters.donor !== "All") {
+      tempProjects = tempProjects.filter(p => p.donor === filters.donor);
     }
     if (filters.status && filters.status !== "All") {
       tempProjects = tempProjects.filter(p => p.status === filters.status);
@@ -45,21 +73,18 @@ const Projects = () => {
     if (filters.implementingAgency) {
       tempProjects = tempProjects.filter(p => p.implementingAgency?.toLowerCase().includes(filters.implementingAgency.toLowerCase()));
     }
-    if (filters.recipient) {
-      tempProjects = tempProjects.filter(p => p.recipient?.toLowerCase().includes(filters.recipient.toLowerCase()));
+    if (filters.recipient && filters.recipient !== "All") {
+      tempProjects = tempProjects.filter(p => p.recipient === filters.recipient);
     }
-    if (filters.startYear) {
+    if (filters.startYear && filters.startYear !== "All") {
       const startYearVal = parseInt(filters.startYear);
-      if (!isNaN(startYearVal)) {
-        tempProjects = tempProjects.filter(p => p.start && new Date(p.start).getFullYear() >= startYearVal);
-      }
+      tempProjects = tempProjects.filter(p => p.start && new Date(p.start).getFullYear() >= startYearVal);
     }
-    if (filters.endYear) {
+    if (filters.endYear && filters.endYear !== "All") {
       const endYearVal = parseInt(filters.endYear);
-      if (!isNaN(endYearVal)) {
-        tempProjects = tempProjects.filter(p => p.end && new Date(p.end).getFullYear() <= endYearVal);
-      }
+      tempProjects = tempProjects.filter(p => p.end && new Date(p.end).getFullYear() <= endYearVal);
     }
+    // Ensure budgetUSD filter also checks for "All" or specific value
     if (filters.budgetUSD && filters.budgetUSD !== "All") {
       switch (filters.budgetUSD) {
         case "<1M USD":
@@ -92,11 +117,13 @@ const Projects = () => {
       <Header />
       <SubHeader /> {/* Assuming Projects page might have a SubHeader, adjust as needed */}
       <div className="projects-page-container">
-        <MapViewProjects />
+        <MapViewProjects projects={filteredProjects} />
         <div className="filters-container">
           <div className="filter-item">
             <label htmlFor="donor">Donor:</label>
-            <input type="text" id="donor" value={filters.donor} onChange={(e) => handleFilterChange('donor', e.target.value)} />
+            <select id="donor" value={filters.donor} onChange={(e) => handleFilterChange('donor', e.target.value)}>
+              {donorOptions.map(option => <option key={option} value={option}>{option}</option>)}
+            </select>
           </div>
           <div className="filter-item">
             <label htmlFor="status">Status:</label>
@@ -118,15 +145,21 @@ const Projects = () => {
           </div>
           <div className="filter-item">
             <label htmlFor="recipient">Recipient:</label>
-            <input type="text" id="recipient" value={filters.recipient} onChange={(e) => handleFilterChange('recipient', e.target.value)} />
+            <select id="recipient" value={filters.recipient} onChange={(e) => handleFilterChange('recipient', e.target.value)}>
+              {recipientOptions.map(option => <option key={option} value={option}>{option}</option>)}
+            </select>
           </div>
           <div className="filter-item">
             <label htmlFor="startYear">Start Year:</label>
-            <input type="number" id="startYear" value={filters.startYear} onChange={(e) => handleFilterChange('startYear', e.target.value)} />
+            <select id="startYear" value={filters.startYear} onChange={(e) => handleFilterChange('startYear', e.target.value)}>
+              {startYearOptions.map(option => <option key={option} value={option}>{option}</option>)}
+            </select>
           </div>
           <div className="filter-item">
             <label htmlFor="endYear">End Year:</label>
-            <input type="number" id="endYear" value={filters.endYear} onChange={(e) => handleFilterChange('endYear', e.target.value)} />
+            <select id="endYear" value={filters.endYear} onChange={(e) => handleFilterChange('endYear', e.target.value)}>
+              {endYearOptions.map(option => <option key={option} value={option}>{option}</option>)}
+            </select>
           </div>
           <div className="filter-item">
             <label htmlFor="budgetUSD">Budget (USD):</label>
