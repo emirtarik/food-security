@@ -1,0 +1,48 @@
+/* src/styles/CountryMapView.css */
+.country-map-view {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  display: flex; /* Use flexbox to position title and map */
+  flex-direction: column; /* Stack title above map */
+  height: 100%; /* Make sure it fills the container from Analysis.js */
+}
+
+.country-map-title {
+  font-size: 1em;
+  font-weight: bold;
+  margin-bottom: 8px;
+  text-align: center;
+  color: #333;
+}
+
+.country-map-container-inner {
+  width: 100%;
+  height: 350px; /* Default height, can be adjusted */
+  flex-grow: 1; /* Allow map to take remaining space if parent has fixed height */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .country-map-container-inner {
+    height: 300px; /* Smaller height for smaller screens */
+  }
+  .country-map-title {
+    font-size: 0.9em;
+  }
+}
+
+@media (max-width: 480px) {
+  .country-map-container-inner {
+    height: 250px; /* Even smaller for very small screens */
+  }
+   .country-map-view {
+    padding: 5px;
+  }
+  .country-map-title {
+    font-size: 0.8em;
+    margin-bottom: 5px;
+  }
+}
