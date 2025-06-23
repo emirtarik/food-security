@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import MapView from "../components/MapView";
 import ComparisonTable from "../components/ComparisonTable";
 import RegionSelector from "../components/RegionSelector";
+import CountryMapView from "../components/CountryMapView";
 import Header from "./Header";
 import Footer from "./Footer";
 import SubHeader from "./SubHeader";
@@ -24,6 +25,14 @@ export default function Analysis() {
     period1: "",
     period2: ""
   });
+
+  // Determine current admin level from selectedRegionData
+  const getCurrentAdminLevel = (region) => {
+    if (region.admin2) return "admin2";
+    if (region.admin1) return "admin1";
+    if (region.admin0) return "admin0";
+    return null;
+  };
 
   // Fetch geojson features for region selection from combined.geojson.
   const [geojsonFeatures, setGeojsonFeatures] = useState([]);
@@ -71,10 +80,29 @@ export default function Analysis() {
                 <MapView />
               ) : (
                 <div>
-                  <RegionSelector 
-                    geojsonData={geojsonFeatures} 
-                    onSelect={setSelectedRegionData} 
+                  <RegionSelector
+                    geojsonData={geojsonFeatures}
+                    onSelect={setSelectedRegionData}
                   />
+                  {/* Conditional rendering of CountryMapView components */}
+                  {getCurrentAdminLevel(selectedRegionData.region) === "admin0" && selectedRegionData.region.admin0 && selectedRegionData.period1 && selectedRegionData.period2 && geojsonFeatures.length > 0 && (
+                    <div className="country-maps-container" style={{ display: 'flex', justifyContent: 'space-around', margin: '20px 0' }}>
+                      <div style={{ width: '48%' }}> {/* Adjusted width for better spacing */}
+                        <CountryMapView
+                          country={selectedRegionData.region.admin0}
+                          period={selectedRegionData.period1}
+                          data={geojsonFeatures}
+                        />
+                      </div>
+                      <div style={{ width: '48%' }}> {/* Adjusted width for better spacing */}
+                        <CountryMapView
+                          country={selectedRegionData.region.admin0}
+                          period={selectedRegionData.period2}
+                          data={geojsonFeatures}
+                        />
+                      </div>
+                    </div>
+                  )}
                   <ComparisonTable
                     regionSelection={selectedRegionData.region}
                     period1={selectedRegionData.period1}
