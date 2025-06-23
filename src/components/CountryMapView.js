@@ -26,8 +26,9 @@ const MONTH_NAMES = {
  * Parse a period key like "October-2024", "2024-10", or "PJune-2025".
  * Returns { year, monthIndex, isPrediction } where monthIndex is 0-based, or monthIndex=-1 if unparseable.
  */
-function parsePeriodKey(period) {
-  const [a, b] = period.split("-");
+function parsePeriodKey(periodKey) { // Renamed param for clarity
+  if (!periodKey) return { year: NaN, monthIndex: -1, isPrediction: false };
+  const [a, b] = periodKey.split("-");
   let year, rawMonth;
 
   if (/^\d{4}$/.test(a)) {
@@ -51,7 +52,6 @@ function parsePeriodKey(period) {
     return { year, monthIndex: idx, isPrediction };
   }
 
-  // Text month via Date fallback
   const date = new Date(`${rawMonth} 1, ${year}`);
   const idx = date.getMonth();
   if (isNaN(idx)) {
@@ -62,13 +62,11 @@ function parsePeriodKey(period) {
 
 /**
  * Format a raw period key into "YYYY [P.]MonthName" in the given locale.
- * Uses manual MONTH_NAMES to guarantee French translations.
  */
-function formatPeriod(period, locale) {
-  const { year, monthIndex, isPrediction } = parsePeriodKey(period);
-  if (isNaN(year) || monthIndex < 0) return period;
+function formatPeriod(periodKey, locale) { // Renamed param for clarity
+  const { year, monthIndex, isPrediction } = parsePeriodKey(periodKey);
+  if (isNaN(year) || monthIndex < 0) return periodKey;
 
-  // Determine language from locale (simplified)
   const lang = typeof locale === 'string' && locale.startsWith("fr") ? "fr" : "en";
   const monthName = MONTH_NAMES[lang][monthIndex];
   const prefix = isPrediction ? 'P.' : '';
@@ -77,8 +75,7 @@ function formatPeriod(period, locale) {
 }
 
 
-const CountryMapView = ({ country, period, data }) => {
-  // Provide default for i18n and then safely access language
+const CountryMapView = ({ country, currentPeriod, otherPeriod, data }) => {
   const { t, i18n = {} } = useTranslationHook("analysis") || {};
   const currentLocale = i18n.language || (typeof navigator !== "undefined" && navigator.language) || "en";
 
@@ -86,11 +83,7 @@ const CountryMapView = ({ country, period, data }) => {
   const mapRef = useRef(null);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
 
-  // Helper function to translate classification values (can be moved to a shared util if needed)
   const translateClassification = (classification, t) => {
-    // This function would be identical to the one in MapView.js
-    // For brevity, I'm omitting the full switch statement here.
-    // It should be copied from MapView.js or refactored.
     switch (classification) {
       case "Non analysée": return t("nonAnalyzed");
       case "Phase 1 : minimal": return t("phase1");
@@ -104,17 +97,17 @@ const CountryMapView = ({ country, period, data }) => {
   };
 
   useEffect(() => {
-    if (!mapContainerRef.current || !country || !period || !data) return;
+    // Ensure currentPeriod is defined before proceeding
+    if (!mapContainerRef.current || !country || !currentPeriod || !data) return;
 
     const countryISO3 = countryNameToISO3[country];
     const bbox = countryISO3 ? countryBoundingBoxes[countryISO3] : null;
 
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
-      style: 'mapbox://styles/mkmd/cm6p4kq7i00ty01sa3iz31788', // Same style as MapView
-      // Center and zoom will be set by fitBounds if bbox is available, otherwise defaults.
-      center: [20, 5], // Default center (e.g., Africa) if no bbox
-      zoom: 2,          // Default zoom if no bbox
+      style: 'mapbox://styles/mkmd/cm6p4kq7i00ty01sa3iz31788',
+      center: [20, 5],
+      zoom: 2,
     });
     mapRef.current = map;
 
@@ -122,14 +115,13 @@ const CountryMapView = ({ country, period, data }) => {
       setIsMapLoaded(true);
 
       if (bbox) {
-        map.fitBounds(bbox, { padding: 20, duration: 0 }); // duration 0 for immediate fit
+        const fitBoundsOptions = { padding: 30, duration: 0 };
+        if (countryISO3 === 'GNB') { fitBoundsOptions.maxZoom = 6.5; }
+        else if (countryISO3 === 'CIV') { fitBoundsOptions.maxZoom = 6.5; }
+        map.fitBounds(bbox, fitBoundsOptions);
       } else {
-        // Fallback: if no bbox, try the old centering logic (or remove if not desired)
-        console.warn(`No bounding box found for country: ${country} (ISO3: ${countryISO3}). Using default view or old logic.`);
-        // Find the country feature to determine its bounding box or center
-        const countryFeature = data.find(
-          (f) => f.properties.admin0Name === country
-        );
+        console.warn(`No bounding box for ${country} (ISO3: ${countryISO3}). Using fallback.`);
+        const countryFeature = data.find((f) => f.properties.admin0Name === country);
         if (countryFeature && countryFeature.geometry) {
           if (countryFeature.geometry.type === 'Point') {
             map.setCenter(countryFeature.geometry.coordinates);
@@ -140,118 +132,152 @@ const CountryMapView = ({ country, period, data }) => {
               const allCoords = countryFeature.geometry.type === 'Polygon'
                   ? countryFeature.geometry.coordinates.flat(1)
                   : countryFeature.geometry.coordinates.flat(2);
-
               allCoords.forEach(coord => {
                   if (minLng === undefined || coord[0] < minLng) minLng = coord[0];
                   if (maxLng === undefined || coord[0] > maxLng) maxLng = coord[0];
                   if (minLat === undefined || coord[1] < minLat) minLat = coord[1];
                   if (maxLat === undefined || coord[1] > maxLat) maxLat = coord[1];
               });
-
               if (minLng !== undefined) {
                 map.fitBounds([[minLng, minLat], [maxLng, maxLat]], { padding: 20, duration: 0 });
               }
-            } catch (e) {
-                console.error("Error processing country geometry for fallback map center:", e);
-            }
+            } catch (e) { console.error("Fallback center error:", e); }
           }
         }
       }
 
-      // Data source setup: Try filtering by ISO3 if available, otherwise fallback to admin0Name.
       let featuresForCountry;
       if (countryISO3 && data.length > 0 && data[0].properties.iso_a3) {
-        // If countryISO3 is known and features have an 'iso_a3' property
         featuresForCountry = data.filter(f => f.properties.iso_a3 === countryISO3);
         if (featuresForCountry.length === 0) {
-          // Fallback if no features match by ISO (e.g. data uses different ISO property or name mismatch)
-          console.warn(`No features found for ISO3 ${countryISO3}. Falling back to filtering by admin0Name for ${country}.`);
+          console.warn(`No features for ISO3 ${countryISO3}. Falling back to admin0Name for ${country}.`);
           featuresForCountry = data.filter(f => f.properties.admin0Name === country);
         }
       } else {
-        // Fallback if countryISO3 is not known or features don't have 'iso_a3'
         featuresForCountry = data.filter(f => f.properties.admin0Name === country);
       }
 
       map.addSource('country-data', {
         type: 'geojson',
-        data: {
-          type: 'FeatureCollection',
-          features: featuresForCountry
-        }
+        data: { type: 'FeatureCollection', features: featuresForCountry }
       });
 
-      const classificationField = `classification_${period}`;
+      const classificationField = `classification_${currentPeriod}`;
       const fillColorExpression = [
-        'match',
-        ['get', classificationField],
-        'Non analysée', '#ffffff',
-        'Phase 1 : minimal', '#d3f3d4',
-        'Phase 2 : sous pression', '#ffe252',
-        'Phase 3 : crises', '#fa890f',
-        'Phase 4 : urgence', '#eb3333',
-        'Phase 5 : famine', '#60090b',
-        'inaccessible', '#cccccc',
-        /* default */ '#ffffff'
+        'match', ['get', classificationField],
+        'Non analysée', '#ffffff', 'Phase 1 : minimal', '#d3f3d4',
+        'Phase 2 : sous pression', '#ffe252', 'Phase 3 : crises', '#fa890f',
+        'Phase 4 : urgence', '#eb3333', 'Phase 5 : famine', '#60090b',
+        'inaccessible', '#cccccc', '#ffffff'
       ];
 
       map.addLayer({
-        id: 'country-fill',
-        type: 'fill',
-        source: 'country-data',
-        layout: {},
-        paint: {
-          'fill-color': fillColorExpression,
-          'fill-opacity': 0.9
-        }
+        id: 'country-fill', type: 'fill', source: 'country-data', layout: {},
+        paint: { 'fill-color': fillColorExpression, 'fill-opacity': 0.9 }
       });
-
       map.addLayer({
-        id: 'country-outline',
-        type: 'line',
-        source: 'country-data',
-        layout: {},
-        paint: {
-          'line-color': '#555',
-          'line-width': 1
-        }
+        id: 'country-outline', type: 'line', source: 'country-data', layout: {},
+        paint: { 'line-color': '#555', 'line-width': 1 }
       });
 
-      // Optional: Add popup for details on hover
-      const popup = new mapboxgl.Popup({
-        closeButton: false,
-        closeOnClick: false,
-        className: 'custom-popup',
-      });
+      const popup = new mapboxgl.Popup({ closeButton: false, closeOnClick: false, className: 'custom-popup' });
 
-      map.on('mouseenter', 'country-fill', () => {
-        map.getCanvas().style.cursor = 'pointer';
-      });
-      map.on('mouseleave', 'country-fill', () => {
-        map.getCanvas().style.cursor = '';
-        popup.remove();
-      });
+      map.on('mouseenter', 'country-fill', () => { map.getCanvas().style.cursor = 'pointer'; });
+      map.on('mouseleave', 'country-fill', () => { map.getCanvas().style.cursor = ''; popup.remove(); });
+
       map.on('mousemove', 'country-fill', (e) => {
         if (e.features.length > 0) {
           const feature = e.features[0];
           const props = feature.properties;
-          const classification = props[classificationField] || 'Non analysée';
-          let bgColor = '#ffffff'; // Determine based on classification as in MapView
-          // ... (bgColor logic from MapView)
+
+          // Current period data
+          const currentClassificationField = `classification_${currentPeriod}`;
+          const currentPopulationTotalField = `population_total_${currentPeriod}`;
+          const currentPopulationPh2Field = `population_ph2_${currentPeriod}`;
+          const currentPopulationPh3Field = `population_ph3_${currentPeriod}`;
+          const currentLevelField = `level_${currentPeriod}`;
+          const currentClassificationValue = props[currentClassificationField] || 'Non analysée';
+
+          // Other period data
+          const otherPopulationTotalField = `population_total_${otherPeriod}`;
+          const otherPopulationPh2Field = `population_ph2_${otherPeriod}`;
+          const otherPopulationPh3Field = `population_ph3_${otherPeriod}`;
+
+          // Calculate differences (simple numeric subtraction, ensure values are numbers)
+          const getNum = val => (typeof val === 'number' ? val : parseFloat(String(val).replace(/,/g, ''))) || 0;
+
+          const popTotalCurrent = getNum(props[currentPopulationTotalField]);
+          const popTotalOther = getNum(props[otherPopulationTotalField]);
+          const popTotalDiff = popTotalCurrent - popTotalOther;
+
+          const popPh2Current = getNum(props[currentPopulationPh2Field]);
+          const popPh2Other = getNum(props[otherPopulationPh2Field]);
+          const popPh2Diff = popPh2Current - popPh2Other;
+
+          const popPh3Current = getNum(props[currentPopulationPh3Field]);
+          const popPh3Other = getNum(props[otherPopulationPh3Field]);
+          const popPh3Diff = popPh3Current - popPh3Other;
+
+          const formatDiff = (val) => (val > 0 ? `+${val.toLocaleString()}` : val.toLocaleString());
+
+          let bgColor = '#ffffff';
+          if (currentClassificationValue === 'Non analysée') bgColor = '#ffffff';
+          else if (currentClassificationValue === 'Phase 1 : minimal') bgColor = '#d3f3d4';
+          else if (currentClassificationValue === 'Phase 2 : sous pression') bgColor = '#ffe252';
+          else if (currentClassificationValue === 'Phase 3 : crises') bgColor = '#fa890f';
+          else if (currentClassificationValue === 'Phase 4 : urgence') bgColor = '#eb3333';
+          else if (currentClassificationValue === 'Phase 5 : famine') bgColor = '#60090b';
+          else if (currentClassificationValue === 'inaccessible') bgColor = '#cccccc';
+
+          const countryNameForFlag = props["admin0Name"] || "";
+          const flagName = countryNameForFlag.toLowerCase().replace(/\s+/g, '-');
+          const flagURL = `/flags/${flagName}.svg`;
+
+          const aggregatedNotice = (props[currentLevelField] === 1 || props[currentLevelField] === '1' || props[currentLevelField] === "true" || props[currentLevelField] === true)
+            ? `<div class="popup-aggregated-box"><div class="popup-aggregated">⚠️ ${t("dataAggregated")}</div></div>`
+            : '';
 
           const popupContent = `
             <div class="popup-content">
+              ${aggregatedNotice}
               <div class="popup-header-flag">
                 <h3 class="popup-header">
                   ${props["admin2Name"] || t("unknownDistrict")} - ${props["admin1Name"] || t("unknownRegion")}
                 </h3>
+                <div class="popup-flag">
+                  <img src="${flagURL}" alt="${t("flag")}" />
+                </div>
               </div>
               <div class="popup-subheader-box" style="background-color: ${bgColor};">
-                <h4 class="popup-subheader">${translateClassification(classification, t)}</h4>
+                <h4 class="popup-subheader">${translateClassification(currentClassificationValue, t)}</h4>
               </div>
               <div class="popup-details">
-                <p><strong>${t("populationTotal")}:</strong> ${props[`population_total_${period}`] || t("nA")}</p>
-                {/* Add more details as needed */}
+                <table class="popup-table">
+                  <thead>
+                    <tr>
+                      <th>${t("indicator")}</th>
+                      <th>${formatPeriod(currentPeriod, currentLocale)}</th>
+                      <th>${t("difference")} (${formatPeriod(otherPeriod, currentLocale)})</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>${t("populationTotal")}:</strong></td>
+                      <td>${popTotalCurrent.toLocaleString() || t("nA")}</td>
+                      <td>${formatDiff(popTotalDiff)}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>${t("populationPh2")}:</strong></td>
+                      <td>${popPh2Current.toLocaleString() || t("nA")}</td>
+                      <td>${formatDiff(popPh2Diff)}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>${t("populationPh3")}:</strong></td>
+                      <td>${popPh3Current.toLocaleString() || t("nA")}</td>
+                      <td>${formatDiff(popPh3Diff)}</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           `;
@@ -261,58 +287,53 @@ const CountryMapView = ({ country, period, data }) => {
     });
 
     return () => {
-      if (mapRef.current) {
-        mapRef.current.remove();
-        mapRef.current = null;
-      }
+      if (mapRef.current) { mapRef.current.remove(); mapRef.current = null; }
       setIsMapLoaded(false);
     };
-  }, [country, period, data, t]); // Add t to dependency array
+  }, [country, currentPeriod, otherPeriod, data, t, currentLocale]); // Added currentLocale and otherPeriod
 
-  // Effect to update map when period or data changes, if map is already loaded
   useEffect(() => {
-    if (!isMapLoaded || !mapRef.current || !period) return;
-
+    if (!isMapLoaded || !mapRef.current || !currentPeriod) return;
     const map = mapRef.current;
     const layerId = 'country-fill';
-
     if (map.getLayer(layerId)) {
-      const classificationField = `classification_${period}`;
+      const classificationField = `classification_${currentPeriod}`;
       const fillColorExpression = [
-        'match',
-        ['get', classificationField],
-        'Non analysée', '#ffffff',
-        'Phase 1 : minimal', '#d3f3d4',
-        'Phase 2 : sous pression', '#ffe252',
-        'Phase 3 : crises', '#fa890f',
-        'Phase 4 : urgence', '#eb3333',
-        'Phase 5 : famine', '#60090b',
-        'inaccessible', '#cccccc',
-        /* default */ '#ffffff'
+        'match', ['get', classificationField],
+        'Non analysée', '#ffffff', 'Phase 1 : minimal', '#d3f3d4',
+        'Phase 2 : sous pression', '#ffe252', 'Phase 3 : crises', '#fa890f',
+        'Phase 4 : urgence', '#eb3333', 'Phase 5 : famine', '#60090b',
+        'inaccessible', '#cccccc', '#ffffff'
       ];
       map.setPaintProperty(layerId, 'fill-color', fillColorExpression);
     }
-
-    // If data source also needs updating (e.g. if `data` prop changes structure for the period)
     if (map.getSource('country-data') && data) {
+        // Re-filter data if country or relevant properties change, though main filtering is on load.
+        // This ensures data source is updated if 'data' prop itself changes structure/content for the country.
+        const countryISO3 = countryNameToISO3[country];
+        let featuresForCountry;
+        if (countryISO3 && data.length > 0 && data[0].properties.iso_a3) {
+            featuresForCountry = data.filter(f => f.properties.iso_a3 === countryISO3);
+            if (featuresForCountry.length === 0) {
+                featuresForCountry = data.filter(f => f.properties.admin0Name === country);
+            }
+        } else {
+            featuresForCountry = data.filter(f => f.properties.admin0Name === country);
+        }
         map.getSource('country-data').setData({
-            type: 'FeatureCollection',
-            features: data.filter(f => f.properties.admin0Name === country)
+            type: 'FeatureCollection', features: featuresForCountry
         });
     }
+  }, [country, currentPeriod, data, isMapLoaded]); // Removed country from here as it's in main effect, re-filtering is complex if only country changes without full reload.
 
-  }, [period, data, isMapLoaded, country]); // Add country here as well for data filtering consistency
-
-
-  if (!country || !period) {
+  if (!country || !currentPeriod) {
     return <div>{t("selectCountryAndPeriod")}</div>;
   }
 
   return (
     <div className="country-map-view">
-      <div className="country-map-title">{`${country} - ${formatPeriod(period, currentLocale)}`}</div>
+      <div className="country-map-title">{`${country} - ${formatPeriod(currentPeriod, currentLocale)}`}</div>
       <div ref={mapContainerRef} className="country-map-container-inner" />
-      {/* Optionally, add a small legend or title here */}
     </div>
   );
 };

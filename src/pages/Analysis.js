@@ -85,24 +85,37 @@ export default function Analysis() {
                     onSelect={setSelectedRegionData}
                   />
                   {/* Conditional rendering of CountryMapView components */}
-                  {getCurrentAdminLevel(selectedRegionData.region) === "admin0" && selectedRegionData.region.admin0 && selectedRegionData.period1 && selectedRegionData.period2 && geojsonFeatures.length > 0 && (
-                    <div className="country-maps-container" style={{ display: 'flex', justifyContent: 'space-around', margin: '20px 0' }}>
-                      <div style={{ width: '48%' }}> {/* Adjusted width for better spacing */}
-                        <CountryMapView
-                          country={selectedRegionData.region.admin0}
-                          period={selectedRegionData.period1}
-                          data={geojsonFeatures}
-                        />
+                  {selectedRegionData.period1 && selectedRegionData.period2 && geojsonFeatures.length > 0 ? (
+                    selectedRegionData.region.admin0 ? (
+                      <div className="country-maps-container" style={{ display: 'flex', justifyContent: 'space-around', margin: '20px 0' }}>
+                        <div style={{ width: '48%' }}>
+                          <CountryMapView
+                            country={selectedRegionData.region.admin0}
+                            currentPeriod={selectedRegionData.period1}
+                            otherPeriod={selectedRegionData.period2}
+                            data={geojsonFeatures}
+                          />
+                        </div>
+                        <div style={{ width: '48%' }}>
+                          <CountryMapView
+                            country={selectedRegionData.region.admin0}
+                            currentPeriod={selectedRegionData.period2}
+                            otherPeriod={selectedRegionData.period1}
+                            data={geojsonFeatures}
+                          />
+                        </div>
                       </div>
-                      <div style={{ width: '48%' }}> {/* Adjusted width for better spacing */}
-                        <CountryMapView
-                          country={selectedRegionData.region.admin0}
-                          period={selectedRegionData.period2}
-                          data={geojsonFeatures}
-                        />
+                    ) : (
+                      <div className="country-maps-container" style={{ display: 'flex', justifyContent: 'space-around', margin: '20px 0' }}>
+                        <div className="country-map-placeholder" style={{ width: '48%', height: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed #ccc', backgroundColor: '#f9f9f9' }}>
+                          <p>{t("selectCountryPrompt")}</p>
+                        </div>
+                        <div className="country-map-placeholder" style={{ width: '48%', height: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed #ccc', backgroundColor: '#f9f9f9' }}>
+                          <p>{t("selectCountryPrompt")}</p>
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )
+                  ) : null}
                   <ComparisonTable
                     regionSelection={selectedRegionData.region}
                     period1={selectedRegionData.period1}
