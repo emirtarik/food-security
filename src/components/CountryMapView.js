@@ -4,6 +4,7 @@ import mapboxgl from 'mapbox-gl';
 import '../styles/MapView.css'; // Keep for potential shared popup styles
 import '../styles/CountryMapView.css'; // Import new dedicated styles
 import { useTranslationHook } from "../i18n";
+import { countryNameToISO3, countryBoundingBoxes } from '../utils/mapCoordinates';
 
 // Set your Mapbox access token.
 mapboxgl.accessToken =
@@ -105,77 +106,78 @@ const CountryMapView = ({ country, period, data }) => {
   useEffect(() => {
     if (!mapContainerRef.current || !country || !period || !data) return;
 
-    // Find the country feature to determine its bounding box or center
-    const countryFeature = data.find(
-      (f) => f.properties.admin0Name === country
-    );
-
-    let mapCenter = [0, 0]; // Default center
-    let mapZoom = 2;       // Default zoom
-
-    if (countryFeature && countryFeature.geometry) {
-      // Simplistic way to get a center; for complex polygons, this might not be ideal.
-      // A proper library like turf.js would be better for centroid calculation or bounds.
-      if (countryFeature.geometry.type === 'Point') {
-        mapCenter = countryFeature.geometry.coordinates;
-        mapZoom = 6; // Zoom in more for point features if they represent small countries
-      } else if (countryFeature.geometry.type === 'Polygon' || countryFeature.geometry.type === 'MultiPolygon') {
-        // For simplicity, let's try to find a representative point from the first polygon's first coordinate
-        // This is a very rough approximation. A proper bounding box calculation is needed for robust zooming.
-        try {
-            const firstCoordinates = countryFeature.geometry.type === 'Polygon'
-                ? countryFeature.geometry.coordinates[0][0]
-                : countryFeature.geometry.coordinates[0][0][0];
-            if (firstCoordinates && firstCoordinates.length === 2) {
-                mapCenter = firstCoordinates;
-            }
-             // Attempt to calculate bounds (very basic)
-            let minLng, maxLng, minLat, maxLat;
-            const allCoords = countryFeature.geometry.type === 'Polygon'
-                ? countryFeature.geometry.coordinates.flat(1)
-                : countryFeature.geometry.coordinates.flat(2);
-
-            allCoords.forEach(coord => {
-                if (minLng === undefined || coord[0] < minLng) minLng = coord[0];
-                if (maxLng === undefined || coord[0] > maxLng) maxLng = coord[0];
-                if (minLat === undefined || coord[1] < minLat) minLat = coord[1];
-                if (maxLat === undefined || coord[1] > maxLat) maxLat = coord[1];
-            });
-
-            if (minLng !== undefined) {
-                mapCenter = [(minLng + maxLng) / 2, (minLat + maxLat) / 2];
-                // Basic zoom adjustment based on extent - this is highly approximate
-                const lngDiff = maxLng - minLng;
-                const latDiff = maxLat - minLat;
-                if (lngDiff > 30 || latDiff > 30) mapZoom = 3;
-                else if (lngDiff > 10 || latDiff > 10) mapZoom = 4;
-                else if (lngDiff > 5 || latDiff > 5) mapZoom = 5;
-                else mapZoom = 6;
-            }
-
-        } catch (e) {
-            console.error("Error processing country geometry for map center:", e);
-        }
-      }
-    }
-
+    const countryISO3 = countryNameToISO3[country];
+    const bbox = countryISO3 ? countryBoundingBoxes[countryISO3] : null;
 
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: 'mapbox://styles/mkmd/cm6p4kq7i00ty01sa3iz31788', // Same style as MapView
-      center: mapCenter,
-      zoom: mapZoom,
+      // Center and zoom will be set by fitBounds if bbox is available, otherwise defaults.
+      center: [20, 5], // Default center (e.g., Africa) if no bbox
+      zoom: 2,          // Default zoom if no bbox
     });
     mapRef.current = map;
 
     map.on('load', () => {
       setIsMapLoaded(true);
 
+      if (bbox) {
+        map.fitBounds(bbox, { padding: 20, duration: 0 }); // duration 0 for immediate fit
+      } else {
+        // Fallback: if no bbox, try the old centering logic (or remove if not desired)
+        console.warn(`No bounding box found for country: ${country} (ISO3: ${countryISO3}). Using default view or old logic.`);
+        // Find the country feature to determine its bounding box or center
+        const countryFeature = data.find(
+          (f) => f.properties.admin0Name === country
+        );
+        if (countryFeature && countryFeature.geometry) {
+          if (countryFeature.geometry.type === 'Point') {
+            map.setCenter(countryFeature.geometry.coordinates);
+            map.setZoom(6);
+          } else if (countryFeature.geometry.type === 'Polygon' || countryFeature.geometry.type === 'MultiPolygon') {
+            try {
+              let minLng, maxLng, minLat, maxLat;
+              const allCoords = countryFeature.geometry.type === 'Polygon'
+                  ? countryFeature.geometry.coordinates.flat(1)
+                  : countryFeature.geometry.coordinates.flat(2);
+
+              allCoords.forEach(coord => {
+                  if (minLng === undefined || coord[0] < minLng) minLng = coord[0];
+                  if (maxLng === undefined || coord[0] > maxLng) maxLng = coord[0];
+                  if (minLat === undefined || coord[1] < minLat) minLat = coord[1];
+                  if (maxLat === undefined || coord[1] > maxLat) maxLat = coord[1];
+              });
+
+              if (minLng !== undefined) {
+                map.fitBounds([[minLng, minLat], [maxLng, maxLat]], { padding: 20, duration: 0 });
+              }
+            } catch (e) {
+                console.error("Error processing country geometry for fallback map center:", e);
+            }
+          }
+        }
+      }
+
+      // Data source setup: Try filtering by ISO3 if available, otherwise fallback to admin0Name.
+      let featuresForCountry;
+      if (countryISO3 && data.length > 0 && data[0].properties.iso_a3) {
+        // If countryISO3 is known and features have an 'iso_a3' property
+        featuresForCountry = data.filter(f => f.properties.iso_a3 === countryISO3);
+        if (featuresForCountry.length === 0) {
+          // Fallback if no features match by ISO (e.g. data uses different ISO property or name mismatch)
+          console.warn(`No features found for ISO3 ${countryISO3}. Falling back to filtering by admin0Name for ${country}.`);
+          featuresForCountry = data.filter(f => f.properties.admin0Name === country);
+        }
+      } else {
+        // Fallback if countryISO3 is not known or features don't have 'iso_a3'
+        featuresForCountry = data.filter(f => f.properties.admin0Name === country);
+      }
+
       map.addSource('country-data', {
         type: 'geojson',
         data: {
           type: 'FeatureCollection',
-          features: data.filter(f => f.properties.admin0Name === country) // Filter data for the specific country
+          features: featuresForCountry
         }
       });
 
