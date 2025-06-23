@@ -74,6 +74,18 @@ function formatPeriod(periodKey, locale) { // Renamed param for clarity
   return `${year} ${prefix}${monthName}`;
 }
 
+function getPhaseNumber(classificationString) {
+  if (!classificationString) return -1;
+  const lowerCased = classificationString.toLowerCase();
+  if (lowerCased.includes("phase 1")) return 1;
+  if (lowerCased.includes("phase 2")) return 2;
+  if (lowerCased.includes("phase 3")) return 3;
+  if (lowerCased.includes("phase 4")) return 4;
+  if (lowerCased.includes("phase 5")) return 5;
+  if (lowerCased.includes("inaccessible")) return 6;
+  if (lowerCased.includes("non analysée")) return 0; // Represents "no data" or "not analyzed"
+  return -1; // For unknown strings or if parsing fails
+}
 
 const CountryMapView = ({ country, currentPeriod, otherPeriod, data }) => {
   const { t, i18n = {} } = useTranslationHook("analysis") || {};
@@ -85,20 +97,19 @@ const CountryMapView = ({ country, currentPeriod, otherPeriod, data }) => {
 
   const translateClassification = (classification, t) => {
     switch (classification) {
-      case "Non analysée": return t("nonAnalyzed");
-      case "Phase 1 : minimal": return t("phase1");
-      case "Phase 2 : sous pression": return t("phase2");
-      case "Phase 3 : crises": return t("phase3");
-      case "Phase 4 : urgence": return t("phase4");
-      case "Phase 5 : famine": return t("phase5");
-      case "inaccessible": return t("inaccessible");
-      default: return classification || t("unknownClassification");
+      case "Non analysée": return t("nonAnalyzed", "Non analysée");
+      case "Phase 1 : minimal": return t("phase1", "Phase 1 : minimal");
+      case "Phase 2 : sous pression": return t("phase2", "Phase 2 : sous pression");
+      case "Phase 3 : crises": return t("phase3", "Phase 3 : crises");
+      case "Phase 4 : urgence": return t("phase4", "Phase 4 : urgence");
+      case "Phase 5 : famine": return t("phase5", "Phase 5 : famine");
+      case "inaccessible": return t("inaccessible", "Inaccessible");
+      default: return classification || t("unknownClassification", "Unknown");
     }
   };
 
   useEffect(() => {
-    // Ensure currentPeriod is defined before proceeding
-    if (!mapContainerRef.current || !country || !currentPeriod || !data) return;
+    if (!mapContainerRef.current || !country || !currentPeriod || !otherPeriod || !data) return; // Ensure otherPeriod is also checked
 
     const countryISO3 = countryNameToISO3[country];
     const bbox = countryISO3 ? countryBoundingBoxes[countryISO3] : null;
@@ -190,20 +201,38 @@ const CountryMapView = ({ country, currentPeriod, otherPeriod, data }) => {
           const feature = e.features[0];
           const props = feature.properties;
 
-          // Current period data
           const currentClassificationField = `classification_${currentPeriod}`;
           const currentPopulationTotalField = `population_total_${currentPeriod}`;
           const currentPopulationPh2Field = `population_ph2_${currentPeriod}`;
           const currentPopulationPh3Field = `population_ph3_${currentPeriod}`;
           const currentLevelField = `level_${currentPeriod}`;
-          const currentClassificationValue = props[currentClassificationField] || 'Non analysée';
+          const currentClassificationValue = props[currentClassificationField] || t('nonAnalyzed', 'Non analysée');
 
-          // Other period data
+          const otherClassificationField = `classification_${otherPeriod}`;
+          const otherClassificationValue = props[otherClassificationField] || t('nonAnalyzed', 'Non analysée');
+
+          let classificationChangeHTML = '';
+          const currentPhaseNum = getPhaseNumber(currentClassificationValue);
+          const otherPhaseNum = getPhaseNumber(otherClassificationValue);
+
+          // Compare only if both phases are valid (not -1) and not "Non analysée" (0)
+          if (currentPhaseNum > 0 && otherPhaseNum > 0) {
+            if (currentPhaseNum < otherPhaseNum) {
+              classificationChangeHTML = `<span style="color: green; margin-left: 5px;">(${t("better", "Better")})</span>`;
+            } else if (currentPhaseNum > otherPhaseNum) {
+              classificationChangeHTML = `<span style="color: red; margin-left: 5px;">(${t("worse", "Worse")})</span>`;
+            }
+          } else if (currentPhaseNum > 0 && otherPhaseNum === 0) { // Current is analyzed, other is not
+             classificationChangeHTML = `<span style="color: orange; margin-left: 5px;">(${t("nowAnalyzed", "Now Analyzed")})</span>`;
+          } else if (currentPhaseNum === 0 && otherPhaseNum > 0) { // Current is not analyzed, other was
+             classificationChangeHTML = `<span style="color: gray; margin-left: 5px;">(${t("previouslyAnalyzed", "Previously Analyzed")})</span>`;
+          }
+
+
           const otherPopulationTotalField = `population_total_${otherPeriod}`;
           const otherPopulationPh2Field = `population_ph2_${otherPeriod}`;
           const otherPopulationPh3Field = `population_ph3_${otherPeriod}`;
 
-          // Calculate differences (simple numeric subtraction, ensure values are numbers)
           const getNum = val => (typeof val === 'number' ? val : parseFloat(String(val).replace(/,/g, ''))) || 0;
 
           const popTotalCurrent = getNum(props[currentPopulationTotalField]);
@@ -221,13 +250,13 @@ const CountryMapView = ({ country, currentPeriod, otherPeriod, data }) => {
           const formatDiff = (val) => (val > 0 ? `+${val.toLocaleString()}` : val.toLocaleString());
 
           let bgColor = '#ffffff';
-          if (currentClassificationValue === 'Non analysée') bgColor = '#ffffff';
-          else if (currentClassificationValue === 'Phase 1 : minimal') bgColor = '#d3f3d4';
-          else if (currentClassificationValue === 'Phase 2 : sous pression') bgColor = '#ffe252';
-          else if (currentClassificationValue === 'Phase 3 : crises') bgColor = '#fa890f';
-          else if (currentClassificationValue === 'Phase 4 : urgence') bgColor = '#eb3333';
-          else if (currentClassificationValue === 'Phase 5 : famine') bgColor = '#60090b';
-          else if (currentClassificationValue === 'inaccessible') bgColor = '#cccccc';
+          if (currentClassificationValue === t('nonAnalyzed', 'Non analysée')) bgColor = '#ffffff';
+          else if (currentClassificationValue === t('phase1', 'Phase 1 : minimal')) bgColor = '#d3f3d4';
+          else if (currentClassificationValue === t('phase2', 'Phase 2 : sous pression')) bgColor = '#ffe252';
+          else if (currentClassificationValue === t('phase3', 'Phase 3 : crises')) bgColor = '#fa890f';
+          else if (currentClassificationValue === t('phase4', 'Phase 4 : urgence')) bgColor = '#eb3333';
+          else if (currentClassificationValue === t('phase5', 'Phase 5 : famine')) bgColor = '#60090b';
+          else if (currentClassificationValue === t('inaccessible', 'Inaccessible')) bgColor = '#cccccc';
 
           const countryNameForFlag = props["admin0Name"] || "";
           const flagName = countryNameForFlag.toLowerCase().replace(/\s+/g, '-');
@@ -242,39 +271,32 @@ const CountryMapView = ({ country, currentPeriod, otherPeriod, data }) => {
               ${aggregatedNotice}
               <div class="popup-header-flag">
                 <h3 class="popup-header">
-                  ${props["admin2Name"] || t("unknownDistrict")} - ${props["admin1Name"] || t("unknownRegion")}
+                  ${props["admin2Name"] || t("unknownDistrict", "Unknown District")} - ${props["admin1Name"] || t("unknownRegion", "Unknown Region")}
                 </h3>
                 <div class="popup-flag">
-                  <img src="${flagURL}" alt="${t("flag")}" />
+                  <img src="${flagURL}" alt="${t("flag", "Flag")}" />
                 </div>
               </div>
               <div class="popup-subheader-box" style="background-color: ${bgColor};">
-                <h4 class="popup-subheader">${translateClassification(currentClassificationValue, t)}</h4>
+                <h4 class="popup-subheader">${translateClassification(currentClassificationValue, t)} ${classificationChangeHTML}</h4>
               </div>
               <div class="popup-details">
                 <table class="popup-table">
-                  <thead>
-                    <tr>
-                      <th>${t("indicator")}</th>
-                      <th>${formatPeriod(currentPeriod, currentLocale)}</th>
-                      <th>${t("difference")} (${formatPeriod(otherPeriod, currentLocale)})</th>
-                    </tr>
-                  </thead>
                   <tbody>
                     <tr>
-                      <td><strong>${t("populationTotal")}:</strong></td>
-                      <td>${popTotalCurrent.toLocaleString() || t("nA")}</td>
-                      <td>${formatDiff(popTotalDiff)}</td>
+                      <td><strong>${t("populationTotal", "Total Pop.")}:</strong></td>
+                      <td>${popTotalCurrent.toLocaleString() || t("nA", "N/A")}</td>
+                      <td>${formatDiff(popTotalDiff)}</td> {/* Stays black */}
                     </tr>
                     <tr>
-                      <td><strong>${t("populationPh2")}:</strong></td>
-                      <td>${popPh2Current.toLocaleString() || t("nA")}</td>
-                      <td>${formatDiff(popPh2Diff)}</td>
+                      <td><strong>${t("populationPh2", "Pop. Phase 2+")}:</strong></td>
+                      <td>${popPh2Current.toLocaleString() || t("nA", "N/A")}</td>
+                      <td style="color: ${popPh2Diff > 0 ? 'red' : (popPh2Diff < 0 ? 'green' : 'black')};">${formatDiff(popPh2Diff)}</td>
                     </tr>
                     <tr>
-                      <td><strong>${t("populationPh3")}:</strong></td>
-                      <td>${popPh3Current.toLocaleString() || t("nA")}</td>
-                      <td>${formatDiff(popPh3Diff)}</td>
+                      <td><strong>${t("populationPh3", "Pop. Phase 3+")}:</strong></td>
+                      <td>${popPh3Current.toLocaleString() || t("nA", "N/A")}</td>
+                      <td style="color: ${popPh3Diff > 0 ? 'red' : (popPh3Diff < 0 ? 'green' : 'black')};">${formatDiff(popPh3Diff)}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -290,7 +312,7 @@ const CountryMapView = ({ country, currentPeriod, otherPeriod, data }) => {
       if (mapRef.current) { mapRef.current.remove(); mapRef.current = null; }
       setIsMapLoaded(false);
     };
-  }, [country, currentPeriod, otherPeriod, data, t, currentLocale]); // Added currentLocale and otherPeriod
+  }, [country, currentPeriod, otherPeriod, data, t, currentLocale, i18n]); // Added i18n to deps for t() updates
 
   useEffect(() => {
     if (!isMapLoaded || !mapRef.current || !currentPeriod) return;
@@ -308,8 +330,6 @@ const CountryMapView = ({ country, currentPeriod, otherPeriod, data }) => {
       map.setPaintProperty(layerId, 'fill-color', fillColorExpression);
     }
     if (map.getSource('country-data') && data) {
-        // Re-filter data if country or relevant properties change, though main filtering is on load.
-        // This ensures data source is updated if 'data' prop itself changes structure/content for the country.
         const countryISO3 = countryNameToISO3[country];
         let featuresForCountry;
         if (countryISO3 && data.length > 0 && data[0].properties.iso_a3) {
@@ -324,10 +344,10 @@ const CountryMapView = ({ country, currentPeriod, otherPeriod, data }) => {
             type: 'FeatureCollection', features: featuresForCountry
         });
     }
-  }, [country, currentPeriod, data, isMapLoaded]); // Removed country from here as it's in main effect, re-filtering is complex if only country changes without full reload.
+  }, [country, currentPeriod, data, isMapLoaded]);
 
-  if (!country || !currentPeriod) {
-    return <div>{t("selectCountryAndPeriod")}</div>;
+  if (!country || !currentPeriod || !otherPeriod) { // Check otherPeriod here too
+    return <div>{t("selectCountryAndPeriod", "Please select a country and both time periods.")}</div>;
   }
 
   return (
