@@ -33,7 +33,7 @@
     "region": "Region",
     "classification": "Classification",
     "populationTotal": "Pop. Total",
-    "population": "Population",
+    "population": "Pop.",
     "populationPh2": "Pop. Ph 2",
     "populationPh3": "Pop. Ph 3+",
     "change": "Change",
@@ -43,7 +43,7 @@
     "nA": "N/A",
     "analysisOfChange": "Analysis of Change",
     "zoneChangeHeader": "Ph3+ Zones",
-    "populationChangeHeader": "Ph3+ Population",
+    "populationChangeHeader": "Ph3+ Pop.",
     "loadingAdmin1Data": "Loading Admin1 data...",
     "loadingAdmin2Data": "Loading Admin2 data...",
     "expandToSeeMoreClassification": "Expand to see more"
