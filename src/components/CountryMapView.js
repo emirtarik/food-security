@@ -77,7 +77,10 @@ function formatPeriod(period, locale) {
 
 
 const CountryMapView = ({ country, period, data }) => {
-  const { t, i18n } = useTranslationHook("analysis"); // Ensure i18n is available for locale
+  // Provide default for i18n and then safely access language
+  const { t, i18n = {} } = useTranslationHook("analysis") || {};
+  const currentLocale = i18n.language || (typeof navigator !== "undefined" && navigator.language) || "en";
+
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
@@ -305,7 +308,7 @@ const CountryMapView = ({ country, period, data }) => {
 
   return (
     <div className="country-map-view">
-      <div className="country-map-title">{`${country} - ${formatPeriod(period, i18n.language)}`}</div>
+      <div className="country-map-title">{`${country} - ${formatPeriod(period, currentLocale)}`}</div>
       <div ref={mapContainerRef} className="country-map-container-inner" />
       {/* Optionally, add a small legend or title here */}
     </div>
