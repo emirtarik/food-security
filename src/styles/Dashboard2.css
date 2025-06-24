@@ -1,0 +1,128 @@
+/* src/styles/Dashboard2.css */
+
+.dashboard2-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f9f9f9; /* Light grey background for the page */
+}
+
+.dashboard2-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background-color: #ffffff; /* White background for header */
+  border-bottom: 1px solid #e0e0e0; /* Light border */
+  color: #333;
+}
+
+.dashboard2-header .flag-container {
+  display: flex;
+  align-items: center;
+}
+
+.dashboard2-header .country-flag {
+  width: 40px; /* Adjust size as needed */
+  height: auto;
+  margin-right: 15px;
+  border: 1px solid #ccc;
+}
+
+.dashboard2-header .title-container {
+  text-align: center;
+  flex-grow: 1;
+}
+
+.dashboard2-header .title-container h2 {
+  margin: 0;
+  font-size: 1.8em;
+  color: #0056b3; /* Accent color for title */
+}
+
+.dashboard2-header .title-container h4 {
+  margin: 5px 0 0;
+  font-size: 1em;
+  color: #555;
+}
+
+.dashboard2-header .logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.dashboard2-header .logout-button {
+  padding: 8px 15px;
+  margin-right: 20px;
+  font-size: 0.9em;
+  color: white;
+  background-color: #dc3545; /* Red for logout */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.dashboard2-header .logout-button:hover {
+  background-color: #c82333; /* Darker red on hover */
+}
+
+.dashboard2-header .institution-logo {
+  height: 40px; /* Adjust size as needed */
+}
+
+.dashboard2-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column; /* Stack sections vertically */
+  gap: 20px; /* Space between sections */
+  flex-grow: 1;
+}
+
+.country-specific-interface,
+.country-map-view-container,
+.project-data-submission-placeholder {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.country-specific-interface h3,
+.country-map-view-container h3,
+.project-data-submission-placeholder h4 {
+  margin-top: 0;
+  color: #0056b3;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.project-data-submission-placeholder p em {
+  color: #6c757d; /* Bootstrap's text-muted color */
+}
+
+/* Basic styling for the CountryMapView component if it doesn't have its own that fits */
+.country-map-view-container .country-map-container-inner {
+  height: 400px; /* Default height, can be adjusted */
+  width: 100%;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+/* Responsive adjustments (optional) */
+@media (min-width: 992px) { /* Large devices (desktops, 992px and up) */
+  .dashboard2-content {
+    flex-direction: row; /* Side-by-side layout for larger screens */
+    align-items: flex-start; /* Align items to the top */
+  }
+
+  .country-specific-interface {
+    flex: 1; /* Takes up available space */
+  }
+
+  .country-map-view-container {
+    flex: 1; /* Takes up available space */
+    max-width: 50%; /* Or a fixed width, depending on design */
+  }
+}
