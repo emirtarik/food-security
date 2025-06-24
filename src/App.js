@@ -30,6 +30,10 @@ const LazyLogin = lazy(() => import('./pages/Login'));
 const LazyDashboard = lazy(() => import('./pages/Dashboard'));
 const LazyQuestionnaire = lazy(() => import('./pages/Questionnaire')); // Import the Questionnaire page
 
+// NEW lazy imports for ModuleSelection and Dashboard2
+const LazyModuleSelection = lazy(() => import('./pages/ModuleSelection'));
+const LazyDashboard2 = lazy(() => import('./pages/Dashboard2'));
+
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [role, setRole] = useState(null); // Track the user's role
@@ -68,11 +72,15 @@ export default function App() {
       <Router basename="/">
         <Routes>
           <Route path="/" element={<Home />} />
+
+          {/* /login route: redirect masters to module-selection, others to their questionnaire */}
           <Route
             path="/login"
             element={
-              isLoggedIn ? (
-                <Navigate to="/questionnaire/section1" replace />
+              isLoggedIn && role !== 'master' ? (
+                <Navigate to={`/questionnaire/${role || 'section1'}`} replace />
+              ) : isLoggedIn && role === 'master' ? (
+                <Navigate to="/module-selection" replace />
               ) : (
                 <Suspense fallback={<Loading />}>
                   <LazyLogin onLogin={handleLogin} />
@@ -80,6 +88,8 @@ export default function App() {
               )
             }
           />
+
+          {/* Protected questionnaire route */}
           <Route
             path="/questionnaire/:section"
             element={
@@ -89,7 +99,7 @@ export default function App() {
                     role={role}
                     country={country}
                     onSubmit={handleQuestionnaireSubmit}
-                    setIsLoggedIn={setIsLoggedIn} // Pass down the state setters as props
+                    setIsLoggedIn={setIsLoggedIn}
                     setRole={setRole}
                     setCountry={setCountry}
                   />
@@ -99,6 +109,8 @@ export default function App() {
               )
             }
           />
+
+          {/* Protected dashboard route */}
           <Route
             path="/dashboard"
             element={
@@ -106,7 +118,7 @@ export default function App() {
                 <Suspense fallback={<Loading />}>
                   <LazyDashboard
                     responses={submittedResponses}
-                    role={role} // Pass the role to Dashboard
+                    role={role}
                     country={country}
                     setIsLoggedIn={setIsLoggedIn}
                     setRole={setRole}
@@ -118,6 +130,50 @@ export default function App() {
               )
             }
           />
+
+          {/* NEW protected ModuleSelection route for master users */}
+          <Route
+            path="/module-selection"
+            element={
+              isLoggedIn && role === 'master' ? (
+                <Suspense fallback={<Loading />}>
+                  <LazyModuleSelection
+                    role={role}
+                    country={country}
+                    setIsLoggedIn={setIsLoggedIn}
+                    setRole={setRole}
+                    setCountry={setCountry}
+                  />
+                </Suspense>
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+
+          {/* NEW Dashboard2 route: master → Dashboard2, others → their questionnaire */}
+          <Route
+            path="/dashboard2"
+            element={
+              isLoggedIn && role === 'master' ? (
+                <Suspense fallback={<Loading />}>
+                  <LazyDashboard2
+                    role={role}
+                    country={country}
+                    setIsLoggedIn={setIsLoggedIn}
+                    setRole={setRole}
+                    setCountry={setCountry}
+                  />
+                </Suspense>
+              ) : isLoggedIn && role !== 'master' ? (
+                <Navigate to={role ? `/questionnaire/${role}` : '/login'} replace />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+
+          {/* Other public and protected routes */}
           <Route path="/analysis-and-response" element={<Suspense fallback={<Loading />}><LazyAnalysis /></Suspense>} />
           <Route path="/analysis" element={<Suspense fallback={<Loading />}><LazyAnalysis /></Suspense>} />
           <Route path="/analysis-and-response/analysis" element={<Navigate to="/analysis" />} />
@@ -126,9 +182,9 @@ export default function App() {
           <Route path="/analysis-and-response/toolkit" element={<Suspense fallback={<Loading />}><LazyToolkit /></Suspense>} />
           <Route path="/analysis-and-response/toolkit/set-of-instruments" element={<Suspense fallback={<Loading />}><LazyInstuments /></Suspense>} />
           <Route path="/analysis-and-response/toolkit/c-gov-san" element={<Suspense fallback={<Loading />}><LazyCGovSAN /></Suspense>} />
-          
+
           <Route path="/resources" element={<Suspense fallback={<Loading />}><LazyResources /></Suspense>} />
-          <Route path="/resources/archive" element={  // NEW: Archive route
+          <Route path="/resources/archive" element={
             <Suspense fallback={<Loading />}>
               <LazyArchive />
             </Suspense>
@@ -147,7 +203,7 @@ export default function App() {
           <Route path="/post/:permalink" element={<Suspense fallback={<Loading />}><LazyPosts /></Suspense>} />
           <Route path="/event-and-opportunities/event/:year/:permalink" element={<Suspense fallback={<Loading />}><LazyEventPage /></Suspense>} />
 
-          {/* Add the TooltipTest Route */}
+          {/* TooltipTest and MapView */}
           <Route
             path="/tooltip-test"
             element={
@@ -156,14 +212,9 @@ export default function App() {
               </Suspense>
             }
           />
+          <Route path="/mapview" element={<MapView />} />
 
-          {/* New Route for the MapView */}
-          <Route
-            path="/mapview"
-            element={<MapView />}
-          />
-
-          {/* Add a 404 route */}
+          {/* 404 fallback */}
           <Route path="*" element={<FourOFour />} />
         </Routes>
       </Router>
