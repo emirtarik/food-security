@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import CountryMapView from '../components/CountryMapView';
+import ProjectDataInput from '../components/ProjectDataInput'; // Import the new component
 import projectsData from '../data/projects.json'; // For future use
-import '../styles/Dashboard2.css'; // We'll create this CSS file next
+import '../styles/Dashboard2.css';
 
 // Mock data for CountryMapView - replace with actual data fetching or props later
 const mockMapData = []; // Or some default structure if CountryMapView requires it
@@ -96,22 +97,7 @@ function Dashboard2({ setIsLoggedIn: appSetIsLoggedIn, setRole: appSetRole, setC
           <p>
             This section will display country-specific information for Module 2.
           </p>
-          {/* Placeholder for future project data submission UI */}
-          <div className="project-data-submission-placeholder">
-            <h4>Project Data Submission (Admin1 Level)</h4>
-            <p>
-              <em>(Project data submission functionality will be implemented here later.)</em>
-            </p>
-            <p>Variables will be based on <code>src/data/projects.json</code>.</p>
-            {/*
-              Example of how projects.json structure might be used:
-              <ul>
-                {projectsData.variables.map(variable => (
-                  <li key={variable.name}>{variable.label_en} ({variable.type})</li>
-                ))}
-              </ul>
-            */}
-          </div>
+          <ProjectDataInput /> {/* Render the new component here */}
         </div>
 
         <div className="country-map-view-container">
