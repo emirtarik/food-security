@@ -32,7 +32,12 @@ function Login({ onLogin }) {
 
         // Call onLogin function with role and navigate to the section
         onLogin(true, role, country);
-        navigate(`/questionnaire/${role}`);
+
+        if (role === 'master') {
+          navigate('/module-selection', { state: { role, country } });
+        } else {
+          navigate(`/questionnaire/${role}`);
+        }
       }
     } catch (error) {
       console.error('Login failed:', error);
