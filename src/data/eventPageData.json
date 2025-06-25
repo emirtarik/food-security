@@ -1,6 +1,49 @@
 [
   {
-    "ID": 30,
+    "ID": 32,
+    "en": {
+      "img": "/uploads/2025/07/Food-systems-FfD4.jpg",
+      "date": "02/07/25",
+      "place": "Virtual event",
+      "title": "Scaling solutions: Improving food and nutrition governance in the Sahel and West Africa",
+      "type": "FFD4",
+      "excerpt": "As part of the 4th International Conference on Financing for Development (FFD4) programme, the OECD/SWAC Secretariat, is hosting a webinar on strengthening food and nutrition security governance in the Sahel and West Africa. Join us to explore how innovative governance tools, inclusive business models and regional partnerships can build more resilient food systems.",
+      "isMarkdown": true,
+      "sections": [
+        {
+          "id": "rub-0",
+          "title": "About",
+          "isMarkdown": true,
+          "markdownPath": "/markdown/2025/07/ffd4-2025_section0.md"
+        }
+      ]
+    },
+    "fr": {
+      "img": "/uploads/2025/07/Food-systems-FfD4.jpg",
+      "date": "02/07/25",
+      "place": "Événement virtuel",
+      "title": "Mettre les solutions à l'échelle : renforcer la gouvernance alimentaire et nutritionnelle au Sahel et en Afrique de l'Ouest",
+      "type": "FFD4",
+      "excerpt": "Dans le cadre du programme de la 4ème Conférence internationale sur le financement du développement (FFD4), le Secrétariat du Club du Sahel et de l'Afrique de l'Ouest (CSAO/OCDE) organise un webinaire sur le renforcement de la gouvernance de la sécurité alimentaire et nutritionnelle au Sahel et en Afrique de l'Ouest. Rejoignez-nous pour explorer comment des outils de gouvernance innovants, des modèles économiques inclusifs et des partenariats régionaux peuvent contribuer à construire des systèmes alimentaires plus résilients.",
+      "isMarkdown": true,
+      "sections": [
+        {
+          "id": "rub-0",
+          "title": "À propos",
+          "isMarkdown": true,
+          "markdownPath": "/markdown/2025/07/ffd4-2025_fr_section0.md"
+        }
+      ]
+    },
+    "year": "2025",
+    "has_content": false,
+    "permalink": "ffd4-july-2025",
+    "date_start": "02/07/25",
+    "date_end": "02/07/25",
+    "zipDownload": null
+  },
+  {
+    "ID": 31,
     "en": {
       "img": "/uploads/2025/05/ECOWAP-May-2025-SavethedateEN.png",
       "date": "26/05/25",
