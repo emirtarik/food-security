@@ -84,8 +84,9 @@ export default function Analysis() {
                     geojsonData={geojsonFeatures}
                     onSelect={setSelectedRegionData}
                   />
+
                   {/* Conditional rendering of CountryMapView components */}
-                  {selectedRegionData.period1 && selectedRegionData.period2 && geojsonFeatures.length > 0 ? (
+                  {/* {selectedRegionData.period1 && selectedRegionData.period2 && geojsonFeatures.length > 0 ? (
                     selectedRegionData.region.admin0 ? (
                       <div className="country-maps-container" style={{ display: 'flex', justifyContent: 'space-around', margin: '20px 0' }}>
                         <div style={{ width: '48%' }}>
@@ -115,7 +116,7 @@ export default function Analysis() {
                         </div>
                       </div>
                     )
-                  ) : null}
+                  ) : null} */}
                   <ComparisonTable
                     regionSelection={selectedRegionData.region}
                     period1={selectedRegionData.period1}
