@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { apiClient } from '../apiClient';
 import ActionPlans from '../components/ActionPlans'; // Import the ActionPlans component
 import Questions from '../components/Questions'; // Import the Questions component
 import QuestionComments from '../components/QuestionComments'; // Import the QuestionComments component
@@ -36,7 +36,6 @@ const flattenQuestionComments = (dataFetched) => {
 };
 
 function Questionnaire({ onSubmit, role, country, setIsLoggedIn, setRole, setCountry }) {
-    const apiUrl = process.env.REACT_APP_API_URL;
 
     const { section } = useParams(); // Get the section from the URL
     const navigate = useNavigate();
@@ -266,9 +265,9 @@ function Questionnaire({ onSubmit, role, country, setIsLoggedIn, setRole, setCou
 
                     if (role === 'master') {
                         // Fetch master responses
-                        const response = await axios.get(`${apiUrl}/master-responses`, {
+                        const response = await apiClient.get('/master-responses', {
                             params: { country, year, month },
-                        });
+                           });
                         dataFetched = response.data;
                         console.log('Fetched master data:', dataFetched);
 
@@ -327,7 +326,7 @@ function Questionnaire({ onSubmit, role, country, setIsLoggedIn, setRole, setCou
                         setExistingDataLoaded(true);
                     } else {
                         // Fetch regular responses
-                        const response = await axios.get(`${apiUrl}/responses`, {
+                        const response = await apiClient.get('/responses', {
                             params: { country, year, month, role },
                         });
                         dataFetched = response.data;
@@ -362,7 +361,7 @@ function Questionnaire({ onSubmit, role, country, setIsLoggedIn, setRole, setCou
 
             fetchExistingResponses();
         }
-    }, [country, year, month, role, apiUrl]);
+    }, [country, year, month, role]);
 
     // Initialize default responses for master users or single section for others
     useEffect(() => {
@@ -495,13 +494,8 @@ function Questionnaire({ onSubmit, role, country, setIsLoggedIn, setRole, setCou
 
             console.log('Saving Data:', JSON.stringify(saveData, null, 2));
 
-            const endpoint = role === 'master' ? `${apiUrl}/submit-master` : `${apiUrl}/submit`;
-
-            await axios.post(endpoint, saveData, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+            const endpoint = role === 'master' ? '/submit-master' : '/submit';
+            await apiClient.post(endpoint, saveData);
 
             alert('Vos réponses ont été sauvegardées.');
         } catch (error) {
@@ -576,13 +570,8 @@ function Questionnaire({ onSubmit, role, country, setIsLoggedIn, setRole, setCou
         console.log('Submitting Data:', JSON.stringify(submissionData, null, 2));
 
         try {
-            const endpoint = role === 'master' ? `${apiUrl}/submit-master` : `${apiUrl}/submit`;
-
-            const response = await axios.post(endpoint, submissionData, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+            const endpoint = role === 'master' ? '/submit-master' : '/submit';
+            const response = await apiClient.post(endpoint, submissionData);
 
             console.log('Submission Response:', response.data);
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { apiClient } from '../apiClient';
 import '../styles/Login.css'; // Import the CSS
 
 function Login({ onLogin }) {
@@ -9,17 +9,12 @@ function Login({ onLogin }) {
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
-  const apiUrl = process.env.REACT_APP_API_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
     try {
-      const response = await axios.post(`${apiUrl}/login`, {
-        username,
-        password,
-      });
-
+      const response = await apiClient.post('/login', { username, password });
       const { country, role } = response.data;
 
       if (response.status === 200) {

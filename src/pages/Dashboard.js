@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom'; 
-import axios from 'axios';
+import { apiClient } from '../apiClient';
 import SummaryTable from '../components/SummaryTable';
 import SummaryGraphs from '../components/SummaryGraphs';
 import PerformanceTable from '../components/PerformanceTable';
@@ -12,7 +12,6 @@ import QuestionComments from '../components/QuestionComments'; // Import the Que
 import '../styles/Dashboard.css';
 
 function Dashboard({ setIsLoggedIn, setRole, setCountry }) {
-  const apiUrl = process.env.REACT_APP_API_URL;
 
   const location = useLocation(); 
   const navigate = useNavigate(); 
@@ -62,7 +61,7 @@ function Dashboard({ setIsLoggedIn, setRole, setCountry }) {
   useEffect(() => {
     const fetchAvailableCountries = async () => {
       try {
-        const { data } = await axios.get(`${apiUrl}/available-countries`);
+        const { data } = await apiClient.get('/available-countries');
         setAvailableCountries(data);
       } catch (error) {
         console.error('Error fetching available countries:', error);
@@ -70,13 +69,13 @@ function Dashboard({ setIsLoggedIn, setRole, setCountry }) {
     };
 
     fetchAvailableCountries();
-  }, [apiUrl]);
+  }, []);
 
   useEffect(() => {
     const fetchAvailableMonths = async () => {
       try {
         if (year && country) {
-          const { data } = await axios.get(`${apiUrl}/available-months`, {
+          const { data } = await apiClient.get('/available-months', {
             params: { country, year },
           });
           setAvailableMonths(data);
@@ -93,13 +92,13 @@ function Dashboard({ setIsLoggedIn, setRole, setCountry }) {
     if (country && year) {
       fetchAvailableMonths();
     }
-  }, [apiUrl, country, year]);
+  }, [country, year]);
 
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
         if (year && month && country) {
-          const { data } = await axios.get(`${apiUrl}/dashboard-responses`, {
+          const { data } = await apiClient.get('/dashboard-responses', {
             params: {
               country,
               year,
@@ -140,7 +139,7 @@ function Dashboard({ setIsLoggedIn, setRole, setCountry }) {
     if (country && year && month) {
       fetchDashboardData();
     }
-  }, [apiUrl, country, year, month]);
+  }, [country, year, month]);
 
   useEffect(() => {
     if (storedResponses && Object.keys(storedResponses).length > 0) {
