@@ -64,7 +64,7 @@
   "scripts": {
     "start": "node server.js",
     "build": "react-scripts build",
-    "build:azure": "set \"GENERATE_SOURCEMAP=false\" && node --max-old-space-size=4096 --openssl-legacy-provider node_modules/react-scripts/scripts/build.js",
+    "build:azure": "set \"GENERATE_SOURCEMAP=false\" && node --max-old-space-size=8192 --openssl-legacy-provider node_modules/react-scripts/scripts/build.js",
     "postinstall": "npm run build:azure",   
     "deploy": "gh-pages -d build",
     "test": "react-scripts test",
