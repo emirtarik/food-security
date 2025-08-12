@@ -33,7 +33,7 @@
   },
   {
     "title": "Summary of conclusions, RPCA restricted meeting 2025",
-    "img": "/uploads/2025/04/2025-04 RPCA - Summary of conclusions - EN.png",
+    "img": "/uploads/2025/04/2025-04-RPCA-Summary-of-conclusions-EN.png",
     "flag": "/images/EN_Co-fundedbytheEU_RGB_POS.png",
     "datecontent": "April 2025",
     "bllink": "/documents/summaryofconclusions-april2025",
@@ -49,7 +49,7 @@
   },
   {
     "title": "Reléve des conclusions, RPCA réunion restreinte 2025",
-    "img": "/uploads/2025/04/2025-04 RPCA - Summary of conclusions - FR.png",
+    "img": "/uploads/2025/04/2025-04-RPCA-Summary-of-conclusions-FR.png",
     "flag": "/images/FR_Co-fundedbytheEU_RGB_POS.png",
     "datecontent": "avril 2025",
     "bllink": "/documents/relévedesconclusions-avril2025",
@@ -62,6 +62,36 @@
       "Langs": "French"
     },
     "permalink": "/uploads/2025/04/2025-04 RPCA - Summary of conclusions - FR.pdf"
+  },
+  {
+    "title": "Draft agenda, restricted meeting 2025",
+    "img": "/uploads/2025/04/EN_RPCA_Draft_Agenda.jpg",
+    "datecontent": "April 2025",
+    "bllink": "/documents/draftagenda-april2025",
+    "content": {
+      "Published": "April 2025",
+      "Description": "",
+      "Countries": "Benin, Burkina Faso, Cabo Verde, Cameroon, ECOWAS area, Chad, CILSS area, Côte d'Ivoire, G5 Sahel area, Gambia, Ghana, Guinea, Guinea-Bissau, Liberia, Liptako-Gourma, Mali, Mauritania, Niger, Nigeria, Senegal, Sierra Leone, Togo, UEMOA area",
+      "Themes": "Agriculture & Value chains, Food security, Gender, Livestock & Pastoralism, Markets, prices & trade, Nutrition, Resilience, Rural-urban links, Social protection",
+      "Scale": "Cross-border, Regional (West Africa)",
+      "Langs": "English"
+    },
+    "permalink": "/uploads/2025/04/EN_RPCA_Draft_Agenda.pdf"
+  },
+  {
+    "title": "Projet d'ordre du jour, réunion restreinte 2025",
+    "img": "/uploads/2025/04/FR_RPCA_Draft_Agenda.jpg",
+    "datecontent": "avril 2025",
+    "bllink": "/documents/draftagenda-april2025-fr",
+    "content": {
+      "Published": "avril 2025",
+      "Description": "",
+      "Countries": "Benin, Burkina Faso, Cabo Verde, Camnpmeroon, ECOWAS area, Chad, CILSS area, Côte d'Ivoire, G5 Sahel area, Gambia, Ghana, Guinea, Guinea-Bissau, Liberia, Liptako-Gourma, Mali, Mauritania, Niger, Nigeria, Senegal, Sierra Leone, Togo, UEMOA area",
+      "Themes": "Agriculture & Value chains, Food security, Gender, Livestock & Pastoralism, Markets, prices & trade, Nutrition, Resilience, Rural-urban links, Social protection",
+      "Scale": "Cross-border, Regional (West Africa)",
+      "Langs": "French"
+    },
+    "permalink": "/uploads/2025/04/FR_RPCA_Draft_Agenda.pdf"
   },
   {
     "title": "Summary of conclusions, 40th annual meeting",
@@ -92,6 +122,36 @@
       "Langs": "French"
     },
     "permalink": "/uploads/2024/12/FR_2024-12_RPCA-Summary_of_conclusions.pdf"
+  },
+  {
+    "title": "Draft agenda, 40th annual meeting",
+    "img": "/uploads/2024/12/EN_Draft_Agenda_Nouakchott_2024.jpg",
+    "datecontent": "December 2024",
+    "bllink": "/documents/draftagenda-december2024",
+    "content": {
+      "Published": "December 2024",
+      "Description": "",
+      "Countries": "Benin, Burkina Faso, Cabo Verde, Cameroon, ECOWAS area, Chad, CILSS area, Côte d'Ivoire, G5 Sahel area, Gambia, Ghana, Guinea, Guinea-Bissau, Liberia, Liptako-Gourma, Mali, Mauritania, Niger, Nigeria, Senegal, Sierra Leone, Togo, UEMOA area",
+      "Themes": "Agriculture & Value chains, Food security, Gender, Livestock & Pastoralism, Markets, prices & trade, Nutrition, Resilience, Rural-urban links, Social protection",
+      "Scale": "Cross-border, Regional (West Africa)",
+      "Langs": "English"
+    },
+    "permalink": "/uploads/2024/12/EN_Draft_Agenda_Nouakchott_2024.pdf"
+  },
+  {
+    "title": "Projet d'ordre du jour, 40e réunion annuelle",
+    "img": "/uploads/2024/12/FR_Projet_dOrdre_du_Jour_Nouakchott_2024.jpg",
+    "datecontent": "décembre 2024",
+    "bllink": "/documents/draftagenda-december2024-fr",
+    "content": {
+      "Published": "décembre 2024",
+      "Description": "",
+      "Countries": "Benin, Burkina Faso, Cabo Verde, Cameroon, ECOWAS area, Chad, CILSS area, Côte d'Ivoire, G5 Sahel area, Gambia, Ghana, Guinea, Guinea-Bissau, Liberia, Liptako-Gourma, Mali, Mauritania, Niger, Nigeria, Senegal, Sierra Leone, Togo, UEMOA area",
+      "Themes": "Agriculture & Value chains, Food security, Gender, Livestock & Pastoralism, Markets, prices & trade, Nutrition, Resilience, Rural-urban links, Social protection",
+      "Scale": "Cross-border, Regional (West Africa)",
+      "Langs": "French"
+    },
+    "permalink": "/uploads/2024/12/FR_Projet_dOrdre_du_Jour_Nouakchott_2024.pdf"
   },
   {
     "title": "Avis PREGEC",
@@ -171,6 +231,36 @@
       "Langs": "English"
     },
     "permalink": "/uploads/2024/04/EN_2024-04_RPCA_NAD_Policy_Brief.pdf"
+  },
+  {
+    "title": "Draft agenda, restricted meeting 2024",
+    "img": "/uploads/2024/04/Draft-agenda-RPCA-2024-EN.jpg",
+    "datecontent": "April 2024",
+    "bllink": "/documents/draftagenda-april2024",
+    "content": {
+      "Published": "April 2024",
+      "Description": "",
+      "Countries": "Benin, Burkina Faso, Cabo Verde, Cameroon, ECOWAS area, Chad, CILSS area, Côte d'Ivoire, G5 Sahel area, Gambia, Ghana, Guinea, Guinea-Bissau, Liberia, Liptako-Gourma, Mali, Mauritania, Niger, Nigeria, Senegal, Sierra Leone, Togo, UEMOA area",
+      "Themes": "Agriculture & Value chains, Food security, Gender, Livestock & Pastoralism, Markets, prices & trade, Nutrition, Resilience, Rural-urban links, Social protection",
+      "Scale": "Cross-border, Regional (West Africa)",
+      "Langs": "English"
+    },
+    "permalink": "/uploads/2024/04/Draft-agenda-RPCA-2024-EN.pdf"
+  },
+  {
+    "title": "Projet d'ordre du jour, réunion restreinte 2024",
+    "img": "/uploads/2024/04/Draft-agenda-RPCA-2024-FR.jpg",
+    "datecontent": "avril 2024",
+    "bllink": "/documents/draftagenda-april2024-fr",
+    "content": {
+      "Published": "avril 2024",
+      "Description": "",
+      "Countries": "Benin, Burkina Faso, Cabo Verde, Cameroon, ECOWAS area, Chad, CILSS area, Côte d'Ivoire, G5 Sahel area, Gambia, Ghana, Guinea, Guinea-Bissau, Liberia, Liptako-Gourma, Mali, Mauritania, Niger, Nigeria, Senegal, Sierra Leone, Togo, UEMOA area",
+      "Themes": "Agriculture & Value chains, Food security, Gender, Livestock & Pastoralism, Markets, prices & trade, Nutrition, Resilience, Rural-urban links, Social protection",
+      "Scale": "Cross-border, Regional (West Africa)",
+      "Langs": "French"
+    },
+    "permalink": "/uploads/2024/04/Draft-agenda-RPCA-2024-FR.pdf"
   },
   {
     "title": "Reléve des conclusions, 39e réunion annuelle",
