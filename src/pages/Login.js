@@ -14,7 +14,7 @@ function Login({ onLogin }) {
     e.preventDefault();
     
     try {
-      const response = await apiClient.post('/login', { username, password });
+      const response = await apiClient.post('/login', { username, password }, { withCredentials: false });
       const { country, role } = response.data;
 
       if (response.status === 200) {

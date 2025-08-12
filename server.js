@@ -12,7 +12,7 @@ app.get('*', (req, res) => {
 });
 
 // use the PORT environment variable, or default to 8080
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
