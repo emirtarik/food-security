@@ -57,6 +57,44 @@ const INSETS = [
   }
 ];
 
+/**
+ * Parse a period key like "October-2024", "2024-10", or "PJune-2025".
+ * Returns { year, monthIndex, isPrediction } where monthIndex is 0-based, or monthIndex=-1 if unparseable.
+ */
+function parsePeriodKey(period) {
+  if (!period) return { year: NaN, monthIndex: -1, isPrediction: false };
+  const [a, b] = period.split("-");
+  let year, rawMonth;
+
+  if (/^\d{4}$/.test(a)) {
+    year = +a;
+    rawMonth = b;
+  } else if (/^\d{4}$/.test(b)) {
+    year = +b;
+    rawMonth = a;
+  } else {
+    return { year: NaN, monthIndex: -1, isPrediction: false };
+  }
+
+  let isPrediction = false;
+  if (/^[Pp]/.test(rawMonth)) {
+    isPrediction = true;
+    rawMonth = rawMonth.slice(1);
+  }
+
+  if (/^\d{1,2}$/.test(rawMonth)) {
+    const idx = Math.min(Math.max(+rawMonth - 1, 0), 11);
+    return { year, monthIndex: idx, isPrediction };
+  }
+
+  const date = new Date(`${rawMonth} 1, ${year}`);
+  const idx = date.getMonth();
+  if (isNaN(idx)) {
+    return { year: NaN, monthIndex: -1, isPrediction };
+  }
+  return { year, monthIndex: idx, isPrediction };
+}
+
 const MapView = () => {
   const { t } = useTranslationHook("analysis");
   const mapContainerRef = useRef(null);
@@ -93,41 +131,25 @@ const MapView = () => {
     }
   };
   
-  // Available dates from your CSV files.
-  const dateOptions = [
-    "March-2014",
-    "October-2014",
-    "March-2015",
-    "October-2015",
-    "March-2016",
-    "October-2016",
-    "March-2017",
-    "October-2017",
-    "March-2018",
-    "October-2018",
-    "March-2019",
-    "October-2019",
-    "March-2020",
-    "October-2020",
-    "March-2021",
-    "October-2021",
-    "March-2022",
-    "October-2022",
-    "March-2023",
-    "October-2023",
-    "March-2024",
-    "October-2024",
-    "March-2025",
-    "PJune-2025"
-  ];
-  // Default to the last possible date.
-  const [currentDateIndex, setCurrentDateIndex] = useState(dateOptions.length - 1);
-  const currentDate = dateOptions[currentDateIndex];
+  // State for dynamically extracted date options
+  const [dateOptions, setDateOptions] = useState([]);
+  const [currentDateIndex, setCurrentDateIndex] = useState(0);
+  const currentDate = dateOptions[currentDateIndex] || '';
   
   // Update the currentDateRef whenever currentDate changes.
   useEffect(() => {
     currentDateRef.current = currentDate;
+    console.log('Current date set to:', currentDate); // Debug log
   }, [currentDate]);
+
+  // Update currentDateIndex when dateOptions change
+  useEffect(() => {
+    if (dateOptions.length > 0) {
+      setCurrentDateIndex(dateOptions.length - 1);
+      console.log('Current date options:', dateOptions); // Debug log
+      console.log('Setting current date index to:', dateOptions.length - 1); // Debug log
+    }
+  }, [dateOptions]);
   
   
 
@@ -199,27 +221,35 @@ const MapView = () => {
         data: `/data/combined.geojson`,
       });
 
-      // Determine the insertion point for custom layers.
-      const customAdmin0LayerId = 'admin0-8pm03x';
-      let insertionLayerId = customAdmin0LayerId;
-      if (!map.getLayer(customAdmin0LayerId)) {
-        const layers = map.getStyle().layers;
-        insertionLayerId = layers.find(layer => layer.type === 'symbol')?.id;
-      }
-
-      // Add the base fill layer.
-      const initialField = `classification_${currentDate}`;
-      map.addLayer(
-        {
-          id: 'admin-boundaries-fill',
-          type: 'fill',
-          source: 'admin-boundaries',
-          minzoom: 3,
-          layout: {},
-          paint: {
-            'fill-color': [
+      // Extract date options from the GeoJSON data
+      fetch('/data/combined.geojson')
+        .then(response => response.json())
+        .then(data => {
+          const periodSet = new Set();
+          data.features.forEach(f => {
+            Object.keys(f.properties)
+              .filter(key => key.startsWith("classification_"))
+              .forEach(key => periodSet.add(key.replace("classification_", "")));
+          });
+          const periods = Array.from(periodSet);
+          periods.sort((p1, p2) => {
+            const { year: y1, monthIndex: m1 } = parsePeriodKey(p1);
+            const { year: y2, monthIndex: m2 } = parsePeriodKey(p2);
+            if (y1 !== y2) return y1 - y2;
+            return m1 - m2;
+          });
+          console.log('Extracted date options:', periods); // Debug log
+          setDateOptions(periods);
+          // Set to the last available date
+          setCurrentDateIndex(periods.length - 1);
+          
+          // Update the map with the first available date
+          if (periods.length > 0) {
+            const firstDate = periods[periods.length - 1]; // Get the most recent date
+            const classificationField = `classification_${firstDate}`;
+            const fillColorExpression = [
               'match',
-              ['get', initialField],
+              ['get', classificationField],
               'Non analysée', '#ffffff',
               'Phase 1 : minimal', '#d3f3d4',
               'Phase 2 : sous pression', '#ffe252',
@@ -228,7 +258,43 @@ const MapView = () => {
               'Phase 5 : famine', '#60090b',
               'inaccessible', '#cccccc',
               /* default */ '#ffffff'
-            ],
+            ];
+            map.setPaintProperty('admin-boundaries-fill', 'fill-color', fillColorExpression);
+          }
+        })
+        .catch(error => {
+          console.error('Error loading GeoJSON data:', error);
+          // Fallback to hardcoded dates if fetch fails
+          const fallbackDates = [
+            "March-2014", "November-2014", "March-2015", "November-2015",
+            "March-2016", "November-2016", "March-2017", "November-2017",
+            "March-2018", "November-2018", "March-2019", "November-2019",
+            "March-2020", "November-2020", "March-2021", "November-2021",
+            "March-2022", "November-2022", "March-2023", "November-2023",
+            "March-2024", "November-2024", "March-2025", "PJune-2025"
+          ];
+          setDateOptions(fallbackDates);
+          setCurrentDateIndex(fallbackDates.length - 1);
+        });
+
+      // Determine the insertion point for custom layers.
+      const customAdmin0LayerId = 'admin0-8pm03x';
+      let insertionLayerId = customAdmin0LayerId;
+      if (!map.getLayer(customAdmin0LayerId)) {
+        const layers = map.getStyle().layers;
+        insertionLayerId = layers.find(layer => layer.type === 'symbol')?.id;
+      }
+
+      // Add the base fill layer - will be updated when data is loaded
+      map.addLayer(
+        {
+          id: 'admin-boundaries-fill',
+          type: 'fill',
+          source: 'admin-boundaries',
+          minzoom: 3,
+          layout: {},
+          paint: {
+            'fill-color': '#ffffff', // Default color until data is loaded
             'fill-opacity': fillOpacity,
             'fill-opacity-transition': { duration: 500 }
           },
@@ -548,6 +614,7 @@ const MapView = () => {
 
   return (
     <div className="map-view-container">
+
       <button
         className="export-button"
         onClick={handleExportPNG}

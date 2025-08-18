@@ -85,38 +85,35 @@ export default function Analysis() {
                     onSelect={setSelectedRegionData}
                   />
 
-                  {/* Conditional rendering of CountryMapView components */}
-                  {/* {selectedRegionData.period1 && selectedRegionData.period2 && geojsonFeatures.length > 0 ? (
+                  {/* Single Country Map View showing situation changes */}
+                  {selectedRegionData.period1 && selectedRegionData.period2 && geojsonFeatures.length > 0 ? (
                     selectedRegionData.region.admin0 ? (
-                      <div className="country-maps-container" style={{ display: 'flex', justifyContent: 'space-around', margin: '20px 0' }}>
-                        <div style={{ width: '48%' }}>
-                          <CountryMapView
-                            country={selectedRegionData.region.admin0}
-                            currentPeriod={selectedRegionData.period1}
-                            otherPeriod={selectedRegionData.period2}
-                            data={geojsonFeatures}
-                          />
-                        </div>
-                        <div style={{ width: '48%' }}>
-                          <CountryMapView
-                            country={selectedRegionData.region.admin0}
-                            currentPeriod={selectedRegionData.period2}
-                            otherPeriod={selectedRegionData.period1}
-                            data={geojsonFeatures}
-                          />
-                        </div>
+                      <div className="country-map-container" style={{ margin: '20px 0' }}>
+                        <CountryMapView
+                          country={selectedRegionData.region.admin0}
+                          currentPeriod={selectedRegionData.period2}
+                          otherPeriod={selectedRegionData.period1}
+                          data={geojsonFeatures}
+                          showChangeOverlay={true}
+                        />
                       </div>
                     ) : (
-                      <div className="country-maps-container" style={{ display: 'flex', justifyContent: 'space-around', margin: '20px 0' }}>
-                        <div className="country-map-placeholder" style={{ width: '48%', height: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed #ccc', backgroundColor: '#f9f9f9' }}>
-                          <p>{t("selectCountryPrompt")}</p>
-                        </div>
-                        <div className="country-map-placeholder" style={{ width: '48%', height: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed #ccc', backgroundColor: '#f9f9f9' }}>
+                      <div className="country-map-placeholder" style={{ height: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed #ccc', backgroundColor: '#f9f9f9', borderRadius: '4px', margin: '20px 0' }}>
+                        <div style={{ textAlign: 'center', color: '#666' }}>
+                          <p style={{ fontSize: '1.1em', marginBottom: '8px' }}>🗺️</p>
                           <p>{t("selectCountryPrompt")}</p>
                         </div>
                       </div>
                     )
-                  ) : null} */}
+                  ) : (
+                    <div className="country-map-placeholder" style={{ height: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed #ccc', backgroundColor: '#f9f9f9', borderRadius: '4px', margin: '20px 0' }}>
+                      <div style={{ textAlign: 'center', color: '#666' }}>
+                        <p style={{ fontSize: '1.1em', marginBottom: '8px' }}>📅</p>
+                        <p>{t("selectPeriodsPrompt") || "Please select two time periods to compare"}</p>
+                      </div>
+                    </div>
+                  )}
+                  
                   <ComparisonTable
                     regionSelection={selectedRegionData.region}
                     period1={selectedRegionData.period1}

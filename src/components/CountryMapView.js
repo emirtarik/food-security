@@ -22,6 +22,37 @@ const MONTH_NAMES = {
   ]
 };
 
+// Classification severity mapping for change detection
+const classificationSeverity = {
+  "Non analysée": 0,
+  "Phase 1 : minimal": 1,
+  "Phase 2 : sous pression": 2,
+  "Phase 3 : crises": 3,
+  "Phase 4 : urgence": 4,
+  "Phase 5 : famine": 5,
+  "inaccessible": 6
+};
+
+// Helper functions from ComparisonTable for consistent calculations
+const parseNumber = (value) => {
+  const str = String(value).replace(/,/g, '');
+  const num = parseFloat(str);
+  return isNaN(num) ? 0 : num;
+};
+
+const formatNumber = (num) => {
+  let n = typeof num === 'number' ? num : parseNumber(num);
+  if (isNaN(n)) return num;
+  n = Math.trunc(n);
+  return n.toLocaleString();
+};
+
+const formatPercentage = (value, decimalPlaces = 1) => {
+  if (value === null || value === undefined) return "—";
+  if (typeof value !== 'number' || isNaN(value) || !isFinite(value)) return "N/A";
+  return value.toFixed(decimalPlaces) + "%";
+};
+
 /**
  * Parse a period key like "October-2024", "2024-10", or "PJune-2025".
  * Returns { year, monthIndex, isPrediction } where monthIndex is 0-based, or monthIndex=-1 if unparseable.
@@ -74,8 +105,64 @@ function formatPeriod(periodKey, locale) { // Renamed param for clarity
   return `${year} ${prefix}${monthName}`;
 }
 
+/**
+ * Determine if situation is improving or deteriorating based on classification severity
+ * Returns color with intensity based on severity of change
+ */
+function getSituationChange(currentClassification, otherClassification) {
+  const currentSeverity = classificationSeverity[currentClassification] || 0;
+  const otherSeverity = classificationSeverity[otherClassification] || 0;
+  
+  // If either period is "Non analysée", return white
+  if (currentClassification === "Non analysée" || otherClassification === "Non analysée") {
+    return { 
+      status: 'unanalyzed', 
+      color: '#ffffff', 
+      severity: 0,
+      opacity: 0
+    };
+  }
+  
+  if (currentSeverity > otherSeverity) {
+    // Deteriorating - use darker red based on severity
+    const severity = currentSeverity - otherSeverity;
+    const intensity = Math.min(0.3 + (severity * 0.15), 0.9); // 0.3 to 0.9 opacity
+    const redValue = Math.floor(255 * (0.6 + (severity * 0.1))); // 153 to 255 red
+    const greenValue = Math.floor(255 * (0.1 + (severity * 0.05))); // 26 to 51 green
+    const blueValue = Math.floor(255 * (0.1 + (severity * 0.05))); // 26 to 51 blue
+    
+    return { 
+      status: 'deteriorating', 
+      color: `rgb(${redValue}, ${greenValue}, ${blueValue})`, 
+      severity: severity,
+      opacity: intensity
+    };
+  } else if (currentSeverity < otherSeverity) {
+    // Improving - use darker green based on severity
+    const severity = otherSeverity - currentSeverity;
+    const intensity = Math.min(0.3 + (severity * 0.15), 0.9); // 0.3 to 0.9 opacity
+    const redValue = Math.floor(255 * (0.1 + (severity * 0.05))); // 26 to 51 red
+    const greenValue = Math.floor(255 * (0.6 + (severity * 0.1))); // 153 to 255 green
+    const blueValue = Math.floor(255 * (0.1 + (severity * 0.05))); // 26 to 51 blue
+    
+    return { 
+      status: 'improving', 
+      color: `rgb(${redValue}, ${greenValue}, ${blueValue})`, 
+      severity: severity,
+      opacity: intensity
+    };
+  } else {
+    // No change - use gray
+    return { 
+      status: 'stable', 
+      color: '#cccccc', 
+      severity: 0,
+      opacity: 0.6
+    };
+  }
+}
 
-const CountryMapView = ({ country, currentPeriod, otherPeriod, data }) => {
+const CountryMapView = ({ country, currentPeriod, otherPeriod, data, showChangeOverlay = true }) => {
   const { t, i18n = {} } = useTranslationHook("analysis") || {};
   const currentLocale = i18n.language || (typeof navigator !== "undefined" && navigator.language) || "en";
 
@@ -157,11 +244,37 @@ const CountryMapView = ({ country, currentPeriod, otherPeriod, data }) => {
         featuresForCountry = data.filter(f => f.properties.admin0Name === country);
       }
 
-      map.addSource('country-data', {
-        type: 'geojson',
-        data: { type: 'FeatureCollection', features: featuresForCountry }
+      // Add situation change data to features
+      const featuresWithChange = featuresForCountry.map(feature => {
+        const props = feature.properties;
+        const currentClassificationField = `classification_${currentPeriod}`;
+        const otherClassificationField = `classification_${otherPeriod}`;
+        
+        const currentClassification = props[currentClassificationField] || 'Non analysée';
+        const otherClassification = props[otherClassificationField] || 'Non analysée';
+        
+        const change = getSituationChange(currentClassification, otherClassification);
+        
+        return {
+          ...feature,
+          properties: {
+            ...props,
+            situationChange: change.status,
+            changeColor: change.color,
+            changeSeverity: change.severity,
+            changeOpacity: change.opacity,
+            currentClassification,
+            otherClassification
+          }
+        };
       });
 
+      map.addSource('country-data', {
+        type: 'geojson',
+        data: { type: 'FeatureCollection', features: featuresWithChange }
+      });
+
+      // Base classification layer
       const classificationField = `classification_${currentPeriod}`;
       const fillColorExpression = [
         'match', ['get', classificationField],
@@ -172,11 +285,46 @@ const CountryMapView = ({ country, currentPeriod, otherPeriod, data }) => {
       ];
 
       map.addLayer({
-        id: 'country-fill', type: 'fill', source: 'country-data', layout: {},
+        id: 'country-fill', 
+        type: 'fill', 
+        source: 'country-data', 
+        layout: {},
         paint: { 'fill-color': fillColorExpression, 'fill-opacity': 0.9 }
       });
+
+      // Situation change overlay layer
+      if (showChangeOverlay && otherPeriod) {
+        map.addLayer({
+          id: 'situation-change-overlay',
+          type: 'fill',
+          source: 'country-data',
+          layout: {},
+          paint: {
+            'fill-color': [
+              'case',
+              ['==', ['get', 'situationChange'], 'deteriorating'], ['get', 'changeColor'],
+              ['==', ['get', 'situationChange'], 'improving'], ['get', 'changeColor'],
+              ['==', ['get', 'situationChange'], 'stable'], ['get', 'changeColor'],
+              ['==', ['get', 'situationChange'], 'unanalyzed'], ['get', 'changeColor'],
+              'rgba(255, 255, 255, 0)'
+            ],
+            'fill-opacity': [
+              'case',
+              ['==', ['get', 'situationChange'], 'deteriorating'], ['get', 'changeOpacity'],
+              ['==', ['get', 'situationChange'], 'improving'], ['get', 'changeOpacity'],
+              ['==', ['get', 'situationChange'], 'stable'], ['get', 'changeOpacity'],
+              ['==', ['get', 'situationChange'], 'unanalyzed'], ['get', 'changeOpacity'],
+              0
+            ]
+          }
+        });
+      }
+
       map.addLayer({
-        id: 'country-outline', type: 'line', source: 'country-data', layout: {},
+        id: 'country-outline', 
+        type: 'line', 
+        source: 'country-data', 
+        layout: {},
         paint: { 'line-color': '#555', 'line-width': 1 }
       });
 
@@ -199,26 +347,38 @@ const CountryMapView = ({ country, currentPeriod, otherPeriod, data }) => {
           const currentClassificationValue = props[currentClassificationField] || 'Non analysée';
 
           // Other period data
+          const otherClassificationField = `classification_${otherPeriod}`;
           const otherPopulationTotalField = `population_total_${otherPeriod}`;
           const otherPopulationPh2Field = `population_ph2_${otherPeriod}`;
           const otherPopulationPh3Field = `population_ph3_${otherPeriod}`;
+          const otherClassificationValue = props[otherClassificationField] || 'Non analysée';
 
-          // Calculate differences (simple numeric subtraction, ensure values are numbers)
-          const getNum = val => (typeof val === 'number' ? val : parseFloat(String(val).replace(/,/g, ''))) || 0;
-
-          const popTotalCurrent = getNum(props[currentPopulationTotalField]);
-          const popTotalOther = getNum(props[otherPopulationTotalField]);
+          // Calculate differences using same logic as ComparisonTable
+          const popTotalCurrent = parseNumber(props[currentPopulationTotalField]);
+          const popTotalOther = parseNumber(props[otherPopulationTotalField]);
           const popTotalDiff = popTotalCurrent - popTotalOther;
+          const popTotalDiffInThousands = Math.trunc(popTotalDiff / 1000);
+          const popTotalPct = popTotalOther > 0 ? (popTotalDiff / popTotalOther) * 100 : null;
 
-          const popPh2Current = getNum(props[currentPopulationPh2Field]);
-          const popPh2Other = getNum(props[otherPopulationPh2Field]);
-          const popPh2Diff = popPh2Current - popPh2Other;
-
-          const popPh3Current = getNum(props[currentPopulationPh3Field]);
-          const popPh3Other = getNum(props[otherPopulationPh3Field]);
+          const popPh3Current = parseNumber(props[currentPopulationPh3Field]);
+          const popPh3Other = parseNumber(props[otherPopulationPh3Field]);
           const popPh3Diff = popPh3Current - popPh3Other;
+          const popPh3DiffInThousands = Math.trunc(popPh3Diff / 1000);
+          
+          let popPh3PopulationPercentChange = 0;
+          if (popPh3Other !== 0) {
+            popPh3PopulationPercentChange = (popPh3Diff / popPh3Other) * 100;
+          } else if (popPh3Diff !== 0) {
+            popPh3PopulationPercentChange = null;
+          }
 
           const formatDiff = (val) => (val > 0 ? `+${val.toLocaleString()}` : val.toLocaleString());
+          const formatPct = (val) => (val === null ? '—' : `${(val >= 0 ? '+' : '')}${Math.abs(val).toFixed(1)}%`);
+
+          // Situation change indicator
+          const situationChange = props.situationChange || 'stable';
+          const changeIndicator = situationChange === 'deteriorating' ? '🔴' : 
+                                 situationChange === 'improving' ? '🟢' : '⚪';
 
           let bgColor = '#ffffff';
           if (currentClassificationValue === 'Non analysée') bgColor = '#ffffff';
@@ -237,6 +397,7 @@ const CountryMapView = ({ country, currentPeriod, otherPeriod, data }) => {
             ? `<div class="popup-aggregated-box"><div class="popup-aggregated">⚠️ ${t("dataAggregated")}</div></div>`
             : '';
 
+          // Compact popup content
           const popupContent = `
             <div class="popup-content">
               ${aggregatedNotice}
@@ -249,35 +410,13 @@ const CountryMapView = ({ country, currentPeriod, otherPeriod, data }) => {
                 </div>
               </div>
               <div class="popup-subheader-box" style="background-color: ${bgColor};">
-                <h4 class="popup-subheader">${translateClassification(currentClassificationValue, t)}</h4>
+                <h4 class="popup-subheader">
+                  ${translateClassification(otherClassificationValue, t)} → ${translateClassification(currentClassificationValue, t)} ${changeIndicator}
+                </h4>
               </div>
-              <div class="popup-details">
-                <table class="popup-table">
-                  <thead>
-                    <tr>
-                      <th>${t("indicator")}</th>
-                      <th>${formatPeriod(currentPeriod, currentLocale)}</th>
-                      <th>${t("difference")} (${formatPeriod(otherPeriod, currentLocale)})</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><strong>${t("populationTotal")}:</strong></td>
-                      <td>${popTotalCurrent.toLocaleString() || t("nA")}</td>
-                      <td>${formatDiff(popTotalDiff)}</td>
-                    </tr>
-                    <tr>
-                      <td><strong>${t("populationPh2")}:</strong></td>
-                      <td>${popPh2Current.toLocaleString() || t("nA")}</td>
-                      <td>${formatDiff(popPh2Diff)}</td>
-                    </tr>
-                    <tr>
-                      <td><strong>${t("populationPh3")}:</strong></td>
-                      <td>${popPh3Current.toLocaleString() || t("nA")}</td>
-                      <td>${formatDiff(popPh3Diff)}</td>
-                    </tr>
-                  </tbody>
-                </table>
+              <div class="popup-brief" style="font-size:10px; line-height:1.3;">
+                <div><strong>${t("populationTotal")}:</strong> ${formatNumber(popTotalDiffInThousands)} (${formatPct(popTotalPct)})</div>
+                <div><strong>${t("populationPh3")}:</strong> ${formatNumber(popPh3DiffInThousands)} (${formatPercentage(popPh3PopulationPercentChange, 1)})</div>
               </div>
             </div>
           `;
@@ -290,7 +429,7 @@ const CountryMapView = ({ country, currentPeriod, otherPeriod, data }) => {
       if (mapRef.current) { mapRef.current.remove(); mapRef.current = null; }
       setIsMapLoaded(false);
     };
-  }, [country, currentPeriod, otherPeriod, data, t, currentLocale]); // Added currentLocale and otherPeriod
+  }, [country, currentPeriod, otherPeriod, data, t, currentLocale, showChangeOverlay]); // Added showChangeOverlay
 
   useEffect(() => {
     if (!isMapLoaded || !mapRef.current || !currentPeriod) return;
@@ -320,11 +459,37 @@ const CountryMapView = ({ country, currentPeriod, otherPeriod, data }) => {
         } else {
             featuresForCountry = data.filter(f => f.properties.admin0Name === country);
         }
+
+        // Update features with change data
+        const featuresWithChange = featuresForCountry.map(feature => {
+          const props = feature.properties;
+          const currentClassificationField = `classification_${currentPeriod}`;
+          const otherClassificationField = `classification_${otherPeriod}`;
+          
+          const currentClassification = props[currentClassificationField] || 'Non analysée';
+          const otherClassification = props[otherClassificationField] || 'Non analysée';
+          
+          const change = getSituationChange(currentClassification, otherClassification);
+          
+          return {
+            ...feature,
+            properties: {
+              ...props,
+              situationChange: change.status,
+              changeColor: change.color,
+              changeSeverity: change.severity,
+              changeOpacity: change.opacity,
+              currentClassification,
+              otherClassification
+            }
+          };
+        });
+
         map.getSource('country-data').setData({
-            type: 'FeatureCollection', features: featuresForCountry
+            type: 'FeatureCollection', features: featuresWithChange
         });
     }
-  }, [country, currentPeriod, data, isMapLoaded]); // Removed country from here as it's in main effect, re-filtering is complex if only country changes without full reload.
+  }, [country, currentPeriod, otherPeriod, data, isMapLoaded, showChangeOverlay]); // Added showChangeOverlay
 
   if (!country || !currentPeriod) {
     return <div>{t("selectCountryAndPeriod")}</div>;
@@ -332,7 +497,26 @@ const CountryMapView = ({ country, currentPeriod, otherPeriod, data }) => {
 
   return (
     <div className="country-map-view">
-      <div className="country-map-title">{`${country} - ${formatPeriod(currentPeriod, currentLocale)}`}</div>
+      <div className="country-map-title">
+        {`${country} - ${formatPeriod(currentPeriod, currentLocale)} vs ${formatPeriod(otherPeriod, currentLocale)}`}
+        {showChangeOverlay && otherPeriod && (
+          <div className="change-legend">
+            <span className="legend-item">
+              <span className="legend-color improving"></span> {t("improving")}
+            </span>
+            <span className="legend-item">
+              <span className="legend-color deteriorating"></span> {t("deteriorating")}
+            </span>
+            <span className="legend-item">
+              <span className="legend-color stable"></span> {t("noChange")}
+            </span>
+            <span className="legend-item">
+              <span className="legend-color unanalyzed"></span> {t("nonAnalyzed")}
+            </span>
+            <span className="legend-note">(Darker = More severe change)</span>
+          </div>
+        )}
+      </div>
       <div ref={mapContainerRef} className="country-map-container-inner" />
     </div>
   );

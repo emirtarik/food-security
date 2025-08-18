@@ -7,7 +7,7 @@ import '../styles/Dashboard2.css';
 
 // Mock data for CountryMapView - replace with actual data fetching or props later
 const mockMapData = []; // Or some default structure if CountryMapView requires it
-const mockCurrentPeriod = "October-2024"; // Example, make this dynamic later
+const mockCurrentPeriod = "November-2024"; // Example, make this dynamic later
 const mockOtherPeriod = "June-2024"; // Example, make this dynamic later
 
 

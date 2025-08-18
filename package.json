@@ -63,6 +63,7 @@
   },
   "scripts": {
     "start": "node server.js",
+    "dev": "react-scripts start",
     "build": "react-scripts build",
     "build:azure": "set \"GENERATE_SOURCEMAP=false\" && node --max-old-space-size=8192 --openssl-legacy-provider node_modules/react-scripts/scripts/build.js",
     "postinstall": "npm run build:azure",   

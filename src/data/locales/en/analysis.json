@@ -47,5 +47,12 @@
     "loadingAdmin1Data": "Loading Admin1 data...",
     "loadingAdmin2Data": "Loading Admin2 data...",
     "expandToSeeMoreClassification": "Expand to see more",
-    "selectCountryPrompt": "Select a country to view data"
+    "selectCountryPrompt": "Select a country to view data",
+    "situationChange": "Situation Change",
+    "situationDeteriorating": "Situation deteriorating",
+    "situationImproving": "Situation improving",
+    "situationStable": "Situation stable",
+    "improving": "Improving",
+    "deteriorating": "Deteriorating",
+    "selectPeriodsPrompt": "Please select two time periods to compare"
   }

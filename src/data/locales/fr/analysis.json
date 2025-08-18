@@ -47,5 +47,12 @@
     "loadingAdmin1Data": "Chargement données Admin1...",
     "loadingAdmin2Data": "Chargement données Admin2...",
     "expandToSeeMoreClassification": "Voir détails",
-    "selectCountryPrompt": "Sélectionnez un pays pour voir les données"
+    "selectCountryPrompt": "Sélectionnez un pays pour voir les données",
+    "situationChange": "Évolution de la situation",
+    "situationDeteriorating": "Situation se détériorant",
+    "situationImproving": "Situation s'améliorant",
+    "situationStable": "Situation stable",
+    "improving": "Amélioration",
+    "deteriorating": "Détérioration",
+    "selectPeriodsPrompt": "Veuillez sélectionner deux périodes pour comparer"
   }

@@ -1,43 +1,68 @@
-# Getting Started with Create React App
+# Food Security Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Local Development Setup
 
-## Available Scripts
+### Prerequisites
+- Node.js (version 18 or higher)
+- All dependencies installed (`npm install` in root directory)
 
-In the project directory, you can run:
+### Running the Application Locally
 
-### `npm start`
+#### Option 1: Use the convenience script (Recommended)
+```bash
+./start-local-dev.sh
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+#### Option 2: Use npm run dev from root directory
+```bash
+npm run dev
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+#### Option 3: Manual startup
+1. **Start backend:**
+   ```bash
+   cd backend
+   npm start
+   ```
 
-### `npm test`
+2. **Start frontend (in a new terminal):**
+   ```bash
+   cd site
+   npm run dev
+   ```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### What Each Command Does
 
-### `npm run build`
+- **`./start-local-dev.sh`**: Checks ports and starts both servers using `npm run dev`
+- **`npm run dev`**: Uses `concurrently` to run both frontend and backend simultaneously
+- **`npm run client`**: Starts the React development server on port 3000
+- **`npm run server`**: Starts the Express backend server on port 5001
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Backend Connection
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The frontend is configured to connect to:
+- **Local development:** `http://localhost:5001` (when using `npm run dev`)
+- **Production:** Uses `REACT_APP_API_URL` environment variable
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Configuration Options
 
-### `npm run eject`
+In `src/apiClient.js`, you can choose between:
+- **Direct connection** (default): `http://localhost:5001`
+- **Proxy connection**: Uses the proxy configuration in `package.json`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+To switch to proxy mode, set `useProxy = true` in `apiClient.js`.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Production Build
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+To build for production:
+```bash
+npm run build
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+To build for Azure deployment:
+```bash
+npm run build:azure
+```
 
 ## Learn More
 
