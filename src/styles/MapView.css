@@ -2,7 +2,7 @@
 .map-view-container {
   position: relative;
   width: 100%;
-  height: 100vh;
+  height: 60vh;
 }
 
 .map-container {
@@ -55,6 +55,29 @@
   width: 100px;
 }
 
+.opacity-value {
+  font-size: 12px;
+  min-width: 30px;
+}
+
+/* ACLED control styling */
+.acled-control {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.acled-control label {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.acled-control input[type="checkbox"] {
+  margin-right: 5px;
+}
+
 /* Legend styling */
 .legend {
   position: absolute;
@@ -86,6 +109,141 @@
   height: 12px;
   margin-right: 5px;
   border: 1px solid #999;
+}
+
+.legend-circle {
+  width: 12px;
+  height: 12px;
+  margin-right: 5px;
+  border: 1px solid #999;
+}
+
+/* ACLED legend styling */
+.acled-legend {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #ccc;
+}
+
+.acled-legend h5 {
+  margin: 0 0 5px 0;
+  font-size: 13px;
+  color: #d32f2f;
+}
+
+/* Food insecurity legend styling */
+.food-insecurity-legend {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.food-insecurity-legend h5 {
+  margin: 0 0 5px 0;
+  font-size: 13px;
+  color: #2e7d32;
+}
+
+/* Critical overlap legend styling */
+.critical-overlap-legend {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #ccc;
+}
+
+.critical-overlap-legend h5 {
+  margin: 0 0 5px 0;
+  font-size: 13px;
+  color: #7b1fa2;
+  font-weight: bold;
+}
+
+.critical-overlap-legend .legend-note {
+  margin-top: 8px;
+  padding: 8px;
+  background-color: rgba(139, 0, 139, 0.1);
+  border-left: 3px solid #7b1fa2;
+  font-size: 11px;
+  line-height: 1.3;
+  color: #333;
+}
+
+.critical-overlap-legend .legend-note strong {
+  color: #7b1fa2;
+}
+
+.critical-overlap-legend .legend-note em {
+  color: #7b1fa2;
+  font-style: italic;
+}
+
+/* Critical overlap legend - bottom left position styling */
+.critical-overlap-legend-bottom-left {
+  position: absolute;
+  bottom: 20px; /* Position at bottom left */
+  left: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #333;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  z-index: 10;
+  font-family: Lato, sans-serif;
+  max-width: 400px;
+}
+
+.critical-overlap-legend-bottom-left h5 {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  color: #7b1fa2;
+  font-weight: bold;
+}
+
+.critical-overlap-legend-bottom-left .legend-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.critical-overlap-legend-bottom-left .legend-color-box {
+  width: 14px;
+  height: 14px;
+  margin-right: 8px;
+  border: 1px solid #999;
+}
+
+.critical-overlap-legend-bottom-left .legend-note {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: rgba(139, 0, 139, 0.1);
+  border-left: 3px solid #7b1fa2;
+  font-size: 11px;
+  line-height: 1.4;
+  color: #333;
+}
+
+.critical-overlap-legend-bottom-left .legend-note strong {
+  color: #7b1fa2;
+}
+
+.critical-overlap-legend-bottom-left .legend-note em {
+  color: #7b1fa2;
+  font-style: italic;
+}
+
+.legend-note {
+  margin-top: 5px;
+  padding-top: 5px;
+  border-top: 1px solid #eee;
+  font-size: 5px;
+  text-align: left;
+}
+
+.legend-note small {
+  color: #666;
+  font-size: 5px;
+  font-style: italic;
 }
 
 .custom-popup {
@@ -215,6 +373,20 @@
   width: 80%;   /* Adjust width as needed */
   margin-left: auto;
   margin-right: auto;
+}
+
+/* ACLED popup section styling */
+.popup-acled-section {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #ccc;
+}
+
+.popup-acled-section h5 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  color: #d32f2f;
+  font-weight: bold;
 }
 
 .popup-table {

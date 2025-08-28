@@ -1,0 +1,365 @@
+.ph3-plus-line-plot-container {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 20px 0;
+  font-family: 'Lato', sans-serif;
+}
+
+.plot-header {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.plot-header h3 {
+  color: #243D54;
+  margin: 0 0 10px 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.plot-header p {
+  color: #666;
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.controls-section {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+}
+
+.selectors-row {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.country-selector {
+  flex: 1;
+  min-width: 300px;
+}
+
+.country-selector label {
+  display: block;
+  font-weight: 500;
+  color: #495057;
+  margin-bottom: 8px;
+  font-family: 'Lato', sans-serif;
+}
+
+.country-checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.country-checkbox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 6px 10px;
+  background: white;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  transition: all 0.2s ease;
+  font-size: 13px;
+}
+
+.country-checkbox:hover {
+  background: #f0f0f0;
+  border-color: #bbb;
+}
+
+.country-checkbox input[type="checkbox"] {
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.country-color-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+  border: 1px solid #ccc;
+}
+
+.country-name {
+  font-weight: 600;
+  color: #333;
+  flex: 1;
+}
+
+.country-flag {
+  width: 20px;
+  height: 15px;
+  margin-left: 8px;
+  border-radius: 2px;
+  border: 1px solid #ddd;
+}
+
+.region-selector {
+  flex: 1;
+  min-width: 300px;
+}
+
+.region-selector label {
+  display: block;
+  font-weight: 500;
+  color: #495057;
+  margin-bottom: 8px;
+  font-family: 'Lato', sans-serif;
+}
+
+.region-checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.region-checkbox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 6px 10px;
+  background: white;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  transition: all 0.2s ease;
+  font-size: 13px;
+}
+
+.region-checkbox:hover {
+  background: #f0f0f0;
+  border-color: #bbb;
+}
+
+.region-checkbox input[type="checkbox"] {
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.region-color-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+  border: 1px solid #ccc;
+}
+
+.region-name {
+  font-weight: 600;
+  color: #333;
+  flex: 1;
+}
+
+.region-logo {
+  width: 20px;
+  height: 20px;
+  margin-left: 8px;
+  object-fit: contain;
+}
+
+.country-selector label {
+  display: block;
+  font-weight: 500;
+  color: #495057;
+  margin-bottom: 8px;
+  font-family: 'Lato', sans-serif;
+}
+
+.dropdown-container {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.country-dropdown {
+  flex: 1;
+  min-height: 120px;
+  padding: 8px;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  background: white;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.9rem;
+}
+
+.country-dropdown option {
+  padding: 4px 8px;
+  font-family: 'Lato', sans-serif;
+}
+
+.dropdown-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.btn-select-all,
+.btn-clear-all {
+  padding: 6px 12px;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  background: white;
+  color: #495057;
+  cursor: pointer;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.8rem;
+  transition: background-color 0.2s ease;
+}
+
+.btn-select-all:hover,
+.btn-clear-all:hover {
+  background-color: #f8f9fa;
+}
+
+.btn-select-all {
+  background-color: #e3f2fd;
+  border-color: #2196f3;
+  color: #1976d2;
+}
+
+.btn-clear-all {
+  background-color: #ffebee;
+  border-color: #f44336;
+  color: #d32f2f;
+}
+
+.chart-container {
+  height: 500px;
+  position: relative;
+  margin-top: 20px;
+}
+
+.loading-message,
+.no-data-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  color: #666;
+  font-size: 1.1rem;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #dee2e6;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .ph3-plus-line-plot-container {
+    padding: 15px;
+    margin: 15px 0;
+  }
+
+  .plot-header h3 {
+    font-size: 1.3rem;
+  }
+
+  .plot-header p {
+    font-size: 0.9rem;
+  }
+
+  .selectors-row {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .country-selector,
+  .region-selector {
+    min-width: auto;
+  }
+
+  .country-list {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    max-height: 150px;
+  }
+
+  .country-checkbox {
+    font-size: 0.85rem;
+    padding: 4px 6px;
+  }
+
+  .chart-container {
+    height: 400px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ph3-plus-line-plot-container {
+    padding: 10px;
+  }
+
+  .controls-section {
+    padding: 10px;
+  }
+
+  .country-list {
+    grid-template-columns: 1fr;
+    max-height: 120px;
+  }
+
+  .chart-container {
+    height: 350px;
+  }
+}
+
+/* Custom scrollbar for country list */
+.country-checkboxes::-webkit-scrollbar {
+  width: 6px;
+}
+
+.country-checkboxes::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.country-checkboxes::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.country-checkboxes::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Chart.js customizations */
+.chart-container canvas {
+  border-radius: 6px;
+}
+
+/* Animation for loading states */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ph3-plus-line-plot-container {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Focus states for accessibility */
+.country-checkbox input[type="checkbox"]:focus + .country-color-indicator {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}
+
+.country-selector input[type="checkbox"]:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}
