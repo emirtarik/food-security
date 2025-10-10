@@ -79,6 +79,34 @@
   flex-grow: 1;
 }
 
+.dashboard2-main {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 20px;
+}
+
+.info-panels {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 12px;
+}
+
+.info-card {
+  background-color: #ffffff;
+  padding: 16px 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+.info-card h4 {
+  margin: 0 0 8px 0;
+  color: #0056b3;
+}
+
+.info-card .muted {
+  color: #6c757d;
+}
+
 .country-specific-interface,
 .country-map-view-container,
 .project-data-submission-placeholder {
@@ -110,19 +138,84 @@
   border: 1px solid #ddd;
 }
 
+.submissions-section {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Tabs styling (aligned with Analysis.css look and feel) */
+.tab-container {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 8px 8px 0 8px;
+}
+
+.tab-button {
+  padding: 10px 16px;
+  border: none;
+  background: #233D54;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  margin-right: 6px;
+  margin-bottom: 6px;
+  border-radius: 4px 4px 0 0;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tab-button:hover {
+  background: #C2BE00;
+  color: #fff;
+}
+
+.active-tab {
+  background: #C2BE00;
+  color: #fff;
+  font-weight: 600;
+  border-bottom: 2px solid #C2BE00;
+  box-shadow: 0 -1px 0 rgba(0,0,0,0.05) inset;
+}
+
+.tab-content {
+  border-top: 1px solid #e0e0e0;
+  padding: 16px 20px 20px 20px;
+}
+
+/* Headings hierarchy inside submission panels */
+.country-specific-interface h3 {
+  margin: 0 0 6px 0;
+}
+.country-specific-interface h4 {
+  margin: 10px 0;
+  color: #333;
+  border-left: 4px solid #0d6efd;
+  padding-left: 8px;
+}
+
+.section-header {
+  margin-bottom: 16px;
+}
+
+.section-header h3 {
+  font-size: 1.3em;
+  color: #0056b3;
+  margin: 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
 /* Responsive adjustments (optional) */
 @media (min-width: 992px) { /* Large devices (desktops, 992px and up) */
   .dashboard2-content {
-    flex-direction: row; /* Side-by-side layout for larger screens */
-    align-items: flex-start; /* Align items to the top */
+    flex-direction: column; /* Keep stacked but grid inside */
   }
 
-  .country-specific-interface {
-    flex: 1; /* Takes up available space */
+  .dashboard2-main {
+    grid-template-columns: 1.5fr 1fr; /* Map + info side by side */
   }
 
-  .country-map-view-container {
-    flex: 1; /* Takes up available space */
-    max-width: 50%; /* Or a fixed width, depending on design */
+  .info-panels {
+    grid-template-columns: 1fr;
   }
 }

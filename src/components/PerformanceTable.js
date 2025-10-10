@@ -130,7 +130,7 @@ function PerformanceTable({
         {/* Financing Mobilized Row */}
         <div className="performance-row">
           <div className="performance-title">
-            <img src="/images/finance-mobilized.png" alt="finance mobilized icon" className="performance-icon" />
+            <img src="/images/zone-insecurity.png" alt="finance mobilized icon" className="performance-icon" />
             Financement mobilisé (%)
             <Tooltip title="Percentage of financing mobilized over the analysis period." arrow>
               <HelpOutlineIcon className="question-tooltip-icon" />

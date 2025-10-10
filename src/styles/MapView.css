@@ -2,7 +2,7 @@
 .map-view-container {
   position: relative;
   width: 100%;
-  height: 60vh;
+  height: 80vh;
 }
 
 .map-container {
@@ -39,44 +39,9 @@
   width: 100%;
 }
 
-.opacity-control {
-  display: flex;
-  align-items: center;
-  margin-top: 8px;
-}
+/* Opacity control styles removed - not needed for production */
 
-.opacity-control label {
-  margin-right: 5px;
-  font-size: 13px;
-}
-
-.opacity-control input[type="range"] {
-  margin-right: 5px;
-  width: 100px;
-}
-
-.opacity-value {
-  font-size: 12px;
-  min-width: 30px;
-}
-
-/* ACLED control styling */
-.acled-control {
-  display: flex;
-  align-items: center;
-  margin-top: 8px;
-}
-
-.acled-control label {
-  display: flex;
-  align-items: center;
-  font-size: 13px;
-  cursor: pointer;
-}
-
-.acled-control input[type="checkbox"] {
-  margin-right: 5px;
-}
+/* ACLED control styling removed - not needed for production */
 
 /* Legend styling */
 .legend {

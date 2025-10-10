@@ -22,8 +22,18 @@ export default function Disclaimer({ isProject }) {
           </a>
         </p>
       )}
-      <p className="disclaimer-content text-center">
-        {t("Disclaimer")}
+      <p className="disclaimer-content text-justify">
+        {t("Disclaimer").split('\n').map((line, index) => (
+          <React.Fragment key={index}>
+            {line.split(/(\*\*.*?\*\*)/).map((part, partIndex) => {
+              if (part.startsWith('**') && part.endsWith('**')) {
+                return <strong key={partIndex}>{part.slice(2, -2)}</strong>;
+              }
+              return part;
+            })}
+            {index < t("Disclaimer").split('\n').length - 1 && <br />}
+          </React.Fragment>
+        ))}
       </p>
     </div>
   );

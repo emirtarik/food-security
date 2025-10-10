@@ -98,13 +98,7 @@ function parsePeriodKey(period) {
 const MapView = ({ 
   currentDateIndex, 
   setCurrentDateIndex, 
-  dateOptions, 
-  showFoodInsecurityLayer,
-  setShowFoodInsecurityLayer,
-  showAcledLayer,
-  setShowAcledLayer,
-  showCriticalOverlap,
-  setShowCriticalOverlap
+  dateOptions
 }) => {
   const { t } = useTranslationHook("analysis");
   const mapContainerRef = useRef(null);
@@ -144,11 +138,12 @@ const MapView = ({
   // Get current date from props
   const currentDate = dateOptions[currentDateIndex] || '';
   
-  // State for ACLED data
-  const [acledYears, setAcledYears] = useState([]);
-  const [currentAcledYear, setCurrentAcledYear] = useState(null);
+  // State for ACLED data - COMMENTED OUT FOR PRODUCTION
+  // const [acledYears, setAcledYears] = useState([]);
+  // const [currentAcledYear, setCurrentAcledYear] = useState(null);
   
-  // Function to generate conflict dots within administrative regions
+  // Function to generate conflict dots within administrative regions - COMMENTED OUT FOR PRODUCTION
+  /*
   const generateConflictDots = (geojsonData, acledYear) => {
     const dots = [];
     const densityField = `acled_Dns${acledYear}`;
@@ -236,7 +231,7 @@ const MapView = ({
     }
     
     return inside;
-  };
+  }
   
   // Helper function to calculate centroid of a polygon
   const calculateCentroid = (polygon) => {
@@ -247,6 +242,7 @@ const MapView = ({
     });
     return [x / polygon.length, y / polygon.length];
   };
+  */
   
   // Update the currentDateRef whenever currentDate changes.
   useEffect(() => {
@@ -263,7 +259,8 @@ const MapView = ({
     }
   }, [dateOptions]);
   
-  // Update ACLED year when food insecurity date changes
+  // Update ACLED year when food insecurity date changes - COMMENTED OUT FOR PRODUCTION
+  /*
   useEffect(() => {
     if (currentDate) {
       const { year } = parsePeriodKey(currentDate);
@@ -275,6 +272,7 @@ const MapView = ({
       }
     }
   }, [currentDate, acledYears]);
+  */
 
 
 
@@ -304,7 +302,8 @@ const MapView = ({
 
 
 
-  // Update ACLED layer when year changes
+  // Update ACLED layer when year changes - COMMENTED OUT FOR PRODUCTION
+  /*
   useEffect(() => {
     if (!isMapLoaded || !currentAcledYear) return;
     const map = mapRef.current;
@@ -328,7 +327,6 @@ const MapView = ({
             'case',
             ['==', ['get', 'density'], null], 0,
             ['==', ['get', 'density'], 0], 0,
-            ['<', ['get', 'density'], 0.001], 1,
             ['<', ['get', 'density'], 0.01], 2,
             ['<', ['get', 'density'], 0.1], 3,
             ['<', ['get', 'density'], 1], 4,
@@ -340,7 +338,6 @@ const MapView = ({
             'case',
             ['==', ['get', 'density'], null], 0,
             ['==', ['get', 'density'], 0], 0,
-            ['<', ['get', 'density'], 0.001], 0.1,
             ['<', ['get', 'density'], 0.01], 0.2,
             ['<', ['get', 'density'], 0.1], 0.3,
             ['<', ['get', 'density'], 1], 0.4,
@@ -352,8 +349,10 @@ const MapView = ({
         });
     }
   }, [currentAcledYear, isMapLoaded]);
+  */
 
-  // Update critical overlap layer
+  // Update critical overlap layer - COMMENTED OUT FOR PRODUCTION
+  /*
   useEffect(() => {
     if (!isMapLoaded || !currentAcledYear) return;
     const map = mapRef.current;
@@ -418,16 +417,18 @@ const MapView = ({
             ['==', ['get', classificationField], 'Phase 4 : urgence'],
             ['==', ['get', classificationField], 'Phase 5 : famine']
           ],
-          ['>=', ['get', densityField], 0.01],
-          ['>=', ['get', eventsField], 5]
+          ['>=', ['get', 'density'], 0.01],
+          ['>=', ['get', 'events'], 5]
         ],
         'rgba(128, 0, 128, 0.3)', // Light purple background for critical overlap
         'rgba(128, 0, 128, 0)' // Transparent if not all conditions met
       ]);
     }
   }, [currentAcledYear, currentDate, isMapLoaded]);
+  */
 
-  // Toggle ACLED layer visibility
+  // Toggle ACLED layer visibility - COMMENTED OUT FOR PRODUCTION
+  /*
   useEffect(() => {
     if (!isMapLoaded) return;
     const map = mapRef.current;
@@ -440,37 +441,23 @@ const MapView = ({
       const is2025 = currentDate && currentDate.includes('2025');
       
       // Only show the layer if user wants to show it AND ACLED data exists AND not 2025
-      const visibility = (showAcledLayer && hasAcledData && !is2025) ? 'visible' : 'none';
-      map.setLayoutProperty(layerId, 'visibility', visibility);
-      
-      // Also update inset maps
-      Object.values(insetMapsRef.current).forEach(inset => {
-        if (inset && inset.getLayer(layerId)) {
-          inset.setLayoutProperty(layerId, 'visibility', visibility);
-        }
-      });
-    }
-  }, [showAcledLayer, currentAcledYear, acledYears, currentDate, isMapLoaded]);
+      // const visibility = (showAcledLayer && hasAcledData && !is2025) ? 'visible' : 'none';
+      // map.setLayoutProperty(layerId, 'visibility', visibility);
+      // 
+      // // Also update inset maps
+      // Object.values(insetMapsRef.current).forEach(inset => {
+      //   if (inset && inset.getLayer(layerId)) {
+      //     inset.setLayoutProperty(layerId, 'visibility', visibility);
+      //   }
+      // });
+      // }
+      // }, [showAcledLayer, currentAcledYear, acledYears, currentDate, isMapLoaded]);
+  */
 
-  // Toggle food insecurity layer visibility
-  useEffect(() => {
-    if (!isMapLoaded) return;
-    const map = mapRef.current;
-    const layerId = 'admin-boundaries-fill';
-    if (map && map.getLayer(layerId)) {
-      const visibility = showFoodInsecurityLayer ? 'visible' : 'none';
-      map.setLayoutProperty(layerId, 'visibility', visibility);
-      
-      // Also update inset maps
-      Object.values(insetMapsRef.current).forEach(inset => {
-        if (inset && inset.getLayer(layerId)) {
-          inset.setLayoutProperty(layerId, 'visibility', visibility);
-        }
-      });
-    }
-  }, [showFoodInsecurityLayer, isMapLoaded]);
+  // Food insecurity layer is always visible - no toggle needed
 
-  // Toggle critical overlap layer visibility
+  // Toggle critical overlap layer visibility - COMMENTED OUT FOR PRODUCTION
+  /*
   useEffect(() => {
     if (!isMapLoaded) return;
     const map = mapRef.current;
@@ -483,17 +470,18 @@ const MapView = ({
       const is2025 = currentDate && currentDate.includes('2025');
       
       // Only show the layer if user wants to show it AND ACLED data exists AND not 2025
-      const visibility = (showCriticalOverlap && hasAcledData && !is2025) ? 'visible' : 'none';
-      map.setLayoutProperty(layerId, 'visibility', visibility);
-      
-      // Also update inset maps
-      Object.values(insetMapsRef.current).forEach(inset => {
-        if (inset && inset.getLayer(layerId)) {
-          inset.setLayoutProperty(layerId, 'visibility', visibility);
-        }
-      });
-    }
-  }, [showCriticalOverlap, currentAcledYear, acledYears, currentDate, isMapLoaded]);
+      // const visibility = (showCriticalOverlap && hasAcledData && !is2025) ? 'visible' : 'none';
+      // map.setLayoutProperty(layerId, 'visibility', visibility);
+      // 
+      // // Also update inset maps
+      // Object.values(insetMapsRef.current).forEach(inset => {
+      //   if (inset && inset.getLayer(layerId)) {
+      //     inset.setLayoutProperty(layerId, 'visibility', visibility);
+      //   }
+      // });
+      // }
+      // }, [showCriticalOverlap, currentAcledYear, acledYears, currentDate, isMapLoaded]);
+  */
   
 
   useEffect(() => {
@@ -559,61 +547,80 @@ const MapView = ({
         data: `/data/combined.geojson`,
       });
 
-      // Extract ACLED years from the GeoJSON data
-      fetch('/data/combined.geojson')
-        .then(response => response.json())
-        .then(data => {
-          const acledYearSet = new Set();
-          
-          data.features.forEach(f => {
-            // Extract ACLED years
-            Object.keys(f.properties)
-              .filter(key => key.startsWith("acled_evC"))
-              .forEach(key => {
-                const year = key.replace("acled_evC", "");
-                if (/^\d{4}$/.test(year)) {
-                  acledYearSet.add(parseInt(year));
-                }
-              });
-          });
-          
-          const acledYears = Array.from(acledYearSet).sort((a, b) => a - b);
-          
-          console.log('Extracted ACLED years:', acledYears); // Debug log
-          
-          setAcledYears(acledYears);
-          
-          // Set ACLED year to match the food insecurity year
-          if (dateOptions.length > 0) {
-            const lastPeriod = dateOptions[dateOptions.length - 1];
-            const { year } = parsePeriodKey(lastPeriod);
-            if (!isNaN(year) && acledYears.includes(year)) {
-              setCurrentAcledYear(year);
-            }
-          }
-          
-          // Update the map with the first available date
-          if (dateOptions.length > 0) {
-            const firstDate = dateOptions[dateOptions.length - 1]; // Get the most recent date
-            const classificationField = `classification_${firstDate}`;
-            const fillColorExpression = [
-              'match',
-              ['get', classificationField],
-              'Non analysée', '#ffffff',
-              'Phase 1 : minimal', '#d3f3d4',
-              'Phase 2 : sous pression', '#ffe252',
-              'Phase 3 : crises', '#fa890f',
-              'Phase 4 : urgence', '#eb3333',
-              'Phase 5 : famine', '#60090b',
-              'inaccessible', '#cccccc',
-              /* default */ '#ffffff'
-            ];
-            map.setPaintProperty('admin-boundaries-fill', 'fill-color', fillColorExpression);
-          }
-        })
-        .catch(error => {
-          console.error('Error loading GeoJSON data:', error);
-        });
+      // Extract ACLED years from the GeoJSON data - COMMENTED OUT FOR PRODUCTION
+      // fetch('/data/combined.geojson')
+      //   .then(response => response.json())
+      //   .then(data => {
+      //     const acledYearSet = new Set();
+      //     
+      //     data.features.forEach(f => {
+      //       // Extract ACLED years
+      //       Object.keys(f.properties)
+      //         .filter(key => key.startsWith("acled_evC"))
+      //         .forEach(key => {
+      //           const year = key.replace("acled_evC", "");
+      //           if (/^\d{4}$/.test(year)) {
+      //             acledYearSet.add(parseInt(year));
+      //           }
+      //         });
+      //     });
+      //     
+      //     const acledYears = Array.from(acledYearSet).sort((a, b) => a - b);
+      //     
+      //     console.log('Extracted ACLED years:', acledYears); // Debug log
+      //     
+      //     setAcledYears(acledYears);
+      //     
+      //     // Set ACLED year to match the food insecurity year
+      //     if (dateOptions.length > 0) {
+      //       const lastPeriod = dateOptions[dateOptions.length - 1];
+      //       const { year } = parsePeriodKey(lastPeriod);
+      //       if (!isNaN(year) && acledYears.includes(year)) {
+      //         setCurrentAcledYear(year);
+      //       }
+      //     }
+      //     
+      //     // Update the map with the first available date
+      //     if (dateOptions.length > 0) {
+      //       const firstDate = dateOptions[dateOptions.length - 1]; // Get the most recent date
+      //       const classificationField = `classification_${firstDate}`;
+      //       const fillColorExpression = [
+      //         'match',
+      //         ['get', classificationField],
+      //         'Non analysée', '#ffffff',
+      //         'Phase 1 : minimal', '#d3f3d4',
+      //         'Phase 2 : sous pression', '#ffe252',
+      //         'Phase 3 : crises', '#fa890f',
+      //         'Phase 4 : urgence', '#eb3333',
+      //         'Phase 5 : famine', '#60090b',
+      //         'inaccessible', '#cccccc',
+      //         /* default */ '#ffffff'
+      //       ];
+      //       map.setPaintProperty('admin-boundaries-fill', 'fill-color', fillColorExpression);
+      //     }
+      //   })
+      //   .catch(error => {
+      //     console.error('Error loading GeoJSON data:', error);
+      //   });
+      
+      // Update the map with the first available date (simplified for production)
+      if (dateOptions.length > 0) {
+        const firstDate = dateOptions[dateOptions.length - 1]; // Get the most recent date
+        const classificationField = `classification_${firstDate}`;
+        const fillColorExpression = [
+          'match',
+          ['get', classificationField],
+          'Non analysée', '#ffffff',
+          'Phase 1 : minimal', '#d3f3d4',
+          'Phase 2 : sous pression', '#ffe252',
+          'Phase 3 : crises', '#fa890f',
+          'Phase 4 : urgence', '#eb3333',
+          'Phase 5 : famine', '#60090b',
+          'inaccessible', '#cccccc',
+          /* default */ '#ffffff'
+        ];
+        map.setPaintProperty('admin-boundaries-fill', 'fill-color', fillColorExpression);
+      }
 
       // Determine the insertion point for custom layers.
       const customAdmin0LayerId = 'admin0-8pm03x';
@@ -669,52 +676,52 @@ const MapView = ({
         insertionLayerId
       );
 
-      // Add critical overlap layer - highlights high food insecurity + high conflict
-      map.addLayer(
-        {
-          id: 'critical-overlap-layer',
-          type: 'fill',
-          source: 'admin-boundaries',
-          minzoom: 3,
-          layout: {
-            visibility: showCriticalOverlap ? 'visible' : 'none'
-          },
-          paint: {
-            'fill-color': 'rgba(139, 0, 139, 0)', // Will be updated based on overlap
-            'fill-opacity': 1.0
-          },
-        },
-        insertionLayerId
-      );
+      // Add critical overlap layer - highlights high food insecurity + high conflict - COMMENTED OUT FOR PRODUCTION
+      // map.addLayer(
+      //   {
+      //     id: 'critical-overlap-layer',
+      //     type: 'fill',
+      //     source: 'admin-boundaries',
+      //     minzoom: 3,
+      //     layout: {
+      //       visibility: 'none' // Always hidden in production
+      //     },
+      //     paint: {
+      //       'fill-color': 'rgba(139, 0, 139, 0)', // Will be updated based on overlap
+      //       'fill-opacity': 1.0
+      //     },
+      //   },
+      //   insertionLayerId
+      // );
 
-      // Add ACLED conflict layer as density dots
-      map.addSource('acled-dots-source', {
-        type: 'geojson',
-        data: {
-          type: 'FeatureCollection',
-          features: []
-        }
-      });
-      
-      map.addLayer(
-        {
-          id: 'acled-conflict-layer',
-          type: 'circle',
-          source: 'acled-dots-source',
-          minzoom: 3,
-          layout: {
-            visibility: showAcledLayer ? 'visible' : 'none'
-          },
-          paint: {
-            'circle-radius': 2,
-            'circle-color': '#4E7C8D',
-            'circle-opacity': 0.7,
-            'circle-stroke-width': 0.5,
-            'circle-stroke-color': '#265E74'
-          },
-        },
-        insertionLayerId
-      );
+      // Add ACLED conflict layer as density dots - COMMENTED OUT FOR PRODUCTION
+      // map.addSource('acled-dots-source', {
+      //   type: 'geojson',
+      //   data: {
+      //     type: 'FeatureCollection',
+      //     features: []
+      //   }
+      // });
+      // 
+      // map.addLayer(
+      //   {
+      //     id: 'acled-conflict-layer',
+      //     type: 'circle',
+      //     source: 'acled-dots-source',
+      //     minzoom: 3,
+      //     layout: {
+      //       visibility: 'none' // Always hidden in production
+      //     },
+      //     paint: {
+      //       'circle-radius': 2,
+      //       'circle-color': '#4E7C8D',
+      //       'circle-opacity': 0.7,
+      //       'circle-stroke-width': 0.5,
+      //       'circle-stroke-color': '#265E74'
+      //     },
+      //   },
+      //   insertionLayerId
+      // );
 
       // Create a popup for hover interactions.
       const popup = new mapboxgl.Popup({
@@ -752,10 +759,10 @@ const MapView = ({
           const populationPh3Field = `population_ph3_${current}`;
           const levelField = `level_${current}`;
 
-          // ACLED fields
-          const acledEventsField = currentAcledYear ? `acled_evC${currentAcledYear}` : null;
-          const acledDensityField = currentAcledYear ? `acled_Dns${currentAcledYear}` : null;
-          const acledFatalitiesField = currentAcledYear ? `acled_ftl${currentAcledYear}` : null;
+          // ACLED fields - COMMENTED OUT FOR PRODUCTION
+          // const acledEventsField = currentAcledYear ? `acled_evC${currentAcledYear}` : null;
+          // const acledDensityField = currentAcledYear ? `acled_Dns${currentAcledYear}` : null;
+          // const acledFatalitiesField = currentAcledYear ? `acled_ftl${currentAcledYear}` : null;
           
   
           const props = feature.properties;
@@ -792,7 +799,8 @@ const MapView = ({
                 `
             : '';
 
-          // ACLED data section
+          // ACLED data section - COMMENTED OUT FOR PRODUCTION
+          /*
           const acledData = currentAcledYear && acledEventsField ? `
             <div class="popup-acled-section">
               <h5>${t("conflictData") || "Conflict Data"} (${currentAcledYear})</h5>
@@ -812,6 +820,8 @@ const MapView = ({
               </table>
             </div>
           ` : '';
+          */
+          const acledData = ''; // No ACLED data in production
 
           // Build popup content using CSS classes.
           const popupContent = `
@@ -1095,97 +1105,95 @@ const MapView = ({
         <h4>{t("legend") || "Legend"}</h4>
         
         {/* Food Insecurity Legend */}
-        {showFoodInsecurityLayer && (
-          <div className="food-insecurity-legend">
-            <h5>{t("foodInsecurityData") || "Food Insecurity Data"}</h5>
-            <div className="legend-item">
-              <div className="legend-color-box" style={{ backgroundColor: '#ffffff' }}></div>
-              <span>{t("nonAnalyzed")}</span>
-            </div>
-            <div className="legend-item">
-              <div className="legend-color-box" style={{ backgroundColor: '#d3f3d4' }}></div>
-              <span>{t("phase1")}</span>
-            </div>
-            <div className="legend-item">
-              <div className="legend-color-box" style={{ backgroundColor: '#ffe252' }}></div>
-              <span>{t("phase2")}</span>
-            </div>
-            <div className="legend-item">
-              <div className="legend-color-box" style={{ backgroundColor: '#fa890f' }}></div>
-              <span>{t("phase3")}</span>
-            </div>
-            <div className="legend-item">
-              <div className="legend-color-box" style={{ backgroundColor: '#eb3333' }}></div>
-              <span>{t("phase4")}</span>
-            </div>
-            <div className="legend-item">
-              <div className="legend-color-box" style={{ backgroundColor: '#60090b' }}></div>
-              <span>{t("phase5")}</span>
-            </div>
-            <div className="legend-item">
-              <div className="legend-color-box" style={{ backgroundColor: '#cccccc' }}></div>
-              <span>{t("inaccessible")}</span>
-            </div>
-          </div>
-        )}
-        
-        {/* ACLED Legend */}
-        {showAcledLayer && currentAcledYear && (
-          <div className="acled-legend">
-            <h5>{t("conflictDensityData") || "Conflict Density Data"} ({currentAcledYear})</h5>
-            <div className="legend-item">
-              <div className="legend-dot" style={{ 
-                width: '8px', 
-                height: '8px', 
-                borderRadius: '50%', 
-                backgroundColor: '#4E7C8D',
-                border: '1px solid #265E74',
-                display: 'inline-block',
-                marginRight: '8px'
-              }}></div>
-              <span>{t("conflictDots") || "Conflict Events (Dots)"}</span>
-            </div>
-            <div className="legend-note">
-              <em>{t("conflictDotsExplanation") || "Bigger dots = higher conflict density."}</em>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Critical Overlap Legend - Bottom Left Position */}
-      {showCriticalOverlap && (
-        <div className="critical-overlap-legend-bottom-left">
-          <h5>{t("criticalOverlapData") || "Critical Overlap Data"}</h5>
+        <div className="food-insecurity-legend">
+          <h5>{t("foodInsecurityData") || "Food Insecurity Data"}</h5>
           <div className="legend-item">
-            <div className="legend-pattern-box" style={{ 
-              backgroundColor: 'rgba(128, 0, 128, 0.3)',
-              width: '20px',
-              height: '20px',
-              border: '1px solid #333',
-              display: 'inline-block',
-              marginRight: '8px',
-              position: 'relative',
-              overflow: 'hidden'
-            }}>
-              <div style={{
-                position: 'absolute',
-                top: '-10px',
-                left: '-10px',
-                width: '40px',
-                height: '40px',
-                background: 'repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(128, 0, 128, 0.8) 4px, rgba(128, 0, 128, 0.8) 6px)',
-                transform: 'rotate(45deg)'
-              }}></div>
-            </div>
-            <span>{t("criticalOverlap") || "High Food Insecurity + High Conflict"}</span>
+            <div className="legend-color-box" style={{ backgroundColor: '#ffffff' }}></div>
+            <span>{t("nonAnalyzed")}</span>
           </div>
-          <div className="legend-note">
-            <strong>{t("criticalOverlapCriteria") || "Criteria:"}</strong><br/>
-            • {t("criticalOverlapFoodInsecurity") || "Food Insecurity: Phase 3 (Crisis), Phase 4 (Emergency), or Phase 5 (Famine)"}<br/>
-            • {t("criticalOverlapConflict") || "Conflict: Density ≥ 0.01 AND Events ≥ 5"}<br/>
+          <div className="legend-item">
+            <div className="legend-color-box" style={{ backgroundColor: '#d3f3d4' }}></div>
+            <span>{t("phase1")}</span>
+          </div>
+          <div className="legend-item">
+            <div className="legend-color-box" style={{ backgroundColor: '#ffe252' }}></div>
+            <span>{t("phase2")}</span>
+          </div>
+          <div className="legend-item">
+            <div className="legend-color-box" style={{ backgroundColor: '#fa890f' }}></div>
+            <span>{t("phase3")}</span>
+          </div>
+          <div className="legend-item">
+            <div className="legend-color-box" style={{ backgroundColor: '#eb3333' }}></div>
+            <span>{t("phase4")}</span>
+          </div>
+          <div className="legend-item">
+            <div className="legend-color-box" style={{ backgroundColor: '#60090b' }}></div>
+            <span>{t("phase5")}</span>
+          </div>
+          <div className="legend-item">
+            <div className="legend-color-box" style={{ backgroundColor: '#cccccc' }}></div>
+            <span>{t("inaccessible")}</span>
           </div>
         </div>
-      )}
+        
+        {/* ACLED Legend - COMMENTED OUT FOR PRODUCTION */}
+        {/* {currentAcledYear && (
+        //   <div className="acled-legend">
+        //     <h5>{t("conflictDensityData") || "Conflict Density Data"} ({currentAcledYear})</h5>
+        //     <div className="legend-item">
+        //       <div className="legend-dot" style={{ 
+        //         width: '8px', 
+        //         height: '8px', 
+        //         borderRadius: '50%', 
+        //         backgroundColor: '#4E7C8D',
+        //         border: '1px solid #265E74',
+        //         display: 'inline-block',
+        //         marginRight: '8px'
+        //       }}></div>
+        //       <span>{t("conflictDots") || "Conflict Events (Dots)"}</span>
+        //     </div>
+        //     <div className="legend-note">
+        //       <em>{t("conflictDotsExplanation") || "Bigger dots = higher conflict density."}</em>
+        //     </div>
+        //   </div>
+        // )} */}
+      </div>
+
+      {/* Critical Overlap Legend - Bottom Left Position - COMMENTED OUT FOR PRODUCTION */}
+      {/* {(
+      //   <div className="critical-overlap-legend-bottom-left">
+      //     <h5>{t("criticalOverlapData") || "Critical Overlap Data"}</h5>
+      //     <div className="legend-item">
+      //       <div className="legend-pattern-box" style={{ 
+      //         backgroundColor: 'rgba(128, 0, 128, 0.3)',
+      //         width: '20px',
+      //         height: '20px',
+      //         border: '1px solid #333',
+      //         display: 'inline-block',
+      //         marginRight: '8px',
+      //         position: 'relative',
+      //         overflow: 'hidden'
+      //       }}>
+      //         <div style={{
+      //           position: 'absolute',
+      //           top: '-10px',
+      //           left: '-10px',
+      //           width: '40px',
+      //           height: '40px',
+      //           background: 'repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(128, 0, 128, 0.8) 4px, rgba(128, 0, 128, 0.8) 6px)',
+      //           transform: 'rotate(45deg)'
+      //         }}></div>
+      //       </div>
+      //       <span>{t("criticalOverlap") || "High Food Insecurity + High Conflict"}</span>
+      //     </div>
+      //     <div className="legend-note">
+      //       <strong>{t("criticalOverlapCriteria") || "Criteria:"}</strong><br/>
+      //       • {t("criticalOverlapFoodInsecurity") || "Food Insecurity: Phase 3 (Crisis), Phase 4 (Emergency), or Phase 5 (Famine)"}<br/>
+      //       • {t("criticalOverlapConflict") || "Conflict: Density ≥ 0.01 AND Events ≥ 5"}<br/>
+      //     </div>
+      //   </div>
+      // )} */}
     </div>
   );
 };

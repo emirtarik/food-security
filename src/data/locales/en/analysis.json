@@ -120,5 +120,21 @@
     "criticalOverlapNote": "Darker purple indicates areas requiring immediate attention",
     "conflictDots": "Conflict Events (Dots)",
     "conflictDotsExplanation": "Bigger dots = higher conflict density.",
-    "projection": "Projection"
+    "projection": "Projection",
+    "download": "Download",
+    "dataDownloadTitle": "Download our Dataset",
+    "dataDownloadIntro": "Please fill in the short form below to enable the download.",
+    "email": "Email address",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "country": "Country",
+    "organisation": "Organisation (public sector: specify ministry or local entity)",
+    "stakeholderGrouping": "Stakeholder grouping",
+    "selectOption": "Select an option",
+    "intendedUse": "How do you intend to use the data? (voluntary)",
+    "downloadCsv": "Download CSV",
+    "completeFormToDownload": "Complete form to enable download",
+    "privacyNote": "These details are used only to understand who uses the data. No personal information is stored by this site.",
+    "invalidEmail": "Please enter a valid email",
+    "required": "Required"
   }

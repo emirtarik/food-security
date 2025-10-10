@@ -1,28 +1,22 @@
 .project-data-input-container {
-  background-color: #f9f9f9;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
-}
-
-.project-data-input-container h3 {
-  color: #333;
-  text-align: center;
-  margin-bottom: 20px;
+  background-color: #ffffff;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  margin-bottom: 0;
 }
 
 .project-data-form {
   display: grid;
   grid-template-columns: 1fr; /* Single column for smaller screens */
-  gap: 15px;
+  gap: 12px;
 }
 
 /* Responsive layout for larger screens */
 @media (min-width: 768px) {
   .project-data-form {
     grid-template-columns: 1fr 1fr; /* Two columns for medium and larger screens */
-    gap: 20px; /* Increased gap for larger screens */
+    gap: 16px; /* tighter gap */
   }
 }
 
@@ -32,10 +26,24 @@
 }
 
 .form-group label {
-  margin-bottom: 5px;
-  font-weight: bold;
-  color: #555;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #333;
   font-size: 0.9em;
+}
+
+.categories-group {
+  grid-column: 1 / -1;
+  background: #f8f9fa;
+  padding: 16px;
+  border-radius: 6px;
+  border: 1px solid #dee2e6;
+}
+
+.categories-group > label {
+  font-size: 1em;
+  margin-bottom: 12px;
+  color: #0056b3;
 }
 
 .form-group input[type="text"],
@@ -43,42 +51,87 @@
 .form-group input[type="url"],
 .form-group select,
 .form-group textarea {
-  padding: 10px;
+  padding: 8px 10px; /* narrower bars */
   border: 1px solid #ccc;
   border-radius: 4px;
-  font-size: 1em;
-  width: 100%; /* Ensure inputs take full width of their grid cell */
-  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  font-size: 0.95em;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .form-group textarea {
-  resize: vertical; /* Allow vertical resizing */
-  min-height: 80px;
+  resize: vertical;
+  min-height: 72px;
 }
 
 .submit-button {
-  background-color: #007bff;
+  background-color: #28a745;
   color: white;
-  padding: 12px 20px;
+  padding: 12px 24px;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 1em;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
-  /* Span across both columns if using a 2-column layout on larger screens */
+  font-weight: 600;
+  transition: all 0.3s ease;
   grid-column: 1 / -1;
-  justify-self: center; /* Center the button within the grid area */
-  width: auto; /* Auto width based on padding and content */
-  min-width: 200px; /* Minimum width for the button */
-  margin-top: 10px;
+  justify-self: center;
+  width: auto;
+  min-width: 200px;
+  margin-top: 16px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .submit-button:hover {
-  background-color: #0056b3;
+  background-color: #218838;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  transform: translateY(-1px);
+}
+
+.submit-button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+  transform: none;
 }
 
 /* Specific styling for admin1 dropdown to ensure it's prominent */
 .form-group select#admin1 {
   border-color: #007bff; /* Highlight border */
+}
+
+/* Categories grid */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 12px;
+}
+
+@media (min-width: 768px) {
+  .category-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.category-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.875em;
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+.category-icon-inline {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.category-icon-inline svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
 }

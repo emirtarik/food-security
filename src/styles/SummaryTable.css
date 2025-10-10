@@ -2,84 +2,120 @@
 
 .summary-table {
   width: 48%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   margin: 0;
   padding: 0;
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 2px solid #243D54;
+  outline: 1px solid #C2BE00;
+  outline-offset: -4px;
 }
 
 .summary-table th,
 .summary-table td {
-  padding: 0.125rem; /* 2px => 0.125rem */
+  padding: 0.5rem 0.75rem; /* Increased from 2px for better spacing */
   text-align: left;
-  border: 1px solid #ddd;
-  vertical-align: middle; /* Vertically centers the content inside the table cells */
+  border: 1px solid #e8e8e8;
+  vertical-align: middle;
+  line-height: 1.4;
 }
 
 /* Section Headers */
 .summary-table th.section {
-  max-width: 50px;
-  font-size: 1.125rem; /* 18px => 1.125rem */
+  min-width: 60px;
+  max-width: 80px;
+  font-size: 1rem;
   font-weight: 700;
-  padding: 0.125rem; /* 2px => 0.125rem */
-  text-align: left;
+  padding: 0.75rem 0.5rem;
+  text-align: center;
+  background-color: #f8f9fa;
+  color: #243D54;
+  border-right: 2px solid #C2BE00;
 }
 
 .summary-table td.section {
-  max-width: 50px;
-  font-size: 1.125rem; /* 18px => 1.125rem */
+  min-width: 60px;
+  max-width: 80px;
+  font-size: 1rem;
   font-weight: 700;
-  padding: 0.125rem; /* 2px => 0.125rem */
+  padding: 0.75rem 0.5rem;
   text-align: center;
+  background-color: #f8f9fa;
+  color: #243D54;
+  border-right: 2px solid #C2BE00;
 }
 
 /* Sub-Section Headers */
 .summary-table th.sub-section {
-  max-width: 60px;
-  font-size: 1.125rem; /* 18px => 1.125rem */
+  min-width: 80px;
+  max-width: 120px;
+  font-size: 0.95rem;
   font-weight: 700;
-  padding: 0.125rem; /* 2px => 0.125rem */
+  padding: 0.65rem 0.75rem;
   text-align: left;
+  background-color: #fafbfc;
+  color: #243D54;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .summary-table td.sub-section {
-  max-width: 60px;
-  font-size: 0.75rem; /* 12px => 0.75rem */
-  font-weight: 700;
-  padding: 0.125rem; /* 2px => 0.125rem */
+  min-width: 80px;
+  max-width: 120px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.65rem 0.75rem;
   text-align: left;
+  background-color: #fafbfc;
+  color: #495057;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 /* Score Headers */
 .summary-table th.score {
-  width: 600px;
-  font-size: 1.125rem; /* 18px => 1.125rem */
+  min-width: 200px;
+  max-width: 100%;
+  width: auto;
+  font-size: 0.95rem;
   font-weight: 700;
-  padding: 0.125rem; /* 2px => 0.125rem */
-  text-align: left;
+  padding: 0.65rem 0.75rem;
+  text-align: center;
+  background-color: #f8f9fa;
+  color: #243D54;
 }
 
 .summary-table td.score {
-  width: 600px;
-  font-size: 0.75rem; /* 12px => 0.75rem */
-  font-weight: 700;
-  padding: 0.125rem; /* 2px => 0.125rem */
+  min-width: 200px;
+  max-width: 100%;
+  width: auto;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.65rem 0.75rem;
   vertical-align: middle;
 }
 
 /* Stage Bar Styles */
 .stage-bar {
   position: relative;
-  background-color: #ecf0f1;
-  border-radius: 0.25rem; /* 4px => 0.25rem */
+  background-color: #e9ecef;
+  border-radius: 6px;
   overflow: hidden;
-  height: 1.125rem; /* 18px => 1.125rem */
+  height: 1.5rem; /* Increased from 18px to 24px for better visibility */
   display: flex;
-  align-items: center; /* Vertically centers content within the stage bar */
+  align-items: center;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #dee2e6;
 }
 
 .stage-fill {
   height: 100%;
-  transition: width 0.3s ease-in-out;
+  transition: width 0.4s ease-in-out;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.3);
 }
 
 .stage-text {
@@ -89,12 +125,13 @@
   width: 100%;
   height: 100%;
   display: flex;
-  align-items: center; /* Vertically center the text within the stage bar */
+  align-items: center;
   justify-content: center;
   color: #000;
-  font-size: 0.625rem; /* 10px => 0.625rem */
-  font-weight: bold;
+  font-size: 0.7rem; /* Increased from 10px for better readability */
+  font-weight: 700;
   z-index: 1;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
 }
 
 .section-spacing {
@@ -104,23 +141,23 @@
 
 /* Stage Fill Colors */
 .stage-fill.stage-0 {
-  background-color: #FF6B6B; /* Inexistant */
+  background: linear-gradient(to bottom, #FF6B6B, #FF5555); /* Inexistant */
 }
 
 .stage-fill.stage-1 {
-  background-color: #FFA07A; /* Embryonnaire */
+  background: linear-gradient(to bottom, #FFA07A, #FF9068); /* Embryonnaire */
 }
 
 .stage-fill.stage-2 {
-  background-color: #FFD580; /* Emergent */
+  background: linear-gradient(to bottom, #FFD580, #FFC870); /* Emergent */
 }
 
 .stage-fill.stage-3 {
-  background-color: #B0E57C; /* Consolidé */
+  background: linear-gradient(to bottom, #B0E57C, #A0D86C); /* Consolidé */
 }
 
 .stage-fill.stage-4 {
-  background-color: #8FBC8F; /* Mature */
+  background: linear-gradient(to bottom, #8FBC8F, #7EAB7E); /* Mature */
 }
 
 .section-spacing {
@@ -133,36 +170,128 @@
   left: 0;
   width: 100%;
   height: 100%;
+  pointer-events: none;
 }
 
 .stage-marker {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 0.0625rem; /* 1px => 0.0625rem */
-  background-color: #909090; /* Color of the marker */
+  width: 2px;
+  background-color: rgba(0, 0, 0, 0.15);
   height: 100%;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
 }
 
 .stage-header {
   display: flex;
   justify-content: space-between;
-  background-color: #2c3e50; /* Example background color */
-  color: #fff; /* Text color */
-  padding: 0.3125rem 0; /* 5px => 0.3125rem */
+  background: linear-gradient(to bottom, #243D54, #1d2f44);
+  color: #ffffff;
+  padding: 0.65rem 0;
+  border-radius: 6px 6px 0 0;
+  font-weight: 600;
 }
 
 .stage-header-cell {
   flex: 1;
   text-align: center;
-  border-right: 0.0625rem solid #fff; /* 1px => 0.0625rem */
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 0.9rem;
+  padding: 0 0.5rem;
 }
 
 .stage-header-cell:last-child {
-  border-right: none; /* Remove the border on the last cell */
+  border-right: none;
 }
 
 .summary-table th {
   text-align: center;
-  padding: 0.00625rem 0.00625rem !important; /* 0.1rem => ~1.6px (might need adjustment) */
+  font-weight: 700;
+}
+
+/* Row hover effects */
+.summary-table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.summary-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* Improve table header readability */
+.summary-table thead th {
+  background-color: #243D54;
+  color: #ffffff;
+  font-weight: 700;
+  padding: 0.85rem 0.75rem;
+  border-color: #1d2f44;
+}
+
+/* Add responsive behavior for smaller screens */
+@media screen and (max-width: 1200px) {
+  .summary-table {
+    width: 100%;
+    font-size: 0.9rem;
+  }
+  
+  .summary-table th,
+  .summary-table td {
+    padding: 0.4rem 0.5rem;
+  }
+  
+  .summary-table th.section,
+  .summary-table td.section {
+    min-width: 50px;
+    max-width: 70px;
+    font-size: 0.9rem;
+  }
+  
+  .summary-table th.sub-section,
+  .summary-table td.sub-section {
+    min-width: 70px;
+    max-width: 100px;
+    font-size: 0.85rem;
+  }
+  
+  .stage-bar {
+    height: 1.25rem;
+  }
+  
+  .stage-text {
+    font-size: 0.65rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .summary-table {
+    width: 100%;
+    font-size: 0.85rem;
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .summary-table th,
+  .summary-table td {
+    padding: 0.35rem 0.4rem;
+    font-size: 0.8rem;
+  }
+  
+  .stage-bar {
+    height: 1.15rem;
+  }
+  
+  .stage-text {
+    font-size: 0.6rem;
+  }
+  
+  .stage-header {
+    padding: 0.5rem 0;
+  }
+  
+  .stage-header-cell {
+    font-size: 0.75rem;
+    padding: 0 0.25rem;
+  }
 }

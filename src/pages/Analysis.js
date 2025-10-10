@@ -9,14 +9,15 @@ import Header from "./Header";
 import Footer from "./Footer";
 import SubHeader from "./SubHeader";
 import Disclaimer from "../components/Disclaimer";
+import DataDownload from "../components/DataDownload";
 import { useTranslationHook } from "../i18n";
 import "../styles/Analysis.css";
 
 export default function Analysis() {
-  const { t, i18n } = useTranslationHook("analysis");
+  const { t } = useTranslationHook("analysis");
   const projectsSectionRef = useRef(null);
 
-  // Tabs state: "map" or "comparison"
+  // Tabs state: "map" | "comparison" | "download"
   const [activeTab, setActiveTab] = useState("map");
 
   // Shared state for country and region selection across all plots
@@ -27,27 +28,26 @@ export default function Analysis() {
   // Map controls state
   const [dateOptions, setDateOptions] = useState([]);
   const [currentDateIndex, setCurrentDateIndex] = useState(0);
-  const [showFoodInsecurityLayer, setShowFoodInsecurityLayer] = useState(true);
-  const [showAcledLayer, setShowAcledLayer] = useState(true);
-  const [showCriticalOverlap, setShowCriticalOverlap] = useState(true);
+  // Removed opacity control - not needed for production
+  // Layer visibility controls removed - only food insecurity data available! 
 
   // Regional organization definitions (shared across components)
   const regionalOrganizations = {
     'UEMOA': {
       name: 'UEMOA',
-      countries: ['Benin', 'Burkina Faso', 'Côte d\'Ivoire', 'Guinea-Bissau', 'Mali', 'Niger', 'Senegal', 'Togo'],
+      countries: ['Benin', 'Burkina Faso', 'Côte d\'Ivoire', 'Guinea Bissau', 'Mali', 'Niger', 'Senegal', 'Togo'],
       color: '#FF6B35',
       description: 'West African Economic and Monetary Union'
     },
     'ECOWAS': {
       name: 'ECOWAS',
-      countries: ['Benin', 'Burkina Faso', 'Cabo Verde', 'Côte d\'Ivoire', 'Gambia', 'Ghana', 'Guinea', 'Guinea-Bissau', 'Liberia', 'Mali', 'Niger', 'Nigeria', 'Senegal', 'Sierra Leone', 'Togo'],
+      countries: ['Benin', 'Burkina Faso', 'Cabo Verde', 'Côte d\'Ivoire', 'Gambia', 'Ghana', 'Guinea', 'Guinea Bissau', 'Liberia', 'Mali', 'Niger', 'Nigeria', 'Senegal', 'Sierra Leone', 'Togo'],
       color: '#4CAF50',
       description: 'Economic Community of West African States'
     },
     'CILSS': {
       name: 'CILSS',
-      countries: ['Benin', 'Burkina Faso', 'Cape Verde', 'Chad', 'Gambia', 'Guinea-Bissau', 'Mali', 'Mauritania', 'Niger', 'Senegal'],
+      countries: ['Benin', 'Burkina Faso', 'Cabo Verde', 'Chad', 'Gambia', 'Guinea Bissau', 'Mali', 'Mauritania', 'Niger', 'Senegal'],
       color: '#9C27B0',
       description: 'Permanent Interstates Committee for Drought Control in the Sahel'
     }
@@ -61,89 +61,6 @@ export default function Analysis() {
     period2: ""
   });
 
-  // Helper function to format date display
-  const formatDateDisplay = (dateStr) => {
-    // Better language detection - check multiple sources
-    let language = 'en';
-    
-    // Try to get language from i18n first
-    if (i18n && i18n.language) {
-      language = i18n.language;
-    } else if (window.location.pathname.includes('/fr') || 
-        window.location.href.includes('/fr') || 
-        document.documentElement.lang === 'fr') {
-      language = 'fr';
-    }
-    
-    // Alternative: Check if we can detect French from the translation system
-    // Try translating a word that's different in French
-    const testTranslation = t('map');
-    if (testTranslation === 'Carte') {
-      language = 'fr';
-    }
-    
-    // Manual override for testing - uncomment the line below to force French
-    // language = 'fr';
-    
-    console.log('i18n object:', i18n); // Debug log
-    console.log('Test translation for "map":', testTranslation); // Debug log
-    console.log('Language detected:', language, 'for date:', dateStr); // Debug log
-    
-    if (!dateStr) return '';
-    
-    // Handle PJune-2025 format (projection)
-    if (dateStr.startsWith('P')) {
-      const month = dateStr.substring(1, dateStr.indexOf('-'));
-      const year = dateStr.substring(dateStr.indexOf('-') + 1);
-      
-      const monthMap = {
-        en: {
-          'Jan': 'January', 'Feb': 'February', 'Mar': 'March', 'Apr': 'April',
-          'May': 'May', 'Jun': 'June', 'Jul': 'July', 'Aug': 'August',
-          'Sep': 'September', 'Oct': 'October', 'Nov': 'November', 'Dec': 'December'
-        },
-        fr: {
-          'Jan': 'Janvier', 'Feb': 'Février', 'Mar': 'Mars', 'Apr': 'Avril',
-          'May': 'Mai', 'Jun': 'Juin', 'Jul': 'Juillet', 'Aug': 'Août',
-          'Sep': 'Septembre', 'Oct': 'Octobre', 'Nov': 'Novembre', 'Dec': 'Décembre'
-        }
-      };
-      
-      const fullMonth = monthMap[language]?.[month] || month;
-      const projectionText = language === 'fr' ? t('projection') : t('projection');
-      
-      console.log('Projection format - Month:', month, 'Full month:', fullMonth, 'Language:', language); // Debug log
-      return `${fullMonth} ${projectionText} ${year}`;
-    }
-    
-    // Handle regular format like "March-2024"
-    const parts = dateStr.split('-');
-    if (parts.length === 2) {
-      const month = parts[0];
-      const year = parts[1];
-      
-      const monthMap = {
-        en: {
-          'January': 'January', 'February': 'February', 'March': 'March', 'April': 'April',
-          'May': 'May', 'June': 'June', 'July': 'July', 'August': 'August',
-          'September': 'September', 'October': 'October', 'November': 'November', 'December': 'December'
-        },
-        fr: {
-          'January': 'Janvier', 'February': 'Février', 'March': 'Mars', 'April': 'Avril',
-          'May': 'Mai', 'June': 'Juin', 'July': 'Juillet', 'August': 'Août',
-          'September': 'Septembre', 'October': 'Octobre', 'November': 'Novembre', 'December': 'Décembre'
-        }
-      };
-      
-      const translatedMonth = monthMap[language]?.[month] || month;
-      console.log('Regular format - Month:', month, 'Translated:', translatedMonth, 'Language:', language); // Debug log
-      return `${translatedMonth} ${year}`;
-    }
-    
-    // Fallback to original string if format is not recognized
-    return dateStr;
-  };
-
   // Determine current admin level from selectedRegionData
   const getCurrentAdminLevel = (region) => {
     if (region.admin2) return "admin2";
@@ -154,6 +71,64 @@ export default function Analysis() {
 
   // Fetch geojson features for region selection from combined.geojson.
   const [geojsonFeatures, setGeojsonFeatures] = useState([]);
+
+  // Helper function to parse and sort dates chronologically
+  const parseAndSortDates = (periods) => {
+    return periods.sort((p1, p2) => {
+      // Handle special case for PJune (Projection June)
+      const normalizePeriod = (period) => {
+        if (period.startsWith('P')) {
+          // For PJune-2025, treat it as June-2025 for sorting, but keep original for display
+          return period.replace('P', '');
+        }
+        return period;
+      };
+
+      const normalized1 = normalizePeriod(p1);
+      const normalized2 = normalizePeriod(p2);
+
+      // Parse month and year
+      const parseDate = (periodStr) => {
+        const [month, year] = periodStr.split('-');
+        const monthIndex = {
+          'January': 0, 'February': 1, 'March': 2, 'April': 3, 'May': 4, 'June': 5,
+          'July': 6, 'August': 7, 'September': 8, 'October': 9, 'November': 10, 'December': 11
+        };
+        
+        return {
+          year: parseInt(year),
+          month: monthIndex[month] || 0
+        };
+      };
+
+      const date1 = parseDate(normalized1);
+      const date2 = parseDate(normalized2);
+
+      // Compare years first
+      if (date1.year !== date2.year) {
+        return date1.year - date2.year;
+      }
+      
+      // If same year, compare months
+      return date1.month - date2.month;
+    });
+  };
+
+  // Helper function to format dates for display
+  const formatDateDisplay = (period) => {
+    if (!period) return '';
+    
+    if (period.startsWith('P')) {
+      // Handle projection periods like PJune-2025
+      const month = period.substring(1, period.lastIndexOf('-'));
+      const year = period.substring(period.lastIndexOf('-') + 1);
+      return `${month} Projection ${year}`;
+    }
+    
+    // Handle regular periods like March-2024
+    const [month, year] = period.split('-');
+    return `${month} ${year}`;
+  };
 
   useEffect(() => {
     if (projectsSectionRef.current) {
@@ -192,52 +167,10 @@ export default function Analysis() {
         });
         
         const periods = Array.from(periodSet);
-        
-        // Simple approach: map PJune to June for sorting purposes
-        const normalizedPeriods = periods.map(period => {
-          if (period === 'PJune-2025') {
-            return 'June-2025'; // Map PJune to June for sorting
-          }
-          return period;
-        });
-        
-        normalizedPeriods.sort((p1, p2) => {
-          // Parse dates for chronological sorting
-          const parseDate = (dateStr) => {
-            // Handle different date formats: "Mar2023", "Nov2023", "Jun2024", etc.
-            const monthMap = {
-              'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 'May': 5, 'Jun': 6,
-              'Jul': 7, 'Aug': 8, 'Sep': 9, 'Oct': 10, 'Nov': 11, 'Dec': 12
-            };
-            
-            // Extract month and year
-            const monthMatch = dateStr.match(/^([A-Za-z]{3})(\d{4})$/);
-            if (monthMatch) {
-              const month = monthMap[monthMatch[1]];
-              const year = parseInt(monthMatch[2]);
-              return new Date(year, month - 1, 1); // month is 0-indexed in Date constructor
-            }
-            
-            // Fallback to string comparison if parsing fails
-            return new Date(dateStr);
-          };
-          
-          const date1 = parseDate(p1);
-          const date2 = parseDate(p2);
-          
-          return date1 - date2; // Chronological order (earliest first)
-        });
-        
-        // Convert back to original format for PJune
-        const sortedPeriods = normalizedPeriods.map(period => {
-          if (period === 'June-2025') {
-            return 'PJune-2025'; // Convert back to original format
-          }
-          return period;
-        });
+        const sortedPeriods = parseAndSortDates(periods);
         
         setDateOptions(sortedPeriods);
-        setCurrentDateIndex(periods.length - 1); // Set to the last available date
+        setCurrentDateIndex(sortedPeriods.length - 1); // Set to the last available date
       })
       .catch(error => console.error("Error loading combined GeoJSON:", error));
   }, []);
@@ -262,6 +195,12 @@ export default function Analysis() {
               >
                 {t("comparison")}
               </button>
+              <button
+                className={activeTab === "download" ? "tab-button active-tab" : "tab-button"}
+                onClick={() => setActiveTab("download")}
+              >
+                {t("download") || "Download"}
+              </button>
             </div>
             <div className="tab-content">
               {activeTab === "map" ? (
@@ -269,86 +208,30 @@ export default function Analysis() {
                   {/* Map Controls */}
                   <div className="map-controls">
                     <div className="control-section">
-                      <div className="modern-date-selector">
-                        <div className="date-header">
-                          <span className="date-label">{t("date")}</span>
-                          <span className="current-date">{formatDateDisplay(dateOptions[currentDateIndex])}</span>
-                        </div>
-                        <div className="slider-container">
-                          <div className="slider-track">
-                            <div 
-                              className="slider-fill" 
-                              style={{ 
-                                width: `${dateOptions.length > 1 ? (currentDateIndex / (dateOptions.length - 1)) * 100 : 0}%` 
-                              }}
-                            ></div>
-                            <input
-                              type="range"
-                              min="0"
-                              max={dateOptions.length - 1}
-                              step="1"
-                              value={currentDateIndex}
-                              onChange={(e) => setCurrentDateIndex(parseInt(e.target.value))}
-                              className="modern-slider"
-                            />
-                          </div>
-                                                  <div className="slider-labels">
-                          <span className="slider-min">{formatDateDisplay(dateOptions[0])}</span>
-                          <span className="slider-max">{formatDateDisplay(dateOptions[dateOptions.length - 1])}</span>
-                        </div>
+                      <div className="date-selector">
+                        <span className="active-date">{t("date")}: {formatDateDisplay(dateOptions[currentDateIndex]) || ''}</span>
+                        <input
+                          type="range"
+                          min="0"
+                          max={dateOptions.length - 1}
+                          step="1"
+                          value={currentDateIndex}
+                          onChange={(e) => setCurrentDateIndex(parseInt(e.target.value))}
+                        />
+                        <div className="date-range-labels">
+                          <span className="date-range-start">{formatDateDisplay(dateOptions[0])}</span>
+                          <span className="date-range-end">{formatDateDisplay(dateOptions[dateOptions.length - 1])}</span>
                         </div>
                       </div>
-
+                      {/* Opacity control removed - not needed for production */}
                     </div>
-                    <div className="control-section">
-                      <div className="modern-layer-controls">
-                        <div className="layer-control-item">
-                          <label className="modern-checkbox">
-                            <input
-                              type="checkbox"
-                              checked={showFoodInsecurityLayer}
-                              onChange={(e) => setShowFoodInsecurityLayer(e.target.checked)}
-                            />
-                            <span className="checkmark"></span>
-                            <span className="layer-label">{t("showFoodInsecurityData") || "Show Food Insecurity Data"}</span>
-                          </label>
-                        </div>
-                        <div className="layer-control-item">
-                          <label className="modern-checkbox">
-                            <input
-                              type="checkbox"
-                              checked={showAcledLayer}
-                              onChange={(e) => setShowAcledLayer(e.target.checked)}
-                            />
-                            <span className="checkmark"></span>
-                            <span className="layer-label">{t("showConflictData") || "Show Conflict Data"}</span>
-                          </label>
-                        </div>
-                        <div className="layer-control-item">
-                          <label className="modern-checkbox">
-                            <input
-                              type="checkbox"
-                              checked={showCriticalOverlap}
-                              onChange={(e) => setShowCriticalOverlap(e.target.checked)}
-                            />
-                            <span className="checkmark"></span>
-                            <span className="layer-label">{t("showCriticalOverlap") || "Show Critical Overlap"}</span>
-                          </label>
-                        </div>
-                      </div>
-                    </div>
+                    {/* Layer controls removed - only food insecurity data available */}
                   </div>
                   
                   <MapView 
                     currentDateIndex={currentDateIndex}
                     setCurrentDateIndex={setCurrentDateIndex}
                     dateOptions={dateOptions}
-                    showFoodInsecurityLayer={showFoodInsecurityLayer}
-                    setShowFoodInsecurityLayer={setShowFoodInsecurityLayer}
-                    showAcledLayer={showAcledLayer}
-                    setShowAcledLayer={setShowAcledLayer}
-                    showCriticalOverlap={showCriticalOverlap}
-                    setShowCriticalOverlap={setShowCriticalOverlap}
                   />
                   
                   <Ph3PlusLinePlot
@@ -361,7 +244,7 @@ export default function Analysis() {
                     regionalOrganizations={regionalOrganizations}
                   />
                 </div>
-              ) : (
+              ) : activeTab === "comparison" ? (
                 <div>
                   <RegionSelector
                     geojsonData={geojsonFeatures}
@@ -402,6 +285,10 @@ export default function Analysis() {
                     period1={selectedRegionData.period1}
                     period2={selectedRegionData.period2}
                   />
+                </div>
+              ) : (
+                <div>
+                  <DataDownload />
                 </div>
               )}
             </div>

@@ -10,13 +10,17 @@ import '../styles/Projects.css';
 const Projects = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sortBy, setSortBy] = useState(''); // '', 'startYear', 'endYear', 'budget'
+  const [sortOrder, setSortOrder] = useState('desc'); // 'asc' or 'desc'
+  const itemsPerPage = 20;
+  
   // Initialize filters with "All" as default for new dropdowns
   const [filters, setFilters] = useState({
-    donor: 'All',
-    status: 'All',
+    donors: [], // Changed to array for multi-select
     fundingAgency: '',
     implementingAgency: '',
-    recipient: 'All',
+    recipientCountries: [], // Changed to array for multi-select
     startYear: 'All',
     endYear: 'All',
     budgetUSD: 'All',
@@ -34,38 +38,96 @@ const Projects = () => {
 
   // Generate unique options for dropdowns
   const donorOptions = useMemo(() => {
-    const donors = new Set(projects.map(p => p.donor).filter(Boolean));
-    return ["All", ...Array.from(donors).sort()];
+    const donors = new Set();
+    projects.forEach(p => {
+      const donor = p.donor?.trim();
+      if (!donor) return;
+      
+      // Parse multiple donors from donor field
+      // Split by common delimiters: semicolon, plus sign, comma
+      const parsedDonors = donor
+        .split(/[;+,]/) // Split by semicolon, plus, or comma
+        .map(d => d.trim()) // Trim whitespace
+        .filter(d => d.length > 0); // Remove empty strings
+      
+      parsedDonors.forEach(d => donors.add(d));
+    });
+    
+    return Array.from(donors).sort();
   }, [projects]);
 
-  const recipientOptions = useMemo(() => {
-    const recipients = new Set(projects.map(p => p.recipient).filter(Boolean));
-    return ["All", ...Array.from(recipients).sort()];
+  const recipientCountryOptions = useMemo(() => {
+    const countries = new Set();
+    projects.forEach(p => {
+      const recipient = p.recipient?.trim();
+      if (!recipient) return;
+      
+      // Parse multiple countries from recipient field
+      // Split by common delimiters: semicolon, plus sign, comma
+      const parsedCountries = recipient
+        .split(/[;+,]/) // Split by semicolon, plus, or comma
+        .map(country => country.trim()) // Trim whitespace
+        .filter(country => country.length > 0); // Remove empty strings
+      
+      parsedCountries.forEach(country => countries.add(country));
+    });
+    
+    return Array.from(countries).sort();
   }, [projects]);
 
   const startYearOptions = useMemo(() => {
-    const years = new Set(projects.map(p => p.start ? new Date(p.start).getFullYear() : null).filter(Boolean));
-    return ["All", ...Array.from(years).sort((a, b) => a - b)];
-  }, [projects]);
+    const years = [];
+    for (let year = 1970; year <= 2030; year++) {
+      years.push(year);
+    }
+    return ["All", ...years];
+  }, []);
 
   const endYearOptions = useMemo(() => {
-    const years = new Set(projects.map(p => p.end ? new Date(p.end).getFullYear() : null).filter(Boolean));
-    return ["All", ...Array.from(years).sort((a, b) => a - b)];
-  }, [projects]);
+    const years = [];
+    for (let year = 1970; year <= 2030; year++) {
+      years.push(year);
+    }
+    return ["All", ...years];
+  }, []);
 
   const handleFilterChange = (filterName, value) => {
     setFilters(prev => ({ ...prev, [filterName]: value }));
+    setCurrentPage(1); // Reset to first page when filters change
+  };
+
+  const handleSort = (field) => {
+    if (sortBy === field) {
+      // Toggle sort order if clicking the same field
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      // Set new field and default to descending
+      setSortBy(field);
+      setSortOrder('desc');
+    }
+    setCurrentPage(1); // Reset to first page when sorting changes
   };
 
   const filteredProjects = useMemo(() => {
     let tempProjects = [...projects];
 
     // Updated filtering logic for dropdowns
-    if (filters.donor && filters.donor !== "All") {
-      tempProjects = tempProjects.filter(p => p.donor === filters.donor);
-    }
-    if (filters.status && filters.status !== "All") {
-      tempProjects = tempProjects.filter(p => p.status === filters.status);
+    if (filters.donors && filters.donors.length > 0) {
+      tempProjects = tempProjects.filter(p => {
+        const donor = p.donor?.trim();
+        if (!donor) return false;
+        
+        // Parse donors from the project's donor field
+        const projectDonors = donor
+          .split(/[;+,]/)
+          .map(d => d.trim().toLowerCase())
+          .filter(d => d.length > 0);
+        
+        // Check if ALL selected donors appear in this project's donor list (AND logic)
+        return filters.donors.every(selectedDonor => 
+          projectDonors.includes(selectedDonor.toLowerCase())
+        );
+      });
     }
     if (filters.fundingAgency) {
       tempProjects = tempProjects.filter(p => p.fundingAgency?.toLowerCase().includes(filters.fundingAgency.toLowerCase()));
@@ -73,16 +135,40 @@ const Projects = () => {
     if (filters.implementingAgency) {
       tempProjects = tempProjects.filter(p => p.implementingAgency?.toLowerCase().includes(filters.implementingAgency.toLowerCase()));
     }
-    if (filters.recipient && filters.recipient !== "All") {
-      tempProjects = tempProjects.filter(p => p.recipient === filters.recipient);
+    if (filters.recipientCountries && filters.recipientCountries.length > 0) {
+      tempProjects = tempProjects.filter(p => {
+        const recipient = p.recipient?.trim();
+        if (!recipient) return false;
+        
+        // Parse countries from the project's recipient field
+        const projectCountries = recipient
+          .split(/[;+,]/)
+          .map(country => country.trim().toLowerCase())
+          .filter(country => country.length > 0);
+        
+        // Check if ALL selected countries appear in this project's recipient list (AND logic)
+        return filters.recipientCountries.every(selectedCountry => 
+          projectCountries.includes(selectedCountry.toLowerCase())
+        );
+      });
     }
     if (filters.startYear && filters.startYear !== "All") {
       const startYearVal = parseInt(filters.startYear);
-      tempProjects = tempProjects.filter(p => p.start && new Date(p.start).getFullYear() >= startYearVal);
+      tempProjects = tempProjects.filter(p => {
+        // Handle both year numbers and date strings
+        const projectStartYear = typeof p.start === 'number' ? p.start : 
+                                  p.start ? new Date(p.start).getFullYear() : null;
+        return projectStartYear && projectStartYear >= startYearVal;
+      });
     }
     if (filters.endYear && filters.endYear !== "All") {
       const endYearVal = parseInt(filters.endYear);
-      tempProjects = tempProjects.filter(p => p.end && new Date(p.end).getFullYear() <= endYearVal);
+      tempProjects = tempProjects.filter(p => {
+        // Handle both year numbers and date strings
+        const projectEndYear = typeof p.end === 'number' ? p.end : 
+                                p.end ? new Date(p.end).getFullYear() : null;
+        return projectEndYear && projectEndYear <= endYearVal;
+      });
     }
     // Ensure budgetUSD filter also checks for "All" or specific value
     if (filters.budgetUSD && filters.budgetUSD !== "All") {
@@ -109,8 +195,42 @@ const Projects = () => {
           break;
       }
     }
+
+    // Apply sorting
+    if (sortBy) {
+      tempProjects.sort((a, b) => {
+        let aValue, bValue;
+
+        if (sortBy === 'startYear') {
+          aValue = typeof a.start === 'number' ? a.start : (a.start ? new Date(a.start).getFullYear() : 0);
+          bValue = typeof b.start === 'number' ? b.start : (b.start ? new Date(b.start).getFullYear() : 0);
+        } else if (sortBy === 'endYear') {
+          aValue = typeof a.end === 'number' ? a.end : (a.end ? new Date(a.end).getFullYear() : 0);
+          bValue = typeof b.end === 'number' ? b.end : (b.end ? new Date(b.end).getFullYear() : 0);
+        } else if (sortBy === 'budget') {
+          aValue = a.budgetUSD || 0;
+          bValue = b.budgetUSD || 0;
+        }
+
+        if (sortOrder === 'asc') {
+          return aValue - bValue;
+        } else {
+          return bValue - aValue;
+        }
+      });
+    }
+
     return tempProjects;
-  }, [projects, filters]);
+  }, [projects, filters, sortBy, sortOrder]);
+
+  // Paginated projects
+  const paginatedProjects = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return filteredProjects.slice(startIndex, endIndex);
+  }, [filteredProjects, currentPage, itemsPerPage]);
+
+  const totalPages = Math.ceil(filteredProjects.length / itemsPerPage);
 
   return (
     <div>
@@ -119,21 +239,50 @@ const Projects = () => {
       <div className="projects-page-container">
         <MapViewProjects projects={filteredProjects} />
         <div className="filters-container">
-          <div className="filter-item">
-            <label htmlFor="donor">Donor:</label>
-            <select id="donor" value={filters.donor} onChange={(e) => handleFilterChange('donor', e.target.value)}>
-              {donorOptions.map(option => <option key={option} value={option}>{option}</option>)}
-            </select>
-          </div>
-          <div className="filter-item">
-            <label htmlFor="status">Status:</label>
-            <select id="status" value={filters.status} onChange={(e) => handleFilterChange('status', e.target.value)}>
-              <option value="All">All</option>
-              <option value="Planned">Planned</option>
-              <option value="Ongoing">Ongoing</option>
-              <option value="Completed">Completed</option>
-              <option value="Cancelled">Cancelled</option>
-            </select>
+          <div className="filter-item filter-item-donors">
+            <div className="donor-filter-header">
+              <label>Donors:</label>
+              <div className="donor-filter-actions">
+                <button 
+                  type="button"
+                  className="donor-action-btn"
+                  onClick={() => {
+                    setFilters(prev => ({ ...prev, donors: donorOptions }));
+                    setCurrentPage(1);
+                  }}
+                >
+                  Select All
+                </button>
+                <button 
+                  type="button"
+                  className="donor-action-btn"
+                  onClick={() => {
+                    setFilters(prev => ({ ...prev, donors: [] }));
+                    setCurrentPage(1);
+                  }}
+                >
+                  Clear All
+                </button>
+              </div>
+            </div>
+            <div className="donor-checkboxes">
+              {donorOptions.map(donor => (
+                <label key={donor} className="donor-checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={filters.donors.includes(donor)}
+                    onChange={(e) => {
+                      const newDonors = e.target.checked
+                        ? [...filters.donors, donor]
+                        : filters.donors.filter(d => d !== donor);
+                      setFilters(prev => ({ ...prev, donors: newDonors }));
+                      setCurrentPage(1);
+                    }}
+                  />
+                  <span>{donor}</span>
+                </label>
+              ))}
+            </div>
           </div>
           <div className="filter-item">
             <label htmlFor="fundingAgency">Funding Agency:</label>
@@ -143,11 +292,50 @@ const Projects = () => {
             <label htmlFor="implementingAgency">Implementing Agency:</label>
             <input type="text" id="implementingAgency" value={filters.implementingAgency} onChange={(e) => handleFilterChange('implementingAgency', e.target.value)} />
           </div>
-          <div className="filter-item">
-            <label htmlFor="recipient">Recipient:</label>
-            <select id="recipient" value={filters.recipient} onChange={(e) => handleFilterChange('recipient', e.target.value)}>
-              {recipientOptions.map(option => <option key={option} value={option}>{option}</option>)}
-            </select>
+          <div className="filter-item filter-item-countries">
+            <div className="country-filter-header">
+              <label>Recipient Countries:</label>
+              <div className="country-filter-actions">
+                <button 
+                  type="button"
+                  className="country-action-btn"
+                  onClick={() => {
+                    setFilters(prev => ({ ...prev, recipientCountries: recipientCountryOptions }));
+                    setCurrentPage(1);
+                  }}
+                >
+                  Select All
+                </button>
+                <button 
+                  type="button"
+                  className="country-action-btn"
+                  onClick={() => {
+                    setFilters(prev => ({ ...prev, recipientCountries: [] }));
+                    setCurrentPage(1);
+                  }}
+                >
+                  Clear All
+                </button>
+              </div>
+            </div>
+            <div className="country-checkboxes">
+              {recipientCountryOptions.map(country => (
+                <label key={country} className="country-checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={filters.recipientCountries.includes(country)}
+                    onChange={(e) => {
+                      const newCountries = e.target.checked
+                        ? [...filters.recipientCountries, country]
+                        : filters.recipientCountries.filter(c => c !== country);
+                      setFilters(prev => ({ ...prev, recipientCountries: newCountries }));
+                      setCurrentPage(1);
+                    }}
+                  />
+                  <span>{country}</span>
+                </label>
+              ))}
+            </div>
           </div>
           <div className="filter-item">
             <label htmlFor="startYear">Start Year:</label>
@@ -175,17 +363,85 @@ const Projects = () => {
           </div>
         </div>
         <div className="projects-list-container">
-          <h2>Projects</h2>
+          <div className="projects-list-header">
+            <h2>Projects ({filteredProjects.length} total)</h2>
+            <div className="sort-controls">
+              <label>Sort by:</label>
+              <button 
+                className={`sort-btn ${sortBy === 'startYear' ? 'active' : ''}`}
+                onClick={() => handleSort('startYear')}
+              >
+                Start Year {sortBy === 'startYear' && (sortOrder === 'asc' ? '↑' : '↓')}
+              </button>
+              <button 
+                className={`sort-btn ${sortBy === 'endYear' ? 'active' : ''}`}
+                onClick={() => handleSort('endYear')}
+              >
+                End Year {sortBy === 'endYear' && (sortOrder === 'asc' ? '↑' : '↓')}
+              </button>
+              <button 
+                className={`sort-btn ${sortBy === 'budget' ? 'active' : ''}`}
+                onClick={() => handleSort('budget')}
+              >
+                Budget {sortBy === 'budget' && (sortOrder === 'asc' ? '↑' : '↓')}
+              </button>
+              {sortBy && (
+                <button 
+                  className="sort-btn clear-sort"
+                  onClick={() => setSortBy('')}
+                >
+                  Clear Sort
+                </button>
+              )}
+            </div>
+          </div>
           {loading ? (
             <p>Loading projects...</p>
           ) : filteredProjects.length === 0 ? (
             <p>No projects found matching your criteria.</p>
           ) : (
-            <div className="projects-grid">
-              {filteredProjects.map(project => (
-                <ProjectCard project={project} key={project.id} />
-              ))}
-            </div>
+            <>
+              <div className="projects-grid">
+                {paginatedProjects.map(project => (
+                  <ProjectCard project={project} key={project.id} />
+                ))}
+              </div>
+              {totalPages > 1 && (
+                <div className="pagination-controls">
+                  <button 
+                    className="pagination-btn"
+                    onClick={() => setCurrentPage(1)}
+                    disabled={currentPage === 1}
+                  >
+                    First
+                  </button>
+                  <button 
+                    className="pagination-btn"
+                    onClick={() => setCurrentPage(currentPage - 1)}
+                    disabled={currentPage === 1}
+                  >
+                    Previous
+                  </button>
+                  <span className="pagination-info">
+                    Page {currentPage} of {totalPages}
+                  </span>
+                  <button 
+                    className="pagination-btn"
+                    onClick={() => setCurrentPage(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                  >
+                    Next
+                  </button>
+                  <button 
+                    className="pagination-btn"
+                    onClick={() => setCurrentPage(totalPages)}
+                    disabled={currentPage === totalPages}
+                  >
+                    Last
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

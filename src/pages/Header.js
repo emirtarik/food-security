@@ -44,26 +44,41 @@ const Header = () => {
           </div>
 
           <div className="col-sm-3 lang">
-            <ul className="nav nav-lang justify-content-end">
-              <li className="nav-item">
-                <button
-                  href="#"
-                  className={`nav-link ${selectedLanguage === 'fr' ? 'selected' : ''}`}
-                  onClick={() => handleLanguageChange("fr")}
-                >
-                  FR
-                </button>
-              </li>
-              <li className="nav-item">|</li>
-              <li className="nav-item">
-                <button
-                  className={`nav-link ${selectedLanguage === 'en' ? 'selected' : ''}`}
-                  onClick={() => handleLanguageChange("en")}
-                >
-                  EN
-                </button>
-              </li>
-            </ul>
+            <div className="d-flex justify-content-end align-items-center">
+              <a 
+                href={`${BASE_URL}/login`}
+                className="btn btn-outline-primary me-3"
+                style={{ 
+                  padding: '8px 20px',
+                  borderRadius: '4px',
+                  textDecoration: 'none',
+                  fontSize: '16px',
+                  fontWeight: '500'
+                }}
+              >
+                {t("Login")}
+              </a>
+              <ul className="nav nav-lang justify-content-end mb-0">
+                <li className="nav-item">
+                  <button
+                    href="#"
+                    className={`nav-link ${selectedLanguage === 'fr' ? 'selected' : ''}`}
+                    onClick={() => handleLanguageChange("fr")}
+                  >
+                    FR
+                  </button>
+                </li>
+                <li className="nav-item">|</li>
+                <li className="nav-item">
+                  <button
+                    className={`nav-link ${selectedLanguage === 'en' ? 'selected' : ''}`}
+                    onClick={() => handleLanguageChange("en")}
+                  >
+                    EN
+                  </button>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>

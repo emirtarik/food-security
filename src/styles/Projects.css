@@ -57,12 +57,103 @@
   /* Container for the "Projects" title and the grid */
 }
 
+.projects-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
 .projects-list-container h2 {
   font-size: 1.8em; /* Larger title */
   font-weight: 600;
   color: #333;
-  margin-bottom: 24px;
-  text-align: center;
+  margin: 0;
+}
+
+.sort-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.sort-controls label {
+  font-weight: 500;
+  color: #495057;
+  margin: 0;
+}
+
+.sort-btn {
+  padding: 8px 16px;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  background-color: white;
+  color: #495057;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sort-btn:hover {
+  background-color: #f8f9fa;
+  border-color: #adb5bd;
+}
+
+.sort-btn.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.sort-btn.clear-sort {
+  background-color: #6c757d;
+  color: white;
+  border-color: #6c757d;
+}
+
+.sort-btn.clear-sort:hover {
+  background-color: #5a6268;
+  border-color: #545b62;
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 32px;
+  padding: 20px 0;
+}
+
+.pagination-btn {
+  padding: 8px 16px;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  background-color: white;
+  color: #495057;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-info {
+  font-weight: 500;
+  color: #495057;
+  padding: 0 12px;
 }
 
 .projects-grid {
@@ -108,6 +199,18 @@
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Smaller min for cards on mobile */
     gap: 16px;
   }
+  .projects-list-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .sort-controls {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .pagination-controls {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
 }
 
 @media (max-width: 576px) {
@@ -116,5 +219,182 @@
   }
    .projects-grid {
     grid-template-columns: 1fr; /* Single column on very small screens */
+  }
+}
+
+/* Styles for the donor checkboxes filter */
+.filter-item-donors {
+  flex-basis: 100%; /* Take full width */
+  min-width: 100%;
+}
+
+.donor-filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.donor-filter-header label {
+  margin-bottom: 0; /* Override the default margin */
+}
+
+.donor-filter-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.donor-action-btn {
+  padding: 4px 12px;
+  font-size: 0.85em;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.donor-action-btn:hover {
+  background-color: #0056b3;
+}
+
+.donor-action-btn:active {
+  background-color: #004085;
+}
+
+.donor-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  max-height: 200px; /* Limit height to avoid taking too much space */
+  overflow-y: auto; /* Add scroll if there are many donors */
+  padding: 10px;
+  background-color: white;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+}
+
+.donor-checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  padding: 6px 10px;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  font-size: 0.9em;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.donor-checkbox-label:hover {
+  background-color: #e9ecef;
+  border-color: #adb5bd;
+}
+
+.donor-checkbox-label input[type="checkbox"] {
+  margin: 0;
+  cursor: pointer;
+  width: auto;
+  min-width: auto;
+}
+
+.donor-checkbox-label input[type="checkbox"]:checked + span {
+  font-weight: 600;
+  color: #0056b3;
+}
+
+/* Styles for the country checkboxes filter */
+.filter-item-countries {
+  flex-basis: 100%; /* Take full width */
+  min-width: 100%;
+}
+
+.country-filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.country-filter-header label {
+  margin-bottom: 0; /* Override the default margin */
+}
+
+.country-filter-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.country-action-btn {
+  padding: 4px 12px;
+  font-size: 0.85em;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.country-action-btn:hover {
+  background-color: #0056b3;
+}
+
+.country-action-btn:active {
+  background-color: #004085;
+}
+
+.country-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  max-height: 200px; /* Limit height to avoid taking too much space */
+  overflow-y: auto; /* Add scroll if there are many countries */
+  padding: 10px;
+  background-color: white;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+}
+
+.country-checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  padding: 6px 10px;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  font-size: 0.9em;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.country-checkbox-label:hover {
+  background-color: #e9ecef;
+  border-color: #adb5bd;
+}
+
+.country-checkbox-label input[type="checkbox"] {
+  margin: 0;
+  cursor: pointer;
+  width: auto;
+  min-width: auto;
+}
+
+.country-checkbox-label input[type="checkbox"]:checked + span {
+  font-weight: 600;
+  color: #0056b3;
+}
+
+@media (max-width: 768px) {
+  .donor-checkboxes {
+    max-height: 150px; /* Reduce max height on smaller screens */
+  }
+  .country-checkboxes {
+    max-height: 150px; /* Reduce max height on smaller screens */
   }
 }

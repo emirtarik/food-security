@@ -16,6 +16,19 @@ mapboxgl.accessToken =
 
 // const INSETS = [ ... ]; // Removed
 
+// Country name mapping: Mapbox English names -> Preferred display names
+const COUNTRY_NAME_MAPPING = {
+  'the gambia': 'Gambia',
+  'cape verde': 'Cabo Verde',
+  'ivory coast': 'Côte d\'Ivoire',
+};
+
+// Function to get the preferred country name
+const getPreferredCountryName = (mapboxName) => {
+  const lowerName = mapboxName?.toLowerCase();
+  return COUNTRY_NAME_MAPPING[lowerName] || mapboxName;
+};
+
 const MapViewProjects = ({ projects }) => { // Added projects prop
   const { t } = useTranslationHook("analysis");
   const mapContainerRef = useRef(null);
@@ -29,12 +42,21 @@ const MapViewProjects = ({ projects }) => { // Added projects prop
       return {};
     }
     return projects.reduce((acc, project) => {
-      // Normalize country names: trim and handle potential inconsistencies if necessary
-      // Normalize country names: trim and convert to lowercase
-      const country = project.recipient?.trim().toLowerCase();
-      if (country) {
+      const recipient = project.recipient?.trim();
+      if (!recipient) return acc;
+
+      // Parse multiple countries from recipient field
+      // Split by common delimiters: semicolon, plus sign, comma
+      const countries = recipient
+        .split(/[;+,]/) // Split by semicolon, plus, or comma
+        .map(country => country.trim().toLowerCase()) // Trim whitespace and normalize to lowercase
+        .filter(country => country.length > 0); // Remove empty strings
+
+      // Count each country individually
+      countries.forEach(country => {
         acc[country] = (acc[country] || 0) + 1;
-      }
+      });
+
       return acc;
     }, {});
   }, [projects]);
@@ -64,15 +86,15 @@ const MapViewProjects = ({ projects }) => { // Added projects prop
   const choroplethOutlineLayerId = 'countries-project-counts-outline';
 
   // Define color scale for the choropleth legend
-  const legendColors = ['#FFFFE0', '#FFD700', '#FFA500', '#FF6347', '#FF0000', '#B22222'];
-  const legendStops = [0, 1, 5, 10, 20, 50]; // Min projects for each color
+  const legendColors = ['#FFFFE0', '#FFD700', '#FFA500', '#FF6347', '#FF0000', '#B22222', '#8B0000'];
+  const legendStops = [0, 1, 5, 10, 20, 50, 100]; // Min projects for each color
 
   useEffect(() => {
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: 'mapbox://styles/mkmd/cm6p4kq7i00ty01sa3iz31788',
-      center: [20, 10], // Centered more globally
-      zoom: 1.5, // Zoomed out to see the world
+      center: [3, 14], // Match MapView.js coordinates
+      zoom: 4.45, // Match MapView.js zoom level
     });
     mapRef.current = map;
 
@@ -102,7 +124,8 @@ const MapViewProjects = ({ projects }) => { // Added projects prop
             legendStops[2], legendColors[2], // 5-9 projects
             legendStops[3], legendColors[3], // 10-19 projects
             legendStops[4], legendColors[4], // 20-49 projects
-            legendStops[5], legendColors[5]  // 50+ projects
+            legendStops[5], legendColors[5], // 50-99 projects
+            legendStops[6], legendColors[6]  // 100+ projects
           ],
           'fill-opacity': 0.7,
         },
@@ -120,85 +143,81 @@ const MapViewProjects = ({ projects }) => { // Added projects prop
         },
       });
 
-      // Interactivity: Popup on hover
-      map.on('mousemove', choroplethLayerId, (e) => {
-        map.getCanvas().style.cursor = 'pointer';
-        if (e.features.length > 0) {
-          const feature = e.features[0];
-          const countryName = feature.properties.name_en; // Original name from mapbox
-          const projectCount = projectCountsByCountry[countryName?.toLowerCase()] || 0; // Lookup with lowercase
-
-          popupRef.current
-            .setLngLat(e.lngLat)
-            .setHTML(`<strong>${countryName}</strong><br />Projects: ${projectCount}`)
-            .addTo(map);
-        }
-      });
-
-      map.on('mouseleave', choroplethLayerId, () => {
-        map.getCanvas().style.cursor = '';
-        popupRef.current.remove();
-      });
-
       map.on('idle', () => setIsDataLoaded(true));
     });
 
     return () => map.remove();
   }, []); // Empty dependency array to run only once on mount
 
+  // Effect to set up interactivity handlers with current projectCountsByCountry
+  useEffect(() => {
+    if (!isMapLoaded || !mapRef.current) return;
+
+    const map = mapRef.current;
+
+    const handleMouseMove = (e) => {
+      map.getCanvas().style.cursor = 'pointer';
+      if (e.features.length > 0) {
+        const feature = e.features[0];
+        const mapboxCountryName = feature.properties.name_en; // Original name from mapbox
+        const preferredCountryName = getPreferredCountryName(mapboxCountryName);
+        const projectCount = projectCountsByCountry[preferredCountryName?.toLowerCase()] || 0; // Lookup with normalized name
+
+        popupRef.current
+          .setLngLat(e.lngLat)
+          .setHTML(`<strong>${preferredCountryName}</strong><br />Projects: ${projectCount}`)
+          .addTo(map);
+      }
+    };
+
+    const handleMouseLeave = () => {
+      map.getCanvas().style.cursor = '';
+      popupRef.current.remove();
+    };
+
+    // Add event handlers
+    map.on('mousemove', choroplethLayerId, handleMouseMove);
+    map.on('mouseleave', choroplethLayerId, handleMouseLeave);
+
+    // Cleanup: remove handlers when effect re-runs or component unmounts
+    return () => {
+      map.off('mousemove', choroplethLayerId, handleMouseMove);
+      map.off('mouseleave', choroplethLayerId, handleMouseLeave);
+    };
+  }, [isMapLoaded, projectCountsByCountry]); // Re-run when projectCountsByCountry changes
+
   // Effect to update feature states when projectCountsByCountry changes
   useEffect(() => {
-    if (isMapLoaded && mapRef.current && mapRef.current.isStyleLoaded() && projects.length > 0) {
-      // Small timeout to ensure source is available after style load, especially for vector tiles
-      const timeoutId = setTimeout(() => {
-        const map = mapRef.current;
-        // Query all features from the country boundaries source layer
-        // This might be performance intensive if the layer has too many features not visible.
-        // A better approach for global datasets is often to have a list of all country ISOs/names
-        // and iterate through that, setting feature state by feature.id (which is usually the ISO code).
-        // For Mapbox country-boundaries-v1, feature.id is often the ISO 3166-1 alpha-2 code.
+    if (!isMapLoaded || !mapRef.current || !mapRef.current.isStyleLoaded()) return;
+    
+    // Small timeout to ensure source is available after style load, especially for vector tiles
+    const timeoutId = setTimeout(() => {
+      const map = mapRef.current;
+      // Query all features from the country boundaries source layer
+      const features = map.querySourceFeatures(countryBoundariesSourceId, {
+        sourceLayer: 'country_boundaries'
+      });
 
-        // Clear previous feature states first (optional, but good practice)
-        // This requires knowing all possible feature IDs or iterating over previously set states.
-        // For simplicity, we'll just update. If a country previously had projects and now has 0,
-        // its state will be updated to 0 or removed (if we explicitly remove state for 0).
+      if (features && features.length > 0) {
+        features.forEach(feature => {
+          const mapboxCountryName = feature.properties.name_en;
+          const preferredCountryName = getPreferredCountryName(mapboxCountryName);
+          const normalizedCountryName = preferredCountryName?.toLowerCase();
+          const featureId = feature.id;
 
-        const features = map.querySourceFeatures(countryBoundariesSourceId, {
-          sourceLayer: 'country_boundaries'
+          // Get the project count for this country (default to 0 if no projects)
+          const projectCount = (normalizedCountryName && projectCountsByCountry[normalizedCountryName]) || 0;
+          
+          map.setFeatureState(
+            { source: countryBoundariesSourceId, sourceLayer: 'country_boundaries', id: featureId },
+            { project_count: projectCount }
+          );
         });
+      }
+    }, 500); // Delay to allow map to settle and source to be queryable.
 
-        // Create a map of country ISO codes to their vector tile feature IDs if needed
-        // For mapbox.country-boundaries-v1, the 'id' field of the feature can often be used directly if it corresponds to a known ID scheme (like ISO a2).
-        // The property 'iso_3166_1_alpha_3' is more standard for matching with our project data if recipient names are English.
-        // We need to match `projectCountsByCountry` (keyed by lowercase country name) to the map features.
-
-        if (features && features.length > 0) {
-          const allProcessedFeatureIds = new Set();
-
-          features.forEach(feature => {
-            const countryNameFromMap = feature.properties.name_en?.toLowerCase();
-            const featureId = feature.id;
-            allProcessedFeatureIds.add(featureId);
-
-            if (countryNameFromMap && projectCountsByCountry[countryNameFromMap] !== undefined) {
-              map.setFeatureState(
-                { source: countryBoundariesSourceId, sourceLayer: 'country_boundaries', id: featureId },
-                { project_count: projectCountsByCountry[countryNameFromMap] }
-              );
-            } else {
-              // Set count to 0 for countries from map not in our current filtered list or explicitly having 0
-              map.setFeatureState(
-                { source: countryBoundariesSourceId, sourceLayer: 'country_boundaries', id: featureId },
-                { project_count: 0 }
-              );
-            }
-          });
-        }
-      }, 500); // Delay to allow map to settle and source to be queryable.
-
-      return () => clearTimeout(timeoutId);
-    }
-  }, [projectCountsByCountry, isMapLoaded, projects]); // projects dependency ensures re-run if initial projects load late.
+    return () => clearTimeout(timeoutId);
+  }, [projectCountsByCountry, isMapLoaded]); // Re-run whenever project counts change
 
 
   return (
@@ -211,15 +230,18 @@ const MapViewProjects = ({ projects }) => { // Added projects prop
       )}
       <div ref={mapContainerRef} className="map-container" />
       <div className="legend-container mapboxgl-ctrl-bottom-left">
-        <h4>{t('projectCountLegendTitle', {ns: 'global'}) || "Projects per Country"}</h4>
-        {legendStops.map((stop, index) => (
-          <div key={index} className="legend-item">
-            <span className="legend-color" style={{ backgroundColor: legendColors[index] }} />
-            <span className="legend-label">
-              {index === legendStops.length - 1 ? `${stop}+` : `${stop}${legendStops[index+1] ? ` - ${legendStops[index+1]-1}` : '+'}`}
-            </span>
-          </div>
-        ))}
+        <h4>Project count</h4>
+        {legendStops.slice(1).map((stop, index) => {
+          const actualIndex = index + 1; // Offset because we skipped the first item (0)
+          return (
+            <div key={actualIndex} className="legend-item">
+              <span className="legend-color" style={{ backgroundColor: legendColors[actualIndex] }} />
+              <span className="legend-label">
+                {actualIndex === legendStops.length - 1 ? `${stop}+` : `${stop} - ${legendStops[actualIndex+1]-1}`}
+              </span>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

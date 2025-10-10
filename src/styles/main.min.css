@@ -12683,21 +12683,21 @@ h2 {
   background: #243d54;
 }
 .btn-white {
-  background: #fff;
-  color: #243d54;
+  background: #233D54;
+  color: #fff;
 }
 .btn-white:hover {
-  background: #c8d200;
+  background: #C2BE00;
   color: #fff;
 }
 .btn-white-inv {
-  color: #fff !important;
+  color: #fff;
   border: 1px solid #fff;
   background: 0 0;
 }
 .btn-white-inv:hover {
-  background: #fff !important;
-  color: #243d54 !important;
+  background: #fff;
+  color: #C2BE00;
 }
 .btn-unstyled {
   font-size: 0.7rem;

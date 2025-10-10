@@ -123,8 +123,21 @@ function SummaryGraphs({ averageScore, sectionAverages }) {
   });
 
   useEffect(() => {
-    setCurrentValue(parseFloat(averageScore.toFixed(1)));
-  }, [averageScore]);
+    // Recalculate the average from sectionAverages to ensure accuracy
+    const sectionScores = Object.values(sectionAverages)
+      .map(Number)
+      .filter(score => !isNaN(score) && score > 0);
+    
+    let calculatedAverage = 0;
+    if (sectionScores.length > 0) {
+      const sectionSum = sectionScores.reduce((sum, score) => sum + score, 0);
+      const avgOnScale0to5 = sectionSum / sectionScores.length;
+      // Convert from 0-5 scale to 0-100 scale
+      calculatedAverage = avgOnScale0to5 * 20;
+    }
+    
+    setCurrentValue(parseFloat(calculatedAverage.toFixed(1)));
+  }, [sectionAverages]);
 
   const gaugeOptions = {
     pointer: {

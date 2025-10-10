@@ -1,0 +1,112 @@
+.data-download-container {
+  margin-top: 24px;
+  width: fit-content;
+  margin: auto;
+}
+
+.data-download-title {
+  text-align: center;
+  font-weight: 700;
+  color: #243D54;
+}
+
+.data-download-intro {
+  margin: 8px 0 20px;
+  color: #444;
+}
+
+.data-download-form {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 20px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+
+.form-row {
+  display: block;
+  margin-bottom: 14px;
+}
+
+.form-row.two-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-row label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #243D54;
+}
+
+.form-row input,
+.form-row select,
+.form-row textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #cfd8dc;
+  border-radius: 4px;
+  font-size: 14px;
+  background: #F8EADE;
+  transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.form-row input:focus,
+.form-row select:focus,
+.form-row textarea:focus {
+  outline: none;
+  background: #fff;
+  border-color: #C2BE00;
+  box-shadow: 0 0 0 3px rgba(194, 190, 0, 0.25);
+}
+
+.error-text {
+  color: #b00020;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.form-actions {
+  margin-top: 16px;
+}
+
+.download-btn {
+  background: #243D54;
+  border: none;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.download-btn:hover {
+  background: #1f3346;
+}
+
+.download-btn[disabled] {
+  background: #9db8ef;
+  cursor: not-allowed;
+}
+
+.privacy-note {
+  margin-top: 14px;
+  color: #243D54;
+  font-size: 13px;
+}
+
+.privacy-link {
+  color: #C2BE00;
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .form-row.two-cols {
+    grid-template-columns: 1fr;
+  }
+}
+
+

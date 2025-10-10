@@ -120,5 +120,21 @@
     "criticalOverlapNote": "Le violet plus foncé indique les zones nécessitant une attention immédiate",
     "conflictDots": "Événements de Conflit (Points)",
     "conflictDotsExplanation": "Points plus gros = densité de conflit plus élevée.",
-    "projection": "Projection"
+    "projection": "Projection",
+    "download": "Téléchargement",
+    "dataDownloadTitle": "Télécharger le jeu de données",
+    "dataDownloadIntro": "Veuillez remplir le court formulaire ci-dessous pour activer le téléchargement.",
+    "email": "Adresse e-mail",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "country": "Pays",
+    "organisation": "Organisation (secteur public : préciser ministère ou entité locale)",
+    "stakeholderGrouping": "Catégorie d'acteurs",
+    "selectOption": "Sélectionner une option",
+    "intendedUse": "Comment comptez-vous utiliser les données ? (facultatif)",
+    "downloadCsv": "Télécharger le CSV",
+    "completeFormToDownload": "Complétez le formulaire pour activer le téléchargement",
+    "privacyNote": "Ces informations servent uniquement à comprendre qui utilise les données. Aucune information personnelle n'est stockée par ce site.",
+    "invalidEmail": "Veuillez saisir un e-mail valide",
+    "required": "Obligatoire"
   }

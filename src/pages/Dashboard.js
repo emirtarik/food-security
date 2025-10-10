@@ -201,15 +201,21 @@ function Dashboard({ setIsLoggedIn, setRole, setCountry }) {
       console.log('Calculated section averages:', calculatedSectionAverages); // Log calculated section averages
       console.log('Calculated subsection averages:', calculatedSubsectionAverages); // Log calculated subsection averages
 
-      // Calculate total score across all responses
-      const totalScore = Object.values(storedResponses).reduce((sum, score) => {
-        return sum + (typeof score === 'number' ? score : 0);
-      }, 0);
+      // Calculate overall average from section averages (not individual questions)
+      // This ensures the overall score is the average of section averages
+      const sectionScores = Object.values(calculatedSectionAverages).map(Number).filter(score => !isNaN(score) && score > 0);
+      
+      let overallAverage = 0;
+      if (sectionScores.length > 0) {
+        const sectionSum = sectionScores.reduce((sum, score) => sum + score, 0);
+        const avgOnScale0to5 = sectionSum / sectionScores.length;
+        // Convert from 0-5 scale to 0-100 scale
+        overallAverage = avgOnScale0to5 * 20;
+      }
 
-      const avg = totalScore / Object.values(storedResponses).length;
       setSectionAverages(calculatedSectionAverages);
       setSubsectionAverages(calculatedSubsectionAverages);
-      setAverageScore(avg * 16.66);
+      setAverageScore(overallAverage);
     } else {
       // Reset averages if no data is present
       setAverageScore(0);
@@ -240,6 +246,23 @@ function Dashboard({ setIsLoggedIn, setRole, setCountry }) {
           <h4>{country}</h4>
         </div>
         <div className="logo-container">
+          <button 
+            className="module-selection-button" 
+            onClick={() => navigate('/module-selection')}
+            style={{
+              marginRight: '10px',
+              padding: '8px 15px',
+              backgroundColor: '#4CAF50',
+              color: 'white',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer',
+              fontSize: '0.9rem',
+              fontWeight: '500'
+            }}
+          >
+            Module Selection
+          </button>
           <button className="logout-button" onClick={handleLogout}>Logout</button>
           <img src="logo128.png" alt="RPCA Logo" className="institution-logo" />
         </div>

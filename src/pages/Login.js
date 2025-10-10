@@ -1,66 +1,78 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiClient } from '../apiClient';
-import '../styles/Login.css'; // Import the CSS
+import '../styles/Login.css';
 
 function Login({ onLogin }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+    setErrorMessage('');
+    setLoading(true);
+
     try {
-      const response = await apiClient.post('/login', { username, password }, { withCredentials: false });
-      const { country, role } = response.data;
+      const u = username.trim();
+      const p = password; // don't trim passwords
 
-      if (response.status === 200) {
-        console.log('Login successful:', country, role);
+      const res = await apiClient.post('/login', { username: u, password: p });
+      const { country, role } = res.data;
 
-        // Save country and role to localStorage
-        localStorage.setItem('country', country);
-        localStorage.setItem('role', role);
-        localStorage.setItem('isLoggedIn', true);
+      // NOTE: localStorage stores strings
+      localStorage.setItem('country', country);
+      localStorage.setItem('role', role);
+      localStorage.setItem('isLoggedIn', 'true');
 
-        // Call onLogin function with role and navigate to the section
-        onLogin(true, role, country);
+      onLogin(true, role, country);
 
-        if (role === 'master') {
-          navigate('/module-selection', { state: { role, country } });
-        } else {
-          navigate(`/questionnaire/${role}`);
-        }
+      if (role === 'master') {
+        navigate('/module-selection', { state: { role, country } });
+      } else {
+        navigate(`/questionnaire/${role}`);
       }
-    } catch (error) {
-      console.error('Login failed:', error);
-      setErrorMessage('Incorrect username or password');
+    } catch (err) {
+      const status = err.response?.status;
+      if (status === 401) setErrorMessage('Incorrect username or password');
+      else if (status === 429) setErrorMessage('Too many attempts. Please try again in a moment.');
+      else setErrorMessage('Unable to login right now. Please try again.');
+      console.error('login error', {
+        status,
+        data: err.response?.data,
+        msg: err.message
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
-
   return (
-    <div className="login-page"> {/* Updated the wrapper to use the new login-page class */}
+    <div className="login-page">
       <div className="login-container">
         <h2>Login</h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} autoComplete="on">
           <input
             type="text"
             placeholder="Username"
             value={username}
+            autoComplete="username"
             onChange={(e) => setUsername(e.target.value)}
           />
           <input
             type="password"
             placeholder="Password"
             value={password}
+            autoComplete="current-password"
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button type="submit">Login</button>
+          <button type="submit" disabled={loading || !username || !password}>
+            {loading ? 'Logging in…' : 'Login'}
+          </button>
         </form>
-        {errorMessage && <p className="error-message">{errorMessage}</p>} {/* Display error message */}
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
       </div>
     </div>
   );
