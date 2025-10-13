@@ -17,7 +17,7 @@ const Projects = () => {
   
   // Initialize filters with "All" as default for new dropdowns
   const [filters, setFilters] = useState({
-    donors: [], // Changed to array for multi-select
+    donors: ['EU'], // Pre-select EU to show EU projects on first load
     fundingAgency: '',
     implementingAgency: '',
     recipientCountries: [], // Changed to array for multi-select

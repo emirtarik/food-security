@@ -29,6 +29,7 @@ const DataDownload = () => {
   });
 
   const [touched, setTouched] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const emailValid = useMemo(() => {
     if (!formData.email) return false;
@@ -66,8 +67,9 @@ const DataDownload = () => {
     return "";
   };
 
-  const handleDownload = () => {
-    if (!requiredValid) return;
+  const handleDownload = async () => {
+    if (!requiredValid || isSubmitting) return;
+    setIsSubmitting(true);
     try {
       if (window.gtag) {
         window.gtag('event', 'download_csv', {
@@ -80,12 +82,55 @@ const DataDownload = () => {
         });
       }
     } catch (_) {}
-    const a = document.createElement('a');
-    a.href = '/data/RPCA_food_insecurity.csv';
-    a.download = 'RPCA_food_insecurity.csv';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+
+    try {
+      // Log request to backend (non-blocking)
+      try {
+        // Prefer explicit env; otherwise fall back in production to known backend host
+        const explicitBase = process.env.REACT_APP_BACKEND_URL || process.env.REACT_APP_API_URL || '';
+        const isProdFront = typeof window !== 'undefined' && /food-security\.net$/i.test(window.location.hostname);
+        const fallbackProdBase = isProdFront ? 'https://food-security-back.azurewebsites.net' : '';
+        const backendBase = (explicitBase || fallbackProdBase).replace(/\/$/, '');
+        if (!backendBase) {
+          console.warn('No backend base URL configured; set REACT_APP_BACKEND_URL for reliable logging.');
+        }
+        const url = `${backendBase}/download-requests`;
+        await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ ...formData, language: currentLanguage })
+        }).catch(() => {});
+      } catch (_) {}
+
+      const csvPath = '/data/RPCA_food_insecurity.csv';
+      const res = await fetch(csvPath, { cache: 'no-store' });
+      if (!res.ok) throw new Error(`Failed to fetch CSV: ${res.status}`);
+
+      const contentType = res.headers.get('content-type') || '';
+      let blob;
+      if (contentType.includes('text/csv') || contentType.includes('application/csv')) {
+        blob = await res.blob();
+      } else {
+        const buffer = await res.arrayBuffer();
+        blob = new Blob([buffer], { type: 'text/csv;charset=utf-8' });
+      }
+
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'RPCA_food_insecurity.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('CSV download failed:', err);
+      // Fallback: navigate to the CSV path, browser will handle it
+      window.location.href = '/data/RPCA_food_insecurity.csv';
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -142,8 +187,12 @@ const DataDownload = () => {
         </div>
 
         <div className="form-actions">
-          <button type="submit" className="download-btn" disabled={!requiredValid} onClick={handleDownload}>
-            {requiredValid ? (t("downloadCsv") || "Download CSV") : (t("completeFormToDownload") || "Complete form to enable download")}
+          <button type="submit" className="download-btn" disabled={!requiredValid || isSubmitting}>
+            {isSubmitting
+              ? (t("loadingData") || "Loading data...")
+              : requiredValid
+                ? (t("downloadCsv") || "Download CSV")
+                : (t("completeFormToDownload") || "Complete form to enable download")}
           </button>
           <a className="csv-link" href="/data/RPCA_food_insecurity.csv" download style={{ display: "none" }}>CSV</a>
         </div>

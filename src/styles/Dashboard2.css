@@ -193,18 +193,6 @@
   padding-left: 8px;
 }
 
-.section-header {
-  margin-bottom: 16px;
-}
-
-.section-header h3 {
-  font-size: 1.3em;
-  color: #0056b3;
-  margin: 0;
-  padding-bottom: 8px;
-  border-bottom: 2px solid #e0e0e0;
-}
-
 /* Responsive adjustments (optional) */
 @media (min-width: 992px) { /* Large devices (desktops, 992px and up) */
   .dashboard2-content {

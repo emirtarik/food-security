@@ -100,7 +100,7 @@ const MapView = ({
   setCurrentDateIndex, 
   dateOptions
 }) => {
-  const { t } = useTranslationHook("analysis");
+  const { t, currentLanguage } = useTranslationHook("analysis");
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
   const insetMapsRef = useRef({});
@@ -829,7 +829,7 @@ const MapView = ({
               ${aggregatedNotice}
               <div class="popup-header-flag">
                 <h3 class="popup-header">
-                  ${props["admin2Name"] || t("unknownDistrict")} - ${props["admin1Name"] || t("unknownRegion")}
+                  ${props["admin2Name"] || t("unknownDistrict")} - ${props["admin1Name"] || t("unknownRegion")}, ${countryName}
                 </h3>
                 <div class="popup-flag">
                   <img src="${flagURL}" alt="${t("flag")}" />
@@ -955,6 +955,67 @@ const MapView = ({
       m.setPaintProperty('admin-boundaries-fill', 'fill-color', fillColorExpression);
     });
   }, [currentDate, isMapLoaded]);
+
+  // Effect to update map language when currentLanguage changes
+  useEffect(() => {
+    if (!isMapLoaded || !mapRef.current) return;
+    
+    const updateMapLanguage = (map) => {
+      // Check if map and style are ready
+      if (!map || !map.isStyleLoaded()) {
+        console.warn('Map style not loaded yet, skipping language update');
+        return;
+      }
+      
+      try {
+        const style = map.getStyle();
+        if (!style || !style.layers) {
+          console.warn('Map style or layers not available');
+          return;
+        }
+        
+        // Determine the language code for Mapbox (supports 'en', 'fr', etc.)
+        const languageCode = currentLanguage || 'fr';
+        
+        // Update all symbol layers to use the appropriate language field
+        style.layers.forEach(layer => {
+          if (layer.type === 'symbol' && layer.layout && layer.layout['text-field']) {
+            // Check if the text-field uses a 'name' property
+            const textField = layer.layout['text-field'];
+            
+            // Mapbox expressions can be complex, but typically country/place names use ['get', 'name_XX']
+            // We'll update to use the language-specific field
+            if (Array.isArray(textField) && textField[0] === 'get' && textField[1] && textField[1].startsWith('name')) {
+              map.setLayoutProperty(layer.id, 'text-field', ['get', `name_${languageCode}`]);
+            } else if (Array.isArray(textField) && textField[0] === 'coalesce') {
+              // Handle coalesce expressions - update the first name field
+              const newCoalesce = textField.map(item => {
+                if (Array.isArray(item) && item[0] === 'get' && item[1] && item[1].startsWith('name')) {
+                  return ['get', `name_${languageCode}`];
+                }
+                return item;
+              });
+              map.setLayoutProperty(layer.id, 'text-field', newCoalesce);
+            }
+          }
+        });
+      } catch (error) {
+        console.warn('Error updating map language:', error);
+      }
+    };
+    
+    // Update main map
+    updateMapLanguage(mapRef.current);
+    
+    // Update inset maps
+    Object.values(insetMapsRef.current).forEach(insetMap => {
+      if (insetMap) {
+        updateMapLanguage(insetMap);
+      }
+    });
+    
+    console.log(`Map language updated to: ${currentLanguage || 'fr'}`);
+  }, [currentLanguage, isMapLoaded]);
   
   const handleExportPNG = () => {
     const map = mapRef.current;

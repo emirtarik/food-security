@@ -16,24 +16,25 @@ mapboxgl.accessToken =
 
 // const INSETS = [ ... ]; // Removed
 
-// Country name mapping: Mapbox English names -> Preferred display names
+// Country name mapping: Mapbox English names -> Standard English names
 const COUNTRY_NAME_MAPPING = {
   'the gambia': 'Gambia',
   'cape verde': 'Cabo Verde',
   'ivory coast': 'Côte d\'Ivoire',
 };
 
-// Function to get the preferred country name
+// Function to get the preferred country name (normalized to standard English)
 const getPreferredCountryName = (mapboxName) => {
   const lowerName = mapboxName?.toLowerCase();
   return COUNTRY_NAME_MAPPING[lowerName] || mapboxName;
 };
 
 const MapViewProjects = ({ projects }) => { // Added projects prop
-  const { t } = useTranslationHook("analysis");
+  const { t, currentLanguage } = useTranslationHook("analysis");
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
+  const [isStyleLoaded, setIsStyleLoaded] = useState(false);
   const [isDataLoaded, setIsDataLoaded] = useState(false); // Kept for loading overlay
 
   // Calculate project counts by country
@@ -86,8 +87,8 @@ const MapViewProjects = ({ projects }) => { // Added projects prop
   const choroplethOutlineLayerId = 'countries-project-counts-outline';
 
   // Define color scale for the choropleth legend
-  const legendColors = ['#FFFFE0', '#FFD700', '#FFA500', '#FF6347', '#FF0000', '#B22222', '#8B0000'];
-  const legendStops = [0, 1, 5, 10, 20, 50, 100]; // Min projects for each color
+  const legendColors = ['#FFFFE0', '#FFD700', '#FFA500', '#FF6347', '#FF0000', '#B22222', '#8B0000', '#4B0000'];
+  const legendStops = [0, 1, 5, 10, 20, 50, 100, 150]; // Min projects for each color
 
   useEffect(() => {
     const map = new mapboxgl.Map({
@@ -125,7 +126,8 @@ const MapViewProjects = ({ projects }) => { // Added projects prop
             legendStops[3], legendColors[3], // 10-19 projects
             legendStops[4], legendColors[4], // 20-49 projects
             legendStops[5], legendColors[5], // 50-99 projects
-            legendStops[6], legendColors[6]  // 100+ projects
+            legendStops[6], legendColors[6], // 100-149 projects
+            legendStops[7], legendColors[7]  // 150+ projects
           ],
           'fill-opacity': 0.7,
         },
@@ -143,7 +145,11 @@ const MapViewProjects = ({ projects }) => { // Added projects prop
         },
       });
 
-      map.on('idle', () => setIsDataLoaded(true));
+      // Set style loaded when the map is ready
+      map.on('idle', () => {
+        setIsDataLoaded(true);
+        setIsStyleLoaded(true);
+      });
     });
 
     return () => map.remove();
@@ -163,9 +169,13 @@ const MapViewProjects = ({ projects }) => { // Added projects prop
         const preferredCountryName = getPreferredCountryName(mapboxCountryName);
         const projectCount = projectCountsByCountry[preferredCountryName?.toLowerCase()] || 0; // Lookup with normalized name
 
+        // Get the country name in the current language from Mapbox
+        const languageCode = currentLanguage || 'fr';
+        const displayCountryName = feature.properties[`name_${languageCode}`] || preferredCountryName;
+
         popupRef.current
           .setLngLat(e.lngLat)
-          .setHTML(`<strong>${preferredCountryName}</strong><br />Projects: ${projectCount}`)
+          .setHTML(`<strong>${displayCountryName}</strong><br />Projects: ${projectCount}`)
           .addTo(map);
       }
     };
@@ -188,11 +198,18 @@ const MapViewProjects = ({ projects }) => { // Added projects prop
 
   // Effect to update feature states when projectCountsByCountry changes
   useEffect(() => {
-    if (!isMapLoaded || !mapRef.current || !mapRef.current.isStyleLoaded()) return;
+    if (!isStyleLoaded || !mapRef.current) return;
     
     // Small timeout to ensure source is available after style load, especially for vector tiles
     const timeoutId = setTimeout(() => {
       const map = mapRef.current;
+      
+      // Ensure the map and source are ready
+      if (!map.getSource(countryBoundariesSourceId)) {
+        console.warn('Country boundaries source not ready yet');
+        return;
+      }
+      
       // Query all features from the country boundaries source layer
       const features = map.querySourceFeatures(countryBoundariesSourceId, {
         sourceLayer: 'country_boundaries'
@@ -213,11 +230,65 @@ const MapViewProjects = ({ projects }) => { // Added projects prop
             { project_count: projectCount }
           );
         });
+        console.log('Feature states updated with project counts:', projectCountsByCountry);
+      } else {
+        console.warn('No features found for country boundaries');
       }
     }, 500); // Delay to allow map to settle and source to be queryable.
 
     return () => clearTimeout(timeoutId);
-  }, [projectCountsByCountry, isMapLoaded]); // Re-run whenever project counts change
+  }, [projectCountsByCountry, isStyleLoaded]); // Re-run whenever project counts or style loaded state changes
+
+  // Effect to update map language when currentLanguage changes
+  useEffect(() => {
+    if (!isMapLoaded || !mapRef.current) return;
+    
+    const map = mapRef.current;
+    
+    // Check if map and style are ready
+    if (!map || !map.isStyleLoaded()) {
+      console.warn('Map style not loaded yet, skipping language update');
+      return;
+    }
+    
+    try {
+      const style = map.getStyle();
+      if (!style || !style.layers) {
+        console.warn('Map style or layers not available');
+        return;
+      }
+      
+      // Determine the language code for Mapbox (supports 'en', 'fr', etc.)
+      const languageCode = currentLanguage || 'fr';
+      
+      // Update all symbol layers to use the appropriate language field
+      style.layers.forEach(layer => {
+        if (layer.type === 'symbol' && layer.layout && layer.layout['text-field']) {
+          // Check if the text-field uses a 'name' property
+          const textField = layer.layout['text-field'];
+          
+          // Mapbox expressions can be complex, but typically country/place names use ['get', 'name_XX']
+          // We'll update to use the language-specific field
+          if (Array.isArray(textField) && textField[0] === 'get' && textField[1] && textField[1].startsWith('name')) {
+            map.setLayoutProperty(layer.id, 'text-field', ['get', `name_${languageCode}`]);
+          } else if (Array.isArray(textField) && textField[0] === 'coalesce') {
+            // Handle coalesce expressions - update the first name field
+            const newCoalesce = textField.map(item => {
+              if (Array.isArray(item) && item[0] === 'get' && item[1] && item[1].startsWith('name')) {
+                return ['get', `name_${languageCode}`];
+              }
+              return item;
+            });
+            map.setLayoutProperty(layer.id, 'text-field', newCoalesce);
+          }
+        }
+      });
+      
+      console.log(`Map language updated to: ${languageCode}`);
+    } catch (error) {
+      console.warn('Error updating map language:', error);
+    }
+  }, [currentLanguage, isMapLoaded]);
 
 
   return (
@@ -233,12 +304,15 @@ const MapViewProjects = ({ projects }) => { // Added projects prop
         <h4>Project count</h4>
         {legendStops.slice(1).map((stop, index) => {
           const actualIndex = index + 1; // Offset because we skipped the first item (0)
+          const isLastItem = actualIndex === legendStops.length - 1;
+          const rangeLabel = isLastItem 
+            ? `${stop}+` 
+            : `${stop} - ${legendStops[actualIndex + 1] - 1}`;
+          
           return (
             <div key={actualIndex} className="legend-item">
               <span className="legend-color" style={{ backgroundColor: legendColors[actualIndex] }} />
-              <span className="legend-label">
-                {actualIndex === legendStops.length - 1 ? `${stop}+` : `${stop} - ${legendStops[actualIndex+1]-1}`}
-              </span>
+              <span className="legend-label">{rangeLabel}</span>
             </div>
           );
         })}

@@ -5,7 +5,7 @@
   flex-direction: column;
   gap: 24px; /* Increased gap for better separation */
   padding: 24px; /* Increased padding for the overall page */
-  max-width: 1600px; /* Max width for very large screens */
+  max-width: 1200px; /* Max width for very large screens */
   margin: 0 auto; /* Center page content */
 }
 
