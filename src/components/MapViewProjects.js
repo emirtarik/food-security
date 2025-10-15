@@ -29,7 +29,7 @@ const getPreferredCountryName = (mapboxName) => {
   return COUNTRY_NAME_MAPPING[lowerName] || mapboxName;
 };
 
-const MapViewProjects = ({ projects }) => { // Added projects prop
+const MapViewProjects = ({ projects, filters, setFilters, donorOptions, recipientCountryOptions }) => { // Added filter props
   const { t, currentLanguage } = useTranslationHook("analysis");
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
@@ -61,6 +61,7 @@ const MapViewProjects = ({ projects }) => { // Added projects prop
       return acc;
     }, {});
   }, [projects]);
+
 
   // Available dates from your CSV files. // Removed
   // const dateOptions = [ ... ]; // Kept for now, in case it's used elsewhere, but likely removable
@@ -95,7 +96,7 @@ const MapViewProjects = ({ projects }) => { // Added projects prop
       container: mapContainerRef.current,
       style: 'mapbox://styles/mkmd/cm6p4kq7i00ty01sa3iz31788',
       center: [3, 14], // Match MapView.js coordinates
-      zoom: 4.45, // Match MapView.js zoom level
+      zoom: 3.8, // Reduced zoom to accommodate smaller map width
     });
     mapRef.current = map;
 
@@ -299,23 +300,118 @@ const MapViewProjects = ({ projects }) => { // Added projects prop
           <h1>{t('mapLoadingMessage', { ns: 'global' }) || "The map is loading, please wait..."}</h1>
         </div>
       )}
-      <div ref={mapContainerRef} className="map-container" />
-      <div className="legend-container mapboxgl-ctrl-bottom-left">
-        <h4>Project count</h4>
-        {legendStops.slice(1).map((stop, index) => {
-          const actualIndex = index + 1; // Offset because we skipped the first item (0)
-          const isLastItem = actualIndex === legendStops.length - 1;
-          const rangeLabel = isLastItem 
-            ? `${stop}+` 
-            : `${stop} - ${legendStops[actualIndex + 1] - 1}`;
-          
-          return (
-            <div key={actualIndex} className="legend-item">
-              <span className="legend-color" style={{ backgroundColor: legendColors[actualIndex] }} />
-              <span className="legend-label">{rangeLabel}</span>
+      
+      <div className="map-and-lists-wrapper">
+        {/* Map Section */}
+        <div className="map-section">
+          <div ref={mapContainerRef} className="map-container" />
+          <div className="legend-container mapboxgl-ctrl-bottom-left">
+            <h4>Project count</h4>
+            {legendStops.slice(1).map((stop, index) => {
+              const actualIndex = index + 1; // Offset because we skipped the first item (0)
+              const isLastItem = actualIndex === legendStops.length - 1;
+              const rangeLabel = isLastItem 
+                ? `${stop}+` 
+                : `${stop} - ${legendStops[actualIndex + 1] - 1}`;
+              
+              return (
+                <div key={actualIndex} className="legend-item">
+                  <span className="legend-color" style={{ backgroundColor: legendColors[actualIndex] }} />
+                  <span className="legend-label">{rangeLabel}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Filters Section */}
+        <div className="filters-section">
+          <div className="filter-container">
+            <h3>Donors</h3>
+            <div className="filter-header">
+              <div className="filter-actions">
+                <button 
+                  type="button"
+                  className="filter-action-btn"
+                  onClick={() => {
+                    setFilters(prev => ({ ...prev, donors: donorOptions }));
+                  }}
+                >
+                  Select All
+                </button>
+                <button 
+                  type="button"
+                  className="filter-action-btn"
+                  onClick={() => {
+                    setFilters(prev => ({ ...prev, donors: [] }));
+                  }}
+                >
+                  Clear All
+                </button>
+              </div>
             </div>
-          );
-        })}
+            <div className="filter-checkboxes">
+              {donorOptions.map(donor => (
+                <label key={donor} className="filter-checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={filters.donors.includes(donor)}
+                    onChange={(e) => {
+                      const newDonors = e.target.checked
+                        ? [...filters.donors, donor]
+                        : filters.donors.filter(d => d !== donor);
+                      setFilters(prev => ({ ...prev, donors: newDonors }));
+                    }}
+                  />
+                  <span>{donor}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div className="filter-container">
+            <h3>Recipient Countries</h3>
+            <div className="filter-header">
+              <div className="filter-actions">
+                <button 
+                  type="button"
+                  className="filter-action-btn"
+                  onClick={() => {
+                    setFilters(prev => ({ ...prev, recipientCountries: recipientCountryOptions }));
+                  }}
+                >
+                  Select All
+                </button>
+                <button 
+                  type="button"
+                  className="filter-action-btn"
+                  onClick={() => {
+                    setFilters(prev => ({ ...prev, recipientCountries: [] }));
+                  }}
+                >
+                  Clear All
+                </button>
+              </div>
+            </div>
+            <div className="filter-checkboxes">
+              {recipientCountryOptions.map(country => (
+                <label key={country} className="filter-checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={filters.recipientCountries.includes(country)}
+                    onChange={(e) => {
+                      const newCountries = e.target.checked
+                        ? [...filters.recipientCountries, country]
+                        : filters.recipientCountries.filter(c => c !== country);
+                      setFilters(prev => ({ ...prev, recipientCountries: newCountries }));
+                    }}
+                  />
+                  <span>{country}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

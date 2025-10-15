@@ -237,53 +237,14 @@ const Projects = () => {
       <Header />
       <SubHeader /> {/* Assuming Projects page might have a SubHeader, adjust as needed */}
       <div className="projects-page-container">
-        <MapViewProjects projects={filteredProjects} />
+        <MapViewProjects 
+          projects={filteredProjects} 
+          filters={filters}
+          setFilters={setFilters}
+          donorOptions={donorOptions}
+          recipientCountryOptions={recipientCountryOptions}
+        />
         <div className="filters-container">
-          <div className="filter-item filter-item-donors">
-            <div className="donor-filter-header">
-              <label>Donors:</label>
-              <div className="donor-filter-actions">
-                <button 
-                  type="button"
-                  className="donor-action-btn"
-                  onClick={() => {
-                    setFilters(prev => ({ ...prev, donors: donorOptions }));
-                    setCurrentPage(1);
-                  }}
-                >
-                  Select All
-                </button>
-                <button 
-                  type="button"
-                  className="donor-action-btn"
-                  onClick={() => {
-                    setFilters(prev => ({ ...prev, donors: [] }));
-                    setCurrentPage(1);
-                  }}
-                >
-                  Clear All
-                </button>
-              </div>
-            </div>
-            <div className="donor-checkboxes">
-              {donorOptions.map(donor => (
-                <label key={donor} className="donor-checkbox-label">
-                  <input
-                    type="checkbox"
-                    checked={filters.donors.includes(donor)}
-                    onChange={(e) => {
-                      const newDonors = e.target.checked
-                        ? [...filters.donors, donor]
-                        : filters.donors.filter(d => d !== donor);
-                      setFilters(prev => ({ ...prev, donors: newDonors }));
-                      setCurrentPage(1);
-                    }}
-                  />
-                  <span>{donor}</span>
-                </label>
-              ))}
-            </div>
-          </div>
           <div className="filter-item">
             <label htmlFor="fundingAgency">Funding Agency:</label>
             <input type="text" id="fundingAgency" value={filters.fundingAgency} onChange={(e) => handleFilterChange('fundingAgency', e.target.value)} />
@@ -291,51 +252,6 @@ const Projects = () => {
           <div className="filter-item">
             <label htmlFor="implementingAgency">Implementing Agency:</label>
             <input type="text" id="implementingAgency" value={filters.implementingAgency} onChange={(e) => handleFilterChange('implementingAgency', e.target.value)} />
-          </div>
-          <div className="filter-item filter-item-countries">
-            <div className="country-filter-header">
-              <label>Recipient Countries:</label>
-              <div className="country-filter-actions">
-                <button 
-                  type="button"
-                  className="country-action-btn"
-                  onClick={() => {
-                    setFilters(prev => ({ ...prev, recipientCountries: recipientCountryOptions }));
-                    setCurrentPage(1);
-                  }}
-                >
-                  Select All
-                </button>
-                <button 
-                  type="button"
-                  className="country-action-btn"
-                  onClick={() => {
-                    setFilters(prev => ({ ...prev, recipientCountries: [] }));
-                    setCurrentPage(1);
-                  }}
-                >
-                  Clear All
-                </button>
-              </div>
-            </div>
-            <div className="country-checkboxes">
-              {recipientCountryOptions.map(country => (
-                <label key={country} className="country-checkbox-label">
-                  <input
-                    type="checkbox"
-                    checked={filters.recipientCountries.includes(country)}
-                    onChange={(e) => {
-                      const newCountries = e.target.checked
-                        ? [...filters.recipientCountries, country]
-                        : filters.recipientCountries.filter(c => c !== country);
-                      setFilters(prev => ({ ...prev, recipientCountries: newCountries }));
-                      setCurrentPage(1);
-                    }}
-                  />
-                  <span>{country}</span>
-                </label>
-              ))}
-            </div>
           </div>
           <div className="filter-item">
             <label htmlFor="startYear">Start Year:</label>
