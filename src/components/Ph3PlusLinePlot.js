@@ -173,7 +173,13 @@ const Ph3PlusLinePlot = ({
       });
     });
 
-    const periods = Array.from(periodsSet).sort((p1, p2) => {
+    // Filter out June data points (monthIndex 5, which is June in 0-based indexing)
+    const filteredPeriods = Array.from(periodsSet).filter(period => {
+      const { monthIndex } = parsePeriodKey(period);
+      return monthIndex !== 5; // Exclude June (monthIndex 5)
+    });
+
+    const periods = filteredPeriods.sort((p1, p2) => {
       const { year: y1, monthIndex: m1 } = parsePeriodKey(p1);
       const { year: y2, monthIndex: m2 } = parsePeriodKey(p2);
       if (y1 !== y2) return y1 - y2;

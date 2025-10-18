@@ -197,6 +197,32 @@ const DataDownload = () => {
           <a className="csv-link" href="/data/RPCA_food_insecurity.csv" download style={{ display: "none" }}>CSV</a>
         </div>
 
+        <div className="citation-section">
+          <h4 className="citation-title">{t("citationSuggestion") || "Suggested Citation"}</h4>
+          <div className="citation-text">
+            {(() => {
+              const isFr = (currentLanguage || '').startsWith('fr');
+              if (isFr) {
+                return (
+                  <p>
+                    "RPCA - Réseau de Prévention des Crises Alimentaires (2024). Données sur l'insécurité alimentaire. 
+                    <a href="https://food-security.net" target="_blank" rel="noreferrer">https://food-security.net</a>. 
+                    Consulté le {new Date().toLocaleDateString('fr-FR')}."
+                  </p>
+                );
+              } else {
+                return (
+                  <p>
+                    "RPCA - Réseau de Prévention des Crises Alimentaires (2024). Food Insecurity Data. 
+                    <a href="https://food-security.net" target="_blank" rel="noreferrer">https://food-security.net</a>. 
+                    Accessed {new Date().toLocaleDateString('en-US')}."
+                  </p>
+                );
+              }
+            })()}
+          </div>
+        </div>
+
         <p className="privacy-note">
           {(() => {
             const isFr = (currentLanguage || '').startsWith('fr');
@@ -206,7 +232,7 @@ const DataDownload = () => {
               <span>
                 {isFr
                   ? "En soumettant votre adresse e-mail, vous acceptez les "
-                  : "By submitting your email address you agree to the OECD’s "}
+                  : "By submitting your email address you agree to the OECD's "}
                 <a href={termsHref} target="_blank" rel="noreferrer" className="privacy-link">{isFr ? "Conditions générales" : "Terms and Conditions"}</a>
                 {isFr ? " et la " : " and "}
                 <a href={privacyHref} target="_blank" rel="noreferrer" className="privacy-link">{isFr ? "Politique de confidentialité" : "Privacy Policy"}</a>
