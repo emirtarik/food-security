@@ -136,5 +136,6 @@
     "completeFormToDownload": "Complete form to enable download",
     "privacyNote": "These details are used only to understand who uses the data. No personal information is stored by this site.",
     "invalidEmail": "Please enter a valid email",
-    "required": "Required"
+    "required": "Required",
+    "citationSuggestion": "Suggested Citation"
   }
