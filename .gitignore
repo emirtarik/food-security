@@ -1,6 +1,11 @@
 node_modules/
 build/
-public/
+public/data/
+public/uploads/
+public/images/
+public/markdown/
+public/flags/
+
 
 .env.local
 .env
