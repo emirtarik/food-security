@@ -564,13 +564,13 @@ const Ph3PlusLinePlot = ({
     }
   };
 
-  // Function to get flag filename for a country
+  // Function to get flag filename(s) for a country
   const getFlagFilename = (countryName) => {
     const flagMap = {
       'Nigeria': 'nigeria.svg',
       'Senegal': 'senegal.svg',
       'Burkina Faso': 'burkina-faso.svg',
-      'Côte d\'Ivoire': 'côte-d\'ivoire.svg',
+      'Côte d\'Ivoire': ['côte-d\'ivoire.svg', 'ivory-coast.svg'],
       'Mali': 'mali.svg',
       'Niger': 'niger.svg',
       'Chad': 'chad.svg',
@@ -585,7 +585,13 @@ const Ph3PlusLinePlot = ({
       'Cabo Verde': 'cabo-verde.svg',
       'Mauritania': 'mauritania.svg'
     };
-    return flagMap[countryName] || null;
+    const filename = flagMap[countryName];
+    if (!filename) return { primary: null, fallback: null };
+    // If it's an array, return primary and fallback
+    if (Array.isArray(filename)) {
+      return { primary: filename[0], fallback: filename[1] || null };
+    }
+    return { primary: filename, fallback: null };
   };
 
 
@@ -612,7 +618,7 @@ const Ph3PlusLinePlot = ({
             <label>{t('selectCountries') || 'Select Countries:'}</label>
             <div className="country-checkboxes">
               {availableCountries.map(country => {
-                const flagFilename = getFlagFilename(country);
+                const { primary: primaryFilename, fallback: fallbackFilename } = getFlagFilename(country);
                 return (
                   <label key={country} className="country-checkbox">
                     <input
@@ -625,11 +631,16 @@ const Ph3PlusLinePlot = ({
                       style={{ backgroundColor: getCountryColor(country) }}
                     ></span>
                     <span className="country-name">{country}</span>
-                    {flagFilename && (
+                    {primaryFilename && (
                       <img 
-                        src={`/flags/${flagFilename}`} 
+                        src={`/flags/${primaryFilename}`} 
                         alt={`${country} flag`}
                         className="country-flag"
+                        onError={(e) => {
+                          if (fallbackFilename && e.target.src !== `/flags/${fallbackFilename}`) {
+                            e.target.src = `/flags/${fallbackFilename}`;
+                          }
+                        }}
                       />
                     )}
                   </label>

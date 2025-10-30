@@ -254,7 +254,7 @@ export default function Analysis() {
                   {/* Single Country Map View showing situation changes */}
                   {selectedRegionData.period1 && selectedRegionData.period2 && geojsonFeatures.length > 0 ? (
                     selectedRegionData.region.admin0 ? (
-                      <div className="country-map-container" style={{ margin: '20px 0' }}>
+                      <div className="country-map-container" style={{ margin: '20px 0', minHeight: '650px', height: 'auto' }}>
                         <CountryMapView
                           country={selectedRegionData.region.admin0}
                           currentPeriod={selectedRegionData.period2}

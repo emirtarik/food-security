@@ -95,6 +95,39 @@ function parsePeriodKey(period) {
   return { year, monthIndex: idx, isPrediction };
 }
 
+/**
+ * Function to get flag filename(s) for a country
+ * Returns an object with primary and fallback filenames
+ */
+function getFlagFilename(countryName) {
+  const flagMap = {
+    'Nigeria': 'nigeria.svg',
+    'Senegal': 'senegal.svg',
+    'Burkina Faso': 'burkina-faso.svg',
+    'Côte d\'Ivoire': ['côte-d\'ivoire.svg', 'ivory-coast.svg'],
+    'Mali': 'mali.svg',
+    'Niger': 'niger.svg',
+    'Chad': 'chad.svg',
+    'Ghana': 'ghana.svg',
+    'Guinea': 'guinea.svg',
+    'Guinea-Bissau': 'guinea-bissau.svg',
+    'Liberia': 'liberia.svg',
+    'Sierra Leone': 'sierra-leone.svg',
+    'Togo': 'togo.svg',
+    'Benin': 'benin.svg',
+    'Gambia': 'gambia.svg',
+    'Cabo Verde': 'cabo-verde.svg',
+    'Mauritania': 'mauritania.svg'
+  };
+  const filename = flagMap[countryName];
+  if (!filename) return { primary: null, fallback: null };
+  // If it's an array, return primary and fallback
+  if (Array.isArray(filename)) {
+    return { primary: filename[0], fallback: filename[1] || null };
+  }
+  return { primary: filename, fallback: null };
+}
+
 const MapView = ({ 
   currentDateIndex, 
   setCurrentDateIndex, 
@@ -107,11 +140,18 @@ const MapView = ({
   
   // Ref to hold the latest selected date.
   const currentDateRef = useRef(null);
+  // Track whether a date change was triggered programmatically (by animation)
+  const isProgrammaticDateChangeRef = useRef(false);
   
   // Track whether the map has finished loading.
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   // New state to track when all data and layers are loaded.
   const [isDataLoaded, setIsDataLoaded] = useState(false);
+  
+  // Animation state management
+  const [isAnimating, setIsAnimating] = useState(false);
+  const animationIntervalRef = useRef(null);
+  const [hasPlayedInitialAnimation, setHasPlayedInitialAnimation] = useState(false);
 
   // Helper function to translate classification values.
   const translateClassification = (classification, t) => {
@@ -133,6 +173,46 @@ const MapView = ({
       default:
         return classification || t("unknownClassification");
     }
+  };
+
+  // Helper function to get classification icon
+  const getClassificationIcon = (classification) => {
+    // Return empty string - no icons needed
+    return "";
+  };
+
+  // Helper function to preserve original number formatting
+  const formatNumber = (num) => {
+    if (!num || num === 0) return null;
+    // Return the number as-is to preserve existing comma formatting
+    return num.toString();
+  };
+
+  // Animation control functions
+  const startAnimation = () => {
+    if (isAnimating || dateOptions.length <= 1) return;
+    
+    setIsAnimating(true);
+    let currentIndex = 0;
+    const animationSpeed = 1000; // Fixed speed of 1 second between frames
+    
+    animationIntervalRef.current = setInterval(() => {
+      isProgrammaticDateChangeRef.current = true;
+      setCurrentDateIndex(currentIndex);
+      currentIndex++;
+      
+      if (currentIndex >= dateOptions.length) {
+        stopAnimation();
+      }
+    }, animationSpeed);
+  };
+
+  const stopAnimation = () => {
+    if (animationIntervalRef.current) {
+      clearInterval(animationIntervalRef.current);
+      animationIntervalRef.current = null;
+    }
+    setIsAnimating(false);
   };
   
   // Get current date from props
@@ -250,6 +330,18 @@ const MapView = ({
     console.log('Current date set to:', currentDate); // Debug log
   }, [currentDate]);
 
+  // Stop animation when date is manually changed
+  useEffect(() => {
+    if (isProgrammaticDateChangeRef.current) {
+      // Consume the flag and do not treat this as manual
+      isProgrammaticDateChangeRef.current = false;
+      return;
+    }
+    if (isAnimating) {
+      stopAnimation();
+    }
+  }, [currentDateIndex]);
+
   // Update currentDateIndex when dateOptions change
   useEffect(() => {
     if (dateOptions.length > 0) {
@@ -258,6 +350,33 @@ const MapView = ({
       console.log('Setting current date index to:', dateOptions.length - 1); // Debug log
     }
   }, [dateOptions]);
+
+  // Auto-start animation on first load
+  useEffect(() => {
+    if (isDataLoaded && dateOptions.length > 1 && !hasPlayedInitialAnimation) {
+      // Start from the beginning and animate through all periods
+      isProgrammaticDateChangeRef.current = true;
+      setCurrentDateIndex(0);
+      setHasPlayedInitialAnimation(true);
+      
+      // Start animation after a short delay to ensure map is ready
+      setTimeout(() => {
+        // Only start if not already animating (prevents conflicts)
+        if (!isAnimating) {
+          startAnimation();
+        }
+      }, 1000);
+    }
+  }, [isDataLoaded, dateOptions.length, hasPlayedInitialAnimation, isAnimating]);
+
+  // Cleanup animation interval on unmount
+  useEffect(() => {
+    return () => {
+      if (animationIntervalRef.current) {
+        clearInterval(animationIntervalRef.current);
+      }
+    };
+  }, []);
   
   // Update ACLED year when food insecurity date changes - COMMENTED OUT FOR PRODUCTION
   /*
@@ -641,7 +760,8 @@ const MapView = ({
           paint: {
             'fill-color': '#ffffff', // Default color until data is loaded
             'fill-opacity': 0.9,
-            'fill-opacity-transition': { duration: 500 }
+            'fill-opacity-transition': { duration: 500 },
+            'fill-color-transition': { duration: 300 }
           },
         },
         insertionLayerId
@@ -787,10 +907,11 @@ const MapView = ({
             bgColor = '#cccccc';
           }
   
-          // Compute the flag image URL based on the country name.
+          // Get flag filename using the shared function
           const countryName = props["admin0Name"] || "";
-          const flagName = countryName.toLowerCase().replace(/\s+/g, '-');
-          const flagURL = `/flags/${flagName}.svg`;
+          const { primary: primaryFlag, fallback: fallbackFlag } = getFlagFilename(countryName);
+          const flagURL = primaryFlag ? `/flags/${primaryFlag}` : '';
+          const fallbackFlagURL = fallbackFlag ? `/flags/${fallbackFlag}` : '';
   
           const aggregatedNotice = (props[levelField] === 1 || props[levelField] === '1')
             ? ` <div class="popup-aggregated-box">
@@ -827,32 +948,43 @@ const MapView = ({
           const popupContent = `
             <div class="popup-content">
               ${aggregatedNotice}
-              <div class="popup-header-flag">
-                <h3 class="popup-header">
-                  ${props["admin2Name"] || t("unknownDistrict")} - ${props["admin1Name"] || t("unknownRegion")}, ${countryName}
-                </h3>
+              <div class="popup-header-section">
+                <div class="popup-location-info">
+                  <h3 class="popup-title">${props["admin2Name"] || t("unknownDistrict")}</h3>
+                  <p class="popup-subtitle">${props["admin1Name"] || t("unknownRegion")}, ${countryName}</p>
+                </div>
                 <div class="popup-flag">
-                  <img src="${flagURL}" alt="${t("flag")}" />
+                  <img src="${flagURL}" alt="${t("flag")}" ${fallbackFlagURL ? `onerror="this.src='${fallbackFlagURL}'; this.onerror=null;"` : ''} />
                 </div>
               </div>
-              <div class="popup-subheader-box" style="background-color: ${bgColor};">
-                <h4 class="popup-subheader">${translateClassification(props[classificationField], t)}</h4>
+              
+              <div class="popup-classification-section">
+                <div class="popup-classification-box" style="background-color: ${bgColor};">
+                  <h4 class="popup-classification-text">${translateClassification(props[classificationField], t)}</h4>
+                </div>
               </div>
-              <div class="popup-details">
-                <table class="popup-table">
-                  <tr>
-                    <td><strong>${t("populationTotal")}:</strong></td>
-                    <td>${props[populationTotalField] || t("nA")}</td>
-                  </tr>
-                  <tr>
-                    <td><strong>${t("populationPh2")}:</strong></td>
-                    <td>${props[populationPh2Field] || t("nA")}</td>
-                  </tr>
-                  <tr>
-                    <td><strong>${t("populationPh3")}:</strong></td>
-                    <td>${props[populationPh3Field] || t("nA")}</td>
-                  </tr>
-                </table>
+              
+              <div class="popup-stats-section">
+                <div class="popup-stats-grid">
+                  <div class="popup-stat-item">
+                    <div class="popup-stat-content">
+                      <div class="popup-stat-label">${t("populationTotal")}</div>
+                      <div class="popup-stat-value">${formatNumber(props[populationTotalField]) || t("nA")}</div>
+                    </div>
+                  </div>
+                  <div class="popup-stat-item">
+                    <div class="popup-stat-content">
+                      <div class="popup-stat-label">${t("populationPh2")}</div>
+                      <div class="popup-stat-value">${formatNumber(props[populationPh2Field]) || t("nA")}</div>
+                    </div>
+                  </div>
+                  <div class="popup-stat-item">
+                    <div class="popup-stat-content">
+                      <div class="popup-stat-label">${t("populationPh3")}</div>
+                      <div class="popup-stat-value">${formatNumber(props[populationPh3Field]) || t("nA")}</div>
+                    </div>
+                  </div>
+                </div>
               </div>
               ${acledData}
             </div>
@@ -1127,6 +1259,7 @@ const MapView = ({
 
   return (
     <div className="map-view-container">
+
 
       <button
         className="export-button"

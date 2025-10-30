@@ -152,12 +152,12 @@ function getSituationChange(currentClassification, otherClassification) {
       opacity: intensity
     };
   } else {
-    // No change - use gray
+    // No change - use consistent gray (fully opaque to cover base colors)
     return { 
       status: 'stable', 
       color: '#cccccc', 
       severity: 0,
-      opacity: 0.6
+      opacity: 1.0  // Fully opaque to ensure consistent gray regardless of base phase
     };
   }
 }
@@ -330,13 +330,37 @@ const CountryMapView = ({ country, currentPeriod, otherPeriod, data, showChangeO
 
       const popup = new mapboxgl.Popup({ closeButton: false, closeOnClick: false, className: 'custom-popup' });
 
-      map.on('mouseenter', 'country-fill', () => { map.getCanvas().style.cursor = 'pointer'; });
-      map.on('mouseleave', 'country-fill', () => { map.getCanvas().style.cursor = ''; popup.remove(); });
+      // Build list of interactive layers dynamically
+      const getInteractiveLayers = () => {
+        const layers = ['country-fill'];
+        if (showChangeOverlay && otherPeriod && map.getLayer('situation-change-overlay')) {
+          layers.unshift('situation-change-overlay');
+        }
+        return layers;
+      };
 
-      map.on('mousemove', 'country-fill', (e) => {
-        if (e.features.length > 0) {
-          const feature = e.features[0];
-          const props = feature.properties;
+      // Set up cursor on hover
+      ['country-fill', 'situation-change-overlay'].forEach((layerId) => {
+        if (map.getLayer(layerId)) {
+          map.on('mouseenter', layerId, () => { map.getCanvas().style.cursor = 'pointer'; });
+          map.on('mouseleave', layerId, () => { map.getCanvas().style.cursor = ''; });
+        }
+      });
+
+      // Use map-level mousemove with queryRenderedFeatures to avoid double tooltips
+      let hoveredFeatureId = null;
+      map.on('mousemove', (e) => {
+        const interactiveLayers = getInteractiveLayers().filter(id => map.getLayer(id));
+        const feats = map.queryRenderedFeatures(e.point, { layers: interactiveLayers });
+        
+        if (!feats || feats.length === 0) {
+          popup.remove();
+          hoveredFeatureId = null;
+          return;
+        }
+        
+        const feature = feats[0];
+        const props = feature.properties;
 
           // Current period data
           const currentClassificationField = `classification_${currentPeriod}`;
@@ -389,40 +413,98 @@ const CountryMapView = ({ country, currentPeriod, otherPeriod, data, showChangeO
           else if (currentClassificationValue === 'Phase 5 : famine') bgColor = '#60090b';
           else if (currentClassificationValue === 'inaccessible') bgColor = '#cccccc';
 
+          // Get flag filename using the shared function from MapView.js
           const countryNameForFlag = props["admin0Name"] || "";
-          const flagName = countryNameForFlag.toLowerCase().replace(/\s+/g, '-');
-          const flagURL = `/flags/${flagName}.svg`;
+          const flagMap = {
+            'Nigeria': 'nigeria.svg',
+            'Senegal': 'senegal.svg',
+            'Burkina Faso': 'burkina-faso.svg',
+            'Côte d\'Ivoire': ['côte-d\'ivoire.svg', 'ivory-coast.svg'],
+            'Mali': 'mali.svg',
+            'Niger': 'niger.svg',
+            'Chad': 'chad.svg',
+            'Ghana': 'ghana.svg',
+            'Guinea': 'guinea.svg',
+            'Guinea-Bissau': 'guinea-bissau.svg',
+            'Liberia': 'liberia.svg',
+            'Sierra Leone': 'sierra-leone.svg',
+            'Togo': 'togo.svg',
+            'Benin': 'benin.svg',
+            'Gambia': 'gambia.svg',
+            'Cabo Verde': 'cabo-verde.svg',
+            'Mauritania': 'mauritania.svg'
+          };
+          const filename = flagMap[countryNameForFlag];
+          let primaryFlag = null, fallbackFlag = null;
+          if (filename) {
+            if (Array.isArray(filename)) {
+              primaryFlag = filename[0];
+              fallbackFlag = filename[1] || null;
+            } else {
+              primaryFlag = filename;
+            }
+          }
+          const flagURL = primaryFlag ? `/flags/${primaryFlag}` : '';
+          const fallbackFlagURL = fallbackFlag ? `/flags/${fallbackFlag}` : '';
 
           const aggregatedNotice = (props[currentLevelField] === 1 || props[currentLevelField] === '1' || props[currentLevelField] === "true" || props[currentLevelField] === true)
             ? `<div class="popup-aggregated-box"><div class="popup-aggregated">⚠️ ${t("dataAggregated")}</div></div>`
             : '';
 
-          // Compact popup content
+          // Updated popup content matching MapView.js style
           const popupContent = `
             <div class="popup-content">
               ${aggregatedNotice}
-              <div class="popup-header-flag">
-                <h3 class="popup-header">
-                  ${props["admin2Name"] || t("unknownDistrict")} - ${props["admin1Name"] || t("unknownRegion")}
-                </h3>
+              <div class="popup-header-section">
+                <div class="popup-location-info">
+                  <h3 class="popup-title">${props["admin2Name"] || t("unknownDistrict")}</h3>
+                  <p class="popup-subtitle">${props["admin1Name"] || t("unknownRegion")}, ${countryNameForFlag}</p>
+                </div>
                 <div class="popup-flag">
-                  <img src="${flagURL}" alt="${t("flag")}" />
+                  <img src="${flagURL}" alt="${t("flag")}" ${fallbackFlagURL ? `onerror="this.src='${fallbackFlagURL}'; this.onerror=null;"` : ''} />
                 </div>
               </div>
-              <div class="popup-subheader-box" style="background-color: ${bgColor};">
-                <h4 class="popup-subheader">
-                  ${translateClassification(otherClassificationValue, t)} → ${translateClassification(currentClassificationValue, t)} ${changeIndicator}
-                </h4>
+              
+              <div class="popup-classification-section">
+                <div class="popup-classification-box" style="background-color: ${bgColor};">
+                  <h4 class="popup-classification-text">
+                    ${translateClassification(otherClassificationValue, t)} → ${translateClassification(currentClassificationValue, t)} ${changeIndicator}
+                  </h4>
+                </div>
               </div>
-              <div class="popup-brief" style="font-size:10px; line-height:1.3;">
-                <div><strong>${t("populationTotal")}:</strong> ${formatNumber(popTotalDiffInThousands)} (${formatPct(popTotalPct)})</div>
-                <div><strong>${t("populationPh3")}:</strong> ${formatNumber(popPh3DiffInThousands)} (${formatPercentage(popPh3PopulationPercentChange, 1)})</div>
+              
+              <div class="popup-stats-section">
+                <div class="popup-stats-grid">
+                  <div class="popup-stat-item">
+                    <div class="popup-stat-content">
+                      <div class="popup-stat-label">${t("populationTotal")}</div>
+                      <div class="popup-stat-value">${formatNumber(popTotalDiffInThousands)} (${formatPct(popTotalPct)})</div>
+                    </div>
+                  </div>
+                  <div class="popup-stat-item">
+                    <div class="popup-stat-content">
+                      <div class="popup-stat-label">${t("populationPh3")}</div>
+                      <div class="popup-stat-value">${formatNumber(popPh3DiffInThousands)} (${formatPercentage(popPh3PopulationPercentChange, 1)})</div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           `;
-          popup.setLngLat(e.lngLat).setHTML(popupContent).addTo(map);
-        }
+        popup.setLngLat(e.lngLat).setHTML(popupContent).addTo(map);
       });
+
+      map.on('mouseleave', 'country-fill', () => {
+        popup.remove();
+        hoveredFeatureId = null;
+      });
+      
+      if (showChangeOverlay && otherPeriod && map.getLayer('situation-change-overlay')) {
+        map.on('mouseleave', 'situation-change-overlay', () => {
+          popup.remove();
+          hoveredFeatureId = null;
+        });
+      }
     });
 
     return () => {
@@ -499,25 +581,57 @@ const CountryMapView = ({ country, currentPeriod, otherPeriod, data, showChangeO
     <div className="country-map-view">
       <div className="country-map-title">
         {`${country} - ${formatPeriod(currentPeriod, currentLocale)} vs ${formatPeriod(otherPeriod, currentLocale)}`}
+      </div>
+      <div ref={mapContainerRef} className="country-map-container-inner">
         {showChangeOverlay && otherPeriod && (
-          <div className="change-legend">
-            <span className="legend-item">
-              <span className="legend-color improving"></span> {t("improving")}
-            </span>
-            <span className="legend-item">
-              <span className="legend-color deteriorating"></span> {t("deteriorating")}
-            </span>
-            <span className="legend-item">
-              <span className="legend-color stable"></span> {t("noChange")}
-            </span>
-            <span className="legend-item">
-              <span className="legend-color unanalyzed"></span> {t("nonAnalyzed")}
-            </span>
-            <span className="legend-note">(Darker = More severe change)</span>
+          <div className="change-legend map-legend">
+            <div className="legend-section">
+              <span className="legend-label">{t("improving")}:</span>
+              <div className="legend-shades">
+                <span className="legend-shade-item" title="1 phase improvement">
+                  <span className="legend-shade" style={{ backgroundColor: 'rgba(38, 178, 38, 0.45)' }}></span>
+                </span>
+                <span className="legend-shade-item" title="2 phase improvement">
+                  <span className="legend-shade" style={{ backgroundColor: 'rgba(51, 204, 51, 0.6)' }}></span>
+                </span>
+                <span className="legend-shade-item" title="3 phase improvement">
+                  <span className="legend-shade" style={{ backgroundColor: 'rgba(63, 229, 63, 0.75)' }}></span>
+                </span>
+                <span className="legend-shade-item" title="4+ phase improvement">
+                  <span className="legend-shade" style={{ backgroundColor: 'rgba(76, 255, 76, 0.9)' }}></span>
+                </span>
+              </div>
+            </div>
+            <div className="legend-section">
+              <span className="legend-label">{t("deteriorating")}:</span>
+              <div className="legend-shades">
+                <span className="legend-shade-item" title="1 phase deterioration">
+                  <span className="legend-shade" style={{ backgroundColor: 'rgba(178, 38, 38, 0.45)' }}></span>
+                </span>
+                <span className="legend-shade-item" title="2 phase deterioration">
+                  <span className="legend-shade" style={{ backgroundColor: 'rgba(204, 51, 51, 0.6)' }}></span>
+                </span>
+                <span className="legend-shade-item" title="3 phase deterioration">
+                  <span className="legend-shade" style={{ backgroundColor: 'rgba(229, 63, 63, 0.75)' }}></span>
+                </span>
+                <span className="legend-shade-item" title="4+ phase deterioration">
+                  <span className="legend-shade" style={{ backgroundColor: 'rgba(255, 76, 76, 0.9)' }}></span>
+                </span>
+              </div>
+            </div>
+            <div className="legend-section">
+              <span className="legend-item">
+                <span className="legend-color stable"></span> {t("noChange")}
+              </span>
+            </div>
+            <div className="legend-section">
+              <span className="legend-item">
+                <span className="legend-color unanalyzed"></span> {t("nonAnalyzed")}
+              </span>
+            </div>
           </div>
         )}
       </div>
-      <div ref={mapContainerRef} className="country-map-container-inner" />
     </div>
   );
 };
