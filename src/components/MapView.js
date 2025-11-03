@@ -608,8 +608,8 @@ const MapView = ({
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: 'mapbox://styles/mkmd/cm6p4kq7i00ty01sa3iz31788',
-      center: [3, 14],
-      zoom: 4.45,
+      center: [2.5, 14],
+      zoom: 4.2,
     });
     mapRef.current = map;
 
@@ -1149,7 +1149,7 @@ const MapView = ({
     console.log(`Map language updated to: ${currentLanguage || 'fr'}`);
   }, [currentLanguage, isMapLoaded]);
   
-  const handleExportPNG = () => {
+  const handleExportPNG = async () => {
     const map = mapRef.current;
     if (!map || !isDataLoaded) return;
 
@@ -1171,89 +1171,134 @@ const MapView = ({
     const prevCenter = map.getCenter();
     const prevZoom   = map.getZoom();
 
-    // 2) Resize map container
+    // 2) Resize map container (upscale for higher fidelity)
+    const UPSCALE = 2; // render at 2x, then downscale for crisp output
     const container = map.getContainer();
     const origStyle = {
       width:  container.style.width,
       height: container.style.height
     };
-    container.style.width  = `${EXPORT_WIDTH}px`;
-    container.style.height = `${EXPORT_HEIGHT}px`;
+    container.style.width  = `${EXPORT_WIDTH * UPSCALE}px`;
+    container.style.height = `${EXPORT_HEIGHT * UPSCALE}px`;
     map.resize();
 
-    map.once('idle', () => {
+    await new Promise(resolve => {
+      map.once('idle', resolve);
+    });
       // 3) Jump to fixed view
-      map.jumpTo({ center: EXPORT_VIEW.center, zoom: EXPORT_VIEW.zoom, essential: true });
+    map.jumpTo({ center: EXPORT_VIEW.center, zoom: EXPORT_VIEW.zoom, essential: true });
 
-      map.once('idle', async () => {
-        const ratio = window.devicePixelRatio;
-        const exportCanvas = document.createElement('canvas');
-        exportCanvas.width  = EXPORT_WIDTH * ratio;
-        exportCanvas.height = EXPORT_HEIGHT * ratio;
-        const ctx = exportCanvas.getContext('2d');
-        ctx.scale(ratio, ratio);
+    await new Promise(resolve => {
+      map.once('idle', resolve);
+    });
+    // extra frame to ensure tiles settled
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
 
-        // 4) Draw main map
-        ctx.drawImage(map.getCanvas(), 0, 0, EXPORT_WIDTH, EXPORT_HEIGHT);
+    // Ensure inset maps have rendered
+    const insetMaps = Object.values(insetMapsRef.current || {});
+    await Promise.all(
+      insetMaps.map(m => new Promise(res => {
+        if (!m) return res();
+        if (m.loaded()) return requestAnimationFrame(() => res());
+        m.once('idle', () => requestAnimationFrame(() => res()));
+      }))
+    );
 
-        // 5) Draw insets
-        INSETS.forEach(({ id, size: [w, h], style }) => {
-          const insetCanvas = insetMapsRef.current[id].getCanvas();
-          const rect = mapContainerRef.current.getBoundingClientRect();
-          const x = style.left
-            ? parseInt(style.left)
-            : rect.width - w - parseInt(style.right);
-          const y = style.top
-            ? parseInt(style.top)
-            : rect.height - h - parseInt(style.bottom);
-          ctx.drawImage(insetCanvas, x, y, w, h);
-        });
+    // Prepare final export canvas at target presentation size
+    const exportCanvas = document.createElement('canvas');
+    exportCanvas.width  = EXPORT_WIDTH;
+    exportCanvas.height = EXPORT_HEIGHT;
+    const ctx = exportCanvas.getContext('2d');
+    ctx.clearRect(0, 0, EXPORT_WIDTH, EXPORT_HEIGHT);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, EXPORT_WIDTH, EXPORT_HEIGHT);
 
-        // 6) Draw legend overlay
-        const legendEl = mapContainerRef.current.querySelector('.legend');
-        if (legendEl) {
-          // Rasterize legend DIV
-          const legendCanvas = await html2canvas(legendEl, {
-            backgroundColor: null,
-            scale: ratio
-          });
-          // Figure out its position relative to map container
-          const legendRect = legendEl.getBoundingClientRect();
-          const containerRect = mapContainerRef.current.getBoundingClientRect();
-          const lx = legendRect.left - containerRect.left;
-          const ly = legendRect.top  - containerRect.top;
-          // Draw it onto our export canvas
-          ctx.drawImage(
-            legendCanvas,
-            lx * ratio,
-            ly * ratio,
-            legendRect.width * ratio,
-            legendRect.height * ratio
-          );
-        }
+    // 4) Draw main map (downscale from upscaled canvas → crisp result)
+    ctx.drawImage(map.getCanvas(), 0, 0, EXPORT_WIDTH, EXPORT_HEIGHT);
 
-        // 7) Download PNG
-        exportCanvas.toBlob(blob => {
-          const url = URL.createObjectURL(blob);
-          const a   = document.createElement('a');
-          a.href    = url;
-          a.download = `food-crisis-map_${currentDate}.png`;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          URL.revokeObjectURL(url);
+    // 5) Draw insets
+    INSETS.forEach(({ id, size: [w, h], style }) => {
+      const insetCanvas = insetMapsRef.current[id].getCanvas();
+      const left  = style.left  ? parseInt(style.left, 10)  : null;
+      const right = style.right ? parseInt(style.right, 10) : null;
+      const top   = style.top   ? parseInt(style.top, 10)   : null;
+      const bottom= style.bottom? parseInt(style.bottom,10) : null;
+      const x = left != null ? left : (EXPORT_WIDTH - w - (right || 0));
+      const y = top  != null ? top  : (EXPORT_HEIGHT - h - (bottom || 0));
+      ctx.drawImage(insetCanvas, x, y, w, h);
+    });
 
-          // 8) Restore original size & view
-          container.style.width  = origStyle.width;
-          container.style.height = origStyle.height;
-          map.resize();
-          map.jumpTo({
-            center: [prevCenter.lng, prevCenter.lat],
-            zoom:   prevZoom,
-            essential: true
-          });
-        }, 'image/png');
+    // 6) Draw legend overlay
+    const legendEl = mapContainerRef.current.querySelector('.legend');
+    if (legendEl) {
+      // Render at 1x CSS pixels then downscale positions/sizes by UPSCALE
+      const legendCanvas = await html2canvas(legendEl, {
+        backgroundColor: null,
+        scale: 1
       });
+      const cs = window.getComputedStyle(legendEl);
+      const lLeft  = cs.left   && cs.left !== 'auto'   ? parseInt(cs.left, 10)   : null;
+      const lRight = cs.right  && cs.right !== 'auto'  ? parseInt(cs.right, 10)  : null;
+      const lTop   = cs.top    && cs.top !== 'auto'    ? parseInt(cs.top, 10)    : null;
+      const lBottom= cs.bottom && cs.bottom !== 'auto' ? parseInt(cs.bottom, 10) : null;
+      const drawW = legendCanvas.width;  // 1x CSS px
+      const drawH = legendCanvas.height;
+      const lx = lLeft != null ? lLeft : (EXPORT_WIDTH - drawW - (lRight || 0));
+      const ly = lTop  != null ? lTop  : (EXPORT_HEIGHT - drawH - (lBottom || 0));
+      ctx.drawImage(legendCanvas, lx, ly, drawW, drawH);
+    }
+
+    // 7) Draw centered bottom watermark (logo_rpca.svg)
+    try {
+      const logoImg = new Image();
+      logoImg.src = '/images/logo_rpca.svg';
+      await new Promise(res => { logoImg.onload = res; logoImg.onerror = res; });
+      const maxLogoHeight = 100; // limit height to 100px
+      const maxLogoWidth = Math.min(220, Math.round(EXPORT_WIDTH * 0.18));
+      const naturalRatio = logoImg.naturalWidth && logoImg.naturalHeight
+        ? (logoImg.naturalWidth / logoImg.naturalHeight)
+        : (226 / 308); // fallback to SVG viewBox ratio
+      let logoWidth = maxLogoWidth;
+      let logoHeight = Math.round(logoWidth / naturalRatio);
+      if (logoHeight > maxLogoHeight) {
+        logoHeight = maxLogoHeight;
+        logoWidth = Math.round(logoHeight * naturalRatio);
+      }
+      const logoX = Math.round((EXPORT_WIDTH - logoWidth) / 2);
+      const bottomMargin = 14; // px above bottom edge
+      const logoY = EXPORT_HEIGHT - logoHeight - bottomMargin;
+
+      ctx.save();
+      ctx.globalAlpha = 0.5; // reduce opacity
+      ctx.drawImage(logoImg, logoX, logoY, logoWidth, logoHeight);
+      ctx.restore();
+    } catch (e) {
+      console.warn('Watermark draw skipped:', e);
+    }
+
+    // 8) Download PNG
+    await new Promise(resolve => {
+      exportCanvas.toBlob(blob => {
+        const url = URL.createObjectURL(blob);
+        const a   = document.createElement('a');
+        a.href    = url;
+        a.download = `food-crisis-map_${currentDate}.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        resolve();
+      }, 'image/png');
+    });
+
+    // 9) Restore original size & view
+    container.style.width  = origStyle.width;
+    container.style.height = origStyle.height;
+    map.resize();
+    map.jumpTo({
+      center: [prevCenter.lng, prevCenter.lat],
+      zoom:   prevZoom,
+      essential: true
     });
   };
 
@@ -1295,12 +1340,12 @@ const MapView = ({
 
       
       {/* Legend Overlay */}
-      <div className="legend">
-        <h4>{t("legend") || "Legend"}</h4>
+      <div className="legend" style={{ position: 'absolute', bottom: '20px', left: '20px', top: 'auto', fontSize: '11px' }}>
+        {/* <h4 style={{ fontSize: '15px' }}>{t("legend") || "Legend"}</h4> */}
         
         {/* Food Insecurity Legend */}
         <div className="food-insecurity-legend">
-          <h5>{t("foodInsecurityData") || "Food Insecurity Data"}</h5>
+          {/* <h5>{t("foodInsecurityData") || "Food Insecurity Data"}</h5> */}
           <div className="legend-item">
             <div className="legend-color-box" style={{ backgroundColor: '#ffffff' }}></div>
             <span>{t("nonAnalyzed")}</span>

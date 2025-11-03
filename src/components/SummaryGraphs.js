@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import { RadialGauge } from '@progress/kendo-react-gauges';
+import ReactSpeedometer from 'react-d3-speedometer';
 import { useSpring, animated } from '@react-spring/web';
 import '../styles/SummaryGraphs.css';
 
@@ -139,50 +139,20 @@ function SummaryGraphs({ averageScore, sectionAverages }) {
     setCurrentValue(parseFloat(calculatedAverage.toFixed(1)));
   }, [sectionAverages]);
 
-  const gaugeOptions = {
-    pointer: {
-      value: currentValue,
-      color: 'black',
-    },
-    scale: {
-      min: 0,
-      max: 100,
-      majorUnit: 10,
-      minorUnit: 5,
-      startAngle: 0,
-      endAngle: 180,
-      rangeSize: 50,
-      labels: {
-        visible: true,
-        color: '#000',
-        font: '12px Lato, sans-serif',
-        position: 'outside',
-        format: '{0}',
-      },
-      ranges: [
-        { from: 0, to: 10, color: 'red' },
-        { from: 10, to: 20, color: 'darkorange' },
-        { from: 20, to: 30, color: 'orange' },
-        { from: 30, to: 40, color: 'yellow' },
-        { from: 40, to: 50, color: 'yellowgreen' },
-        { from: 50, to: 60, color: 'lightgreen' },
-        { from: 60, to: 70, color: 'mediumseagreen' },
-        { from: 70, to: 80, color: 'forestgreen' },
-        { from: 80, to: 90, color: 'green' },
-        { from: 90, to: 100, color: 'darkgreen' },
-      ],
-    },
-    animation: {
-      duration: 1500,
-      easing: 'easeOutBounce',
-    },
-    gaugeArea: {
-      width: 500,
-      height: 'auto',
-      background: 'transparent',
-      margin: 0,
-    },
+  // Define custom segments with colors for the speedometer
+  // react-d3-speedometer uses segments array with objects containing { text, position, color }
+  const getSegmentColors = () => {
+    return [
+      '#FF6B6B',      // 0-20: red
+      '#FFA07A',      // 20-40: light salmon
+      '#FFD580',      // 40-60: light yellow
+      '#B0E57C',      // 60-80: light green
+      '#8FBC8F'       // 80-100: dark sea green
+    ];
   };
+
+  const customSegmentStops = [0, 20, 40, 60, 80, 100];
+  const segmentColors = getSegmentColors();
 
   const sectionDonutCharts = Object.keys(sectionAverages).map((section, index) => {
     const sectionScore = parseFloat(sectionAverages[section]) || 0;
@@ -210,7 +180,23 @@ function SummaryGraphs({ averageScore, sectionAverages }) {
         </div>
         <div className="speedometer-wrapper">
           <div className="speedometer-container">
-            <RadialGauge {...gaugeOptions} style={{ width: '100%' }} />
+            <ReactSpeedometer
+              maxValue={100}
+              value={currentValue}
+              needleColor="#000000"
+              segments={5}
+              customSegmentStops={customSegmentStops}
+              segmentColors={segmentColors}
+              textColor="#000000"
+              valueFormat="d"
+              currentValueText=""
+              valueTextFontSize="0px"
+              height={250}
+              width={400}
+              ringWidth={30}
+              needleTransitionDuration={1500}
+              needleTransition="easeElastic"
+            />
           </div>
 
           <div className="gauge-value-text">

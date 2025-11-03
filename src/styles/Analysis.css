@@ -9,6 +9,31 @@
     margin: 0 auto;
     padding: 15px;
   }
+
+.analysis-page .visualization-section {
+    width: min(95vw, 1600px);
+    max-width: 1600px;
+    margin: 0 auto;
+    padding-left: 32px;
+    padding-right: 32px;
+    box-sizing: border-box;
+}
+
+.analysis-page .tab-content {
+    padding: 24px 32px;
+}
+
+@media (max-width: 768px) {
+    .analysis-page .visualization-section {
+        width: 100%;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .analysis-page .tab-content {
+        padding: 16px;
+    }
+}
   
   /* ------------------------------------
      Calendar Header Section

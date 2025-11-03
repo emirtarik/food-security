@@ -119,6 +119,7 @@ const aggregateFeatures = (features) => {
     ph3:                Math.trunc(totalPh3  / 1000),
     aggregatedAtAdmin1: usedLevel === 1,
     rawTotalPop: totalPop,
+    rawPh2Pop: totalPh2,
     rawPh3Pop: totalPh3,
     numberOfAnalyzedUnits: actualAdmin2sConsideredForCount.length,
     numberOfZonesInPh3Plus: numberOfZonesInPh3Plus,
@@ -206,10 +207,13 @@ const getAdmin1DataForCountry = async (
 
     const populationChange = (agg2 ? agg2.rawPh3Pop : 0) - agg1.rawPh3Pop;
     const populationChangeInThousands = Math.trunc(populationChange / 1000);
+    const populationPh2Change = (agg2 ? agg2.rawPh2Pop : 0) - agg1.rawPh2Pop;
+    const populationPh2ChangeInThousands = Math.trunc(populationPh2Change / 1000);
     const zoneChange = (agg2 ? agg2.numberOfZonesInPh3Plus : 0) - agg1.numberOfZonesInPh3Plus;
 
     const zoneChangeVisuals = getChangeVisuals(zoneChange);
     const populationChangeVisuals = getChangeVisuals(populationChange);
+    const populationPh2ChangeVisuals = getChangeVisuals(populationPh2Change);
 
     const ph3OfTotalPercent1 = agg1.rawTotalPop > 0 ? (agg1.rawPh3Pop / agg1.rawTotalPop) * 100 : 0;
     const ph3OfTotalPercent2 = (agg2 && agg2.rawTotalPop > 0) ? (agg2.rawPh3Pop / agg2.rawTotalPop) * 100 : 0;
@@ -219,6 +223,13 @@ const getAdmin1DataForCountry = async (
       ph3PopulationPercentChange = (populationChange / agg1.rawPh3Pop) * 100;
     } else if (populationChange !== 0) {
       ph3PopulationPercentChange = null;
+    }
+
+    let ph2PopulationPercentChange = 0;
+    if (agg1.rawPh2Pop !== 0) {
+      ph2PopulationPercentChange = (populationPh2Change / agg1.rawPh2Pop) * 100;
+    } else if (populationPh2Change !== 0) {
+      ph2PopulationPercentChange = null;
     }
 
     return {
@@ -252,9 +263,13 @@ const getAdmin1DataForCountry = async (
       zoneChange:       zoneChange,
       populationChange: populationChange,
       populationChangeInThousands: formatNumber(populationChangeInThousands),
+      populationPh2Change: populationPh2Change,
+      populationPh2ChangeInThousands: formatNumber(populationPh2ChangeInThousands),
       ph3PopulationPercentChange: ph3PopulationPercentChange,
+      ph2PopulationPercentChange: ph2PopulationPercentChange,
       zoneChangeVisuals: zoneChangeVisuals,
       populationChangeVisuals: populationChangeVisuals,
+      populationPh2ChangeVisuals: populationPh2ChangeVisuals,
       isSubRow: true
     };
   });
@@ -311,10 +326,13 @@ const getAdmin2DataForAdmin1 = async (
 
     const populationChange = (agg2 ? agg2.rawPh3Pop : 0) - agg1.rawPh3Pop;
     const populationChangeInThousands = Math.trunc(populationChange / 1000);
+    const populationPh2Change = (agg2 ? agg2.rawPh2Pop : 0) - agg1.rawPh2Pop;
+    const populationPh2ChangeInThousands = Math.trunc(populationPh2Change / 1000);
     const zoneChange = (agg2 ? agg2.numberOfZonesInPh3Plus : 0) - agg1.numberOfZonesInPh3Plus;
 
     const zoneChangeVisuals = getChangeVisuals(zoneChange);
     const populationChangeVisuals = getChangeVisuals(populationChange);
+    const populationPh2ChangeVisuals = getChangeVisuals(populationPh2Change);
 
     const ph3OfTotalPercent1 = agg1.rawTotalPop > 0 ? (agg1.rawPh3Pop / agg1.rawTotalPop) * 100 : 0;
     const ph3OfTotalPercent2 = (agg2 && agg2.rawTotalPop > 0) ? (agg2.rawPh3Pop / agg2.rawTotalPop) * 100 : 0;
@@ -324,6 +342,13 @@ const getAdmin2DataForAdmin1 = async (
       ph3PopulationPercentChange = (populationChange / agg1.rawPh3Pop) * 100;
     } else if (populationChange !== 0) {
       ph3PopulationPercentChange = null;
+    }
+
+    let ph2PopulationPercentChange = 0;
+    if (agg1.rawPh2Pop !== 0) {
+      ph2PopulationPercentChange = (populationPh2Change / agg1.rawPh2Pop) * 100;
+    } else if (populationPh2Change !== 0) {
+      ph2PopulationPercentChange = null;
     }
 
     return {
@@ -357,9 +382,13 @@ const getAdmin2DataForAdmin1 = async (
       zoneChange:       zoneChange,
       populationChange: populationChange,
       populationChangeInThousands: formatNumber(populationChangeInThousands),
+      populationPh2Change: populationPh2Change,
+      populationPh2ChangeInThousands: formatNumber(populationPh2ChangeInThousands),
       ph3PopulationPercentChange: ph3PopulationPercentChange,
+      ph2PopulationPercentChange: ph2PopulationPercentChange,
       zoneChangeVisuals: zoneChangeVisuals,
       populationChangeVisuals: populationChangeVisuals,
+      populationPh2ChangeVisuals: populationPh2ChangeVisuals,
       level: 2,
       isSubRow: true
     };
@@ -425,12 +454,18 @@ const ComparisonTable = ({
     }
   };
 
-  const handleAdmin1RowClick = async (admin0NameParent, admin1Name) => {
-    const admin1RowData = (admin1SubRowsData[admin0NameParent] || []).find(r => r.region === admin1Name);
-    const isExpandableAdmin1 = admin1RowData && !admin1RowData.aggregated1;
+  const handleAdmin1RowClick = async (admin0NameParent, admin1Name, fallbackRowData = null) => {
+    const admin1Rows = admin1SubRowsData[admin0NameParent] || [];
+    const admin1RowData = admin1Rows.find(r => r.region === admin1Name) || fallbackRowData;
 
-    if (regionSelection.admin1 || !isExpandableAdmin1) {
-        return;
+    if (!admin1RowData) {
+      return;
+    }
+
+    const isExpandableAdmin1 = !admin1RowData.aggregated1;
+
+    if (regionSelection.admin1 || regionSelection.admin2 || !isExpandableAdmin1) {
+      return;
     }
 
     const key = `${admin0NameParent}_${admin1Name}`;
@@ -487,11 +522,23 @@ const ComparisonTable = ({
 
   if (loading) return <div className="comparison-table-container">{t("loadingComparisonData")}</div>;
 
+  const isAdmin0Scoped = Boolean(regionSelection.admin0);
+  const isAdmin1Scoped = Boolean(regionSelection.admin1);
+  const isAdmin2Scoped = Boolean(regionSelection.admin2);
+
+  const baseLevel = (isAdmin2Scoped || isAdmin1Scoped) ? 2 : (isAdmin0Scoped ? 1 : 0);
+  const shouldForceClassificationDisplayForLevel1 = isAdmin0Scoped && !isAdmin1Scoped;
+
   const grouped1 = groupDataByRegion(dataPeriod1, regionSelection);
   const grouped2 = groupDataByRegion(dataPeriod2, regionSelection);
 
   const baseRows = Object.keys(grouped1).map(regionName => {
-    const agg1 = aggregateFeatures(grouped1[regionName]);
+    const regionFeaturesPeriod1 = grouped1[regionName] || [];
+    const sampleFeature = regionFeaturesPeriod1[0];
+    const admin0NameParent = regionSelection.admin0 || sampleFeature?.admin0Name || regionName;
+    const admin1NameParent = regionSelection.admin1 || sampleFeature?.admin1Name || regionName;
+
+    const agg1 = aggregateFeatures(regionFeaturesPeriod1);
     const agg2 = grouped2[regionName] ? aggregateFeatures(grouped2[regionName]) : null;
 
     const classificationP1 = agg1.classification;
@@ -508,10 +555,13 @@ const ComparisonTable = ({
 
     const populationChange = (agg2 ? agg2.rawPh3Pop : 0) - agg1.rawPh3Pop;
     const populationChangeInThousands = Math.trunc(populationChange / 1000);
+    const populationPh2Change = (agg2 ? agg2.rawPh2Pop : 0) - agg1.rawPh2Pop;
+    const populationPh2ChangeInThousands = Math.trunc(populationPh2Change / 1000);
     const zoneChange = (agg2 ? agg2.numberOfZonesInPh3Plus : 0) - agg1.numberOfZonesInPh3Plus;
 
     const zoneChangeVisuals = getChangeVisuals(zoneChange);
     const populationChangeVisuals = getChangeVisuals(populationChange);
+    const populationPh2ChangeVisuals = getChangeVisuals(populationPh2Change);
 
     const ph3OfTotalPercent1 = agg1.rawTotalPop > 0 ? (agg1.rawPh3Pop / agg1.rawTotalPop) * 100 : 0;
     const ph3OfTotalPercent2 = (agg2 && agg2.rawTotalPop > 0) ? (agg2.rawPh3Pop / agg2.rawTotalPop) * 100 : 0;
@@ -521,6 +571,13 @@ const ComparisonTable = ({
       ph3PopulationPercentChange = (populationChange / agg1.rawPh3Pop) * 100;
     } else if (populationChange !== 0) {
       ph3PopulationPercentChange = null;
+    }
+
+    let ph2PopulationPercentChange = 0;
+    if (agg1.rawPh2Pop !== 0) {
+      ph2PopulationPercentChange = (populationPh2Change / agg1.rawPh2Pop) * 100;
+    } else if (populationPh2Change !== 0) {
+      ph2PopulationPercentChange = null;
     }
 
     return {
@@ -553,69 +610,120 @@ const ComparisonTable = ({
       zoneChange:       zoneChange,
       populationChange: populationChange,
       populationChangeInThousands: formatNumber(populationChangeInThousands),
+      populationPh2Change: populationPh2Change,
+      populationPh2ChangeInThousands: formatNumber(populationPh2ChangeInThousands),
       ph3PopulationPercentChange: ph3PopulationPercentChange,
+      ph2PopulationPercentChange: ph2PopulationPercentChange,
       zoneChangeVisuals: zoneChangeVisuals,
       populationChangeVisuals: populationChangeVisuals,
-      level: 0,
-      isSubRow: false
+      populationPh2ChangeVisuals: populationPh2ChangeVisuals,
+      level: baseLevel,
+      isSubRow: false,
+      admin0NameParent,
+      admin1NameParent: baseLevel >= 2 ? admin1NameParent : undefined
     };
   });
 
   const displayRows = [];
-  baseRows.forEach(baseRow => {
-    displayRows.push(baseRow);
-    const admin0Key = baseRow.region;
+  if (baseLevel === 0) {
+    baseRows.forEach(baseRow => {
+      displayRows.push(baseRow);
+      const admin0Key = baseRow.region;
 
-    if (expandedAdmin0s[admin0Key] && !regionSelection.admin1 && !regionSelection.admin2) {
-      const admin1Rows = admin1SubRowsData[admin0Key];
-      if (admin1Rows) {
-        admin1Rows.forEach(admin1Row => {
-          displayRows.push({ ...admin1Row, level: 1, isSubRow: true });
-          const admin1Key = `${admin1Row.admin0NameParent}_${admin1Row.region}`;
-          const isExpandableAdmin1 = !admin1Row.aggregated1;
+      if (expandedAdmin0s[admin0Key] && !regionSelection.admin1 && !regionSelection.admin2) {
+        const admin1Rows = admin1SubRowsData[admin0Key];
+        if (admin1Rows) {
+          admin1Rows.forEach(admin1Row => {
+            displayRows.push({ ...admin1Row, level: 1, isSubRow: true });
+            const admin1Key = `${admin1Row.admin0NameParent}_${admin1Row.region}`;
+            const isExpandableAdmin1 = !admin1Row.aggregated1;
 
-          if (isExpandableAdmin1 && expandedAdmin1s[admin1Key]) {
-            const admin2Rows = admin2SubRowsData[admin1Key];
-            if (admin2Rows) {
-              admin2Rows.forEach(admin2Row => {
-                displayRows.push({ ...admin2Row, level: 2, isSubRow: true });
-              });
-            } else if (loadingAdmin2Key === admin1Key) {
-              displayRows.push({
-                region: t("loadingAdmin2Data"),
-                classification1: "", population1: "", popPh2_1: "", popPh3_1: "",
-                classification2: "", population2: "", popPh2_2: "", popPh3_2: "",
-                classificationChange: "",
-                zoneChange: 0, populationChange: 0, populationChangeInThousands: 0, ph3PopulationPercentChange: 0,
-                rawPop1: 0, units1: 0, rawPh3Pop1: 0, zonesInPh3Plus1: 0, ph3OfTotalPercent1: 0,
-                rawPop2: 0, units2: 0, rawPh3Pop2: 0, zonesInPh3Plus2: 0, ph3OfTotalPercent2: 0,
-                isNonAnalyseeInAnyPeriod: false,
-                zoneChangeVisuals: { direction: 'neutral', color: 'default'},
+            if (isExpandableAdmin1 && expandedAdmin1s[admin1Key]) {
+              const admin2Rows = admin2SubRowsData[admin1Key];
+              if (admin2Rows) {
+                admin2Rows.forEach(admin2Row => {
+                  displayRows.push({ ...admin2Row, level: 2, isSubRow: true });
+                });
+              } else if (loadingAdmin2Key === admin1Key) {
+                displayRows.push({
+                  region: t("loadingAdmin2Data"),
+                  classification1: "", population1: "", popPh2_1: "", popPh3_1: "",
+                  classification2: "", population2: "", popPh2_2: "", popPh3_2: "",
+                  classificationChange: "",
+                  zoneChange: 0, populationChange: 0, populationChangeInThousands: 0, ph3PopulationPercentChange: 0,
+                populationPh2Change: 0, populationPh2ChangeInThousands: 0, ph2PopulationPercentChange: 0,
+                  rawPop1: 0, units1: 0, rawPh3Pop1: 0, zonesInPh3Plus1: 0, ph3OfTotalPercent1: 0,
+                  rawPop2: 0, units2: 0, rawPh3Pop2: 0, zonesInPh3Plus2: 0, ph3OfTotalPercent2: 0,
+                  isNonAnalyseeInAnyPeriod: false,
+                  zoneChangeVisuals: { direction: 'neutral', color: 'default'},
                 populationChangeVisuals: { direction: 'neutral', color: 'default'},
-                level: 2, isSubRow: true, isPlaceholder: true,
-                admin0NameParent: admin1Row.admin0NameParent,
-                admin1NameParent: admin1Row.region
-              });
+                populationPh2ChangeVisuals: { direction: 'neutral', color: 'default'},
+                  level: 2, isSubRow: true, isPlaceholder: true,
+                  admin0NameParent: admin1Row.admin0NameParent,
+                  admin1NameParent: admin1Row.region
+                });
+              }
             }
-          }
-        });
-      } else {
-        displayRows.push({
-          region: t("loadingAdmin1Data"),
-          classification1: "", population1: "", popPh2_1: "", popPh3_1: "",
-          classification2: "", population2: "", popPh2_2: "", popPh3_2: "",
-          classificationChange: "",
-          zoneChange: 0, populationChange: 0, populationChangeInThousands: 0, ph3PopulationPercentChange: 0,
-          rawPop1: 0, units1: 0, rawPh3Pop1: 0, zonesInPh3Plus1: 0, ph3OfTotalPercent1: 0,
-          rawPop2: 0, units2: 0, rawPh3Pop2: 0, zonesInPh3Plus2: 0, ph3OfTotalPercent2: 0,
-          isNonAnalyseeInAnyPeriod: false,
-          zoneChangeVisuals: { direction: 'neutral', color: 'default'},
+          });
+        } else {
+          displayRows.push({
+            region: t("loadingAdmin1Data"),
+            classification1: "", population1: "", popPh2_1: "", popPh3_1: "",
+            classification2: "", population2: "", popPh2_2: "", popPh3_2: "",
+            classificationChange: "",
+            zoneChange: 0, populationChange: 0, populationChangeInThousands: 0, ph3PopulationPercentChange: 0,
+          populationPh2Change: 0, populationPh2ChangeInThousands: 0, ph2PopulationPercentChange: 0,
+            rawPop1: 0, units1: 0, rawPh3Pop1: 0, zonesInPh3Plus1: 0, ph3OfTotalPercent1: 0,
+            rawPop2: 0, units2: 0, rawPh3Pop2: 0, zonesInPh3Plus2: 0, ph3OfTotalPercent2: 0,
+            isNonAnalyseeInAnyPeriod: false,
+            zoneChangeVisuals: { direction: 'neutral', color: 'default'},
           populationChangeVisuals: { direction: 'neutral', color: 'default'},
-          level: 1, isSubRow: true, isPlaceholder: true
-        });
+          populationPh2ChangeVisuals: { direction: 'neutral', color: 'default'},
+            level: 1, isSubRow: true, isPlaceholder: true
+          });
+        }
       }
-    }
-  });
+    });
+  } else if (baseLevel === 1) {
+    baseRows.forEach(baseRow => {
+      displayRows.push(baseRow);
+      if (baseRow.aggregated1) {
+        return;
+      }
+
+      const admin1Key = `${baseRow.admin0NameParent}_${baseRow.region}`;
+      if (expandedAdmin1s[admin1Key]) {
+        const admin2Rows = admin2SubRowsData[admin1Key];
+        if (admin2Rows) {
+          admin2Rows.forEach(admin2Row => {
+            displayRows.push({ ...admin2Row, level: 2, isSubRow: true });
+          });
+        } else if (loadingAdmin2Key === admin1Key) {
+          displayRows.push({
+            region: t("loadingAdmin2Data"),
+            classification1: "", population1: "", popPh2_1: "", popPh3_1: "",
+            classification2: "", population2: "", popPh2_2: "", popPh3_2: "",
+            classificationChange: "",
+            zoneChange: 0, populationChange: 0, populationChangeInThousands: 0, ph3PopulationPercentChange: 0,
+            populationPh2Change: 0, populationPh2ChangeInThousands: 0, ph2PopulationPercentChange: 0,
+            rawPop1: 0, units1: 0, rawPh3Pop1: 0, zonesInPh3Plus1: 0, ph3OfTotalPercent1: 0,
+            rawPop2: 0, units2: 0, rawPh3Pop2: 0, zonesInPh3Plus2: 0, ph3OfTotalPercent2: 0,
+            isNonAnalyseeInAnyPeriod: false,
+            zoneChangeVisuals: { direction: 'neutral', color: 'default'},
+            populationChangeVisuals: { direction: 'neutral', color: 'default'},
+            populationPh2ChangeVisuals: { direction: 'neutral', color: 'default'},
+            level: 2, isSubRow: true, isPlaceholder: true,
+            admin0NameParent: baseRow.admin0NameParent,
+            admin1NameParent: baseRow.region
+          });
+        }
+      }
+    });
+  } else {
+    baseRows.forEach(baseRow => {
+      displayRows.push(baseRow);
+    });
+  }
 
   const cellStyle = (classification) => ({
     backgroundColor: classificationColor[classification] || '#ffffff'
@@ -652,7 +760,7 @@ const ComparisonTable = ({
                       isExpandable = true;
                       const admin1Key = `${row.admin0NameParent}_${row.region}`;
                       isExpanded = expandedAdmin1s[admin1Key];
-                      clickHandler = () => handleAdmin1RowClick(row.admin0NameParent, row.region);
+                      clickHandler = () => handleAdmin1RowClick(row.admin0NameParent, row.region, row);
                     }
                   }
                   const tdClass = isExpandable ? 'clickable-row' : 'non-clickable-row';
@@ -725,6 +833,10 @@ const ComparisonTable = ({
                                 showActualClassification = isAggregatedEndpointAdmin1;
                             }
 
+                            if (!showActualClassification && row.level === 1 && !row.isSubRow && shouldForceClassificationDisplayForLevel1) {
+                                showActualClassification = true;
+                            }
+
                             if (showActualClassification) {
                                 return (
                                 <td style={cellStyle(row.classification1)}>
@@ -794,6 +906,10 @@ const ComparisonTable = ({
                                 showActualClassification = isAggregatedEndpointAdmin1ForP2;
                             }
 
+                            if (!showActualClassification && row.level === 1 && !row.isSubRow && shouldForceClassificationDisplayForLevel1) {
+                                showActualClassification = true;
+                            }
+
                             if (showActualClassification) {
                                 return (
                                 <td style={cellStyle(row.classification2)}>
@@ -840,19 +956,24 @@ const ComparisonTable = ({
             <table className="comparison-table data-table-2col triple-table">
               <thead>
                 <tr>
+                  <th>{t("populationChangePh2Header")}</th>
                   <th>{t("zoneChangeHeader")}</th>
                   <th>{t("populationChangeHeader")}</th>
                 </tr>
               </thead>
               <tbody>
                 {displayRows.map((row, i) => {
+                  const ph2Visuals = !row.isPlaceholder && row.populationPh2ChangeVisuals ? row.populationPh2ChangeVisuals : { direction: 'neutral', color: 'default' };
                   const zoneVisuals = !row.isPlaceholder && row.zoneChangeVisuals ? row.zoneChangeVisuals : { direction: 'neutral', color: 'default' };
                   const popVisuals = !row.isPlaceholder && row.populationChangeVisuals ? row.populationChangeVisuals : { direction: 'neutral', color: 'default' };
+                  const ph2Arrow = getArrowSymbol(ph2Visuals.direction);
                   const zoneArrow = getArrowSymbol(zoneVisuals.direction);
                   const popArrow = getArrowSymbol(popVisuals.direction);
 
+                  const populationPh2ChangeInThousandsText = row.isPlaceholder ? "" : row.populationPh2ChangeInThousands;
                   const zoneChangeText = row.isPlaceholder ? "" : row.zoneChange;
                   const populationChangeInThousandsText = row.isPlaceholder ? "" : row.populationChangeInThousands;
+                  const ph2PopulationPercentChangeText = row.isPlaceholder ? "" : formatPercentage(row.ph2PopulationPercentChange, 1);
                   const ph3PopulationPercentChangeText = row.isPlaceholder ? "" : formatPercentage(row.ph3PopulationPercentChange, 1);
 
                   return (
@@ -861,9 +982,13 @@ const ComparisonTable = ({
                         <>
                           <td>N/A</td>
                           <td>N/A</td>
+                          <td>N/A</td>
                         </>
                       ) : (
                         <>
+                          <td style={{ color: ph2Visuals.color === 'default' ? 'inherit' : ph2Visuals.color }}>
+                            {ph2Arrow}{`${populationPh2ChangeInThousandsText} (${ph2PopulationPercentChangeText})`}
+                          </td>
                           <td style={{ color: zoneVisuals.color === 'default' ? 'inherit' : zoneVisuals.color }}>
                             {zoneArrow}{zoneChangeText}
                           </td>
