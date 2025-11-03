@@ -1,0 +1,32 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-foodsecurityback-dev-aad34-authRole",
+      "UnauthRoleArn": "arn:aws:iam::137068251666:role/amplify-foodsecurityback-dev-aad34-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::137068251666:role/amplify-foodsecurityback-dev-aad34-authRole",
+      "Region": "eu-north-1",
+      "DeploymentBucketName": "amplify-foodsecurityback-dev-aad34-deployment",
+      "UnauthRoleName": "amplify-foodsecurityback-dev-aad34-unauthRole",
+      "StackName": "amplify-foodsecurityback-dev-aad34",
+      "StackId": "arn:aws:cloudformation:eu-north-1:137068251666:stack/amplify-foodsecurityback-dev-aad34/d1904400-b4ad-11f0-85a8-06eb5e3b1da3",
+      "AmplifyAppId": "d32unj85oxiw3g"
+    },
+    "categories": {
+      "auth": {
+        "foodsecurityback2c8a9d2f": {}
+      },
+      "function": {
+        "presignUpload": {
+          "deploymentBucketName": "amplify-foodsecurityback-dev-aad34-deployment",
+          "s3Key": "amplify-builds/presignUpload-61496a73567574526d34-build.zip"
+        }
+      },
+      "storage": {
+        "foodsecuritybackbe4b1cdd": {}
+      },
+      "api": {
+        "documentsAPI": {}
+      }
+    }
+  }
+}

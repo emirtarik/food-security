@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/presign": {
+      "name": "/presign",
+      "lambdaFunction": "presignUpload",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}

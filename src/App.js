@@ -29,7 +29,7 @@ const LazyEventPage = lazy(() => import('./pages/EventPage'));
 const LazyLogin = lazy(() => import('./pages/Login'));
 const LazyDashboard = lazy(() => import('./pages/Dashboard'));
 const LazyQuestionnaire = lazy(() => import('./pages/Questionnaire')); // Import the Questionnaire page
-
+const EmployeeUploadsPage = lazy(() => import('./pages/EmployeeUploads'));
 // NEW lazy imports for ModuleSelection and Dashboard2
 const LazyModuleSelection = lazy(() => import('./pages/ModuleSelection'));
 const LazyDashboard2 = lazy(() => import('./pages/Dashboard2'));
@@ -213,7 +213,14 @@ export default function App() {
             }
           />
           <Route path="/mapview" element={<MapView />} />
-
+          <Route
+            path="/employee/uploads"
+            element={
+              <Suspense fallback={<Loading />}>
+                <EmployeeUploadsPage />
+              </Suspense>
+            }
+          />
           {/* 404 fallback */}
           <Route path="*" element={<FourOFour />} />
         </Routes>
