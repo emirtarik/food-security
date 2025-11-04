@@ -8,6 +8,7 @@
     "node": ">=18 <21"
   },
   "dependencies": {
+    "@aws-amplify/ui-react": "^6.13.1",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^5.14.16",
@@ -25,6 +26,7 @@
     "@watergis/mapbox-gl-export": "^2.0.1",
     "@wojtekmaj/react-hooks": "^1.18.1",
     "ag-grid-react": "^30.2.0",
+    "aws-amplify": "^6.15.7",
     "axios": "^1.5.1",
     "bootstrap": "^5.3.2",
     "chart.js": "^4.4.4",

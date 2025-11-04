@@ -8,7 +8,6 @@ import documentData from "../../data/DocumentsRPCA.json";
 import "../../styles/Document.css";
 import "../../styles/PDFViewer.css";
 
-// Import PDF components and configure the PDF.js worker
 import { Document as PDFDocument, Page, pdfjs } from 'react-pdf';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
@@ -43,7 +42,6 @@ const DocumentDetail = () => {
   const [scale, setScale] = useState(1.0);
 
   useEffect(() => {
-    // Find the document with the matching bllink
     const foundDocument = documentData.find(doc => doc.bllink === `/documents/${bllink}`);
     setDocument(foundDocument);
   }, [bllink]);

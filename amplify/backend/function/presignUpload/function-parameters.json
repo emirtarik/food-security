@@ -1,0 +1,13 @@
+{
+  "lambdaLayers": [],
+  "permissions": {
+    "storage": {
+      "foodsecuritybackbe4b1cdd": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  }
+}

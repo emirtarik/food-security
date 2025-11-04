@@ -1,0 +1,11 @@
+{
+  "name": "presign-upload",
+  "version": "1.0.0",
+  "description": "Generate pre-signed S3 PUT URLs",
+  "main": "index.js",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.645.0",
+    "@aws-sdk/s3-request-presigner": "^3.645.0"
+  }
+}
+
