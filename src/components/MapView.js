@@ -1,7 +1,6 @@
 // src/components/MapView.jsx
 import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
-import html2canvas from 'html2canvas';
 import { useTranslationHook } from "../i18n";
 import '../styles/MapView.css';
 
@@ -152,6 +151,9 @@ const MapView = ({
   const [isAnimating, setIsAnimating] = useState(false);
   const animationIntervalRef = useRef(null);
   const [hasPlayedInitialAnimation, setHasPlayedInitialAnimation] = useState(false);
+
+  // Exporting state
+  const [isExporting, setIsExporting] = useState(false);
 
   // Helper function to translate classification values.
   const translateClassification = (classification, t) => {
@@ -610,6 +612,7 @@ const MapView = ({
       style: 'mapbox://styles/mkmd/cm6p4kq7i00ty01sa3iz31788',
       center: [2.5, 14],
       zoom: 4.2,
+      preserveDrawingBuffer: true
     });
     mapRef.current = map;
 
@@ -1028,7 +1031,7 @@ const MapView = ({
 
       // create inset maps
       INSETS.forEach(({id,center,zoom})=>{
-        const inset = new mapboxgl.Map({ container:id, style:map.getStyle(), center, zoom, interactive:false, attributionControl:false });
+        const inset = new mapboxgl.Map({ container:id, style:map.getStyle(), center, zoom, interactive:false, attributionControl:false, preserveDrawingBuffer:true });
         inset.on('load',()=> {
           map.getStyle().layers.forEach(l => {
             // Copy the layer
@@ -1054,6 +1057,220 @@ const MapView = ({
   
     return () => map.remove();
   }, []);
+
+  // Export map as PNG with watermark
+  const exportMapAsPNG = async () => {
+    if (!mapRef.current || isExporting) return;
+    // Variables need to be available in finally
+    let prevStyleWidth;
+    let prevStyleHeight;
+    try {
+      setIsExporting(true);
+      const map = mapRef.current;
+
+      // Keep current view, but temporarily render at higher resolution
+      const container = map.getContainer();
+      const originalWidth = container.clientWidth;
+      const originalHeight = container.clientHeight;
+
+      const targetWidth = EXPORT_WIDTH || originalWidth;
+      const targetHeight = EXPORT_HEIGHT || originalHeight;
+
+      // Resize container to target size for higher-quality render
+      prevStyleWidth = container.style.width;
+      prevStyleHeight = container.style.height;
+      container.style.width = `${targetWidth}px`;
+      container.style.height = `${targetHeight}px`;
+      map.resize();
+
+      // Helper: wait until map is visually settled (or timeout)
+      const waitForMapToSettle = (m, timeoutMs = 3000) => new Promise((resolve) => {
+        const start = performance.now();
+        const check = () => {
+          try {
+            if (!m || (!m.isMoving() && m.areTilesLoaded())) return resolve();
+          } catch (_) {
+            return resolve();
+          }
+          if (performance.now() - start > timeoutMs) return resolve();
+          requestAnimationFrame(check);
+        };
+        requestAnimationFrame(check);
+      });
+      const insetMaps = Object.values(insetMapsRef.current).filter(Boolean);
+      await Promise.all([waitForMapToSettle(map), ...insetMaps.map((m) => waitForMapToSettle(m))]);
+
+      // Capture the map canvas
+      const mapCanvas = map.getCanvas();
+
+      // Draw to an offscreen canvas to add overlays and watermark
+      const outCanvas = document.createElement('canvas');
+      outCanvas.width = targetWidth;
+      outCanvas.height = targetHeight;
+      const ctx = outCanvas.getContext('2d');
+
+      // Fill background transparent then draw map image
+      ctx.clearRect(0, 0, targetWidth, targetHeight);
+      ctx.drawImage(mapCanvas, 0, 0, targetWidth, targetHeight);
+
+      // Draw title at the top center with current date
+      try {
+        const titleBase = t("foodInsecurityData") || 'Food Insecurity';
+        const titleText = `${titleBase} – ${currentDate || ''}`;
+        ctx.save();
+        ctx.font = '700 20px sans-serif';
+        ctx.textBaseline = 'top';
+        const textMetrics = ctx.measureText(titleText);
+        const paddingX = 16;
+        const paddingY = 10;
+        const panelW = Math.ceil(textMetrics.width + paddingX * 2);
+        const panelH = 36;
+        const panelX = Math.floor((targetWidth - panelW) / 2);
+        const panelY = 16;
+        // Background panel
+        ctx.fillStyle = 'rgba(255,255,255,0.9)';
+        ctx.fillRect(panelX, panelY, panelW, panelH);
+        ctx.strokeStyle = '#333';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(panelX, panelY, panelW, panelH);
+        // Text
+        ctx.fillStyle = '#000';
+        ctx.fillText(titleText, panelX + paddingX, panelY + paddingY);
+        ctx.restore();
+      } catch (e) {
+        console.warn('Title draw skipped:', e);
+      }
+
+      // Draw inset maps at their configured positions/sizes
+      try {
+        INSETS.forEach(({ id, size: [w, h], style }) => {
+          const insetMap = insetMapsRef.current[id];
+          if (!insetMap) return;
+          const insetCanvas = insetMap.getCanvas();
+          // Compute x,y based on bottom/right offsets
+          const right = parseInt((style && style.right) ? String(style.right).replace('px','') : '0', 10) || 0;
+          const bottom = parseInt((style && style.bottom) ? String(style.bottom).replace('px','') : '0', 10) || 0;
+          const border = 2; // matches CSS border
+          const x = targetWidth - right - w - border * 2; // account for border
+          const y = targetHeight - bottom - h - border * 2;
+          // Draw the white background box + border similar to DOM
+          ctx.save();
+          ctx.fillStyle = '#fff';
+          ctx.strokeStyle = '#333';
+          ctx.lineWidth = border;
+          ctx.fillRect(x, y, w + border * 2, h + border * 2);
+          ctx.strokeRect(x + border / 2, y + border / 2, w + border, h + border);
+          // Draw inset canvas inside the border
+          ctx.drawImage(insetCanvas, x + border, y + border, w, h);
+          ctx.restore();
+        });
+      } catch (e) {
+        // Non-fatal if inset draw fails
+        console.warn('Inset maps draw skipped:', e);
+      }
+
+      // Draw a simple legend similar to the on-screen one (bottom-left)
+      try {
+        const legendX = 20;
+        const legendY = targetHeight - 20; // start from bottom and move upwards
+        const lineH = 20;
+        const box = 14;
+        const gap = 8;
+        const items = [
+          { color: '#ffffff', label: t("nonAnalyzed") },
+          { color: '#d3f3d4', label: t("phase1") },
+          { color: '#ffe252', label: t("phase2") },
+          { color: '#fa890f', label: t("phase3") },
+          { color: '#eb3333', label: t("phase4") },
+          { color: '#60090b', label: t("phase5") },
+          { color: '#cccccc', label: t("inaccessible") },
+        ];
+        ctx.save();
+        ctx.font = '12px sans-serif';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = 'rgba(255,255,255,0.85)';
+        // Background panel
+        const panelWidth = 260;
+        const panelHeight = items.length * lineH + 16;
+        const panelX = legendX - 10;
+        const panelY = legendY - panelHeight;
+        ctx.fillRect(panelX, panelY, panelWidth, panelHeight);
+        ctx.strokeStyle = '#333';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(panelX, panelY, panelWidth, panelHeight);
+        // Items
+        let curY = panelY + 8 + lineH / 2;
+        items.forEach(({ color, label }) => {
+          // color box
+          ctx.fillStyle = color;
+          ctx.fillRect(legendX, curY - box / 2, box, box);
+          ctx.strokeStyle = '#333';
+          ctx.strokeRect(legendX, curY - box / 2, box, box);
+          // text
+          ctx.fillStyle = '#000';
+          ctx.fillText(String(label || ''), legendX + box + gap, curY);
+          curY += lineH;
+        });
+        ctx.restore();
+      } catch (e) {
+        console.warn('Legend draw skipped:', e);
+      }
+
+      // Load watermark image
+      await new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          // Draw watermark with fixed height of 100px, preserving aspect ratio
+          const desiredHeight = 100;
+          const scale = desiredHeight / img.height;
+          const drawWidth = Math.round(img.width * scale);
+          const drawHeight = Math.round(img.height * scale);
+          const x = Math.floor((targetWidth - drawWidth) / 2);
+          const y = Math.floor(targetHeight - drawHeight - 20); // 20px margin from bottom
+
+          ctx.save();
+          ctx.globalAlpha = 0.18; // low opacity
+          ctx.imageSmoothingEnabled = true;
+          ctx.imageSmoothingQuality = 'high';
+          ctx.drawImage(img, x, y, drawWidth, drawHeight);
+          ctx.restore();
+          resolve();
+        };
+        img.onerror = reject;
+        img.src = '/images/logo_rpca.svg';
+      });
+
+      // Trigger download
+      const dataURL = outCanvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      const dateStr = new Date().toISOString().slice(0,19).replace(/[:T]/g,'-');
+      link.download = `rpca-map-export-${dateStr}.png`;
+      link.href = dataURL;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+    } catch (err) {
+      console.error('Failed to export map image:', err);
+    } finally {
+      // Ensure we always restore size and state
+      try {
+        const map = mapRef.current;
+        if (map) {
+          const container = map.getContainer();
+          if (container) {
+            // Restore using stored values if available
+            if (typeof prevStyleWidth !== 'undefined') container.style.width = prevStyleWidth;
+            if (typeof prevStyleHeight !== 'undefined') container.style.height = prevStyleHeight;
+            map.resize();
+          }
+        }
+      } catch (_) {
+        // ignore
+      }
+      setIsExporting(false);
+    }
+  };
 
   useEffect(() => {
     if (!isMapLoaded) return;
@@ -1149,170 +1366,11 @@ const MapView = ({
     console.log(`Map language updated to: ${currentLanguage || 'fr'}`);
   }, [currentLanguage, isMapLoaded]);
   
-  const handleExportPNG = async () => {
-    const map = mapRef.current;
-    if (!map || !isDataLoaded) return;
-
-    // Track the export button click with Google Analytics
-    if (window.gtag) {
-      window.gtag('event', 'export_map_png', {
-        event_category: 'map_interaction',
-        event_label: 'export_button_click',
-        value: 1,
-        custom_parameters: {
-          current_date: currentDate,
-          current_zoom: map.getZoom(),
-          current_center: `${map.getCenter().lat.toFixed(4)},${map.getCenter().lng.toFixed(4)}`
-        }
-      });
-    }
-
-    // 1) Save current camera
-    const prevCenter = map.getCenter();
-    const prevZoom   = map.getZoom();
-
-    // 2) Resize map container (upscale for higher fidelity)
-    const UPSCALE = 2; // render at 2x, then downscale for crisp output
-    const container = map.getContainer();
-    const origStyle = {
-      width:  container.style.width,
-      height: container.style.height
-    };
-    container.style.width  = `${EXPORT_WIDTH * UPSCALE}px`;
-    container.style.height = `${EXPORT_HEIGHT * UPSCALE}px`;
-    map.resize();
-
-    await new Promise(resolve => {
-      map.once('idle', resolve);
-    });
-      // 3) Jump to fixed view
-    map.jumpTo({ center: EXPORT_VIEW.center, zoom: EXPORT_VIEW.zoom, essential: true });
-
-    await new Promise(resolve => {
-      map.once('idle', resolve);
-    });
-    // extra frame to ensure tiles settled
-    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
-
-    // Ensure inset maps have rendered
-    const insetMaps = Object.values(insetMapsRef.current || {});
-    await Promise.all(
-      insetMaps.map(m => new Promise(res => {
-        if (!m) return res();
-        if (m.loaded()) return requestAnimationFrame(() => res());
-        m.once('idle', () => requestAnimationFrame(() => res()));
-      }))
-    );
-
-    // Prepare final export canvas at target presentation size
-    const exportCanvas = document.createElement('canvas');
-    exportCanvas.width  = EXPORT_WIDTH;
-    exportCanvas.height = EXPORT_HEIGHT;
-    const ctx = exportCanvas.getContext('2d');
-    ctx.clearRect(0, 0, EXPORT_WIDTH, EXPORT_HEIGHT);
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, EXPORT_WIDTH, EXPORT_HEIGHT);
-
-    // 4) Draw main map (downscale from upscaled canvas → crisp result)
-    ctx.drawImage(map.getCanvas(), 0, 0, EXPORT_WIDTH, EXPORT_HEIGHT);
-
-    // 5) Draw insets
-    INSETS.forEach(({ id, size: [w, h], style }) => {
-      const insetCanvas = insetMapsRef.current[id].getCanvas();
-      const left  = style.left  ? parseInt(style.left, 10)  : null;
-      const right = style.right ? parseInt(style.right, 10) : null;
-      const top   = style.top   ? parseInt(style.top, 10)   : null;
-      const bottom= style.bottom? parseInt(style.bottom,10) : null;
-      const x = left != null ? left : (EXPORT_WIDTH - w - (right || 0));
-      const y = top  != null ? top  : (EXPORT_HEIGHT - h - (bottom || 0));
-      ctx.drawImage(insetCanvas, x, y, w, h);
-    });
-
-    // 6) Draw legend overlay
-    const legendEl = mapContainerRef.current.querySelector('.legend');
-    if (legendEl) {
-      // Render at 1x CSS pixels then downscale positions/sizes by UPSCALE
-      const legendCanvas = await html2canvas(legendEl, {
-        backgroundColor: null,
-        scale: 1
-      });
-      const cs = window.getComputedStyle(legendEl);
-      const lLeft  = cs.left   && cs.left !== 'auto'   ? parseInt(cs.left, 10)   : null;
-      const lRight = cs.right  && cs.right !== 'auto'  ? parseInt(cs.right, 10)  : null;
-      const lTop   = cs.top    && cs.top !== 'auto'    ? parseInt(cs.top, 10)    : null;
-      const lBottom= cs.bottom && cs.bottom !== 'auto' ? parseInt(cs.bottom, 10) : null;
-      const drawW = legendCanvas.width;  // 1x CSS px
-      const drawH = legendCanvas.height;
-      const lx = lLeft != null ? lLeft : (EXPORT_WIDTH - drawW - (lRight || 0));
-      const ly = lTop  != null ? lTop  : (EXPORT_HEIGHT - drawH - (lBottom || 0));
-      ctx.drawImage(legendCanvas, lx, ly, drawW, drawH);
-    }
-
-    // 7) Draw centered bottom watermark (logo_rpca.svg)
-    try {
-      const logoImg = new Image();
-      logoImg.src = '/images/logo_rpca.svg';
-      await new Promise(res => { logoImg.onload = res; logoImg.onerror = res; });
-      const maxLogoHeight = 100; // limit height to 100px
-      const maxLogoWidth = Math.min(220, Math.round(EXPORT_WIDTH * 0.18));
-      const naturalRatio = logoImg.naturalWidth && logoImg.naturalHeight
-        ? (logoImg.naturalWidth / logoImg.naturalHeight)
-        : (226 / 308); // fallback to SVG viewBox ratio
-      let logoWidth = maxLogoWidth;
-      let logoHeight = Math.round(logoWidth / naturalRatio);
-      if (logoHeight > maxLogoHeight) {
-        logoHeight = maxLogoHeight;
-        logoWidth = Math.round(logoHeight * naturalRatio);
-      }
-      const logoX = Math.round((EXPORT_WIDTH - logoWidth) / 2);
-      const bottomMargin = 14; // px above bottom edge
-      const logoY = EXPORT_HEIGHT - logoHeight - bottomMargin;
-
-      ctx.save();
-      ctx.globalAlpha = 0.5; // reduce opacity
-      ctx.drawImage(logoImg, logoX, logoY, logoWidth, logoHeight);
-      ctx.restore();
-    } catch (e) {
-      console.warn('Watermark draw skipped:', e);
-    }
-
-    // 8) Download PNG
-    await new Promise(resolve => {
-      exportCanvas.toBlob(blob => {
-        const url = URL.createObjectURL(blob);
-        const a   = document.createElement('a');
-        a.href    = url;
-        a.download = `food-crisis-map_${currentDate}.png`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        resolve();
-      }, 'image/png');
-    });
-
-    // 9) Restore original size & view
-    container.style.width  = origStyle.width;
-    container.style.height = origStyle.height;
-    map.resize();
-    map.jumpTo({
-      center: [prevCenter.lng, prevCenter.lat],
-      zoom:   prevZoom,
-      essential: true
-    });
-  };
-
   return (
     <div className="map-view-container">
 
 
-      <button
-        className="export-button"
-        onClick={handleExportPNG}
-        disabled={!isDataLoaded}
-      >
-        {isDataLoaded ? 'Download PNG' : 'Loading…'}
-      </button>
+      
       {/* Loading overlay */}
       {!isDataLoaded && (
         <div className="loading-overlay">
@@ -1321,6 +1379,28 @@ const MapView = ({
         </div>
       )}
       <div ref={mapContainerRef} className="map-container" />
+
+      {/* Export button */}
+      <button
+        onClick={exportMapAsPNG}
+        disabled={isExporting || !isDataLoaded}
+        style={{
+          position: 'absolute',
+          top: '16px',
+          right: '16px',
+          padding: '8px 12px',
+          background: '#1f7a54',
+          color: '#fff',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: isExporting ? 'wait' : 'pointer',
+          opacity: isExporting ? 0.7 : 1,
+          zIndex: 2
+        }}
+        title={isExporting ? t("exporting") : t("exportPng")}
+      >
+        {isExporting ? t("exporting") : t("exportPng")}
+      </button>
       {/* Inset maps */}
       {INSETS.map(({ id, size: [w, h], style }) => (
         <div

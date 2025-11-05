@@ -88,22 +88,21 @@ function createMarkerSVG(shape, color) {
 }
 
 const projectFields = [
-  { name: 'donor', label: 'Donor', type: 'text' },
-  { name: 'title', label: 'Title', type: 'text' },
-  { name: 'status', label: 'Status', type: 'select', options: ['Current', 'Completed', 'Planned'] },
-  { name: 'fundingAgency', label: 'Funding Agency', type: 'text' },
-  { name: 'implementingAgency', label: 'Implementing Agency', type: 'text' },
-  { name: 'recipient', label: 'Recipient Country', type: 'text' }, // Could be pre-filled or a dropdown
-  { name: 'zone', label: 'Zone/Sub-region', type: 'text' },
-  { name: 'start', label: 'Start Year', type: 'number' },
-  { name: 'end', label: 'End Year', type: 'number' },
-  { name: 'currency', label: 'Currency', type: 'text' },
-  { name: 'budget', label: 'Budget (Local Currency)', type: 'number' },
+  { name: 'donor', label: 'Bailleur', type: 'text' },
+  { name: 'title', label: 'Titre', type: 'text' },
+  { name: 'img', label: "URL de l'image", type: 'url' },
+  { name: 'status', label: 'Statut', type: 'select', options: ['En cours', 'Terminé', 'Planifié'] },
+  { name: 'fundingAgency', label: 'Agence de financement', type: 'text' },
+  { name: 'implementingAgency', label: 'Agence de mise en œuvre', type: 'text' },
+  { name: 'start', label: 'Année de début', type: 'number' },
+  { name: 'end', label: 'Année de fin', type: 'number' },
+  { name: 'currency', label: 'Devise', type: 'text' },
+  { name: 'budget', label: 'Budget (devise locale)', type: 'number' },
   { name: 'budgetUSD', label: 'Budget (USD)', type: 'number' },
-  { name: 'link', label: 'Link to Project', type: 'url' },
-  { name: 'img', label: 'Image URL', type: 'url' }, // Simplified for now
-  { name: 'comments', label: 'Comments', type: 'textarea' },
-  { name: 'topic', label: 'Topic/Sector', type: 'text' },
+  { name: 'nationalContribution', label: 'Contribution nationale (devise locale)', type: 'number' },
+  { name: 'nationalContributionUSD', label: 'Contribution nationale (USD)', type: 'number' },
+  { name: 'link', label: 'Lien vers le projet', type: 'url' },
+  { name: 'comments', label: 'Commentaires', type: 'textarea' },
 ];
 
 function ProjectDataInput({ country, onSubmit }) {
@@ -114,7 +113,9 @@ function ProjectDataInput({ country, onSubmit }) {
   const initialFormState = projectFields.reduce((acc, field) => {
     acc[field.name] = '';
     return acc;
-  }, { admin1: '', categories: emptyCategories }); // Add admin1 and categories to the initial state
+  }, { zone: [], categories: emptyCategories, typeProjectSelections: [] }); // Add zone (multi), categories, and project types
+  
+  const TYPE_PROJECT_OPTIONS = ['Humanitaire', 'Développement', 'Paix / protection'];
 
   const [formData, setFormData] = useState(initialFormState);
   const [admin1Options, setAdmin1Options] = useState([]);
@@ -134,6 +135,11 @@ function ProjectDataInput({ country, onSubmit }) {
     e.preventDefault();
     if (!onSubmit) {
       console.warn('[ProjectDataInput] onSubmit prop not provided');
+      return;
+    }
+    // Require at least one zone selected
+    if (!Array.isArray(formData.zone) || formData.zone.length === 0) {
+      alert("Veuillez sélectionner au moins une zone (région Admin1).");
       return;
     }
     try {
@@ -180,29 +186,44 @@ function ProjectDataInput({ country, onSubmit }) {
   return (
     <div className="project-data-input-container">
       <form onSubmit={handleSubmit} className="project-data-form">
-        <div className="form-group">
-          <label htmlFor="admin1">Admin1 Level (Region/Province)</label>
-          <select
-            id="admin1"
-            name="admin1"
-            value={formData.admin1}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select Admin1 Level...</option>
-            {admin1Options.map(level => (
-              <option key={level} value={level}>{level}</option>
-            ))}
-          </select>
-          {loadingAdmin1 && <small className="muted">Loading regions…</small>}
+        <div className="section-card">
+          <h4 className="section-title">Localisation du projet</h4>
+          <p className="section-subtitle">Sélectionnez toutes les régions Admin1 (zones) couvertes par ce projet.</p>
+
+          {loadingAdmin1 && <small className="muted">Chargement des régions…</small>}
           {!loadingAdmin1 && !admin1Error && admin1Options.length === 0 && country && (
-            <small className="muted">No regions found for {country}. Check data file.</small>
+            <small className="muted">Aucune région trouvée pour {country}. Vérifiez le fichier de données.</small>
           )}
           {admin1Error && <small className="error">{admin1Error}</small>}
+
+          <div className="form-group">
+            <label>Zones (régions Admin1)</label>
+            <div className="category-grid">
+              {admin1Options.map(level => (
+                <label key={level} className="category-item">
+                  <input
+                    type="checkbox"
+                    checked={Array.isArray(formData.zone) && formData.zone.includes(level)}
+                    onChange={(e) => {
+                      const checked = e.target.checked;
+                      setFormData(prev => {
+                        const current = Array.isArray(prev.zone) ? prev.zone : [];
+                        if (checked) {
+                          return { ...prev, zone: [...new Set([...current, level])] };
+                        }
+                        return { ...prev, zone: current.filter(v => v !== level) };
+                      });
+                    }}
+                  />
+                  <span>{level}</span>
+                </label>
+              ))}
+            </div>
+          </div>
         </div>
 
         <div className="form-group categories-group">
-          <label>Project Categories</label>
+          <label>Type de soutien</label>
           <div className="category-grid">
             {CATEGORY_FIELDS.map(label => (
               <label key={label} className="category-item">
@@ -226,44 +247,230 @@ function ProjectDataInput({ country, onSubmit }) {
           </div>
         </div>
 
-        {projectFields.map(field => (
-          <div className="form-group" key={field.name}>
-            <label htmlFor={field.name}>{field.label}</label>
-            {field.type === 'select' ? (
-              <select
-                id={field.name}
-                name={field.name}
-                value={formData[field.name]}
-                onChange={handleChange}
-              >
-                <option value="">Select {field.label}...</option>
-                {field.options.map(option => (
-                  <option key={option} value={option}>{option}</option>
-                ))}
-              </select>
-            ) : field.type === 'textarea' ? (
-              <textarea
-                id={field.name}
-                name={field.name}
-                value={formData[field.name]}
-                onChange={handleChange}
-                rows="3"
-              />
-            ) : (
-              <input
-                type={field.type}
-                id={field.name}
-                name={field.name}
-                value={formData[field.name]}
-                onChange={handleChange}
-                placeholder={field.type === 'number' ? '0' : ''}
-              />
-            )}
+        <div className="form-group categories-group">
+          <label>Type de projet</label>
+          <div className="category-grid">
+            {TYPE_PROJECT_OPTIONS.map(option => (
+              <label key={option} className="category-item">
+                <input
+                  type="checkbox"
+                  checked={Array.isArray(formData.typeProjectSelections) && formData.typeProjectSelections.includes(option)}
+                  onChange={(e) => {
+                    const checked = e.target.checked;
+                    setFormData(prev => {
+                      const current = Array.isArray(prev.typeProjectSelections) ? prev.typeProjectSelections : [];
+                      if (checked) {
+                        return { ...prev, typeProjectSelections: [...new Set([...current, option])] };
+                      }
+                      return { ...prev, typeProjectSelections: current.filter(v => v !== option) };
+                    });
+                  }}
+                />
+                <span>{option}</span>
+              </label>
+            ))}
           </div>
-        ))}
+        </div>
+
+        <div className="section-card">
+          <h4 className="section-title">Détails du projet</h4>
+          <div className="form-group">
+            <label htmlFor="title">Titre</label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              placeholder="Titre du projet"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="donor">Bailleur</label>
+            <input
+              type="text"
+              id="donor"
+              name="donor"
+              value={formData.donor}
+              onChange={handleChange}
+              placeholder="ex. UE, Banque mondiale, …"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="fundingAgency">Agence de financement</label>
+            <input
+              type="text"
+              id="fundingAgency"
+              name="fundingAgency"
+              value={formData.fundingAgency}
+              onChange={handleChange}
+              placeholder="Organisation gérant les fonds"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="implementingAgency">Agence de mise en œuvre</label>
+            <input
+              type="text"
+              id="implementingAgency"
+              name="implementingAgency"
+              value={formData.implementingAgency}
+              onChange={handleChange}
+              placeholder="Organisation réalisant les activités"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="img">URL de l'image</label>
+            <input
+              type="url"
+              id="img"
+              name="img"
+              value={formData.img}
+              onChange={handleChange}
+              placeholder="https://..."
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="status">Statut</label>
+            <select
+              id="status"
+              name="status"
+              value={formData.status}
+              onChange={handleChange}
+            >
+              <option value="">Sélectionnez un statut...</option>
+              {['En cours','Terminé','Planifié'].map(option => (
+                <option key={option} value={option}>{option}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div className="section-card">
+          <h4 className="section-title">Calendrier</h4>
+          <div className="form-group">
+            <label htmlFor="start">Année de début</label>
+            <input
+              type="number"
+              id="start"
+              name="start"
+              value={formData.start}
+              onChange={handleChange}
+              placeholder="AAAA"
+              min="1900"
+              max="2100"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="end">Année de fin</label>
+            <input
+              type="number"
+              id="end"
+              name="end"
+              value={formData.end}
+              onChange={handleChange}
+              placeholder="AAAA"
+              min="1900"
+              max="2100"
+            />
+          </div>
+        </div>
+
+        <div className="section-card">
+          <h4 className="section-title">Financements</h4>
+          <div className="form-group">
+            <label htmlFor="currency">Devise</label>
+            <input
+              type="text"
+              id="currency"
+              name="currency"
+              value={formData.currency}
+              onChange={handleChange}
+              placeholder="ex. XOF"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="budget">Budget (devise locale)</label>
+            <input
+              type="number"
+              id="budget"
+              name="budget"
+              value={formData.budget}
+              onChange={handleChange}
+              placeholder="0"
+              min="0"
+              step="0.01"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="budgetUSD">Budget (USD)</label>
+            <input
+              type="number"
+              id="budgetUSD"
+              name="budgetUSD"
+              value={formData.budgetUSD}
+              onChange={handleChange}
+              placeholder="0"
+              min="0"
+              step="0.01"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="nationalContribution">Contribution nationale (devise locale)</label>
+            <input
+              type="number"
+              id="nationalContribution"
+              name="nationalContribution"
+              value={formData.nationalContribution}
+              onChange={handleChange}
+              placeholder="0"
+              min="0"
+              step="0.01"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="nationalContributionUSD">Contribution nationale (USD)</label>
+            <input
+              type="number"
+              id="nationalContributionUSD"
+              name="nationalContributionUSD"
+              value={formData.nationalContributionUSD}
+              onChange={handleChange}
+              placeholder="0"
+              min="0"
+              step="0.01"
+            />
+          </div>
+        </div>
+
+        <div className="section-card">
+          <h4 className="section-title">Références</h4>
+          <div className="form-group">
+            <label htmlFor="link">Lien vers le projet</label>
+            <input
+              type="url"
+              id="link"
+              name="link"
+              value={formData.link}
+              onChange={handleChange}
+              placeholder="https://..."
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="comments">Commentaires</label>
+            <textarea
+              id="comments"
+              name="comments"
+              value={formData.comments}
+              onChange={handleChange}
+              rows="3"
+              placeholder="Notes sur le projet..."
+            />
+          </div>
+        </div>
 
         <button type="submit" className="submit-button" disabled={submitting}>
-          {submitting ? 'Submitting…' : 'Submit Project Data'}
+          {submitting ? 'Envoi…' : 'Soumettre le projet'}
         </button>
       </form>
     </div>

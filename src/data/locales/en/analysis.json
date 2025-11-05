@@ -138,5 +138,7 @@
     "privacyNote": "These details are used only to understand who uses the data. No personal information is stored by this site.",
     "invalidEmail": "Please enter a valid email",
     "required": "Required",
-    "citationSuggestion": "Suggested Citation"
+    "citationSuggestion": "Suggested Citation",
+    "exportPng": "Export PNG",
+    "exporting": "Exporting…"
   }

@@ -154,23 +154,33 @@ function Dashboard2({ setIsLoggedIn: appSetIsLoggedIn, setRole: appSetRole, setC
                   onSubmit={async (formData) => {
                     const payload = {
                       country,
-                      admin1: formData.admin1,
+                      // Derive admin1 from first selected zone (if any)
+                      admin1: Array.isArray(formData.zone) && formData.zone.length > 0 ? formData.zone[0] : null,
                       donor: formData.donor || null,
                       title: formData.title,
+                      img: formData.img || null,
                       status: formData.status || null,
                       fundingAgency: formData.fundingAgency || null,
                       implementingAgency: formData.implementingAgency || null,
-                      recipient: formData.recipient || null,
-                      zone: formData.zone || null,
+                      // recipient is the logged-in country
+                      recipient: country,
+                      // Send zone as an array of selected Admin1 regions
+                      zone: Array.isArray(formData.zone) ? formData.zone : (formData.zone ? [formData.zone] : []),
                       start: formData.start ? Number(formData.start) : null,
                       end: formData.end ? Number(formData.end) : null,
                       currency: formData.currency || null,
                       budget: formData.budget !== '' && formData.budget != null ? Number(formData.budget) : null,
                       budgetUSD: formData.budgetUSD !== '' && formData.budgetUSD != null ? Number(formData.budgetUSD) : null,
+                      nationalContribution: formData.nationalContribution !== '' && formData.nationalContribution != null ? Number(formData.nationalContribution) : null,
+                      nationalContributionUSD: formData.nationalContributionUSD !== '' && formData.nationalContributionUSD != null ? Number(formData.nationalContributionUSD) : null,
+                      // typeSupport is represented by categories grid; keep null here
+                      typeSupport: null,
+                      // Join multi-selected project types for backend VarChar storage
+                      typeProject: Array.isArray(formData.typeProjectSelections) && formData.typeProjectSelections.length > 0
+                        ? formData.typeProjectSelections.join(', ')
+                        : null,
                       link: formData.link || null,
-                      img: formData.img || null,
                       comments: formData.comments || null,
-                      topic: formData.topic || null,
                       categories: formData.categories || {},
                       createdBy: localStorage.getItem('username') || null
                     };
@@ -184,8 +194,18 @@ function Dashboard2({ setIsLoggedIn: appSetIsLoggedIn, setRole: appSetRole, setC
                         body: JSON.stringify(payload)
                       });
                       if (!res.ok) {
-                        const msg = await res.text();
-                        alert(`Failed to submit project: ${msg}`);
+                        let errorMsg = 'Failed to submit project';
+                        try {
+                          const errorJson = await res.json();
+                          errorMsg = errorJson.message || errorMsg;
+                          if (errorJson.detail) {
+                            errorMsg += `\n\nDetail: ${errorJson.detail}`;
+                          }
+                        } catch (e) {
+                          const msg = await res.text();
+                          errorMsg = msg || errorMsg;
+                        }
+                        alert(errorMsg);
                         return false;
                       }
                       alert('Project submitted successfully.');

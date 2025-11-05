@@ -123,12 +123,20 @@ function getPrimaryCategory(project) {
   return null;
 }
 
+function getSupportLabels(project) {
+  const cats = parseCategories(project);
+  const labels = CATEGORY_FIELDS.filter(label => cats[label] === true);
+  return labels;
+}
+
 function CountryProjectsMapView({ country }) {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [projects, setProjects] = useState([]);
   const [admin1Centroids, setAdmin1Centroids] = useState({});
+  const admin1FeaturesRef = useRef({}); // admin1Name -> GeoJSON Feature[] (all admin2 parts within admin1)
+  const briefPopupRef = useRef(null);
   const [statusFilter, setStatusFilter] = useState('');
   const [donorFilter, setDonorFilter] = useState('');
   const [admin1Filter, setAdmin1Filter] = useState('');
@@ -152,21 +160,30 @@ function CountryProjectsMapView({ country }) {
       try {
         const gr = await fetch('/data/combined.geojson');
         const gj = await gr.json();
-        const map = {};
+        const centroids = {};
+        const featureMap = {};
         gj.features.forEach(f => {
           const props = f.properties || {};
           if (props.admin0Name !== country || !props.admin1Name) return;
+          if (!featureMap[props.admin1Name]) featureMap[props.admin1Name] = [];
+          featureMap[props.admin1Name].push(f);
           const g = f.geometry;
           if (!g) return;
           let c = null;
           if (g.type === 'Polygon' || g.type === 'MultiPolygon') c = computeCentroid(g.coordinates);
           else if (g.type === 'Point') c = g.coordinates;
-          if (c) map[props.admin1Name] = c;
+          if (c) centroids[props.admin1Name] = c;
         });
-        if (!cancel) setAdmin1Centroids(map);
+        if (!cancel) {
+          setAdmin1Centroids(centroids);
+          admin1FeaturesRef.current = featureMap;
+        }
       } catch (e) {
         console.error('Failed loading geojson', e);
-        if (!cancel) setAdmin1Centroids({});
+        if (!cancel) {
+          setAdmin1Centroids({});
+          admin1FeaturesRef.current = {};
+        }
       }
     }
     load();
@@ -187,6 +204,54 @@ function CountryProjectsMapView({ country }) {
     map.on('load', () => {
       setIsLoaded(true);
       if (bbox) map.fitBounds(bbox, { padding: 30, duration: 0 });
+
+      // Add dynamic source + layers for highlighting project zones (Admin1 polygons)
+      if (!map.getSource('project-zones')) {
+        map.addSource('project-zones', {
+          type: 'geojson',
+          data: { type: 'FeatureCollection', features: [] }
+        });
+      }
+      if (!map.getLayer('project-zones-fill')) {
+        map.addLayer({
+          id: 'project-zones-fill',
+          type: 'fill',
+          source: 'project-zones',
+          paint: {
+            'fill-color': '#1d4ed8',
+            'fill-opacity': 0.25
+          }
+        });
+      }
+      if (!map.getLayer('project-zones-line')) {
+        map.addLayer({
+          id: 'project-zones-line',
+          type: 'line',
+          source: 'project-zones',
+          paint: {
+            'line-color': '#1d4ed8',
+            'line-width': 2.5
+          }
+        });
+      }
+      if (!map.getLayer('project-zones-labels')) {
+        map.addLayer({
+          id: 'project-zones-labels',
+          type: 'symbol',
+          source: 'project-zones',
+          layout: {
+            'text-field': ['coalesce', ['get', 'admin2Name'], ['get', 'admin1Name']],
+            'text-size': 12,
+            'text-offset': [0, 0.8],
+            'text-anchor': 'top'
+          },
+          paint: {
+            'text-color': '#0f172a',
+            'text-halo-color': '#ffffff',
+            'text-halo-width': 1.2
+          }
+        });
+      }
     });
     return () => { if (mapRef.current) { mapRef.current.remove(); mapRef.current = null; } setIsLoaded(false); };
   }, [country]);
@@ -215,10 +280,84 @@ function CountryProjectsMapView({ country }) {
     const existing = map.__projectMarkers || [];
     existing.forEach(m => m.remove());
 
+    function parseZonesString(zoneStr) {
+      if (!zoneStr || typeof zoneStr !== 'string') return [];
+      return zoneStr.split(',').map(s => s.trim()).filter(Boolean);
+    }
+
+    function highlightProjectZones(project) {
+      try {
+        const zones = parseZonesString(project.zone);
+        const features = [];
+        zones.forEach(name => {
+          const arr = admin1FeaturesRef.current[name];
+          if (Array.isArray(arr)) features.push(...arr);
+        });
+        const src = map.getSource('project-zones');
+        if (!src) return;
+        const fc = { type: 'FeatureCollection', features };
+        src.setData(fc);
+        if (features.length > 0) {
+          // Compute bbox across all features
+          let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+          features.forEach(f => {
+            const g = f.geometry;
+            if (!g) return;
+            const coords = g.type === 'Polygon' ? [g.coordinates] : (g.type === 'MultiPolygon' ? g.coordinates : []);
+            coords.flat(2).forEach(([x,y]) => {
+              if (x < minX) minX = x;
+              if (y < minY) minY = y;
+              if (x > maxX) maxX = x;
+              if (y > maxY) maxY = y;
+            });
+          });
+          if (isFinite(minX) && isFinite(minY) && isFinite(maxX) && isFinite(maxY)) {
+            map.fitBounds([[minX, minY], [maxX, maxY]], { padding: 30, duration: 300 });
+          }
+        }
+      } catch (e) {
+        console.error('Failed to highlight project zones', e);
+      }
+    }
+
+    // Group projects by coordinates to spread overlapping markers
+    function spreadMarkers(projects) {
+      const coordGroups = {};
+      projects.forEach((p, idx) => {
+        const coord = admin1Centroids[p.admin1];
+        if (!coord) return;
+        const key = `${coord[0].toFixed(6)},${coord[1].toFixed(6)}`;
+        if (!coordGroups[key]) coordGroups[key] = [];
+        coordGroups[key].push({ project: p, originalCoord: coord, index: idx });
+      });
+      
+      const spread = [];
+      Object.values(coordGroups).forEach(group => {
+        if (group.length === 1) {
+          spread.push({ ...group[0], finalCoord: group[0].originalCoord });
+        } else {
+          // Spread in a circle around the original point
+          const radius = 0.03; // increased for better separation at country view
+          const angleStep = (2 * Math.PI) / group.length;
+          group.forEach((item, idx) => {
+            const angle = idx * angleStep;
+            const offsetLng = radius * Math.cos(angle);
+            const offsetLat = radius * Math.sin(angle);
+            spread.push({
+              ...item,
+              finalCoord: [item.originalCoord[0] + offsetLng, item.originalCoord[1] + offsetLat]
+            });
+          });
+        }
+      });
+      return spread.sort((a, b) => a.index - b.index);
+    }
+
+    const spreadProjects = spreadMarkers(filtered);
     const markers = [];
-    filtered.forEach(p => {
-      const coord = admin1Centroids[p.admin1];
-      if (!coord) return;
+    spreadProjects.forEach(item => {
+      const p = item.project;
+      const coord = item.finalCoord;
       
       // Get primary category to determine icon
       const primaryCategory = getPrimaryCategory(p);
@@ -235,13 +374,54 @@ function CountryProjectsMapView({ country }) {
           <div class="title">${p.title || 'Project'}</div>
           ${primaryCategory ? `<div class="row"><span class="key">Category:</span><span class="val">${primaryCategory}</span></div>` : ''}
           <div class="row"><span class="key">Admin1:</span><span class="val">${p.admin1 || '—'}</span></div>
+          <div class="row"><span class="key">Zones:</span><span class="val">${(p.zone || '').toString()}</span></div>
           <div class="row"><span class="key">Status:</span><span class="val">${p.status || '—'}</span></div>
           <div class="row"><span class="key">Donor:</span><span class="val">${p.donor || '—'}</span></div>
         `)
       ).addTo(map);
+
+      // Highlight zones on marker click
+      el.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        highlightProjectZones(p);
+        try {
+          if (briefPopupRef.current) {
+            briefPopupRef.current.remove();
+            briefPopupRef.current = null;
+          }
+          const supports = getSupportLabels(p).join(', ');
+          const html = `
+            <div class="project-brief-tooltip">
+              <div class="title">${p.title || ''}</div>
+              <div class="row"><span class="key">Donor:</span><span class="val">${p.donor || '—'}</span></div>
+              <div class="row"><span class="key">Status:</span><span class="val">${p.status || '—'}</span></div>
+              <div class="row"><span class="key">Type of support:</span><span class="val">${supports || '—'}</span></div>
+              <div class="row"><span class="key">Budget (USD):</span><span class="val">${(p.budgetUSD != null) ? Number(p.budgetUSD).toLocaleString() : '—'}</span></div>
+            </div>`;
+          const pop = new mapboxgl.Popup({ offset: 8, closeButton: false, className: 'project-brief-popup' })
+            .setLngLat(coord)
+            .setHTML(html)
+            .addTo(map);
+          briefPopupRef.current = pop;
+        } catch (e) {
+          console.error('Failed showing brief tooltip', e);
+        }
+      });
+      // Also when popup opens
+      marker.getPopup().on('open', () => highlightProjectZones(p));
       markers.push(marker);
     });
     map.__projectMarkers = markers;
+
+    // Clear highlight when clicking on the map background (not on our markers)
+    const onMapClick = (e) => {
+      const t = e && e.originalEvent && e.originalEvent.target;
+      if (t && typeof t.className === 'string' && t.className.includes('project-marker-custom')) return;
+      const src = map.getSource('project-zones');
+      if (src) src.setData({ type: 'FeatureCollection', features: [] });
+    };
+    map.on('click', onMapClick);
+    return () => { map.off('click', onMapClick); };
   }, [filtered, admin1Centroids, isLoaded]);
 
   const statusOptions = useMemo(() => Array.from(new Set(projects.map(p => p.status).filter(Boolean))), [projects]);

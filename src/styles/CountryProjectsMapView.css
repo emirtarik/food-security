@@ -1,3 +1,42 @@
+/* Brief tooltip for project click */
+.mapboxgl-popup.project-brief-popup .mapboxgl-popup-content {
+  padding: 14px 16px !important;
+  border-radius: 8px !important;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.18) !important;
+  background: #ffffff !important; /* override MapView.css transparency */
+  border: 1px solid #e9ecef !important;
+}
+
+.project-brief-tooltip {
+  min-width: 240px;
+  font-family: Lato, sans-serif; /* site font */
+  padding: 2px 0;
+}
+.project-brief-tooltip .title {
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #2c3e50;
+  font-size: 1.05em;
+}
+.project-brief-tooltip .row {
+  display: flex;
+  gap: 6px;
+  font-size: 0.9em;
+  line-height: 1.35;
+  margin-bottom: 6px;
+}
+.project-brief-tooltip .row:last-child {
+  margin-bottom: 0;
+}
+.project-brief-tooltip .key {
+  color: #6c757d;
+  min-width: 110px;
+  font-weight: 500;
+}
+.project-brief-tooltip .val {
+  color: #2c3e50;
+  font-weight: 400;
+}
 .country-projects-toolbar {
   margin-top: 8px;
   display: flex;

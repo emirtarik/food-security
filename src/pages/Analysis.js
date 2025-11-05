@@ -14,7 +14,7 @@ import { useTranslationHook } from "../i18n";
 import "../styles/Analysis.css";
 
 export default function Analysis() {
-  const { t } = useTranslationHook("analysis");
+  const { t, currentLanguage } = useTranslationHook("analysis");
   const projectsSectionRef = useRef(null);
 
   // Tabs state: "map" | "comparison" | "download"
@@ -114,20 +114,72 @@ export default function Analysis() {
     });
   };
 
+  // Month names for translation
+  const MONTH_NAMES = {
+    en: [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ],
+    fr: [
+      "janvier", "février", "mars", "avril", "mai", "juin",
+      "juillet", "août", "septembre", "octobre", "novembre", "décembre"
+    ]
+  };
+
+  // Helper function to translate month names
+  const translateMonthName = (monthName, language) => {
+    if (!monthName) return monthName;
+    
+    // Map English month names to indices
+    const monthIndexMap = {
+      'January': 0, 'February': 1, 'March': 2, 'April': 3, 'May': 4, 'June': 5,
+      'July': 6, 'August': 7, 'September': 8, 'October': 9, 'November': 10, 'December': 11
+    };
+    
+    // Try to find the month index
+    const monthIndex = monthIndexMap[monthName];
+    
+    if (monthIndex !== undefined) {
+      // Use the language-specific month name
+      const lang = language === 'fr' ? 'fr' : 'en';
+      return MONTH_NAMES[lang][monthIndex];
+    }
+    
+    // If not found, try to parse using Date object as fallback
+    try {
+      const date = new Date(`${monthName} 1, 2000`);
+      if (!isNaN(date.getTime())) {
+        const idx = date.getMonth();
+        const lang = language === 'fr' ? 'fr' : 'en';
+        return MONTH_NAMES[lang][idx];
+      }
+    } catch (e) {
+      // If parsing fails, return original
+    }
+    
+    // Return original if translation not found
+    return monthName;
+  };
+
   // Helper function to format dates for display
   const formatDateDisplay = (period) => {
     if (!period) return '';
+    
+    const language = currentLanguage || 'fr';
     
     if (period.startsWith('P')) {
       // Handle projection periods like PJune-2025
       const month = period.substring(1, period.lastIndexOf('-'));
       const year = period.substring(period.lastIndexOf('-') + 1);
-      return `${month} Projection ${year}`;
+      const translatedMonth = translateMonthName(month, language);
+      const projectionText = t("projection");
+      return `${translatedMonth} ${projectionText} ${year}`;
     }
     
     // Handle regular periods like March-2024
     const [month, year] = period.split('-');
-    return `${month} ${year}`;
+    const translatedMonth = translateMonthName(month, language);
+    return `${translatedMonth} ${year}`;
   };
 
   useEffect(() => {
@@ -208,22 +260,33 @@ export default function Analysis() {
                   {/* Map Controls */}
                   <div className="map-controls">
                     <div className="control-section">
-                      <div className="date-selector">
-                        <span className="active-date">{t("date")}: {formatDateDisplay(dateOptions[currentDateIndex]) || ''}</span>
-                        <input
-                          type="range"
-                          min="0"
-                          max={dateOptions.length - 1}
-                          step="1"
-                          value={currentDateIndex}
-                          onChange={(e) => setCurrentDateIndex(parseInt(e.target.value))}
-                        />
+                      <div className="modern-date-selector">
+                        <div className="date-header">
+                          <div className="date-label">{t("date")}</div>
+                          <div className="current-date">{formatDateDisplay(dateOptions[currentDateIndex]) || ''}</div>
+                        </div>
+                        <div className="slider-container">
+                          <div className="slider-track">
+                            <div
+                              className="slider-fill"
+                              style={{ width: `${dateOptions.length > 1 ? (currentDateIndex / (dateOptions.length - 1)) * 100 : 0}%` }}
+                            />
+                          </div>
+                          <input
+                            className="modern-slider"
+                            type="range"
+                            min="0"
+                            max={dateOptions.length - 1}
+                            step="1"
+                            value={currentDateIndex}
+                            onChange={(e) => setCurrentDateIndex(parseInt(e.target.value))}
+                          />
+                        </div>
                         <div className="date-range-labels">
                           <span className="date-range-start">{formatDateDisplay(dateOptions[0])}</span>
                           <span className="date-range-end">{formatDateDisplay(dateOptions[dateOptions.length - 1])}</span>
                         </div>
                       </div>
-                      {/* Opacity control removed - not needed for production */}
                     </div>
                     {/* Layer controls removed - only food insecurity data available */}
                   </div>

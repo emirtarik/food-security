@@ -96,7 +96,7 @@ const HomeSlideRight = ({
   const { t, currentLanguage, changeLanguage } =
     useTranslationHook("slideDataRight");
   return (
-    <section className="home-slide lazy">
+    <section className="home-slide lazy" style={bgStyle("/images/banner-right.jpg")}>
       <div className="container">
         <a href={`${BASE_URL}${slideLink}`}>
           <div
@@ -105,6 +105,9 @@ const HomeSlideRight = ({
               alignItems: "center",
               justifyContent: "center",
               textAlign: "center",
+              backgroundColor: "rgba(36, 61, 84, 0.7)",
+              padding: "30px",
+              borderRadius: "8px",
             }}
           >
             <img
@@ -303,7 +306,6 @@ const Home = () => {
             style={{
               paddingLeft: "0px",
               paddingRight: "0px",
-              background: "#243D54",
             }}
           >
             <HomeSlideRight {...slideDataRight} />
