@@ -186,7 +186,17 @@ function Dashboard2({ setIsLoggedIn: appSetIsLoggedIn, setRole: appSetRole, setC
                     };
 
                     try {
-                      const apiBase = process.env.REACT_APP_API_BASE || 'http://localhost:5001';
+                      // Determine API base URL with smart fallback for production
+                      const apiBase = (() => {
+                        const explicitBase = process.env.REACT_APP_API_BASE || process.env.REACT_APP_API_URL || '';
+                        if (explicitBase) return explicitBase.replace(/\/$/, '');
+                        // In production (detected by hostname), use backend URL
+                        if (typeof window !== 'undefined' && /food-security\.net$/i.test(window.location.hostname)) {
+                          return 'https://food-security-back.azurewebsites.net';
+                        }
+                        // Development fallback
+                        return 'http://localhost:5001';
+                      })();
                       const res = await fetch(`${apiBase}/projects`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
