@@ -1,3 +1,4 @@
+// src/pages/EmployeeUploads.js
 import React, { useState, useRef } from 'react';
 import { Amplify } from 'aws-amplify';
 import { Authenticator } from '@aws-amplify/ui-react';
@@ -7,6 +8,7 @@ import awsconfig from '../aws-exports';
 Amplify.configure(awsconfig);
 
 const PRESIGN_URL = process.env.REACT_APP_PRESIGN_URL;
+const META_URL = process.env.REACT_APP_META_URL || '';
 
 function putWithProgress(url, file, onProgress) {
   return new Promise((resolve, reject) => {
@@ -33,6 +35,75 @@ function putWithProgress(url, file, onProgress) {
     xhr.send(file);
   });
 }
+
+// ==== METADATA CONSTANTS ==== //
+const THEME_OPTIONS = [
+  'Agriculture & Value chains',
+  'Climate change & Adapation',
+  'Employment',
+  'Food security',
+  'Nutrition',
+  'Resilience',
+  'Rural-urbain',
+  'Social protection',
+  'Gender',
+  'Livestock & Pastoralism',
+  'Markets, prices & trade',
+  'Rural-urban links',
+  'Children & Youth',
+  'Water',
+  'Environment',
+  'Naturel resource management',
+  'Health',
+  'Covid-19',
+  'Fisheries & Aquaculture',
+  'Land',
+  'SDGs',
+];
+
+const LANGUAGE_OPTIONS = ['English', 'French', 'Portuguese'];
+
+const COUNTRY_OPTIONS = [
+  'Benin',
+  'Burkina Faso',
+  'Cabo Verde',
+  'Chad',
+  'CILSS area',
+  "Cote d'lvoire",
+  'ECOWAS area',
+  'G5 Sahel area',
+  'Ghana',
+  'Guninea-Bissau',
+  'Liberia',
+  'Liptako-Gourma',
+  'Mali',
+  'Mauritania',
+  'Niger',
+  'Nigeria',
+  'Senegal',
+  'Sierra Leone',
+  'Togo',
+  'Cameroon',
+  'UEMOA area',
+];
+
+const MONTH_LABELS = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
+
+// years 2000 – 2035
+const YEAR_OPTIONS = Array.from({ length: 36 }, (_, i) => 2000 + i);
 
 const palette = {
   bgMain: '#fafaf3',
@@ -446,6 +517,81 @@ const styles = {
     fontSize: 12,
     lineHeight: 1.4,
   },
+
+  // Metadata form styles
+  metaSection: {
+    marginTop: 24,
+    paddingTop: 16,
+    borderTop: `1px dashed ${palette.borderCard}`,
+  },
+  metaCard: {
+    marginTop: 12,
+    backgroundColor: '#f8fbf9',
+    borderRadius: 10,
+    border: `1px solid ${palette.borderSoft}`,
+    padding: 16,
+  },
+  metaTitle: {
+    fontSize: 14,
+    fontWeight: 600,
+    color: palette.greenDark,
+    marginBottom: 8,
+  },
+  metaHelp: {
+    fontSize: 12,
+    color: palette.textMid,
+    marginBottom: 12,
+  },
+  metaField: {
+    marginBottom: 10,
+  },
+  metaLabel: {
+    display: 'block',
+    fontSize: 12,
+    fontWeight: 500,
+    color: palette.textDark,
+    marginBottom: 4,
+  },
+  metaInput: {
+    width: '100%',
+    borderRadius: 6,
+    border: `1px solid ${palette.borderSoft}`,
+    padding: '6px 8px',
+    fontSize: 12,
+  },
+  metaTextarea: {
+    width: '100%',
+    minHeight: 60,
+    borderRadius: 6,
+    border: `1px solid ${palette.borderSoft}`,
+    padding: '6px 8px',
+    fontSize: 12,
+  },
+  metaCheckboxList: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
+    gap: 4,
+    marginTop: 4,
+  },
+  metaCheckboxItem: {
+    fontSize: 12,
+    display: 'flex',
+    alignItems: 'center',
+    gap: 6,
+  },
+  metaJsonBox: {
+    marginTop: 10,
+    backgroundColor: '#f3f4f6',
+    borderRadius: 6,
+    border: `1px solid ${palette.borderSoft}`,
+    padding: 8,
+    fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace',
+    fontSize: 11,
+    whiteSpace: 'pre-wrap',
+    wordBreak: 'break-all',
+    maxHeight: 240,
+    overflow: 'auto',
+  },
 };
 
 export default function EmployeeUploadsPage() {
@@ -474,9 +620,7 @@ export default function EmployeeUploadsPage() {
     >
       {({ signOut, user }) => {
         const displayName =
-          user?.attributes?.name ||
-          user?.username ||
-          'Employee User';
+          user?.attributes?.name || user?.username || 'Employee User';
         const displayMail =
           user?.attributes?.email || 'employee@example.com';
 
@@ -665,14 +809,10 @@ function Uploader() {
             <h1 style={styles.uploadTitle}>Secure Document Upload</h1>
 
             {/* small metadata badges */}
-            <span style={styles.minorMeta}>
-              Max file size: 10 MB
-            </span>
+            <span style={styles.minorMeta}>Max file size: 10 MB</span>
             <span style={styles.minorMeta}>
               Last upload:{' '}
-              {status === 'success' && uploadedKey
-                ? 'just now'
-                : '—'}
+              {status === 'success' && uploadedKey ? 'just now' : '—'}
             </span>
           </div>
 
@@ -719,143 +859,451 @@ function Uploader() {
         </div>
       </div>
 
-      {/* Selected file after card */}
+      {/* Selected file card */}
       {file && (
-        <div style={styles.fileWrapper}>
-          <div style={styles.fileHeaderRow}>
-            <div style={styles.fileHeaderLeft}>
-              <div style={styles.smallLabel}>Selected file</div>
+        <>
+          <div style={styles.fileWrapper}>
+            <div style={styles.fileHeaderRow}>
+              <div style={styles.fileHeaderLeft}>
+                <div style={styles.smallLabel}>Selected file</div>
 
-              <div style={styles.fileName}>{file.name}</div>
+                <div style={styles.fileName}>{file.name}</div>
 
-              <div style={styles.fileMeta}>
-                {file.type || 'Unknown'} •{' '}
-                {(file.size / 1024 / 1024).toFixed(1)} MB
+                <div style={styles.fileMeta}>
+                  {file.type || 'Unknown'} •{' '}
+                  {(file.size / 1024 / 1024).toFixed(1)} MB
+                </div>
+              </div>
+
+              {/* result badge right */}
+              <div style={{ minWidth: 120, textAlign: 'right' }}>
+                {status === 'success' && (
+                  <div
+                    style={{
+                      ...styles.resultBadge,
+                      ...styles.resultOK,
+                    }}
+                  >
+                    <span>✓</span>
+                    <span>Uploaded</span>
+                  </div>
+                )}
+                {status === 'error' && (
+                  <div
+                    style={{
+                      ...styles.resultBadge,
+                      ...styles.resultERR,
+                    }}
+                  >
+                    <span>⚠</span>
+                    <span>Error</span>
+                  </div>
+                )}
+                {status === 'uploading' && (
+                  <div
+                    style={{
+                      ...styles.resultBadge,
+                      backgroundColor: '#fff7ed',
+                      border: '1px solid #fdba74',
+                      color: '#78350f',
+                    }}
+                  >
+                    <span>⟳</span>
+                    <span>Uploading...</span>
+                  </div>
+                )}
+                {status === 'idle' && (
+                  <div
+                    style={{
+                      ...styles.resultBadge,
+                      backgroundColor: '#f9fafb',
+                      border: `1px solid ${palette.borderSoft}`,
+                      color: palette.textMid,
+                    }}
+                  >
+                    <span>…</span>
+                    <span>Pending</span>
+                  </div>
+                )}
               </div>
             </div>
 
-            {/* result badge right */}
-            <div style={{ minWidth: 120, textAlign: 'right' }}>
-              {status === 'success' && (
+            {/* Progress bar */}
+            {status === 'uploading' && (
+              <div style={styles.progressOuter}>
                 <div
                   style={{
-                    ...styles.resultBadge,
-                    ...styles.resultOK,
+                    ...styles.progressInnerBase,
+                    width: `${progress}%`,
                   }}
-                >
-                  <span>✓</span>
-                  <span>Uploaded</span>
-                </div>
-              )}
-              {status === 'error' && (
-                <div
-                  style={{
-                    ...styles.resultBadge,
-                    ...styles.resultERR,
-                  }}
-                >
-                  <span>⚠</span>
-                  <span>Error</span>
-                </div>
-              )}
-              {status === 'uploading' && (
-                <div
-                  style={{
-                    ...styles.resultBadge,
-                    backgroundColor: '#fff7ed',
-                    border: '1px solid #fdba74',
-                    color: '#78350f',
-                  }}
-                >
-                  <span>⟳</span>
-                  <span>Uploading...</span>
-                </div>
-              )}
-              {status === 'idle' && (
-                <div
-                  style={{
-                    ...styles.resultBadge,
-                    backgroundColor: '#f9fafb',
-                    border: `1px solid ${palette.borderSoft}`,
-                    color: palette.textMid,
-                  }}
-                >
-                  <span>…</span>
-                  <span>Pending</span>
-                </div>
+                />
+              </div>
+            )}
+
+            {/* Buttons */}
+            <div style={styles.buttonRow}>
+              <button
+                onClick={uploadToS3}
+                disabled={status === 'uploading'}
+                style={{
+                  ...styles.primaryBtn,
+                  ...(status === 'uploading'
+                    ? styles.primaryBtnDisabled
+                    : {}),
+                }}
+              >
+                {status === 'uploading'
+                  ? `Uploading... ${progress}%`
+                  : 'Upload'}
+              </button>
+
+              <button
+                onClick={resetAll}
+                disabled={status === 'uploading'}
+                style={styles.secondaryBtn}
+              >
+                Remove
+              </button>
+
+              {uploadedKey && status === 'success' && (
+                <button onClick={copyKey} style={styles.tinyBtn}>
+                  Copy key
+                </button>
               )}
             </div>
-          </div>
 
-          {/* Progress bar (only show when uploading) */}
-          {status === 'uploading' && (
-            <div style={styles.progressOuter}>
+            {/* Status message / key */}
+            {message && (
               <div
                 style={{
-                  ...styles.progressInnerBase,
-                  width: `${progress}%`,
+                  fontSize: 12,
+                  lineHeight: 1.4,
+                  marginBottom: 8,
+                  color:
+                    status === 'error' ? '#b91c1c' : palette.greenMain,
                 }}
-              />
-            </div>
-          )}
+              >
+                {message}
+              </div>
+            )}
 
-          {/* Buttons */}
-          <div style={styles.buttonRow}>
-            <button
-              onClick={uploadToS3}
-              disabled={status === 'uploading'}
-              style={{
-                ...styles.primaryBtn,
-                ...(status === 'uploading'
-                  ? styles.primaryBtnDisabled
-                  : {}),
-              }}
-            >
-              {status === 'uploading'
-                ? `Uploading... ${progress}%`
-                : 'Upload'}
-            </button>
-
-            <button
-              onClick={resetAll}
-              disabled={status === 'uploading'}
-              style={styles.secondaryBtn}
-            >
-              Remove
-            </button>
-
-            {uploadedKey && status === 'success' && (
-              <button onClick={copyKey} style={styles.tinyBtn}>
-                Copy key
-              </button>
+            {uploadedKey && (
+              <div style={styles.keyBlock}>
+                <span style={styles.keyLabel}>Key:</span>
+                <span style={styles.keyMono}>{uploadedKey}</span>
+              </div>
             )}
           </div>
 
-          {/* Status message / key */}
-          {message && (
-            <div
-              style={{
-                fontSize: 12,
-                lineHeight: 1.4,
-                marginBottom: 8,
-                color:
-                  status === 'error'
-                    ? '#b91c1c'
-                    : palette.greenMain,
-              }}
-            >
-              {message}
+          {/* Metadata form after successful upload */}
+          {uploadedKey && status === 'success' && (
+            <div style={styles.metaSection}>
+              <MetadataForm uploadedKey={uploadedKey} />
             </div>
           )}
-
-          {uploadedKey && (
-            <div style={styles.keyBlock}>
-              <span style={styles.keyLabel}>Key:</span>
-              <span style={styles.keyMono}>{uploadedKey}</span>
-            </div>
-          )}
-        </div>
+        </>
       )}
     </section>
+  );
+}
+
+// ===== Metadata form component =====
+function MetadataForm({ uploadedKey }) {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+
+  // datecontent parts (month/year) – user defined
+  const now = new Date();
+  const [dateMonth, setDateMonth] = useState(
+    MONTH_LABELS[now.getMonth()]
+  );
+  const [dateYear, setDateYear] = useState(String(now.getFullYear()));
+
+  // published date (auto, from upload time)
+  const [published] = useState(() => {
+    return `${MONTH_LABELS[now.getMonth()]} ${now.getFullYear()}`;
+  });
+
+  const [countries, setCountries] = useState([]);
+  const [themes, setThemes] = useState([]);
+  const [langs, setLangs] = useState([]);
+  const [scale, setScale] = useState('Regional (West Africa)');
+  const [saving, setSaving] = useState(false);
+  const [msg, setMsg] = useState('');
+  const [msgType, setMsgType] = useState('idle'); // 'idle' | 'ok' | 'err'
+  const [previewJson, setPreviewJson] = useState(null);
+
+  function toggleInArray(current, value) {
+    if (current.includes(value)) {
+      return current.filter((v) => v !== value);
+    }
+    return [...current, value];
+  }
+
+  function slugify(str) {
+    return (str || 'document')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
+
+  async function onSubmit(e) {
+    e.preventDefault();
+    setMsg('');
+    setMsgType('idle');
+  
+    if (!title || !description || !dateMonth || !dateYear) {
+      setMsg('Please fill all required fields.');
+      setMsgType('err');
+      return;
+    }
+    if (!countries.length || !themes.length || !langs.length) {
+      setMsg(
+        'Please select at least one Country, one Theme and one Language.'
+      );
+      setMsgType('err');
+      return;
+    }
+  
+    const monthYear = `${dateMonth} ${dateYear}`;
+    const slug = slugify(title);
+  
+    
+    const monthIndex = MONTH_LABELS.indexOf(dateMonth); // 0–11
+    const monthFolder = String(monthIndex + 1).padStart(2, '0');
+  
+    
+    const baseName = uploadedKey.split('/').pop() || uploadedKey;
+  
+   
+    const targetKey = `uploads/${dateYear}/${monthFolder}/${baseName}`;
+  
+    
+    const imgKey = targetKey.replace(/\.pdf$/i, '.png');
+  
+    
+    const payload = {
+      title,
+      img: `/${imgKey}`,
+      flag: '/images/EN_Co-fundedbytheEU_RGB_POS.png',
+      datecontent: monthYear,
+      bllink: `/documents/${slug}`,
+      content: {
+        Published: published,
+        Description: description,
+        Countries: countries.join(', '),
+        Themes: themes.join(', '),
+        Scale: scale,
+        Langs: langs.join(', '),
+      },
+      permalink: `/${targetKey}`,
+  
+      
+      sourceKey: uploadedKey,  
+      targetKey,              
+    };
+  
+    
+    setPreviewJson(payload);
+  
+    if (!META_URL) {
+      setMsg(
+        'Metadata JSON has been generated below. Because REACT_APP_META_URL is not defined, no backend request was sent.'
+      );
+      setMsgType('ok');
+      return;
+    }
+  
+    try {
+      setSaving(true);
+      const res = await fetch(META_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+  
+      if (!res.ok) {
+        throw new Error(`Metadata API returned ${res.status}`);
+      }
+  
+      setMsg('Metadata saved successfully.');
+      setMsgType('ok');
+    } catch (err) {
+      console.error(err);
+      setMsg(err.message || 'Failed to save metadata.');
+      setMsgType('err');
+    } finally {
+      setSaving(false);
+    }
+  }
+  
+  return (
+    <div style={styles.metaCard}>
+      <h2 style={styles.metaTitle}>Document metadata</h2>
+      <p style={styles.metaHelp}>
+        Please fill the fields below. All fields are required. This will be
+        stored into <code>DocumentsRPCA.json</code> (or an equivalent CMS JSON
+        file).
+      </p>
+
+      <form onSubmit={onSubmit}>
+        <div style={styles.metaField}>
+          <label style={styles.metaLabel}>Title</label>
+          <input
+            style={styles.metaInput}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+          />
+        </div>
+
+        <div style={styles.metaField}>
+          <label style={styles.metaLabel}>Description</label>
+          <textarea
+            style={styles.metaTextarea}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            required
+          />
+        </div>
+
+        <div style={styles.metaField}>
+          <label style={styles.metaLabel}>
+            Display date (month / year) – used as <code>datecontent</code>
+          </label>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <select
+              style={styles.metaInput}
+              value={dateMonth}
+              onChange={(e) => setDateMonth(e.target.value)}
+            >
+              {MONTH_LABELS.map((m) => (
+                <option key={m} value={m}>
+                  {m}
+                </option>
+              ))}
+            </select>
+            <select
+              style={styles.metaInput}
+              value={dateYear}
+              onChange={(e) => setDateYear(e.target.value)}
+            >
+              {YEAR_OPTIONS.map((y) => (
+                <option key={y} value={y}>
+                  {y}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div style={styles.metaField}>
+          <label style={styles.metaLabel}>
+            Published (auto from upload time)
+          </label>
+          <input style={styles.metaInput} value={published} readOnly />
+        </div>
+
+        <div style={styles.metaField}>
+          <label style={styles.metaLabel}>Countries</label>
+          <div style={styles.metaCheckboxList}>
+            {COUNTRY_OPTIONS.map((c) => (
+              <label key={c} style={styles.metaCheckboxItem}>
+                <input
+                  type="checkbox"
+                  checked={countries.includes(c)}
+                  onChange={() =>
+                    setCountries((curr) => toggleInArray(curr, c))
+                  }
+                />
+                <span>{c}</span>
+              </label>
+            ))}
+          </div>
+          <small style={styles.metaHelp}>
+            You can select as many countries as needed.
+          </small>
+        </div>
+
+        <div style={styles.metaField}>
+          <label style={styles.metaLabel}>Themes</label>
+          <div style={styles.metaCheckboxList}>
+            {THEME_OPTIONS.map((t) => (
+              <label key={t} style={styles.metaCheckboxItem}>
+                <input
+                  type="checkbox"
+                  checked={themes.includes(t)}
+                  onChange={() =>
+                    setThemes((curr) => toggleInArray(curr, t))
+                  }
+                />
+                <span>{t}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        <div style={styles.metaField}>
+          <label style={styles.metaLabel}>Languages</label>
+          <div style={styles.metaCheckboxList}>
+            {LANGUAGE_OPTIONS.map((l) => (
+              <label key={l} style={styles.metaCheckboxItem}>
+                <input
+                  type="checkbox"
+                  checked={langs.includes(l)}
+                  onChange={() =>
+                    setLangs((curr) => toggleInArray(curr, l))
+                  }
+                />
+                <span>{l}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        <div style={styles.metaField}>
+          <label style={styles.metaLabel}>Scale</label>
+          <input
+            style={styles.metaInput}
+            value={scale}
+            onChange={(e) => setScale(e.target.value)}
+            required
+          />
+        </div>
+
+        <button
+          type="submit"
+          disabled={saving}
+          style={{
+            ...styles.primaryBtn,
+            ...(saving ? styles.primaryBtnDisabled : {}),
+            marginTop: 4,
+          }}
+        >
+          {saving ? 'Saving metadata…' : 'Save metadata'}
+        </button>
+      </form>
+
+      {msg && (
+        <div
+          style={{
+            marginTop: 8,
+            fontSize: 12,
+            color:
+              msgType === 'err' ? '#b91c1c' : palette.greenMain,
+          }}
+        >
+          {msg}
+        </div>
+      )}
+
+      {previewJson && (
+        <div style={styles.metaJsonBox}>
+          {JSON.stringify(previewJson, null, 2)}
+        </div>
+      )}
+    </div>
   );
 }

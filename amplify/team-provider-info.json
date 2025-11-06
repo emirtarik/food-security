@@ -18,7 +18,11 @@
       "function": {
         "presignUpload": {
           "deploymentBucketName": "amplify-foodsecurityback-dev-aad34-deployment",
-          "s3Key": "amplify-builds/presignUpload-61496a73567574526d34-build.zip"
+          "s3Key": "amplify-builds/presignUpload-742f4a74554c484a334d-build.zip"
+        },
+        "saveDocumentMetadata": {
+          "deploymentBucketName": "amplify-foodsecurityback-dev-aad34-deployment",
+          "s3Key": "amplify-builds/saveDocumentMetadata-52667966474b44727564-build.zip"
         }
       },
       "storage": {

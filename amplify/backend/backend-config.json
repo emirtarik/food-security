@@ -9,6 +9,14 @@
           ],
           "category": "function",
           "resourceName": "presignUpload"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "saveDocumentMetadata"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -57,6 +65,12 @@
       ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+    },
+    "saveDocumentMetadata": {
+      "build": true,
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
     }
   },
   "parameters": {
@@ -73,6 +87,22 @@
         {
           "category": "function",
           "resourceName": "presignUpload"
+        }
+      ]
+    },
+    "AMPLIFY_function_saveDocumentMetadata_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "saveDocumentMetadata"
+        }
+      ]
+    },
+    "AMPLIFY_function_saveDocumentMetadata_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "saveDocumentMetadata"
         }
       ]
     }

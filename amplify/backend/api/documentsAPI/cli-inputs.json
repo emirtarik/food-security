@@ -7,6 +7,13 @@
       "permissions": {
         "setting": "open"
       }
+    },
+    "/document-metadata": {
+      "name": "/document-metadata",
+      "lambdaFunction": "saveDocumentMetadata",
+      "permissions": {
+        "setting": "open"
+      }
     }
   }
 }
