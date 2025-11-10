@@ -55,6 +55,7 @@
     "situationStable": "Situation stable",
     "improving": "Amélioration",
     "deteriorating": "Détérioration",
+    "changeInCHClassification": "Changement de la Classification CH",
     "selectPeriodsPrompt": "Veuillez sélectionner deux périodes pour comparer",
     "ph3PlusProportionTitle": "Proportion de la population en Phase 3+ par pays",
     "ph3PlusProportionDescription": "Graphique linéaire interactif montrant le pourcentage de population en Phase 3+ (Crise, Urgence, Famine) pour chaque pays au fil du temps.",
@@ -140,5 +141,11 @@
     "required": "Obligatoire",
     "citationSuggestion": "Citation suggérée",
     "exportPng": "Exporter PNG",
-    "exporting": "Export en cours…"
+    "exporting": "Export en cours…",
+    "Donors": "Bailleurs",
+    "RecipientCountries": "Pays bénéficiaires",
+    "YearRange": "Plage d'années",
+    "BudgetRange": "Plage budgétaire (USD)",
+    "SelectDonors": "Sélectionner les bailleurs...",
+    "SelectCountries": "Sélectionner les pays..."
   }

@@ -162,7 +162,7 @@ function getSituationChange(currentClassification, otherClassification) {
   }
 }
 
-const CountryMapView = ({ country, currentPeriod, otherPeriod, data, showChangeOverlay = true }) => {
+const CountryMapView = ({ country, admin1, currentPeriod, otherPeriod, data, showChangeOverlay = true }) => {
   const { t, i18n = {} } = useTranslationHook("analysis") || {};
   const currentLocale = i18n.language || (typeof navigator !== "undefined" && navigator.language) || "en";
 
@@ -201,7 +201,48 @@ const CountryMapView = ({ country, currentPeriod, otherPeriod, data, showChangeO
     map.on('load', () => {
       setIsMapLoaded(true);
 
-      if (bbox) {
+      // First, filter features for the country
+      let featuresForCountry;
+      if (countryISO3 && data.length > 0 && data[0].properties.iso_a3) {
+        featuresForCountry = data.filter(f => f.properties.iso_a3 === countryISO3);
+        if (featuresForCountry.length === 0) {
+          console.warn(`No features for ISO3 ${countryISO3}. Falling back to admin0Name for ${country}.`);
+          featuresForCountry = data.filter(f => f.properties.admin0Name === country);
+        }
+      } else {
+        featuresForCountry = data.filter(f => f.properties.admin0Name === country);
+      }
+
+      // If admin1 is selected, zoom to admin1; otherwise zoom to country
+      if (admin1) {
+        // Filter features for the selected admin1
+        const admin1Features = featuresForCountry.filter(f => f.properties.admin1Name === admin1);
+        if (admin1Features.length > 0) {
+          // Calculate bounding box from admin1 features
+          let minLng, maxLng, minLat, maxLat;
+          admin1Features.forEach(feature => {
+            if (feature.geometry) {
+              let coords = [];
+              if (feature.geometry.type === 'Point') {
+                coords = [feature.geometry.coordinates];
+              } else if (feature.geometry.type === 'Polygon') {
+                coords = feature.geometry.coordinates.flat(1);
+              } else if (feature.geometry.type === 'MultiPolygon') {
+                coords = feature.geometry.coordinates.flat(2);
+              }
+              coords.forEach(coord => {
+                if (minLng === undefined || coord[0] < minLng) minLng = coord[0];
+                if (maxLng === undefined || coord[0] > maxLng) maxLng = coord[0];
+                if (minLat === undefined || coord[1] < minLat) minLat = coord[1];
+                if (maxLat === undefined || coord[1] > maxLat) maxLat = coord[1];
+              });
+            }
+          });
+          if (minLng !== undefined) {
+            map.fitBounds([[minLng, minLat], [maxLng, maxLat]], { padding: 30, duration: 0 });
+          }
+        }
+      } else if (bbox) {
         const fitBoundsOptions = { padding: 30, duration: 0 };
         if (countryISO3 === 'GNB') { fitBoundsOptions.maxZoom = 6.5; }
         else if (countryISO3 === 'CIV') { fitBoundsOptions.maxZoom = 6.5; }
@@ -233,15 +274,9 @@ const CountryMapView = ({ country, currentPeriod, otherPeriod, data, showChangeO
         }
       }
 
-      let featuresForCountry;
-      if (countryISO3 && data.length > 0 && data[0].properties.iso_a3) {
-        featuresForCountry = data.filter(f => f.properties.iso_a3 === countryISO3);
-        if (featuresForCountry.length === 0) {
-          console.warn(`No features for ISO3 ${countryISO3}. Falling back to admin0Name for ${country}.`);
-          featuresForCountry = data.filter(f => f.properties.admin0Name === country);
-        }
-      } else {
-        featuresForCountry = data.filter(f => f.properties.admin0Name === country);
+      // Filter by admin1 if selected (for data source)
+      if (admin1) {
+        featuresForCountry = featuresForCountry.filter(f => f.properties.admin1Name === admin1);
       }
 
       // Add situation change data to features
@@ -328,7 +363,11 @@ const CountryMapView = ({ country, currentPeriod, otherPeriod, data, showChangeO
         paint: { 'line-color': '#555', 'line-width': 1 }
       });
 
-      const popup = new mapboxgl.Popup({ closeButton: false, closeOnClick: false, className: 'custom-popup' });
+      const popup = new mapboxgl.Popup({ 
+        closeButton: false, 
+        closeOnClick: false, 
+        className: 'custom-popup'
+      });
 
       // Build list of interactive layers dynamically
       const getInteractiveLayers = () => {
@@ -349,6 +388,7 @@ const CountryMapView = ({ country, currentPeriod, otherPeriod, data, showChangeO
 
       // Use map-level mousemove with queryRenderedFeatures to avoid double tooltips
       let hoveredFeatureId = null;
+      let lastPopupContent = null;
       map.on('mousemove', (e) => {
         const interactiveLayers = getInteractiveLayers().filter(id => map.getLayer(id));
         const feats = map.queryRenderedFeatures(e.point, { layers: interactiveLayers });
@@ -356,11 +396,18 @@ const CountryMapView = ({ country, currentPeriod, otherPeriod, data, showChangeO
         if (!feats || feats.length === 0) {
           popup.remove();
           hoveredFeatureId = null;
+          lastPopupContent = null;
           return;
         }
         
         const feature = feats[0];
+        const currentFeatureId = feature.id || feature.properties?.admin2Name || feature.properties?.admin1Name || 'unknown';
         const props = feature.properties;
+        
+        // Only rebuild popup content if we're hovering over a different feature to prevent flickering
+        let popupContent = lastPopupContent;
+        if (hoveredFeatureId !== currentFeatureId) {
+          hoveredFeatureId = currentFeatureId;
 
           // Current period data
           const currentClassificationField = `classification_${currentPeriod}`;
@@ -383,6 +430,18 @@ const CountryMapView = ({ country, currentPeriod, otherPeriod, data, showChangeO
           const popTotalDiff = popTotalCurrent - popTotalOther;
           const popTotalDiffInThousands = Math.trunc(popTotalDiff / 1000);
           const popTotalPct = popTotalOther > 0 ? (popTotalDiff / popTotalOther) * 100 : null;
+
+          const popPh2Current = parseNumber(props[currentPopulationPh2Field]);
+          const popPh2Other = parseNumber(props[otherPopulationPh2Field]);
+          const popPh2Diff = popPh2Current - popPh2Other;
+          const popPh2DiffInThousands = Math.trunc(popPh2Diff / 1000);
+          
+          let popPh2PopulationPercentChange = 0;
+          if (popPh2Other !== 0) {
+            popPh2PopulationPercentChange = (popPh2Diff / popPh2Other) * 100;
+          } else if (popPh2Diff !== 0) {
+            popPh2PopulationPercentChange = null;
+          }
 
           const popPh3Current = parseNumber(props[currentPopulationPh3Field]);
           const popPh3Other = parseNumber(props[otherPopulationPh3Field]);
@@ -448,7 +507,10 @@ const CountryMapView = ({ country, currentPeriod, otherPeriod, data, showChangeO
           const fallbackFlagURL = fallbackFlag ? `/flags/${fallbackFlag}` : '';
 
           const aggregatedNotice = (props[currentLevelField] === 1 || props[currentLevelField] === '1' || props[currentLevelField] === "true" || props[currentLevelField] === true)
-            ? `<div class="popup-aggregated-box"><div class="popup-aggregated">⚠️ ${t("dataAggregated")}</div></div>`
+            ? ` <div class="popup-aggregated-box">
+                  <div class="popup-aggregated">⚠️ ${t("dataAggregated")}</div>
+                </div>
+                `
             : '';
 
           // Updated popup content matching MapView.js style
@@ -483,6 +545,12 @@ const CountryMapView = ({ country, currentPeriod, otherPeriod, data, showChangeO
                   </div>
                   <div class="popup-stat-item">
                     <div class="popup-stat-content">
+                      <div class="popup-stat-label">${t("populationPh2")}</div>
+                      <div class="popup-stat-value">${formatNumber(popPh2DiffInThousands)} (${formatPercentage(popPh2PopulationPercentChange, 1)})</div>
+                    </div>
+                  </div>
+                  <div class="popup-stat-item">
+                    <div class="popup-stat-content">
                       <div class="popup-stat-label">${t("populationPh3")}</div>
                       <div class="popup-stat-value">${formatNumber(popPh3DiffInThousands)} (${formatPercentage(popPh3PopulationPercentChange, 1)})</div>
                     </div>
@@ -491,27 +559,42 @@ const CountryMapView = ({ country, currentPeriod, otherPeriod, data, showChangeO
               </div>
             </div>
           `;
-        popup.setLngLat(e.lngLat).setHTML(popupContent).addTo(map);
+          lastPopupContent = popupContent;
+        }
+        
+        // Always update position to follow cursor, but only update content when feature changes
+        popup.setLngLat(e.lngLat);
+        if (popupContent) {
+          popup.setHTML(popupContent).addTo(map);
+        }
       });
 
       map.on('mouseleave', 'country-fill', () => {
         popup.remove();
         hoveredFeatureId = null;
+        lastPopupContent = null;
       });
       
       if (showChangeOverlay && otherPeriod && map.getLayer('situation-change-overlay')) {
         map.on('mouseleave', 'situation-change-overlay', () => {
           popup.remove();
           hoveredFeatureId = null;
+          lastPopupContent = null;
         });
       }
     });
 
     return () => {
-      if (mapRef.current) { mapRef.current.remove(); mapRef.current = null; }
+      if (mapRef.current) {
+        // Remove popup before removing map
+        const popups = mapRef.current.getContainer().querySelectorAll('.mapboxgl-popup');
+        popups.forEach(p => p.remove());
+        mapRef.current.remove();
+        mapRef.current = null;
+      }
       setIsMapLoaded(false);
     };
-  }, [country, currentPeriod, otherPeriod, data, t, currentLocale, showChangeOverlay]); // Added showChangeOverlay
+  }, [country, admin1, currentPeriod, otherPeriod, data, t, currentLocale, showChangeOverlay]); // Added admin1 and showChangeOverlay
 
   useEffect(() => {
     if (!isMapLoaded || !mapRef.current || !currentPeriod) return;
@@ -540,6 +623,11 @@ const CountryMapView = ({ country, currentPeriod, otherPeriod, data, showChangeO
             }
         } else {
             featuresForCountry = data.filter(f => f.properties.admin0Name === country);
+        }
+
+        // Filter by admin1 if selected
+        if (admin1) {
+            featuresForCountry = featuresForCountry.filter(f => f.properties.admin1Name === admin1);
         }
 
         // Update features with change data
@@ -571,7 +659,7 @@ const CountryMapView = ({ country, currentPeriod, otherPeriod, data, showChangeO
             type: 'FeatureCollection', features: featuresWithChange
         });
     }
-  }, [country, currentPeriod, otherPeriod, data, isMapLoaded, showChangeOverlay]); // Added showChangeOverlay
+  }, [country, admin1, currentPeriod, otherPeriod, data, isMapLoaded, showChangeOverlay]); // Added admin1 and showChangeOverlay
 
   if (!country || !currentPeriod) {
     return <div>{t("selectCountryAndPeriod")}</div>;
@@ -585,6 +673,7 @@ const CountryMapView = ({ country, currentPeriod, otherPeriod, data, showChangeO
       <div ref={mapContainerRef} className="country-map-container-inner">
         {showChangeOverlay && otherPeriod && (
           <div className="change-legend map-legend">
+            <div className="legend-title">{t("changeInCHClassification")}</div>
             <div className="legend-section">
               <span className="legend-label">{t("improving")}:</span>
               <div className="legend-shades">

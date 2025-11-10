@@ -1,18 +1,18 @@
 /* src/components/RegionSelector.css */
 .region-selector {
-  border: 1px solid #ddd;
-  background: #fafafa;
+  border: 1px solid #e9ecef;
+  background: #f8f9fa;
   color: #000000;
-  padding: 16px;
-  border-radius: 4px;
-  max-width: 800px;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 1200px;
   margin: 0 auto 16px auto;
-  font-family: 'Lato' sans-serif;
+  font-family: 'Lato', sans-serif;
 }
 
 .region-selector h3 {
   margin-top: 0;
-  margin-bottom: 12px;
+  margin-bottom: 20px;
   font-size: 18px;
 }
 
@@ -20,31 +20,60 @@
 .region-selector-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
-  align-items: center;
-  margin-bottom: 12px;
+  gap: 20px;
+  align-items: flex-start;
 }
 
 .selector-group {
-  flex: 1 1 150px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-width: 180px;
 }
 
 .selector-group label {
   display: block;
-  margin-bottom: 4px;
-  font-weight: bold;
-  font-size: 14px;
-  color: #333;
+  margin-bottom: 12px;
+  font-weight: 600;
+  font-size: 0.95em;
+  color: #2c3e50;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  border-bottom: 2px solid #C2BE00;
+  padding-bottom: 6px;
 }
 
 .selector-group select {
   width: 100%;
-  padding: 8px;
-  font-size: 14px;
-  border: 1px solid #ccc;
+  padding: 10px;
+  font-size: 0.95em;
+  border: 1px solid #ced4da;
   border-radius: 4px;
   background: #fff;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+  cursor: pointer;
+}
+
+.selector-group select:disabled {
+  background-color: #e9ecef;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .region-selector {
+    padding: 16px;
+  }
+  
+  .region-selector-row {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .selector-group {
+    min-width: 100%;
+  }
 }

@@ -8,22 +8,26 @@ const ProjectCard = ({ project }) => {
     return null;
   }
 
-  // Handle potential BOM character in donor key and provide defaults
-  const donor = project['\uFEFFdonor'] || project.donor || "N/A";
+  // Provide defaults for project fields
   const {
+    donor = "N/A",
     title = "No Title Available",
     status = "N/A",
     recipient = "N/A",
     fundingAgency = "N/A",
+    implementingAgency = "N/A",
     img,
-    start = "",
-    end = "",
+    start = null,
+    end = null,
     budgetUSD,
     comments = "",
     link
   } = project;
 
-  const imageUrl = img ? `${BASE_URL}${img}` : picPlaceholder;
+  // Handle img as either full URL or relative path
+  const imageUrl = img 
+    ? (img.startsWith('http://') || img.startsWith('https://') ? img : `${BASE_URL}${img}`)
+    : picPlaceholder;
 
   const formattedBudget = budgetUSD ?
     `$${parseInt(budgetUSD).toLocaleString()} USD` : "N/A";
@@ -47,9 +51,9 @@ const ProjectCard = ({ project }) => {
         <p className="project-meta-item"><strong>Recipient:</strong> {recipient}</p>
         <p className="project-meta-item"><strong>Funding Agency:</strong> {fundingAgency}</p>
 
-        {(start || end) && (
+        {(start != null || end != null) && (
           <p className="project-duration">
-            <strong>Duration:</strong> {start || "N/A"} - {end || "N/A"}
+            <strong>Duration:</strong> {start != null ? start : "N/A"} - {end != null ? end : "N/A"}
           </p>
         )}
 

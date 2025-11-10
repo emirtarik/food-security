@@ -332,17 +332,17 @@ function ProjectDataInput({ country, onSubmit }) {
           </div>
           <div className="form-group">
             <label htmlFor="status">Statut</label>
-            <select
+              <select
               id="status"
               name="status"
               value={formData.status}
-              onChange={handleChange}
-            >
+                onChange={handleChange}
+              >
               <option value="">Sélectionnez un statut...</option>
               {['En cours','Terminé','Planifié'].map(option => (
-                <option key={option} value={option}>{option}</option>
-              ))}
-            </select>
+                  <option key={option} value={option}>{option}</option>
+                ))}
+              </select>
           </div>
         </div>
 
@@ -458,14 +458,14 @@ function ProjectDataInput({ country, onSubmit }) {
           </div>
           <div className="form-group">
             <label htmlFor="comments">Commentaires</label>
-            <textarea
+              <textarea
               id="comments"
               name="comments"
               value={formData.comments}
-              onChange={handleChange}
-              rows="3"
+                onChange={handleChange}
+                rows="3"
               placeholder="Notes sur le projet..."
-            />
+              />
           </div>
         </div>
 

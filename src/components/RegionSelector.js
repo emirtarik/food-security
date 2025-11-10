@@ -81,12 +81,10 @@ const RegionSelector = ({ geojsonData, onSelect }) => {
   const [hierarchy, setHierarchy] = useState({});
   const [admin0Options, setAdmin0Options] = useState([]);
   const [admin1Options, setAdmin1Options] = useState([]);
-  const [admin2Options, setAdmin2Options] = useState([]);
 
   // Selected region levels
   const [selectedAdmin0, setSelectedAdmin0] = useState("");
   const [selectedAdmin1, setSelectedAdmin1] = useState("");
-  const [selectedAdmin2, setSelectedAdmin2] = useState("");
 
   // Time periods state
   const [timeOptions, setTimeOptions] = useState([]);
@@ -147,44 +145,21 @@ const RegionSelector = ({ geojsonData, onSelect }) => {
       const opts = Object.keys(hierarchy[selectedAdmin0]).sort();
       setAdmin1Options(["", ...opts]);
       setSelectedAdmin1("");
-      setAdmin2Options([]);
-      setSelectedAdmin2("");
     } else {
       setAdmin1Options([]);
       setSelectedAdmin1("");
-      setAdmin2Options([]);
-      setSelectedAdmin2("");
     }
   }, [selectedAdmin0, hierarchy]);
-
-  // Update admin2 when admin1 or admin0 changes
-  useEffect(() => {
-    if (selectedAdmin0 && selectedAdmin1 && hierarchy[selectedAdmin0]?.[selectedAdmin1]) {
-      setAdmin2Options(["", ...hierarchy[selectedAdmin0][selectedAdmin1]]);
-      setSelectedAdmin2("");
-    } else if (selectedAdmin0) {
-      let allAdmin2 = [];
-      Object.keys(hierarchy[selectedAdmin0]).forEach(region => {
-        allAdmin2 = allAdmin2.concat(hierarchy[selectedAdmin0][region]);
-      });
-      allAdmin2 = Array.from(new Set(allAdmin2)).sort();
-      setAdmin2Options(["", ...allAdmin2]);
-      setSelectedAdmin2("");
-    } else {
-      setAdmin2Options([]);
-      setSelectedAdmin2("");
-    }
-  }, [selectedAdmin1, selectedAdmin0, hierarchy]);
 
   // Notify parent of any selection change
   useEffect(() => {
     onSelect({
-      region: { admin0: selectedAdmin0, admin1: selectedAdmin1, admin2: selectedAdmin2 },
+      region: { admin0: selectedAdmin0, admin1: selectedAdmin1, admin2: "" },
       period1: selectedPeriod1,
       period2: selectedPeriod2,
       timeOptions
     });
-  }, [selectedAdmin0, selectedAdmin1, selectedAdmin2, selectedPeriod1, selectedPeriod2, onSelect, timeOptions]);
+  }, [selectedAdmin0, selectedAdmin1, selectedPeriod1, selectedPeriod2, onSelect, timeOptions]);
 
   return (
     <div className="region-selector">
@@ -198,7 +173,6 @@ const RegionSelector = ({ geojsonData, onSelect }) => {
               const c = e.target.value;
               setSelectedAdmin0(c);
               setSelectedAdmin1("");
-              setSelectedAdmin2("");
             }}
           >
             <option value="">{t("selectCountry")}</option>
@@ -220,21 +194,6 @@ const RegionSelector = ({ geojsonData, onSelect }) => {
             ))}
           </select>
         </div>
-        <div className="selector-group">
-          <label>{t("districtLabel")}</label>
-          <select
-            value={selectedAdmin2}
-            onChange={e => setSelectedAdmin2(e.target.value)}
-            disabled={!selectedAdmin0}
-          >
-            <option value="">{t("allDistricts")}</option>
-            {admin2Options.filter(opt => opt !== "").map(option => (
-                <option key={option} value={option}>{option}</option>
-            ))}
-          </select>
-        </div>
-      </div>
-      <div className="region-selector-row time-row">
         <div className="selector-group">
           <label>{t("period1Label")}</label>
           <select value={selectedPeriod1} onChange={e => setSelectedPeriod1(e.target.value)}>

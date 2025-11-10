@@ -320,6 +320,7 @@ export default function Analysis() {
                       <div className="country-map-container" style={{ margin: '20px 0', minHeight: '650px', height: 'auto' }}>
                         <CountryMapView
                           country={selectedRegionData.region.admin0}
+                          admin1={selectedRegionData.region.admin1 || null}
                           currentPeriod={selectedRegionData.period2}
                           otherPeriod={selectedRegionData.period1}
                           data={geojsonFeatures}

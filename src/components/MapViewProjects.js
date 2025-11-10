@@ -1,5 +1,5 @@
 // src/components/MapViewProjects.jsx
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useMemo } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { useTranslationHook } from "../i18n";
 import '../styles/MapViewProjects.css'; // Changed CSS import
@@ -38,7 +38,7 @@ const MapViewProjects = ({ projects, filters, setFilters, donorOptions, recipien
   const [isDataLoaded, setIsDataLoaded] = useState(false); // Kept for loading overlay
 
   // Calculate project counts by country
-  const projectCountsByCountry = React.useMemo(() => {
+  const projectCountsByCountry = useMemo(() => {
     if (!projects || projects.length === 0) {
       return {};
     }
@@ -161,27 +161,59 @@ const MapViewProjects = ({ projects, filters, setFilters, donorOptions, recipien
     if (!isMapLoaded || !mapRef.current) return;
 
     const map = mapRef.current;
+    let lastCountryName = null;
+    let lastProjectCount = null;
+    let throttleTimeout = null;
 
     const handleMouseMove = (e) => {
       map.getCanvas().style.cursor = 'pointer';
-      if (e.features.length > 0) {
-        const feature = e.features[0];
-        const mapboxCountryName = feature.properties.name_en; // Original name from mapbox
-        const preferredCountryName = getPreferredCountryName(mapboxCountryName);
-        const projectCount = projectCountsByCountry[preferredCountryName?.toLowerCase()] || 0; // Lookup with normalized name
-
-        // Get the country name in the current language from Mapbox
-        const languageCode = currentLanguage || 'fr';
-        const displayCountryName = feature.properties[`name_${languageCode}`] || preferredCountryName;
-
-        popupRef.current
-          .setLngLat(e.lngLat)
-          .setHTML(`<strong>${displayCountryName}</strong><br />Projects: ${projectCount}`)
-          .addTo(map);
+      
+      // Clear any pending throttle
+      if (throttleTimeout) {
+        clearTimeout(throttleTimeout);
       }
+      
+      // Capture values before setTimeout to avoid stale closure
+      const features = e.features;
+      const lngLat = e.lngLat;
+      
+      // Throttle updates to reduce rapid blinking
+      throttleTimeout = setTimeout(() => {
+        if (features && features.length > 0) {
+          const feature = features[0];
+          const mapboxCountryName = feature.properties.name_en; // Original name from mapbox
+          const preferredCountryName = getPreferredCountryName(mapboxCountryName);
+          const projectCount = projectCountsByCountry[preferredCountryName?.toLowerCase()] || 0; // Lookup with normalized name
+
+          // Get the country name in the current language from Mapbox
+          const languageCode = currentLanguage || 'fr';
+          const displayCountryName = feature.properties[`name_${languageCode}`] || preferredCountryName;
+
+          // Only update popup if country or count changed
+          if (displayCountryName !== lastCountryName || projectCount !== lastProjectCount) {
+            lastCountryName = displayCountryName;
+            lastProjectCount = projectCount;
+            
+            popupRef.current
+              .setLngLat(lngLat)
+              .setHTML(`<strong>${displayCountryName}</strong><br />Projects: ${projectCount}`)
+              .addTo(map);
+          } else {
+            // Just update position if content hasn't changed
+            popupRef.current.setLngLat(lngLat);
+          }
+        }
+      }, 50); // 50ms throttle delay
     };
 
     const handleMouseLeave = () => {
+      // Clear throttle timeout
+      if (throttleTimeout) {
+        clearTimeout(throttleTimeout);
+        throttleTimeout = null;
+      }
+      lastCountryName = null;
+      lastProjectCount = null;
       map.getCanvas().style.cursor = '';
       popupRef.current.remove();
     };
@@ -192,10 +224,13 @@ const MapViewProjects = ({ projects, filters, setFilters, donorOptions, recipien
 
     // Cleanup: remove handlers when effect re-runs or component unmounts
     return () => {
+      if (throttleTimeout) {
+        clearTimeout(throttleTimeout);
+      }
       map.off('mousemove', choroplethLayerId, handleMouseMove);
       map.off('mouseleave', choroplethLayerId, handleMouseLeave);
     };
-  }, [isMapLoaded, projectCountsByCountry]); // Re-run when projectCountsByCountry changes
+  }, [isMapLoaded, projectCountsByCountry, currentLanguage]); // Re-run when projectCountsByCountry or language changes
 
   // Effect to update feature states when projectCountsByCountry changes
   useEffect(() => {
@@ -321,95 +356,6 @@ const MapViewProjects = ({ projects, filters, setFilters, donorOptions, recipien
                 </div>
               );
             })}
-          </div>
-        </div>
-
-        {/* Filters Section */}
-        <div className="filters-section">
-          <div className="filter-container">
-            <h3>Donors</h3>
-            <div className="filter-header">
-              <div className="filter-actions">
-                <button 
-                  type="button"
-                  className="filter-action-btn"
-                  onClick={() => {
-                    setFilters(prev => ({ ...prev, donors: donorOptions }));
-                  }}
-                >
-                  Select All
-                </button>
-                <button 
-                  type="button"
-                  className="filter-action-btn"
-                  onClick={() => {
-                    setFilters(prev => ({ ...prev, donors: [] }));
-                  }}
-                >
-                  Clear All
-                </button>
-              </div>
-            </div>
-            <div className="filter-checkboxes">
-              {donorOptions.map(donor => (
-                <label key={donor} className="filter-checkbox-label">
-                  <input
-                    type="checkbox"
-                    checked={filters.donors.includes(donor)}
-                    onChange={(e) => {
-                      const newDonors = e.target.checked
-                        ? [...filters.donors, donor]
-                        : filters.donors.filter(d => d !== donor);
-                      setFilters(prev => ({ ...prev, donors: newDonors }));
-                    }}
-                  />
-                  <span>{donor}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-
-          <div className="filter-container">
-            <h3>Recipient Countries</h3>
-            <div className="filter-header">
-              <div className="filter-actions">
-                <button 
-                  type="button"
-                  className="filter-action-btn"
-                  onClick={() => {
-                    setFilters(prev => ({ ...prev, recipientCountries: recipientCountryOptions }));
-                  }}
-                >
-                  Select All
-                </button>
-                <button 
-                  type="button"
-                  className="filter-action-btn"
-                  onClick={() => {
-                    setFilters(prev => ({ ...prev, recipientCountries: [] }));
-                  }}
-                >
-                  Clear All
-                </button>
-              </div>
-            </div>
-            <div className="filter-checkboxes">
-              {recipientCountryOptions.map(country => (
-                <label key={country} className="filter-checkbox-label">
-                  <input
-                    type="checkbox"
-                    checked={filters.recipientCountries.includes(country)}
-                    onChange={(e) => {
-                      const newCountries = e.target.checked
-                        ? [...filters.recipientCountries, country]
-                        : filters.recipientCountries.filter(c => c !== country);
-                      setFilters(prev => ({ ...prev, recipientCountries: newCountries }));
-                    }}
-                  />
-                  <span>{country}</span>
-                </label>
-              ))}
-            </div>
           </div>
         </div>
       </div>

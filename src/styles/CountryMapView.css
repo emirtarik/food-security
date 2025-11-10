@@ -8,6 +8,7 @@
   display: flex; /* Use flexbox to position title and map */
   flex-direction: column; /* Stack title above map */
   height: 100%; /* Make sure it fills the container from Analysis.js */
+  overflow: visible !important; /* Allow tooltips to overflow container boundaries */
 }
 
 .country-map-title {
@@ -35,6 +36,14 @@
   background-color: rgba(255, 255, 255, 0.9);
   border-radius: 4px;
   border: 1px solid #ddd;
+}
+
+.legend-title {
+  font-weight: bold;
+  font-size: 1em;
+  margin-bottom: 4px;
+  text-align: center;
+  color: #333;
 }
 
 .legend-section {
@@ -117,6 +126,7 @@
   flex-grow: 1; /* Allow map to take remaining space if parent has fixed height */
   min-height: 600px; /* Ensure minimum height */
   position: relative; /* Allow absolute positioning of legend inside */
+  overflow: visible !important; /* Allow tooltips to overflow container boundaries */
 }
 
 .change-legend.map-legend {
@@ -198,58 +208,54 @@
   }
 }
 
-/* Tooltip styling for CountryMapView - matching MapView.js style with smaller sizing */
-.country-map-view .custom-popup .mapboxgl-popup-content {
-  font-size: 10px; /* Smaller base font size */
-  padding: 5px 8px;
-  max-width: 220px; /* Adjust as needed */
-  background-color: rgba(255, 255, 255, 0.95); /* Slightly more opaque */
+/* Tooltip styling for CountryMapView - matching MapView.js exactly */
+/* Use the same styles from MapView.css - no overrides needed, just ensure overflow works */
+
+/* Ensure popup container allows overflow */
+.country-map-view .mapboxgl-popup {
+  z-index: 1000 !important;
+  pointer-events: none; /* Allow mouse events to pass through to map */
+  max-width: none !important; /* Remove width restrictions */
 }
 
-.country-map-view .custom-popup .popup-title {
-  font-size: 11px; /* Slightly smaller header */
-  margin-bottom: 3px;
+.country-map-view .mapboxgl-popup-content {
+  pointer-events: auto; /* Re-enable pointer events for popup content */
 }
 
-.country-map-view .custom-popup .popup-subtitle {
-  font-size: 9px; /* Smaller subtitle */
-  line-height: 1.3;
+.country-map-view .mapboxgl-popup-tip {
+  display: none !important;
 }
 
-.country-map-view .custom-popup .popup-header-section {
-  margin-bottom: 6px;
-  padding-bottom: 4px;
+/* Ensure parent containers allow overflow */
+.country-map-container {
+  overflow: visible !important;
+  position: relative !important;
 }
 
-.country-map-view .custom-popup .popup-classification-text {
-  font-size: 10px; /* Smaller classification text */
-  padding: 4px 6px;
+/* Mapbox canvas container should also allow overflow */
+.country-map-container-inner .mapboxgl-canvas-container {
+  overflow: visible !important;
 }
 
-.country-map-view .custom-popup .popup-stat-label {
-  font-size: 9px;
-  font-weight: 500;
+/* Ensure all mapbox containers allow overflow */
+.country-map-container-inner .mapboxgl-map {
+  overflow: visible !important;
 }
 
-.country-map-view .custom-popup .popup-stat-value {
-  font-size: 10px;
-  font-weight: 600;
+.country-map-container-inner .mapboxgl-canvas {
+  overflow: visible !important;
 }
 
-.country-map-view .custom-popup .popup-stat-item {
-  padding: 4px 6px;
+/* Ensure popup can escape all container boundaries */
+.country-map-view .mapboxgl-popup {
+  position: absolute !important;
 }
 
-.country-map-view .custom-popup .popup-stats-grid {
-  gap: 4px;
-}
-
-.country-map-view .custom-popup .popup-aggregated {
-  font-size: 9px;
-  padding: 2px;
-}
-
-.country-map-view .custom-popup .popup-flag img {
-  width: 20px; /* Smaller flag */
-  height: auto;
+/* Ensure parent containers in the page allow overflow - scoped to analysis page */
+.analysis-page .tab-content,
+.analysis-page .visualization-section .row,
+.analysis-page .visualization-section .col-12,
+.analysis-page .visualization-section,
+.analysis-page .container {
+  overflow: visible !important;
 }

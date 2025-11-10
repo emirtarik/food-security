@@ -9,6 +9,15 @@
   margin: 0 auto; /* Center page content */
 }
 
+/* Remove gap between map and projects list */
+.projects-page-container > .map-view-container {
+  margin-bottom: 0;
+}
+
+.projects-list-container {
+  margin-top: 0 !important;
+}
+
 /* Styling for the MapViewProjects component's wrapper if needed, or assume MapViewProjects handles its own height */
 /* For example, if MapViewProjects is wrapped in a div:
 .map-view-projects-wrapper {
@@ -44,6 +53,19 @@
   color: #343a40; /* Darker label color */
 }
 
+.filter-label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 600;
+  font-size: 0.95em;
+  color: #2c3e50;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  border-bottom: 2px solid #C2BE00;
+  padding-bottom: 6px;
+  margin-bottom: 12px;
+}
+
 .filter-item input,
 .filter-item select {
   padding: 10px; /* Increased padding for inputs/selects */
@@ -53,9 +75,75 @@
   /* min-width is on .filter-item, so inputs/selects will fill that */
 }
 
-.projects-list-container {
-  /* Container for the "Projects" title and the grid */
+/* React-select styles */
+.react-select-container {
+  width: 100%;
 }
+
+.react-select__control {
+  min-height: 38px;
+  border: 1px solid #ced4da !important;
+  border-radius: 4px !important;
+  font-size: 0.9em;
+}
+
+.react-select__control:hover {
+  border-color: #adb5bd !important;
+}
+
+.react-select__control--is-focused {
+  border-color: #007bff !important;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
+}
+
+.react-select__multi-value {
+  background-color: #e7f3ff !important;
+  border: 1px solid #007bff !important;
+}
+
+.react-select__multi-value__label {
+  color: #007bff !important;
+  font-size: 0.9em;
+}
+
+.react-select__multi-value__remove {
+  color: #007bff !important;
+}
+
+.react-select__multi-value__remove:hover {
+  background-color: #007bff !important;
+  color: white !important;
+}
+
+.react-select__placeholder {
+  color: #6c757d !important;
+}
+
+.react-select__menu {
+  z-index: 1000;
+}
+
+/* Range slider styles */
+.filter-item-range,
+.filter-item-budget {
+  flex-basis: 100%;
+  min-width: 100%;
+}
+
+/* Style for react-range slider */
+.range-slider-wrapper {
+  margin-top: 12px;
+  padding: 10px 10px;
+}
+
+.filter-item-range label,
+.filter-item-budget label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #343a40;
+}
+
 
 .projects-list-header {
   display: flex;

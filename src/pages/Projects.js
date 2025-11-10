@@ -4,10 +4,14 @@ import SubHeader from './SubHeader.js';
 import Footer from './Footer.js';
 import MapViewProjects from '../components/MapViewProjects.js';
 import ProjectCard from '../components/ProjectCard.js';
+import { Range, getTrackBackground } from 'react-range';
+import Select from 'react-select';
+import { useTranslationHook } from '../i18n';
 import projectDataPlaceholder from '../data/projects.json';
 import '../styles/Projects.css';
 
 const Projects = () => {
+  const { t } = useTranslationHook('analysis');
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -15,25 +19,56 @@ const Projects = () => {
   const [sortOrder, setSortOrder] = useState('desc'); // 'asc' or 'desc'
   const itemsPerPage = 20;
   
-  // Initialize filters with "All" as default for new dropdowns
+  // Calculate initial bounds (will be updated after projects load)
   const [filters, setFilters] = useState({
     donors: ['EU'], // Pre-select EU to show EU projects on first load
-    fundingAgency: '',
-    implementingAgency: '',
     recipientCountries: [], // Changed to array for multi-select
-    startYear: 'All',
-    endYear: 'All',
-    budgetUSD: 'All',
+    yearRange: [1970, 2030], // [min, max] for year range slider - will be updated
+    budgetRange: [0, 100000000], // [min, max] for budget range slider - will be updated
   });
 
   useEffect(() => {
-    // Handle potential BOM character in donor key
-    const cleanedProjects = projectDataPlaceholder.map(p => ({
-      ...p,
-      donor: p['\uFEFFdonor'] || p.donor,
-    }));
+    // Handle potential BOM character in id key and clean up projects
+    const cleanedProjects = projectDataPlaceholder.map(p => {
+      const cleaned = { ...p };
+      // Remove BOM id if present
+      if (cleaned['\uFEFFid']) {
+        cleaned.id = cleaned['\uFEFFid'];
+        delete cleaned['\uFEFFid'];
+      }
+      // Ensure zone is treated as string (may be null)
+      if (cleaned.zone && typeof cleaned.zone === 'string') {
+        cleaned.zone = cleaned.zone.trim();
+      }
+      return cleaned;
+    });
     setProjects(cleanedProjects);
     setLoading(false);
+    
+    // Update yearRange and budgetRange with actual bounds from data
+    const years = [];
+    const budgets = [];
+    cleanedProjects.forEach(p => {
+      const startYear = typeof p.start === 'number' ? p.start : 
+                        p.start ? new Date(p.start).getFullYear() : null;
+      const endYear = typeof p.end === 'number' ? p.end : 
+                      p.end ? new Date(p.end).getFullYear() : null;
+      if (startYear) years.push(startYear);
+      if (endYear) years.push(endYear);
+      if (typeof p.budgetUSD === 'number' && p.budgetUSD !== null) {
+        budgets.push(p.budgetUSD);
+      }
+    });
+    const updates = {};
+    if (years.length > 0) {
+      updates.yearRange = [Math.min(...years), Math.max(...years)];
+    }
+    if (budgets.length > 0) {
+      updates.budgetRange = [Math.min(...budgets), Math.max(...budgets)];
+    }
+    if (Object.keys(updates).length > 0) {
+      setFilters(prev => ({ ...prev, ...updates }));
+    }
   }, []);
 
   // Generate unique options for dropdowns
@@ -75,26 +110,29 @@ const Projects = () => {
     return Array.from(countries).sort();
   }, [projects]);
 
-  const startYearOptions = useMemo(() => {
+  // Calculate min/max years and budget from projects for range sliders
+  const yearBounds = useMemo(() => {
     const years = [];
-    for (let year = 1970; year <= 2030; year++) {
-      years.push(year);
-    }
-    return ["All", ...years];
-  }, []);
+    projects.forEach(p => {
+      const startYear = typeof p.start === 'number' ? p.start : 
+                        p.start ? new Date(p.start).getFullYear() : null;
+      const endYear = typeof p.end === 'number' ? p.end : 
+                      p.end ? new Date(p.end).getFullYear() : null;
+      if (startYear) years.push(startYear);
+      if (endYear) years.push(endYear);
+    });
+    if (years.length === 0) return [1970, 2030];
+    return [Math.min(...years), Math.max(...years)];
+  }, [projects]);
 
-  const endYearOptions = useMemo(() => {
-    const years = [];
-    for (let year = 1970; year <= 2030; year++) {
-      years.push(year);
-    }
-    return ["All", ...years];
-  }, []);
+  const budgetBounds = useMemo(() => {
+    const budgets = projects
+      .map(p => p.budgetUSD)
+      .filter(b => typeof b === 'number' && b !== null);
+    if (budgets.length === 0) return [0, 100000000];
+    return [Math.min(...budgets), Math.max(...budgets)];
+  }, [projects]);
 
-  const handleFilterChange = (filterName, value) => {
-    setFilters(prev => ({ ...prev, [filterName]: value }));
-    setCurrentPage(1); // Reset to first page when filters change
-  };
 
   const handleSort = (field) => {
     if (sortBy === field) {
@@ -129,12 +167,6 @@ const Projects = () => {
         );
       });
     }
-    if (filters.fundingAgency) {
-      tempProjects = tempProjects.filter(p => p.fundingAgency?.toLowerCase().includes(filters.fundingAgency.toLowerCase()));
-    }
-    if (filters.implementingAgency) {
-      tempProjects = tempProjects.filter(p => p.implementingAgency?.toLowerCase().includes(filters.implementingAgency.toLowerCase()));
-    }
     if (filters.recipientCountries && filters.recipientCountries.length > 0) {
       tempProjects = tempProjects.filter(p => {
         const recipient = p.recipient?.trim();
@@ -152,48 +184,31 @@ const Projects = () => {
         );
       });
     }
-    if (filters.startYear && filters.startYear !== "All") {
-      const startYearVal = parseInt(filters.startYear);
+    // Year range filter - projects must have start or end year within the range
+    if (filters.yearRange && Array.isArray(filters.yearRange) && filters.yearRange.length === 2) {
+      const [minYear, maxYear] = filters.yearRange;
       tempProjects = tempProjects.filter(p => {
-        // Handle both year numbers and date strings
         const projectStartYear = typeof p.start === 'number' ? p.start : 
                                   p.start ? new Date(p.start).getFullYear() : null;
-        return projectStartYear && projectStartYear >= startYearVal;
-      });
-    }
-    if (filters.endYear && filters.endYear !== "All") {
-      const endYearVal = parseInt(filters.endYear);
-      tempProjects = tempProjects.filter(p => {
-        // Handle both year numbers and date strings
         const projectEndYear = typeof p.end === 'number' ? p.end : 
                                 p.end ? new Date(p.end).getFullYear() : null;
-        return projectEndYear && projectEndYear <= endYearVal;
+        
+        // Project is included if its start year OR end year falls within the range
+        // Or if the project spans the range (start before min, end after max)
+        const startInRange = projectStartYear && projectStartYear >= minYear && projectStartYear <= maxYear;
+        const endInRange = projectEndYear && projectEndYear >= minYear && projectEndYear <= maxYear;
+        const spansRange = projectStartYear && projectEndYear && projectStartYear <= minYear && projectEndYear >= maxYear;
+        
+        return startInRange || endInRange || spansRange;
       });
     }
-    // Ensure budgetUSD filter also checks for "All" or specific value
-    if (filters.budgetUSD && filters.budgetUSD !== "All") {
-      switch (filters.budgetUSD) {
-        case "<1M USD":
-          tempProjects = tempProjects.filter(p => typeof p.budgetUSD === 'number' && p.budgetUSD < 1000000);
-          break;
-        case "1M<5M USD":
-          tempProjects = tempProjects.filter(p => typeof p.budgetUSD === 'number' && p.budgetUSD >= 1000000 && p.budgetUSD < 5000000);
-          break;
-        case "5M<10M USD":
-          tempProjects = tempProjects.filter(p => typeof p.budgetUSD === 'number' && p.budgetUSD >= 5000000 && p.budgetUSD < 10000000);
-          break;
-        case "10M<100M USD":
-          tempProjects = tempProjects.filter(p => typeof p.budgetUSD === 'number' && p.budgetUSD >= 10000000 && p.budgetUSD < 100000000);
-          break;
-        case ">100M USD":
-          tempProjects = tempProjects.filter(p => typeof p.budgetUSD === 'number' && p.budgetUSD >= 100000000);
-          break;
-        case "Other":
-          tempProjects = tempProjects.filter(p => typeof p.budgetUSD !== 'number' || p.budgetUSD === null);
-          break;
-        default:
-          break;
-      }
+    // Budget range filter
+    if (filters.budgetRange && Array.isArray(filters.budgetRange) && filters.budgetRange.length === 2) {
+      const [minBudget, maxBudget] = filters.budgetRange;
+      tempProjects = tempProjects.filter(p => {
+        if (typeof p.budgetUSD !== 'number' || p.budgetUSD === null) return false;
+        return p.budgetUSD >= minBudget && p.budgetUSD <= maxBudget;
+      });
     }
 
     // Apply sorting
@@ -232,11 +247,154 @@ const Projects = () => {
 
   const totalPages = Math.ceil(filteredProjects.length / itemsPerPage);
 
+
   return (
     <div>
       <Header />
       <SubHeader /> {/* Assuming Projects page might have a SubHeader, adjust as needed */}
       <div className="projects-page-container">
+        {/* All Filters Above Map */}
+        <div className="filters-container">
+          <div className="filter-item">
+            <label htmlFor="donors" className="filter-label">{t('Donors')}:</label>
+            <Select
+              id="donors"
+              isMulti
+              options={donorOptions.map(donor => ({ value: donor, label: donor }))}
+              value={filters.donors.map(donor => ({ value: donor, label: donor }))}
+              onChange={(selectedOptions) => {
+                const selected = selectedOptions ? selectedOptions.map(opt => opt.value) : [];
+                setFilters(prev => ({ ...prev, donors: selected }));
+                setCurrentPage(1);
+              }}
+              placeholder={t('SelectDonors')}
+              className="react-select-container"
+              classNamePrefix="react-select"
+            />
+          </div>
+          <div className="filter-item">
+            <label htmlFor="recipientCountries" className="filter-label">{t('RecipientCountries')}:</label>
+            <Select
+              id="recipientCountries"
+              isMulti
+              options={recipientCountryOptions.map(country => ({ value: country, label: country }))}
+              value={filters.recipientCountries.map(country => ({ value: country, label: country }))}
+              onChange={(selectedOptions) => {
+                const selected = selectedOptions ? selectedOptions.map(opt => opt.value) : [];
+                setFilters(prev => ({ ...prev, recipientCountries: selected }));
+                setCurrentPage(1);
+              }}
+              placeholder={t('SelectCountries')}
+              className="react-select-container"
+              classNamePrefix="react-select"
+            />
+          </div>
+          <div className="filter-item filter-item-range">
+            <label className="filter-label">{t('YearRange')}: {filters.yearRange[0]} - {filters.yearRange[1]}</label>
+            <div className="range-slider-wrapper">
+              <Range
+                values={filters.yearRange}
+                step={1}
+                min={yearBounds[0]}
+                max={yearBounds[1]}
+                onChange={(values) => {
+                  setFilters(prev => ({ ...prev, yearRange: values }));
+                  setCurrentPage(1);
+                }}
+                renderTrack={({ props, children }) => (
+                  <div
+                    {...props}
+                    style={{
+                      ...props.style,
+                      height: '6px',
+                      width: '100%',
+                      background: getTrackBackground({
+                        values: filters.yearRange,
+                        colors: ['#ddd', '#007bff', '#ddd'],
+                        min: yearBounds[0],
+                        max: yearBounds[1],
+                      }),
+                      borderRadius: '3px',
+                    }}
+                  >
+                    {children}
+                  </div>
+                )}
+                renderThumb={({ props, isDragged }) => (
+                  <div
+                    {...props}
+                    style={{
+                      ...props.style,
+                      height: '20px',
+                      width: '20px',
+                      borderRadius: '50%',
+                      backgroundColor: '#007bff',
+                      border: '2px solid white',
+                      boxShadow: isDragged ? '0 4px 8px rgba(0,0,0,0.3)' : '0 2px 4px rgba(0,0,0,0.2)',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      outline: 'none',
+                    }}
+                  />
+                )}
+              />
+            </div>
+          </div>
+          <div className="filter-item filter-item-budget">
+            <label className="filter-label">{t('BudgetRange')}: ${Math.round(filters.budgetRange[0]).toLocaleString()} - ${Math.round(filters.budgetRange[1]).toLocaleString()}</label>
+            <div className="range-slider-wrapper">
+              <Range
+                values={filters.budgetRange}
+                step={1000}
+                min={budgetBounds[0]}
+                max={budgetBounds[1]}
+                onChange={(values) => {
+                  setFilters(prev => ({ ...prev, budgetRange: values }));
+                  setCurrentPage(1);
+                }}
+                renderTrack={({ props, children }) => (
+                  <div
+                    {...props}
+                    style={{
+                      ...props.style,
+                      height: '6px',
+                      width: '100%',
+                      background: getTrackBackground({
+                        values: filters.budgetRange,
+                        colors: ['#ddd', '#007bff', '#ddd'],
+                        min: budgetBounds[0],
+                        max: budgetBounds[1],
+                      }),
+                      borderRadius: '3px',
+                    }}
+                  >
+                    {children}
+                  </div>
+                )}
+                renderThumb={({ props, isDragged }) => (
+                  <div
+                    {...props}
+                    style={{
+                      ...props.style,
+                      height: '20px',
+                      width: '20px',
+                      borderRadius: '50%',
+                      backgroundColor: '#007bff',
+                      border: '2px solid white',
+                      boxShadow: isDragged ? '0 4px 8px rgba(0,0,0,0.3)' : '0 2px 4px rgba(0,0,0,0.2)',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      outline: 'none',
+                    }}
+                  />
+                )}
+              />
+            </div>
+          </div>
+        </div>
+
         <MapViewProjects 
           projects={filteredProjects} 
           filters={filters}
@@ -244,40 +402,6 @@ const Projects = () => {
           donorOptions={donorOptions}
           recipientCountryOptions={recipientCountryOptions}
         />
-        <div className="filters-container">
-          <div className="filter-item">
-            <label htmlFor="fundingAgency">Funding Agency:</label>
-            <input type="text" id="fundingAgency" value={filters.fundingAgency} onChange={(e) => handleFilterChange('fundingAgency', e.target.value)} />
-          </div>
-          <div className="filter-item">
-            <label htmlFor="implementingAgency">Implementing Agency:</label>
-            <input type="text" id="implementingAgency" value={filters.implementingAgency} onChange={(e) => handleFilterChange('implementingAgency', e.target.value)} />
-          </div>
-          <div className="filter-item">
-            <label htmlFor="startYear">Start Year:</label>
-            <select id="startYear" value={filters.startYear} onChange={(e) => handleFilterChange('startYear', e.target.value)}>
-              {startYearOptions.map(option => <option key={option} value={option}>{option}</option>)}
-            </select>
-          </div>
-          <div className="filter-item">
-            <label htmlFor="endYear">End Year:</label>
-            <select id="endYear" value={filters.endYear} onChange={(e) => handleFilterChange('endYear', e.target.value)}>
-              {endYearOptions.map(option => <option key={option} value={option}>{option}</option>)}
-            </select>
-          </div>
-          <div className="filter-item">
-            <label htmlFor="budgetUSD">Budget (USD):</label>
-            <select id="budgetUSD" value={filters.budgetUSD} onChange={(e) => handleFilterChange('budgetUSD', e.target.value)}>
-              <option value="All">All</option>
-              <option value="<1M USD">&lt;1M USD</option>
-              <option value="1M<5M USD">1M &lt; 5M USD</option>
-              <option value="5M<10M USD">5M &lt; 10M USD</option>
-              <option value="10M<100M USD">10M &lt; 100M USD</option>
-              <option value=">100M USD">&gt;100M USD</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-        </div>
         <div className="projects-list-container">
           <div className="projects-list-header">
             <h2>Projects ({filteredProjects.length} total)</h2>
