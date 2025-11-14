@@ -5,11 +5,37 @@ import Footer from "../Footer.js";
 import SearchBox from "../../components/SearchBox.js";
 import SubHeader from "../SubHeader.js";
 import SearchBoxDocument from "../../components/SearchBoxDocument.js";
-import documentData from "../../data/DocumentsRPCA.json";
-import { BASE_URL } from "../../components/constant.js";
+import { BASE_URL, ASSETS_BASE_URL } from "../../components/constant.js";
 import { useTranslationHook } from "../../i18n";
 import "../../styles/Document.css";
 
+//import documentData from "../../data/DocumentsRPCA.json";
+
+const DOCUMENTS_JSON_URL =
+  process.env.REACT_APP_DOCUMENTS_JSON_URL ||
+ `${ASSETS_BASE_URL}/data/DocumentsRPCA.json`; // fallback
+
+ const isAbs = (s) => typeof s === "string" && (/^https?:\/\//i.test(s) || /^data:/i.test(s));
+ 
+ const normalizePath = (raw) => {
+   if (!raw) return "";
+   if (typeof raw === "string") return raw;
+   if (typeof raw === "object") {
+     return raw.medium || raw.url || raw.src || raw.path || "";
+   }
+   return "";
+ };
+ 
+ const resolveAsset = (raw) => {
+   const p = normalizePath(raw);
+   if (!p) return "";
+   if (isAbs(p)) return p;
+   if (p.startsWith("/uploads") || p.startsWith("/images") || p.startsWith("/data")) {
+     return `${ASSETS_BASE_URL}${p}`;
+   }
+   return `${BASE_URL}${p}`;
+ };
+  
 const DocumentsSection = ({
   documents,
   searchQuery,
@@ -103,7 +129,7 @@ const DocumentsSection = ({
       <header className="block-header">
         <h2 className="block-title">{t("Documents")}</h2>
         <a
-          href={`${BASE_URL}/resources/documents`}
+          href={`/resources/documents`}
           className="btn bt-primaryinv btsmall"
         >
           {t("alldoc")}
@@ -120,10 +146,17 @@ const DocumentsSection = ({
           >
             <article>
               <div className="thumb">
-                <img
-                  src={`${BASE_URL}${result.img.medium}`}
-                  alt={result.title}
-                />
+              <img
+                //src={`${ASSETS_BASE_URL}${result.img.medium}`}
+                //alt={result.title}
+                src={resolveAsset(result.img?.medium ?? result.img)}
+                alt={result.title}
+                onError={(e) => {
+                 e.currentTarget.onerror = null;
+                 e.currentTarget.src = `${ASSETS_BASE_URL}/images/doc-placeholder.png`;
+                } }
+              />
+
                 <div className="screen">
                   <p>
                     {result.excerpt.length > MAX_EXCERPT_LENGTH
@@ -168,6 +201,36 @@ export default function Documents() {
   const [selectedThemes, setSelectedThemes] = useState([]);
   const [selectedScales, setSelectedScales] = useState([]);
   const [selectedLangs, setSelectedLangs] = useState([]);
+  const [documents, setDocuments] = useState([]);
+  const [loading, setLoading] = useState(true);
+ const [error, setError] = useState("");
+
+   
+  useEffect(() => {
+    async function loadDocuments() {
+      try {
+        setLoading(true);
+        setError("");
+        const res = await fetch(DOCUMENTS_JSON_URL, {
+          headers: { "Cache-Control": "no-cache" },
+        });
+        if (!res.ok) {
+          throw new Error(`Failed to fetch documents (${res.status})`);
+        }
+        const data = await res.json();
+        setDocuments(Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.error("Error loading documents JSON:", err);
+        setError("Could not load documents metadata.");
+        setDocuments([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadDocuments();
+  }, []);
+
 
   function updateURL() {
     const searchParams = new URLSearchParams(location.search);
@@ -187,7 +250,8 @@ export default function Documents() {
       <div className="row">
         <div className="col-md-2 col-xl-2">
           <SearchBoxDocument
-            jsonData={documentData}
+            //jsonData={documentData}
+            jsonData={documents}
             selectedLocations={selectedLocations}
             setSelectedLocations={setSelectedLocations}
             selectedThemes={selectedThemes}
@@ -199,8 +263,13 @@ export default function Documents() {
           />
         </div>
         <div className="col-md-10 col-xl-10">
+         {loading && <p>Loading documents…</p>}
+         {error && !loading && (
+           <p style={{ color: "red", fontSize: 12 }}>{error}</p>
+          )}
           <DocumentsSection
-            documents={documentData}
+            //documents={documentData}
+            documents={documents}
             searchQuery={searchQuery}
             selectedLocations={selectedLocations}
             selectedThemes={selectedThemes}

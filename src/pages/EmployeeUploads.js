@@ -4,11 +4,33 @@ import { Amplify } from 'aws-amplify';
 import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 import awsconfig from '../aws-exports';
+import { pdfFirstPageToPNG } from '../utils/pdfThumb';
+import { getPresignedPutUrl } from '../apiClient';
+//import { presignPut, uploadWithPut, saveMetadata } from '../../apiClient';
+
+
+
+
 
 Amplify.configure(awsconfig);
 
+
+
 const PRESIGN_URL = process.env.REACT_APP_PRESIGN_URL;
 const META_URL = process.env.REACT_APP_META_URL || '';
+
+
+
+
+
+function twoDigits(n) { return String(n).padStart(2, '0'); }
+function slugify(str) {
+  return (str || '')
+    .toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+}
 
 function putWithProgress(url, file, onProgress) {
   return new Promise((resolve, reject) => {
@@ -665,7 +687,7 @@ export default function EmployeeUploadsPage() {
 
             {/* MAIN */}
             <main style={styles.mainOuter}>
-              <Uploader />
+              <Uploader/>
             </main>
           </div>
         );
@@ -674,12 +696,14 @@ export default function EmployeeUploadsPage() {
   );
 }
 
-function Uploader() {
+function Uploader({ onFileSelected, onUploaded }) {
+  const [pdfFile, setPdfFile] = useState(null);     
+  const [uploadedKey, setUploadedKey] = useState(null);
+  const [pdfThumb, setPdfThumb] = useState(null);
   const [file, setFile] = useState(null);
   const [status, setStatus] = useState('idle'); // 'idle' | 'uploading' | 'success' | 'error'
   const [message, setMessage] = useState('');
   const [progress, setProgress] = useState(0);
-  const [uploadedKey, setUploadedKey] = useState(null);
   const [dropHover, setDropHover] = useState(false);
   const inputRef = useRef(null);
 
@@ -693,12 +717,22 @@ function Uploader() {
     const f = e.target.files?.[0];
     if (f) {
       setFile(f);
+  
+      if (f.type === 'application/pdf') {
+        setPdfFile(f);
+        onFileSelected?.(f);
+      } else {
+        setPdfFile(null);
+        onFileSelected?.(null);
+      }
+  
       setStatus('idle');
       setMessage('');
       setProgress(0);
       setUploadedKey(null);
     }
   }
+  
 
   function onDragOver(e) {
     e.preventDefault();
@@ -715,12 +749,22 @@ function Uploader() {
     const f = e.dataTransfer.files?.[0];
     if (f) {
       setFile(f);
+  
+      if (f.type === 'application/pdf') {
+        setPdfFile(f);
+        onFileSelected?.(f);
+      } else {
+        setPdfFile(null);
+        onFileSelected?.(null);
+      }
+  
       setStatus('idle');
       setMessage('');
       setProgress(0);
       setUploadedKey(null);
     }
   }
+  
 
   async function uploadToS3() {
     if (!file) return;
@@ -769,6 +813,7 @@ function Uploader() {
       await putWithProgress(putUrl, file, (pct) => setProgress(pct));
 
       setUploadedKey(objectKey);
+      onUploaded?.(objectKey);
       setStatus('success');
       setMessage('File uploaded successfully.');
     } catch (err) {
@@ -998,7 +1043,7 @@ function Uploader() {
           {/* Metadata form after successful upload */}
           {uploadedKey && status === 'success' && (
             <div style={styles.metaSection}>
-              <MetadataForm uploadedKey={uploadedKey} />
+              <MetadataForm uploadedKey={uploadedKey} pdfFile={pdfFile} />
             </div>
           )}
         </>
@@ -1008,7 +1053,7 @@ function Uploader() {
 }
 
 // ===== Metadata form component =====
-function MetadataForm({ uploadedKey }) {
+function MetadataForm({ uploadedKey, pdfFile }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
@@ -1032,7 +1077,7 @@ function MetadataForm({ uploadedKey }) {
   const [msg, setMsg] = useState('');
   const [msgType, setMsgType] = useState('idle'); // 'idle' | 'ok' | 'err'
   const [previewJson, setPreviewJson] = useState(null);
-
+  const [flagChoice, setFlagChoice] = useState('none'); // 'none' | 'eu'
   function toggleInArray(current, value) {
     if (current.includes(value)) {
       return current.filter((v) => v !== value);
@@ -1049,6 +1094,11 @@ function MetadataForm({ uploadedKey }) {
       .replace(/^-+|-+$/g, '');
   }
 
+  const META_URL      = process.env.REACT_APP_META_URL;
+  const PRESIGN_URL   = process.env.REACT_APP_PRESIGN_URL;    
+  const TEMP_BASE_URL = process.env.REACT_APP_TEMP_BASE_URL;  
+
+
   async function onSubmit(e) {
     e.preventDefault();
     setMsg('');
@@ -1060,73 +1110,121 @@ function MetadataForm({ uploadedKey }) {
       return;
     }
     if (!countries.length || !themes.length || !langs.length) {
-      setMsg(
-        'Please select at least one Country, one Theme and one Language.'
-      );
+      setMsg('Please select at least one Country, one Theme and one Language.');
       setMsgType('err');
-      return;
-    }
-  
-    const monthYear = `${dateMonth} ${dateYear}`;
-    const slug = slugify(title);
-  
-    
-    const monthIndex = MONTH_LABELS.indexOf(dateMonth); // 0–11
-    const monthFolder = String(monthIndex + 1).padStart(2, '0');
-  
-    
-    const baseName = uploadedKey.split('/').pop() || uploadedKey;
-  
-   
-    const targetKey = `uploads/${dateYear}/${monthFolder}/${baseName}`;
-  
-    
-    const imgKey = targetKey.replace(/\.pdf$/i, '.png');
-  
-    
-    const payload = {
-      title,
-      img: `/${imgKey}`,
-      flag: '/images/EN_Co-fundedbytheEU_RGB_POS.png',
-      datecontent: monthYear,
-      bllink: `/documents/${slug}`,
-      content: {
-        Published: published,
-        Description: description,
-        Countries: countries.join(', '),
-        Themes: themes.join(', '),
-        Scale: scale,
-        Langs: langs.join(', '),
-      },
-      permalink: `/${targetKey}`,
-  
-      
-      sourceKey: uploadedKey,  
-      targetKey,              
-    };
-  
-    
-    setPreviewJson(payload);
-  
-    if (!META_URL) {
-      setMsg(
-        'Metadata JSON has been generated below. Because REACT_APP_META_URL is not defined, no backend request was sent.'
-      );
-      setMsgType('ok');
       return;
     }
   
     try {
       setSaving(true);
+  
+      const monthYear   = `${dateMonth} ${dateYear}`;
+      const slug        = slugify(title);
+      const monthIndex  = MONTH_LABELS.indexOf(dateMonth);        
+      const monthFolder = String(monthIndex + 1).padStart(2, '0');
+  
+      const baseName  = uploadedKey.split('/').pop() || uploadedKey;
+      const targetKey = `uploads/${dateYear}/${monthFolder}/${baseName}`; 
+      let imgKey    = targetKey.replace(/\.pdf$/i, '.png');             
+  
+      let pdfBlobForThumb = null;
+      if (typeof pdfFile !== 'undefined' && pdfFile) {
+        pdfBlobForThumb = pdfFile;
+      } else if (TEMP_BASE_URL) {
+        setMsg('Fetching temp PDF for thumbnail…');
+        const r = await fetch(`${TEMP_BASE_URL}/${uploadedKey}`);
+        if (!r.ok) throw new Error('Cannot download temp PDF for thumbnail.');
+        pdfBlobForThumb = await r.blob();
+      }
+  
+      let pngBlob = null;
+      if (pdfBlobForThumb) {
+        setMsg('Rendering thumbnail…');
+        pngBlob = await pdfFirstPageToPNG(pdfBlobForThumb, 1.2); 
+      }
+  
+      if (pngBlob && PRESIGN_URL) {
+        setMsg('Uploading thumbnail…');
+      
+        const signThumb = await fetch(PRESIGN_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            fileName: imgKey,          
+            fileType: 'image/png',
+          }),
+        });
+      
+        if (!signThumb.ok) {
+          throw new Error(`Presign (PNG) failed ${signThumb.status}`);
+        }
+      
+        let signData = await signThumb.json();
+        if (signData && typeof signData.body === 'string') {
+          try {
+            signData = JSON.parse(signData.body);
+          } catch {
+            
+          }
+        }
+      
+        const putUrl   = signData.uploadURL || signData.url;
+       
+        const thumbKey = signData.key || imgKey;
+      
+        const put = await fetch(putUrl, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'image/png' },
+          body: pngBlob,
+        });
+        if (!put.ok) {
+          throw new Error(`Thumbnail PUT failed: ${put.status}`);
+        }
+      
+        imgKey = thumbKey;
+      }
+      // ---- FLAG PATH SELECTION ----
+      let flagPath = '';
+      if (flagChoice === 'eu') {
+
+        flagPath = '/images/EN_Co-fundedbytheEU_RGB_POS.png';
+      }
+
+      
+      
+      const payload = {
+        title,
+        img: `/${imgKey}`, 
+        flag: flagPath || undefined,
+        datecontent: monthYear,
+        bllink: `/documents/${slug}`,
+        content: {
+          Published: published,
+          Description: description,
+          Countries: countries.join(', '),
+          Themes: themes.join(', '),
+          Scale: scale,
+          Langs: langs.join(', '),
+        },
+        permalink: `/${targetKey}`, 
+        sourceKey: uploadedKey,    
+        targetKey,                  
+      };
+  
+      setPreviewJson(payload);
+  
+      if (!META_URL) {
+        setMsg('Metadata JSON has been generated locally (no REACT_APP_META_URL).');
+        setMsgType('ok');
+        return;
+      }
+  
       const res = await fetch(META_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
-  
-      if (!res.ok) {
-        throw new Error(`Metadata API returned ${res.status}`);
-      }
+      if (!res.ok) throw new Error(`Metadata API returned ${res.status}`);
   
       setMsg('Metadata saved successfully.');
       setMsgType('ok');
@@ -1138,6 +1236,9 @@ function MetadataForm({ uploadedKey }) {
       setSaving(false);
     }
   }
+  
+  
+  
   
   return (
     <div style={styles.metaCard}>
@@ -1271,6 +1372,22 @@ function MetadataForm({ uploadedKey }) {
             onChange={(e) => setScale(e.target.value)}
             required
           />
+        </div>
+        {/* EU flag select */}
+        <div style={styles.metaField}>
+          <label style={styles.metaLabel}>Funding flag</label>
+          <select
+            style={styles.metaInput}
+            value={flagChoice}
+            onChange={(e) => setFlagChoice(e.target.value)}
+          >
+            <option value="none">None</option>
+            <option value="eu">EU – Co-funded by the EU</option>
+          </select>
+          <small style={styles.metaHelp}>
+            If selected, the “Co-funded by the European Union” logo will be
+            shown on the document page.
+          </small>
         </div>
 
         <button

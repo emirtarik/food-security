@@ -212,7 +212,7 @@ const DynamicPost = ({ category, permalinkOverride }) => {
                             {section.documents.map((document, index) => (
                               <li key={index} className="document-item">
                                 <a
-                                  href={`${BASE_URL}${document.link}`}
+                                  href={`{document.link}`}
                                   rel="noopener noreferrer"
                                   target="_blank"
                                   className="document-title"

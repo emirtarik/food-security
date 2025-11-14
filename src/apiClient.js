@@ -32,7 +32,7 @@ apiClient.interceptors.request.use(
     return config;
   },
   (error) => {
-    console.error('❌ API Request Error:', error);
+    console.error(' API Request Error:', error);
     return Promise.reject(error);
   }
 );
@@ -40,7 +40,7 @@ apiClient.interceptors.request.use(
 // Add response interceptor for debugging
 apiClient.interceptors.response.use(
   (response) => {
-    console.log('✅ API Response:', {
+    console.log(' API Response:', {
       status: response.status,
       url: response.config.url,
       data: response.data
@@ -48,7 +48,7 @@ apiClient.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.error('❌ API Response Error:', {
+    console.error(' API Response Error:', {
       status: error.response?.status,
       url: error.config?.url,
       message: error.message,
@@ -57,3 +57,36 @@ apiClient.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+// src/apiClient.js
+
+const PRESIGN_URL = process.env.REACT_APP_PRESIGN_URL || "";
+const META_URL    = process.env.REACT_APP_META_URL    || "";
+
+
+export async function presignPut(key, contentType) {
+  const url = `${PRESIGN_URL}?key=${encodeURIComponent(key)}&contentType=${encodeURIComponent(contentType)}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`presign failed: ${res.status}`);
+  const data = await res.json();
+ 
+  return data.url || data;
+}
+
+export async function uploadWithPut(presignedUrl, blob, contentType) {
+  const r = await fetch(presignedUrl, {
+    method: 'PUT',
+    headers: { 'Content-Type': contentType },
+    body: blob,
+  });
+  if (!r.ok) throw new Error(`upload failed: ${r.status}`);
+}
+
+export async function saveMetadata(record) {
+  const r = await fetch(META_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(record),
+  });
+  if (!r.ok) throw new Error(`metadata save failed: ${r.status}`);
+}
+
