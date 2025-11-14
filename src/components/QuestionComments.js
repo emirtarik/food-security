@@ -2,10 +2,13 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useTranslationHook } from '../i18n';
 import { sectionMapping } from '../mappings'; // Correctly import sectionMapping
 import '../styles/QuestionComments.css'; // Import the CSS for styling
 
 function QuestionComments({ questionComments }) {
+  const { t } = useTranslationHook("questionnaire");
+  
   // Helper function to parse questionKey into section
   const parseQuestionKey = (key) => {
     const keyStr = key.toString();
@@ -45,10 +48,10 @@ function QuestionComments({ questionComments }) {
   return (
     <div className="question-comments-container">
       <div className="saved-action-plans-header">
-        <h4>Commentaires des questions</h4>
+        <h4>{t('questionCommentsTitle')}</h4>
       </div>
       {Object.keys(groupedComments).length === 0 ? (
-        <p>Aucun commentaire n'a été enregistré.</p>
+        <p>{t('noCommentsSaved')}</p>
       ) : (
         // Iterate through grouped comments by section
         Object.entries(groupedComments).map(([section, comments]) => (
@@ -59,7 +62,7 @@ function QuestionComments({ questionComments }) {
             {/* List of Comments in the Section */}
             {comments.map(({ questionKey, comment }) => (
               <div key={questionKey} className="question-comment">
-                <p className="question-key">Question {questionKey}</p>
+                <p className="question-key">{t('question')} {questionKey}</p>
                 <p className="comment-text">{comment}</p>
               </div>
             ))}

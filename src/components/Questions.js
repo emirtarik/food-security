@@ -9,6 +9,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import PropTypes from 'prop-types';
+import { useTranslationHook } from '../i18n';
 import PerformanceTable from './PerformanceTable'; // Import the PerformanceTable component
 import '../styles/Questions.css'; // Ensure you have appropriate styling
 
@@ -45,6 +46,7 @@ function Questions({
   isComplete, // New prop
   missingSections, // New prop
 }) {
+  const { t } = useTranslationHook("questionnaire");
   console.log('Questions Component Props:', { performanceScore, financingNeed, financingMobilized });
 
   // 1. Flatten the questions into an ordered list
@@ -93,10 +95,10 @@ function Questions({
         <>
           {/* Additional Questions Container for Master Users */}
           <div className="additional-questions-container">
-            <h4>Questions supplémentaires</h4>
+            <h4>{t('additionalQuestions')}</h4>
 
             <div className="additional-question">
-              <label>Performance du système d'information (Score CH):</label>
+              <label>{t('performanceScoreLabel')}</label>
               <input
                 type="number"
                 step="0.1"
@@ -108,7 +110,7 @@ function Questions({
             </div>
 
             <div className="additional-question">
-              <label>Besoin de financement (million USD):</label>
+              <label>{t('financingNeedLabel')}</label>
               <input
                 type="number"
                 value={financingNeed}
@@ -118,7 +120,7 @@ function Questions({
             </div>
 
             <div className="additional-question">
-              <label>Financement mobilisé:</label>
+              <label>{t('financingMobilizedLabel')}</label>
               <input
                 type="number"
                 value={financingMobilized}
@@ -161,7 +163,7 @@ function Questions({
               </AccordionSummary>
               <AccordionDetails>
                 {isSectionMissing ? (
-                  <p>Cette section est manquante.</p>
+                  <p>{t('sectionMissing')}</p>
                 ) : (
                   sectionData.subsections.map((sub, subIndex) => (
                     <div key={subIndex} className="subsection-container">
@@ -213,14 +215,14 @@ function Questions({
                                   className="add-comment-button"
                                   disabled={!enabled || isSubmitted}
                                 >
-                                  Commentaires
+                                  {t('comments')}
                                 </button>
                               )}
                               {showCommentBox[key] && (
                                 <textarea
                                   value={questionComments[key] || ''}
                                   onChange={(e) => handleQuestionCommentChange(key, e.target.value)}
-                                  placeholder="Entrez votre commentaire ici"
+                                  placeholder={t('commentPlaceholder')}
                                   className="comment-textarea"
                                   disabled={isSubmitted || !enabled}
                                 />
@@ -229,14 +231,14 @@ function Questions({
 
                             {/* Per-Question Action Plan Section */}
                             <div className="per-question-action-plan-container">
-                              <h5>Actions recommandées</h5>
+                              <h5>{t('recommendedActions')}</h5>
                               {actionPlansPerQuestion[key]?.map((plan, index) => (
                                 <div key={index} className="action-plan-row">
                                   <div className="input-container">
                                     <input
                                       type="text"
                                       value={plan.offerRequest}
-                                      placeholder="Offres ou demandes"
+                                      placeholder={t('offersOrRequests')}
                                       onChange={(e) => handleActionPlanChange(key, index, 'offerRequest', e.target.value)}
                                       disabled={isSubmitted || plan.isSaved || !enabled}
                                       required={requiresActionPlan}
@@ -250,7 +252,7 @@ function Questions({
                                       disabled={isSubmitted || plan.isSaved || !enabled}
                                       required={requiresActionPlan}
                                     >
-                                      <option value="">Année</option>
+                                      <option value="">{t('year')}</option>
                                       {getAvailableYears().map((y) => (
                                         <option key={y} value={y}>
                                           {y}
@@ -263,10 +265,10 @@ function Questions({
                                       disabled={isSubmitted || plan.isSaved || !enabled}
                                       required={requiresActionPlan}
                                     >
-                                      <option value="">Mois</option>
+                                      <option value="">{t('month')}</option>
                                       {getAvailableMonths(parseInt(plan.year, 10)).map((m, mIndex) => (
                                         <option key={mIndex} value={m}>
-                                          {m}
+                                          {t(`months.${m}`) || m}
                                         </option>
                                       ))}
                                     </select>
@@ -276,7 +278,7 @@ function Questions({
                                     <input
                                       type="number"
                                       value={plan.budget}
-                                      placeholder="Budget"
+                                      placeholder={t('budget')}
                                       onChange={(e) => handleActionPlanChange(key, index, 'budget', e.target.value)}
                                       disabled={isSubmitted || plan.isSaved || !enabled}
                                       required={requiresActionPlan}
@@ -287,7 +289,7 @@ function Questions({
                                       disabled={isSubmitted || plan.isSaved || !enabled}
                                       required={requiresActionPlan}
                                     >
-                                      <option value="">Sélectionnez la devise</option>
+                                      <option value="">{t('selectCurrency')}</option>
                                       {currencyOptions.map((currency) => (
                                         <option key={currency.value} value={currency.value}>
                                           {currency.label}
@@ -300,7 +302,7 @@ function Questions({
                                     <input
                                       type="text"
                                       value={plan.responsible}
-                                      placeholder="Responsable"
+                                      placeholder={t('responsible')}
                                       onChange={(e) => handleActionPlanChange(key, index, 'responsible', e.target.value)}
                                       disabled={isSubmitted || plan.isSaved || !enabled}
                                       required={requiresActionPlan}
@@ -315,7 +317,7 @@ function Questions({
                                       onClick={() => handleSaveActionPlan(key, index)}
                                       disabled={!enabled}
                                     >
-                                      Sauvegarder
+                                      {t('saveAction')}
                                     </button>
                                   )}
 
@@ -327,7 +329,7 @@ function Questions({
                                       onClick={() => handleEditActionPlan(key, index)}
                                       disabled={!enabled}
                                     >
-                                      Modifier
+                                      {t('edit')}
                                     </button>
                                   )}
 
@@ -351,14 +353,14 @@ function Questions({
                                   className="add-row-button"
                                   disabled={!enabled} // Removed the locking based on the score
                                 >
-                                  Ajouter
+                                  {t('add')}
                                 </button>
                               )}
 
                               {/* Action Plan Prompt Message */}
                               {requiresActionPlan && sliderTouched && !hasActionPlan && (
                                 <p className="action-plan-message">
-                                  La réponse est trop faible. Veuillez ajouter au moins une action recommandée pour passer à la question suivante.
+                                  {t('actionPlanMessage')}
                                 </p>
                               )}
                             </div>
@@ -425,14 +427,14 @@ function Questions({
                           className="add-comment-button"
                           disabled={!enabled || isSubmitted}
                         >
-                          Comments
+                          {t('comments')}
                         </button>
                       )}
                       {showCommentBox[key] && (
                         <textarea
                           value={questionComments[key] || ''}
                           onChange={(e) => handleQuestionCommentChange(key, e.target.value)}
-                          placeholder="Entrez votre commentaire ici"
+                          placeholder={t('commentPlaceholder')}
                           className="comment-textarea"
                           disabled={isSubmitted || !enabled}
                         />
@@ -441,14 +443,14 @@ function Questions({
 
                     {/* Per-Question Action Plan Section */}
                     <div className="per-question-action-plan-container">
-                      <h5>Action recommandée</h5>
+                      <h5>{t('recommendedAction')}</h5>
                       {actionPlansPerQuestion[key]?.map((plan, index) => (
                         <div key={index} className="action-plan-row">
                           <div className="input-container">
                             <input
                               type="text"
                               value={plan.offerRequest}
-                              placeholder="Offres ou demandes"
+                              placeholder={t('offersOrRequests')}
                               onChange={(e) => handleActionPlanChange(key, index, 'offerRequest', e.target.value)}
                               disabled={isSubmitted || plan.isSaved || !enabled}
                               required={requiresActionPlan}
@@ -462,7 +464,7 @@ function Questions({
                               disabled={isSubmitted || plan.isSaved || !enabled}
                               required={requiresActionPlan}
                             >
-                              <option value="">Année</option>
+                              <option value="">{t('year')}</option>
                               {getAvailableYears().map((y) => (
                                 <option key={y} value={y}>
                                   {y}
@@ -475,10 +477,10 @@ function Questions({
                               disabled={isSubmitted || plan.isSaved || !enabled}
                               required={requiresActionPlan}
                             >
-                              <option value="">Mois</option>
+                              <option value="">{t('month')}</option>
                               {getAvailableMonths(parseInt(plan.year, 10)).map((m, mIndex) => (
                                 <option key={mIndex} value={m}>
-                                  {m}
+                                  {t(`months.${m}`) || m}
                                 </option>
                               ))}
                             </select>
@@ -488,7 +490,7 @@ function Questions({
                             <input
                               type="number"
                               value={plan.budget}
-                              placeholder="Budget"
+                              placeholder={t('budget') || 'Budget'}
                               onChange={(e) => handleActionPlanChange(key, index, 'budget', e.target.value)}
                               disabled={isSubmitted || plan.isSaved || !enabled}
                               required={requiresActionPlan}
@@ -499,7 +501,7 @@ function Questions({
                               disabled={isSubmitted || plan.isSaved || !enabled}
                               required={requiresActionPlan}
                             >
-                              <option value="">Sélectionnez la devise</option>
+                              <option value="">{t('selectCurrency')}</option>
                               {currencyOptions.map((currency) => (
                                 <option key={currency.value} value={currency.value}>
                                   {currency.label}
@@ -512,7 +514,7 @@ function Questions({
                             <input
                               type="text"
                               value={plan.responsible}
-                              placeholder="Responsable"
+                              placeholder={t('responsible')}
                               onChange={(e) => handleActionPlanChange(key, index, 'responsible', e.target.value)}
                               disabled={isSubmitted || plan.isSaved || !enabled}
                               required={requiresActionPlan}
@@ -527,7 +529,7 @@ function Questions({
                               onClick={() => handleSaveActionPlan(key, index)}
                               disabled={!enabled}
                             >
-                              Sauvegarder
+                              {t('saveAction')}
                             </button>
                           )}
 
@@ -539,7 +541,7 @@ function Questions({
                               onClick={() => handleEditActionPlan(key, index)}
                               disabled={!enabled}
                             >
-                              Modifier
+                              {t('edit')}
                             </button>
                           )}
 
@@ -563,14 +565,14 @@ function Questions({
                           className="add-row-button"
                           disabled={!enabled} // Removed locking based on the score
                         >
-                          Ajouter
+                          {t('add')}
                         </button>
                       )}
 
                       {/* Action Plan Prompt Message */}
                       {requiresActionPlan && sliderTouched && !hasActionPlan && (
                         <p className="action-plan-message">
-                          La réponse est trop faible. Veuillez ajouter au moins une action recommandée pour passer à la question suivante.
+                          {t('actionPlanMessage')}
                         </p>
                       )}
                     </div>

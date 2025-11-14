@@ -104,5 +104,12 @@
   "Archive": "Archive",
   "SortAsc": "Sort Ascending",
   "SortDesc": "Sort Descending",
-  "Search results": "Search results"
+  "Search results": "Search results",
+  "SelectModule": "Select C-GOVSAN Module",
+  "SelectModuleDescription": "Choose the module you want to use to continue.",
+  "Module1": "Module 1",
+  "Module1Title": "Analysis tool for capacity to prevent and manage food and nutrition crises",
+  "Module2": "Module 2",
+  "Module2Title": "Monitoring the performance of the response to food crises",
+  "Logout": "Logout"
 }

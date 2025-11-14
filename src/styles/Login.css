@@ -79,3 +79,31 @@
     font-size: 14px;
     margin-top: 10px;
   }
+  
+  .homepage-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 14px;
+    background-color: transparent;
+    color: #243d54;
+    border: 1px solid #243d54;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+  }
+  
+  .homepage-button:hover:not(:disabled) {
+    background-color: #243d54;
+    color: #ffffff;
+  }
+  
+  .homepage-button:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(36, 61, 84, 0.5);
+  }
+  
+  .homepage-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }

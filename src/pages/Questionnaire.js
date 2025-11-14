@@ -2,11 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslationHook } from '../i18n';
 import { apiClient } from '../apiClient';
 import ActionPlans from '../components/ActionPlans'; // Import the ActionPlans component
 import Questions from '../components/Questions'; // Import the Questions component
 import QuestionComments from '../components/QuestionComments'; // Import the QuestionComments component
-import data from '../data/questionnaireData.json'; // Adjust the path to your JSON file
+import dataFr from '../data/questionnaireData.json'; // French version
+import dataEn from '../data/questionnaireData.en.json'; // English version
 import { sectionMapping } from '../mappings'; // Import sectionMapping
 import '../styles/Questionnaire.css';
 
@@ -39,6 +41,21 @@ function Questionnaire({ onSubmit, role, country, setIsLoggedIn, setRole, setCou
 
     const { section } = useParams(); // Get the section from the URL
     const navigate = useNavigate();
+    const { t, currentLanguage, changeLanguage } = useTranslationHook("questionnaire");
+    const [selectedLanguage, setSelectedLanguage] = useState(currentLanguage);
+    
+    // Load the appropriate questionnaire data based on language
+    const data = currentLanguage === 'en' ? dataEn : dataFr;
+    
+    useEffect(() => {
+        setSelectedLanguage(currentLanguage);
+    }, [currentLanguage]);
+
+    const handleLanguageChange = (lang) => {
+        changeLanguage(lang);
+        setSelectedLanguage(lang);
+    };
+    
     const [responses, setResponses] = useState({});
     const [comments, setComments] = useState('');
     const [questionComments, setQuestionComments] = useState({}); // State to hold comments for each question
@@ -176,7 +193,7 @@ function Questionnaire({ onSubmit, role, country, setIsLoggedIn, setRole, setCou
                 !planToSave.currency ||
                 !planToSave.responsible
             ) {
-                alert('Veuillez remplir tous les champs avant de sauvegarder le plan d\'action.');
+                alert(t('fillAllFields') || 'Please fill all fields before saving the action plan.');
                 return prev;
             }
 
@@ -346,7 +363,7 @@ function Questionnaire({ onSubmit, role, country, setIsLoggedIn, setRole, setCou
                         } else {
                             console.log('No existing submission found, prompting to start a new one.');
                             const userWantsNew = window.confirm(
-                                `Aucune réponse existante n'a été trouvée pour ${year} ${month}. Voulez-vous commencer un nouveau questionnaire ?`
+                                `${t('noExistingData')} ${year} ${t(`months.${month}`) || month}. ${t('startNewQuestionnaire')}`
                             );
                             if (userWantsNew) {
                                 setIsQuestionnaireVisible(true); // Show a fresh questionnaire
@@ -497,17 +514,17 @@ function Questionnaire({ onSubmit, role, country, setIsLoggedIn, setRole, setCou
             const endpoint = role === 'master' ? '/submit-master' : '/submit';
             await apiClient.post(endpoint, saveData);
 
-            alert('Vos réponses ont été sauvegardées.');
+            alert(t('saveSuccess'));
         } catch (error) {
             if (error.response) {
                 console.error('Error saving questionnaire:', error.response.data);
-                alert(`Erreur lors de la sauvegarde: ${error.response.data}`);
+                alert(`${t('saveError')} ${error.response.data}`);
             } else if (error.request) {
                 console.error('No response received:', error.request);
-                alert('Aucune réponse du serveur. Veuillez réessayer plus tard.');
+                alert(t('noServerResponse'));
             } else {
                 console.error('Error setting up request:', error.message);
-                alert(`Erreur: ${error.message}`);
+                alert(`${t('error')} ${error.message}`);
             }
         }
     };
@@ -517,29 +534,27 @@ function Questionnaire({ onSubmit, role, country, setIsLoggedIn, setRole, setCou
 
         // Basic Validation
         if (!year || !month) {
-            alert('Veuillez sélectionner l\'année et le mois avant de soumettre.');
+            alert(t('selectYearMonth'));
             return;
         }
 
         // Example: Validate performanceScore, financingNeed, and financingMobilized if role is master
         if (role === 'master') {
             if (!performanceScore || isNaN(parseFloat(performanceScore))) {
-                alert('Veuillez fournir un score de performance valide.');
+                alert(t('validPerformanceScore'));
                 return;
             }
             if (!financingNeed || isNaN(parseFloat(financingNeed))) {
-                alert('Veuillez fournir un besoin de financement valide.');
+                alert(t('validFinancingNeed'));
                 return;
             }
             if (!financingMobilized || isNaN(parseFloat(financingMobilized))) {
-                alert('Veuillez fournir un financement mobilisé valide.');
+                alert(t('validFinancingMobilized'));
                 return;
             }
         }
 
-        const confirmSubmit = window.confirm(
-            'Êtes-vous sûr de vouloir soumettre vos réponses ? Cette action est irréversible.'
-        );
+        const confirmSubmit = window.confirm(t('submitConfirm'));
 
         if (!confirmSubmit) return;
 
@@ -579,21 +594,21 @@ function Questionnaire({ onSubmit, role, country, setIsLoggedIn, setRole, setCou
                 onSubmit(submissionData);
             }
 
-            alert('Questionnaire soumis avec succès!');
+            alert(t('submitSuccess'));
             navigate('/dashboard');
         } catch (error) {
             if (error.response) {
                 // Server responded with a status other than 2xx
                 console.error('Error submitting questionnaire:', error.response.data);
-                alert(`Erreur lors de la soumission: ${error.response.data}`);
+                alert(`${t('submitError')} ${error.response.data}`);
             } else if (error.request) {
                 // No response received from server
                 console.error('No response received:', error.request);
-                alert('Aucune réponse du serveur. Veuillez réessayer plus tard.');
+                alert(t('noServerResponse'));
             } else {
                 // Error setting up the request
                 console.error('Error setting up request:', error.message);
-                alert(`Erreur: ${error.message}`);
+                alert(`${t('error')} ${error.message}`);
             }
         }
     };
@@ -703,6 +718,38 @@ function Questionnaire({ onSubmit, role, country, setIsLoggedIn, setRole, setCou
 
     return (
         <div className="questionnaire-container">
+            <div className="questionnaire-actions">
+                <div className="language-switch">
+                    <ul className="nav nav-lang justify-content-end mb-0">
+                        <li className="nav-item">
+                            <button
+                                className={`nav-link ${selectedLanguage === 'fr' ? 'selected' : ''}`}
+                                onClick={() => handleLanguageChange("fr")}
+                            >
+                                FR
+                            </button>
+                        </li>
+                        <li className="nav-item">|</li>
+                        <li className="nav-item">
+                            <button
+                                className={`nav-link ${selectedLanguage === 'en' ? 'selected' : ''}`}
+                                onClick={() => handleLanguageChange("en")}
+                            >
+                                EN
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                <button type="button" onClick={handleLogout} className="logout-button">
+                    {t('logout')}
+                </button>
+                {role === 'master' && (
+                    <button type="button" onClick={handleSkipToDashboard} className="skip-dashboard-button">
+                        {t('accessDashboard')}
+                    </button>
+                )}
+            </div>
+
             <div className="questionnaire-header">
                 <div className="flag-container">
                     <img
@@ -713,27 +760,19 @@ function Questionnaire({ onSubmit, role, country, setIsLoggedIn, setRole, setCou
                 </div>
                 <div className="title-container">
                     <h3 className="questionnaire-title">
-                        Champs d'analyse {role === 'master' ? ' - Master' : `- ${data[sectionIndex]?.title || ''}`}
+                        {role === 'master' ? t('titleMaster') : `${t('title')} - ${data[sectionIndex]?.title || ''}`}
                     </h3>
                     <h4 className="questionnaire-title">{country}</h4>
                 </div>
                 <div className="logo-container">
-                    <button type="button" onClick={handleLogout} className="logout-button">
-                        Logout
-                    </button>
-                    {role === 'master' && (
-                        <button type="button" onClick={handleSkipToDashboard} className="skip-dashboard-button">
-                            Accéder au Dashboard
-                        </button>
-                    )}
                     <img src="/logo128.png" alt="RPCA Logo" className="institution-logo" />
                 </div>
             </div>
 
             <div className="time-selector-container">
-                <label>Sélectionnez l'année :</label>
+                <label>{t('selectYear')}</label>
                 <select value={year} onChange={(e) => setYear(e.target.value)}>
-                    <option value="">Année</option>
+                    <option value="">{t('year')}</option>
                     {[2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030].map((y) => (
                         <option key={y} value={y}>
                             {y}
@@ -741,9 +780,9 @@ function Questionnaire({ onSubmit, role, country, setIsLoggedIn, setRole, setCou
                     ))}
                 </select>
 
-                <label>Sélectionnez le mois :</label>
+                <label>{t('selectMonth')}</label>
                 <select value={month} onChange={(e) => setMonth(e.target.value)}>
-                    <option value="">Mois</option>
+                    <option value="">{t('month')}</option>
                     {[
                         'January',
                         'February',
@@ -759,7 +798,7 @@ function Questionnaire({ onSubmit, role, country, setIsLoggedIn, setRole, setCou
                         'December',
                     ].map((m, index) => (
                         <option key={index} value={m}>
-                            {m}
+                            {t(`months.${m}`) || m}
                         </option>
                     ))}
                 </select>
@@ -770,15 +809,15 @@ function Questionnaire({ onSubmit, role, country, setIsLoggedIn, setRole, setCou
                 <div className="message-container">
                     {isComplete ? (
                         <div className="completion-message-container">
-                            <p>Le questionnaire est complet. Ci-dessous sont les réponses de toutes les sections.</p>
+                            <p>{t('completeMessage')}</p>
                         </div>
                     ) : (
                         <div className="incompletion-message-container">
-                            <p>Ce questionnaire est incomplet.</p>
+                            <p>{t('incompleteMessage')}</p>
                             {missingSections.length > 0 && (
                                 <ul>
                                     {missingSections.map((section, idx) => (
-                                        <li key={idx}>{section} est manquant ou non soumis.</li>
+                                        <li key={idx}>{section} {t('missingSection')}</li>
                                     ))}
                                 </ul>
                             )}
@@ -791,12 +830,12 @@ function Questionnaire({ onSubmit, role, country, setIsLoggedIn, setRole, setCou
             {isSubmitted && role !== 'master' ? (
                 <div>
                     <div className="submitted-message-container">
-                        <p>Ce questionnaire a déjà été soumis et ne peut pas être modifié.</p>
+                        <p>{t('submittedMessage')}</p>
                     </div>
 
                     <div className="dashboard-skip-container">
                         <button type="button" onClick={handleSkipToDashboard} className="dashboard-skip-button">
-                            Accéder au Dashboard
+                            {t('accessDashboard')}
                         </button>
                     </div>
                 </div>
@@ -849,10 +888,10 @@ function Questionnaire({ onSubmit, role, country, setIsLoggedIn, setRole, setCou
                         {!isSubmitted && (
                             <div className="button-container">
                                 <button type="button" onClick={handleSave} className="submit-button">
-                                    Sauvegarder
+                                    {t('save')}
                                 </button>
                                 <button type="button" onClick={handleSubmit} className="submit-button">
-                                    Soumettre
+                                    {t('submit')}
                                 </button>
                             </div>
                         )}

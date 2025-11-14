@@ -73,6 +73,14 @@ function Login({ onLogin }) {
           </button>
         </form>
         {errorMessage && <p className="error-message">{errorMessage}</p>}
+        <button 
+          type="button" 
+          className="homepage-button"
+          onClick={() => navigate('/')}
+          disabled={loading}
+        >
+          Return to Homepage
+        </button>
       </div>
     </div>
   );

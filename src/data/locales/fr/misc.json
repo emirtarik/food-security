@@ -104,5 +104,12 @@
   "Archive": "Archives",
   "SortAscending": "Trier par ordre croissant",
   "SortDescending": "Trier par ordre décroissant",
-  "Search results": "Résultats de la recherche"
+  "Search results": "Résultats de la recherche",
+  "SelectModule": "Sélectionnez le module C-GOVSAN",
+  "SelectModuleDescription": "Choisissez le module que vous souhaitez utiliser pour continuer.",
+  "Module1": "Module 1",
+  "Module1Title": "Instrument d'analyse de la capacité de prévention et de gestion des crises alimentaires et nutritionnelles",
+  "Module2": "Module 2",
+  "Module2Title": "Suivi de la performance de la réponse aux crises alimentaires",
+  "Logout": "Déconnexion"
 }

@@ -1,0 +1,850 @@
+[
+    {
+      "title": "1: Information and analysis on the food and nutrition situation and response instruments",
+      "subsections": [
+        {
+          "title": "1.1 Information and analysis on food and nutrition security",
+          "questions": [
+            { 
+              "index": "111",
+              "text": "Is the early warning system (EWS) for food and nutrition security (FNS) in place and does it produce a satisfactory Cadre Harmonisé (CH) analysis?",
+              "tooltip": "Examines whether the early warning system for food and nutrition security (EWS FNS) is operational and whether the analyses produced, such as the Cadre Harmonisé (CH), are sufficiently complete and accurate to identify food risks and guide response actions.",
+              "description": {
+                "level1": "The EWS does not exist, or exists but does not produce a CH analysis = 1",
+                "level2": "The EWS exists but the CH functions are not satisfactorily implemented during analysis sessions (CH analysis session evaluation score < 50%) = 2",
+                "level3": "The EWS generates a CH analysis of acceptable quality to feed the CH (CH analysis session score between [50% and 60%[) = 3",
+                "level4": "The EWS produces a CH analysis of satisfactory quality to feed the CH (CH analysis session score between [60% and 80%[) = 4",
+                "level5": "The EWS generates a CH analysis of very satisfactory quality to feed the CH (CH analysis session score greater than or equal to 80) = 5"
+              }
+            },
+            {
+              "index": "112",
+              "text": "Is FNS information disaggregated according to the various manifestations of food insecurity (transient, cyclical or chronic)?",
+              "tooltip": "Analyzes whether the FNS data produced are detailed and differentiated according to the types of food insecurity: transient (temporary), cyclical (recurrent) or chronic.",
+              "description": {
+                "level1": "No disaggregation of information is carried out according to the different manifestations of food insecurity, no methodology = 1",
+                "level2": "Methodologies are under development in some sectors without consultation = 2",
+                "level3": "Methods for characterizing and counting different types of food insecurity exist but they are not consensual = 3",
+                "level4": "A consensual methodology exists and FNS information is partially disaggregated = 4",
+                "level5": "Information is fully disaggregated according to the various manifestations of food insecurity (transient, cyclical, chronic) = 5"
+              }
+            },
+            {
+              "index": "113",
+              "text": "Does FNS information provide the preponderance of causes of food insecurity according to the area analyzed?",
+              "tooltip": "Examines whether FNS data identify and specify the main causes of food insecurity in each area analyzed.",
+              "description": {
+                "level1": "No cause of food insecurity is identified by area = 1",
+                "level2": "The causes of food insecurity are addressed in a global and non-hierarchical manner = 2",
+                "level3": "The causes of food insecurity are identified but not hierarchized and not disaggregated by analyzed area = 3",
+                "level4": "The causes of food insecurity are identified, hierarchized and disaggregated by analyzed area or irregularly = 4",
+                "level5": "The causes of food insecurity are identified, hierarchized and disaggregated by analyzed area for each CH analysis cycle = 5"
+              }
+            },
+            {
+              "index": "114",
+              "text": "Is the frequency of information production aligned with the various types of shocks and corresponding response requirements?",
+              "tooltip": "Evaluates whether information on FNS is produced frequently enough (frequency) to effectively respond to different types of crises (depending on their probability of occurrence) and their specific needs.",
+              "description": {
+                "level1": "No, data are provided according to a predefined schedule that does not take into consideration the different types of shocks and response requirements = 1",
+                "level2": "The information generated takes into consideration the majority of shocks; however, the frequency is not adapted to certain response imperatives = 2",
+                "level3": "The information produced takes into account all shocks but the frequency is not adapted to certain shocks and to the chronicity of food insecurity = 3",
+                "level4": "The information produced takes into account all shocks and the frequency is adapted to most shocks and to the frequency of food crises = 4",
+                "level5": "The information produced takes into account all shocks and the frequency is adapted to all shocks and to the frequency of food crises = 5"
+              }
+            },
+            {
+              "index": "115",
+              "text": "Does the government make a significant contribution to information production in the early warning system?",
+              "tooltip": "Evaluates whether the government plays an important role in supporting the collection and production of information within the early warning system framework.",
+              "description": {
+                "level1": "No, the government does not produce information; partners have provided all available information = 1",
+                "level2": "The Government leads the early warning system but documents less than 30% of CH indicators = 2",
+                "level3": "The Government leads the early warning system and documents between 30% and 50% of CH indicators = 3",
+                "level4": "The Government leads the early warning system and documents between 50% and 80% of CH indicators = 4",
+                "level5": "The Government leads the early warning system and documents more than 80% of CH indicators = 5"
+              }
+            },
+            {
+              "index": "116",
+              "text": "Does the early warning system on food and nutrition security bring together a diversity of actors representative of the FNS field?",
+              "tooltip": "Examines whether the early warning system includes a variety of actors (government, NGOs, regional and international organizations, experts, local communities, etc.)",
+              "description": {
+                "level1": "No, only the government and a few technical and financial partners are represented = 1",
+                "level2": "The government and all technical and financial partners are represented = 2",
+                "level3": "In addition to technical and financial partners, part of civil society is represented with limited contribution = 3",
+                "level4": "All actors are represented in the early warning system but their contribution to information production is irregular = 4",
+                "level5": "All actors are represented in the early warning system and contribute fully to information production = 5"
+              }
+            }
+          ]
+        },
+        {
+          "title": "1.2 Information and analysis for developing the FNS response",
+          "questions": [
+            {
+              "index": "121",
+              "text": "Does the FNS early warning system generate information on the evolution of livelihoods and household vulnerability?",
+              "tooltip": "Evaluates whether the FNS early warning system generates data on the evolution of household living conditions, particularly their sources of income and their vulnerability to crises or external shocks.",
+              "description": {
+                "level1": "No, no consensual indicators on the evolution of livelihoods and household vulnerability = 1",
+                "level2": "Yes, consensual indicators exist but only less than 30% are documented regularly = 2",
+                "level3": "Yes, 30% to 50% of consensual indicators are documented regularly = 3",
+                "level4": "Yes, 50% to 80% of consensual indicators are documented regularly = 4",
+                "level5": "Yes, more than 80% of consensual indicators are documented regularly = 5"
+              }
+            },
+            {
+              "index": "122",
+              "text": "Do the documented indicators on the evolution of livelihoods and household vulnerability contribute to developing the FNS response?",
+              "tooltip" : "Evaluates whether indicators on the evolution of livelihoods and household vulnerability play a key role in developing and adapting the response to prevent and manage food and nutrition crises.",
+              "description": {
+                "level1": "No, the documented indicators are not used to document response development = 1",
+                "level2": "Yes, less than 30% of indicators contribute to response documentation = 2",
+                "level3": "Yes, 30% to 50% of consensual indicators contribute to response development = 3",
+                "level4": "Yes, 50% to 80% of consensual indicators contribute to response development = 4",
+                "level5": "Yes, more than 80% of consensual indicators contribute to response development = 5"
+              }
+            },
+            {
+              "index": "123",
+              "text": "Are analyses conducted to identify and use economic opportunities to support poor and vulnerable people?",
+              "tooltip" : "Examines whether analyses are conducted to identify economic opportunities that can be exploited to support poor and vulnerable people, and whether these opportunities are integrated into intervention strategies to prevent and respond to food crises.",
+              "description": {
+                "level1": "No analysis is currently being conducted to identify or exploit income generation opportunities in the FNS response = 1",
+                "level2": "There is no consensual methodology and analyses are limited to less than 30% of areas in food and nutrition crisis = 2",
+                "level3": "A consensual methodology is defined and used but analyses cover between 30% and 50% of areas in food and nutrition crisis = 3",
+                "level4": "Analyses are conducted based on a consensual methodology and cover between 50% and 80% of areas in food and nutrition crisis = 4",
+                "level5": "Analyses are conducted based on a consensual methodology and cover more than 80% of areas in food and nutrition crisis = 5"
+              }
+            },
+            {
+              "index": "124",
+              "text": "Are market analyses conducted to identify and implement support solutions for poor and vulnerable people?",
+              "tooltip" : "Evaluates whether market analyses are conducted in advance to identify appropriate economic solutions to support poor and vulnerable people, and whether these solutions are then implemented in assistance strategies.",
+              "description": {
+                "level1": "No market analysis is currently being conducted to identify or exploit support solutions for the FNS response = 1",
+                "level2": "Analyses are limited to observations and produce few support solutions, weakly reflected in the FNS response = 2",
+                "level3": "Market analyses conducted provide short-term solutions that are weakly integrated into the FNS response = 3",
+                "level4": "Market analyses propose short and long-term solutions; however, only emergency measures are integrated into programming = 4",
+                "level5": "Short and long-term solutions generated by market analyses are taken into account in FNS prevention and response = 5"
+              }
+            },
+            {
+              "index": "125",
+              "text": "Is a consensual methodology used to develop FNS response packages specific to each situation?",
+              "tooltip" : "Evaluates whether a consensual methodology or criteria are used to design FNS response packages adapted to each specific situation, taking into account local needs and contexts (type of food insecurity, type of shocks, type of beneficiaries).",
+              "description": {
+                "level1": "No, there is no consensual methodology for developing response packages = 1",
+                "level2": "Criteria are shared but do not achieve consensus or are not applied in developing FNS response packages = 2",
+                "level3": "Several non-consensual methodologies coexist; however, resource availability guides response package development = 3",
+                "level4": "A consensual methodology exists and partially guides FNS response design = 4",
+                "level5": "A consensual methodology exists and guides the design of the entire response = 5"
+              }
+            },
+            {
+              "index": "126",
+              "text": "Does the early warning system have alert indicators and immediate trigger thresholds for the FNS response?",
+              "tooltip" : "Evaluates whether the early warning system has specific indicators and predefined thresholds that, when reached, automatically trigger an immediate response to address an emergency situation.",
+              "description": {
+                "level1": "No, there are no early warning indicators and automatic response trigger thresholds = 1",
+                "level2": "Early warning indicators exist but there are no automatic response trigger thresholds = 2",
+                "level3": "Early warning indicators and response trigger thresholds exist but are not always documented = 3",
+                "level4": "Early warning indicators and response trigger thresholds are documented but not for all types of shocks = 4",
+                "level5": "Early warning indicators and response trigger thresholds are documented for all types of shocks = 5"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "2: Program, response plan and other FNS-related interventions: coverage and adaptability to shocks",
+      "subsections": [
+        {
+          "title": "2.1 Coverage and adaptability of the National Response Plan to food insecurity",
+          "questions": [
+            {
+              "index": "211",
+              "text": "What proportion of individuals in food insecurity is covered by the national response plan?",
+              "tooltip" : "Evaluates the proportion of individuals in food insecurity who benefit from support from the national response plan.",
+              "description": {
+                "level1": "The national response plan is not developed or is developed but not implemented = 1",
+                "level2": "Implementation of the national response plan covers less than 30% of individuals in food and nutrition insecurity = 2",
+                "level3": "Implementation of the national response plan covers between 30% and 50% of individuals in food and nutrition insecurity = 3",
+                "level4": "The national response plan covers between 50% and 80% of individuals in food and nutrition insecurity = 4",
+                "level5": "More than 80% of people in food insecurity are supported by the national response plan = 5"
+              }
+            },
+            {
+              "index": "212",
+              "text": "Are support measures to improve market functioning and the purchasing power of poor and vulnerable people applied?",
+              "tooltip" : "Evaluates whether specific actions are implemented to improve market functioning (facilitate physical and economic access, prices, infrastructure availability) and increase the purchasing power of poor and vulnerable people, to help them more easily access essential goods and services.",
+              "description": {
+                "level1": "Market analyses have not provided solutions to support market functioning and the purchasing power of poor and vulnerable populations = 1",
+                "level2": "Market analyses have generated support solutions but they are weakly executed = 2",
+                "level3": "Among the solutions proposed by market analyses, only short-term measures are partially implemented = 3",
+                "level4": "Support solutions for the market and the purchasing power of poor and vulnerable people, both short and long-term, are partially applied = 4",
+                "level5": "Support solutions for the market and the purchasing power of poor and vulnerable people, both short and long-term, are fully applied = 5"
+              }
+            },
+            {
+              "index": "213",
+              "text": "Does the National Response Plan (NRP) provide for measures in favor of sustainable economic inclusion?",
+              "tooltip" : "Evaluates whether the National Response Plan (NRP) provides for specific measures to promote sustainable economic inclusion for vulnerable populations, in order to strengthen their long-term economic autonomy.",
+              "description": {
+                "level1": "No specific provision is envisaged to promote sustainable economic inclusion in the NRP = 1",
+                "level2": "Efforts are being made, but measures to promote economic inclusion are limited and require operationalization = 2",
+                "level3": "Initiatives are being implemented within the NRP framework, but the scope is limited = 3",
+                "level4": "Actions are being taken, with attention given to economic inclusion, but weakly connected to structural actions = 4",
+                "level5": "The National Response Plan promotes sustainable economic inclusion in the NRP and in relation to structural actions = 5"
+              }
+            },
+            {
+              "index": "214",
+              "text": "Does the National Response Plan provide for protection/reconciliation/peace measures in insecure areas?",
+              "tooltip" : "Evaluates whether the National Response Plan (NRP) includes measures to protect populations, prevent conflicts and promote reconciliation or restore peace in areas facing insecurity, taking into account the specific needs of these regions to ensure stability and well-being of affected communities.",
+              "description": {
+                "level1": "No specific provision is envisaged to promote protection, reconciliation, or peace in the national FNS program and the NRP = 1",
+                "level2": "Efforts are being made, but measures to promote protection, reconciliation, or peace cover less than 30% of insecure areas = 2",
+                "level3": "Protection, reconciliation, or peace initiatives are implemented in 30% to 50% of insecure areas = 3",
+                "level4": "Actions are undertaken in 50% to 80% of insecure areas = 4",
+                "level5": "The National Response Plan promotes protection, reconciliation, or peace in more than 80% of insecure areas = 5"
+              }
+            }
+          ]
+        },
+        {
+          "title": "2.2. Coverage and adaptability of the response to the nutrition crisis",
+          "questions": [
+            {
+              "index": "221",
+              "text": "Are nutrition crises anticipated by specific nutrition interventions?",
+              "tooltip" : "Evaluates whether specific nutrition interventions, such as the distribution of food supplements, the implementation of therapeutic nutrition programs, the promotion of breastfeeding, or awareness campaigns on nutrition, are planned to anticipate and prevent nutrition crises, in order to protect vulnerable populations before the situation becomes critical.",
+              "description": {
+                "level1": "Interventions to prevent malnutrition (in the NRP, other interventions) are not prepared, or are developed but not implemented = 1",
+                "level2": "Interventions to prevent malnutrition exist but they cover less than 30% of crisis areas = 2",
+                "level3": "Implementation of nutrition interventions has reached between 30% and 50% of crisis areas = 3",
+                "level4": "Specific nutrition interventions support between 50% and 80% of individuals in nutrition crisis = 4",
+                "level5": "More than 80% of people in food insecurity are supported by the national response plan = 5"
+              }
+            },
+            {
+              "index": "222",
+              "text": "What proportion of individuals in nutrition crisis is covered by the national response plan or specific nutrition interventions?",
+              "tooltip" : "Evaluates the proportion of individuals in nutrition crisis who benefit from assistance provided by the National Response Plan or by specific nutrition interventions, such as acute malnutrition treatment programs or food supplement distribution.",
+              "description": {
+                "level1": "The national response plan and/or specific nutrition interventions are not developed or are developed but not implemented = 1",
+                "level2": "Implementation of the national response plan and/or nutrition interventions covers less than 30% of individuals in nutrition crisis = 2",
+                "level3": "Implementation of the national response plan and/or specific nutrition interventions has reached between 30% and 50% of individuals in nutrition crisis = 3",
+                "level4": "The national response plan and/or specific nutrition interventions support between 50% and 80% of individuals in nutrition crisis = 4",
+                "level5": "More than 80% of people in food insecurity are supported by the national response plan = 5"
+              }
+            },
+            {
+              "index": "223",
+              "text": "Do nutrition programs promote joint targeting tools for poor and vulnerable people?",
+              "tooltip" : "Evaluates whether nutrition programs use common targeting tools, such as the Unified Registry (UR), joint surveys on poverty and vulnerability, or harmonized selection criteria between different actors (government, NGOs), to accurately and coordinatedly identify the poorest and most vulnerable populations requiring nutrition assistance.",
+              "description": {
+                "level1": "Nutrition programs have established an intra-sectoral targeting mechanism, used only by the nutrition sector = 1",
+                "level2": "Nutrition programs use a joint or synchronized targeting mechanism in less than 30% of areas in food and nutrition insecurity = 2",
+                "level3": "Nutrition programs use a joint or synchronized targeting mechanism in 30% - 50% of areas in food and nutrition insecurity = 3",
+                "level4": "Nutrition programs use a joint or synchronized targeting mechanism in 50% - 80% of areas in food and nutrition insecurity = 4",
+                "level5": "In more than 80% of areas in food and nutrition insecurity, nutrition programs use a joint or synchronized targeting mechanism = 5"
+              }
+            },
+            {
+              "index": "224",
+              "text": "Are prevention and response measures of nutrition programs implemented in a synchronized manner?",
+              "tooltip" : "Evaluates whether prevention measures (such as nutrition promotion, awareness, or food supplement distribution) and response measures of nutrition programs are implemented in a coordinated and synchronized manner, to ensure effective intervention and maximize impact on the health of vulnerable populations.",
+              "description": {
+                "level1": "Prevention and response measures of nutrition programs are implemented in a disjointed manner, without coordination with FNS = 1",
+                "level2": "Implementation of prevention and response measures is sporadic, with less than 30% of actions coordinated with FNS = 2",
+                "level3": "Approximately 30% to 50% of prevention and response measures of nutrition programs are synchronized with FNS = 3",
+                "level4": "Approximately 50% to 80% of prevention and response measures of nutrition programs are synchronized with FNS = 4",
+                "level5": "Synchronization of prevention and response measures of nutrition programs with FNS exceeds 80% of planned interventions = 5"
+              }
+            }
+          ]
+        },
+        {
+          "title": "2.3. Coverage and capacity for prevention and response of social protection programs",
+          "questions": [
+            {
+              "index": "231",
+              "text": "What proportion of individuals in food and nutrition insecurity is covered by social protection programs?",
+              "tooltip" : "Evaluates whether social protection programs include specific measures to respond to the needs of individuals in food and nutrition crisis, such as increasing transfer amounts, setting up new services or extending to new beneficiaries.",
+              "description": {
+                "level1": "Social protection programs are not developed or are developed but not implemented = 1",
+                "level2": "Implementation of social protection programs covers less than 30% of individuals in food and nutrition insecurity = 2",
+                "level3": "Implementation of social protection programs covers between 30% and 50% of individuals in food and nutrition insecurity = 3",
+                "level4": "Social protection programs cover between 50% and 80% of individuals in food and nutrition insecurity = 4",
+                "level5": "More than 80% of people in food insecurity are supported by social protection programs = 5"
+              }
+            },
+            {
+              "index": "232",
+              "text": "Do social protection programs provide for response measures in favor of individuals in food and nutrition crisis?",
+              "tooltip" : "Evaluates the proportion of people in food crisis covered by social protection programs.",
+              "description": {
+                "level1": "No specific provision is envisaged by social protection programs to specifically support individuals in food insecurity = 1",
+                "level2": "Programs integrate response actions but which do not exceed 30% of individuals in food and nutrition insecurity = 2",
+                "level3": "Programs integrate response actions that reach 30% - 50% of individuals in food and nutrition insecurity = 3",
+                "level4": "Programs integrate response actions that reach 50% - 80% of individuals in food and nutrition insecurity = 4",
+                "level5": "Programs integrate response actions that reach more than 80% of individuals in food and nutrition insecurity = 5"
+              }
+            },
+            {
+              "index": "233",
+              "text": "Do social protection programs provide for economic inclusion measures for individuals in food and nutrition crisis?",
+              "tooltip" : "Evaluates whether social protection programs integrate measures to promote the economic inclusion of individuals in food and nutrition crisis, such as employment opportunities, vocational training, entrepreneurship support, access to credit, etc.",
+              "description": {
+                "level1": "No specific provision is envisaged by social protection to specifically support individuals in food and nutrition insecurity = 1",
+                "level2": "Programs integrate economic inclusion measures but coverage does not exceed 30% of individuals in food and nutrition insecurity = 2",
+                "level3": "Programs integrate economic inclusion measures that reach 30% - 50% of individuals in food and nutrition insecurity = 3",
+                "level4": "Programs integrate economic inclusion measures that reach 50% - 80% of individuals in food and nutrition insecurity = 4",
+                "level5": "Programs integrate economic inclusion measures that reach more than 80% of individuals in food and nutrition insecurity = 5"
+              }
+            },
+            {
+              "index": "234",
+              "text": "Are support measures to improve market functioning and the purchasing power of poor and vulnerable people applied?",
+              "tooltip" : "Evaluates whether specific measures are implemented to improve market functioning (such as reducing trade barriers, supplying essential goods or price regulation) and increase the purchasing power of poor and vulnerable people, for example through subsidies, cash transfers or targeted assistance programs, to facilitate their access to essential resources during crisis periods.",
+              "description": {
+                "level1": "Market analyses have not provided solutions to support market functioning and the purchasing power of poor and vulnerable populations = 1",
+                "level2": "Market analyses have generated support solutions but they are weakly executed = 2",
+                "level3": "Among the solutions proposed by market analyses, only short-term measures are partially implemented = 3",
+                "level4": "Support solutions for the market and the purchasing power of poor and vulnerable people, both short and long-term, are partially realized = 4",
+                "level5": "Support solutions for the market and the purchasing power of poor and vulnerable people, both short and long-term, are fully realized = 5"
+              }
+            },
+            {
+              "index": "235",
+              "text": "Do social protection programs promote joint targeting tools for poor and vulnerable people?",
+              "tooltip" : "Evaluates whether social protection programs use common tools to effectively identify and target poor and vulnerable people, combining socio-economic, geographic and contextual criteria for targeted distribution of assistance.",
+              "description": {
+                "level1": "Social protection programs have established a registry but do not work for the adoption of a joint targeting system = 1",
+                "level2": "The social registry is open to all sectors but covers less than 30% of areas in food and nutrition insecurity = 2",
+                "level3": "The social registry is used in 30% - 50% of areas in food and nutrition insecurity = 3",
+                "level4": "The social registry is used in 50% - 80% of areas in food and nutrition insecurity = 4",
+                "level5": "In more than 80% of areas in food and nutrition insecurity, the social registry is used = 5"
+              }
+            },
+            {
+              "index": "236",
+              "text": "Are prevention and response measures of social protection programs implemented in a synchronized manner?",
+              "tooltip" : "Evaluates whether prevention and response measures of social protection programs are implemented in a coordinated and synchronized manner with other sectors (FNS, agriculture, livestock, nutrition, etc.) to ensure effective prevention and management of food and nutrition crises.",
+              "description": {
+                "level1": "Prevention and response measures of social protection programs are implemented in a disjointed manner, without coordination with FNS = 1",
+                "level2": "Implementation of prevention and response measures is sporadic, with less than 30% of actions coordinated with FNS = 2",
+                "level3": "Approximately 30% to 50% of prevention and response measures of social protection programs are synchronized with FNS = 3",
+                "level4": "Approximately 50% to 80% of prevention and response measures of social protection programs are synchronized with FNS = 4",
+                "level5": "Synchronization of prevention and response measures of social protection programs with FNS exceeds 80% of planned interventions = 5"
+              }
+            }
+          ]
+        },
+        {
+          "title": "2.4. Coverage and capacity for prevention and response of agricultural programs",
+          "questions": [
+            {
+              "index": "241",
+              "text": "Do agricultural programs provide for prevention and economic inclusion measures for individuals in food crisis?",
+              "tooltip" : "Examines whether agricultural programs integrate specific mechanisms to support people in food crisis, such as production assistance or transfers to guarantee food security.",
+              "description": {
+                "level1": "No specific provision is envisaged by agricultural programs to support individuals in food insecurity = 1",
+                "level2": "Programs integrate prevention measures but coverage does not exceed 30% of individuals in food insecurity = 2",
+                "level3": "Programs integrate prevention and economic inclusion measures that reach 30% - 50% of individuals in food insecurity = 3",
+                "level4": "Programs integrate prevention and economic inclusion measures that reach 50% - 80% of individuals in food insecurity = 4",
+                "level5": "Programs integrate prevention and economic inclusion measures that reach more than 80% of individuals in food insecurity = 5"
+              }
+            },
+            {
+              "index": "242",
+              "text": "Are support measures to improve market functioning and the purchasing power of poor and vulnerable people applied?",
+              "tooltip" : "Evaluates whether specific measures are implemented to improve market functioning, such as price regulation, improving supply of essential goods or reducing trade barriers, and to increase the purchasing power of poor and vulnerable people, for example through local purchases, cash transfers, targeted employment, targeted subsidies, etc.",
+              "description": {
+                "level1": "Market analyses have not provided solutions to support market functioning and the purchasing power of poor and vulnerable populations = 1",
+                "level2": "Market analyses have generated support solutions but they are weakly executed = 2",
+                "level3": "Among the solutions proposed by market analyses, only short-term measures are partially implemented = 3",
+                "level4": "Support solutions for the market and the purchasing power of poor and vulnerable people, both short and long-term, are partially realized = 4",
+                "level5": "Support solutions for the market and the purchasing power of poor and vulnerable people, both short and long-term, are fully realized = 5"
+              }
+            },
+            {
+              "index": "243",
+              "text": "Do agricultural programs provide for response measures in favor of individuals in food crisis?",
+              "tooltip" : "Checks whether agricultural programs include specific response measures to support individuals in food crisis, such as seed distribution, agricultural equipment, or training in agricultural techniques, to strengthen food security and resilience of communities affected by the crisis.",
+              "description": {
+                "level1": "No specific provision is envisaged by agricultural programs to specifically support individuals in food insecurity = 1",
+                "level2": "Programs integrate response actions but which do not exceed 30% of individuals in food insecurity = 2",
+                "level3": "Programs integrate response actions that reach 30% - 50% of individuals in food insecurity = 3",
+                "level4": "Programs integrate response actions that reach 50% - 80% of individuals in food insecurity = 4",
+                "level5": "Programs integrate response actions that reach more than 80% of individuals in food insecurity = 5"
+              }
+            },
+            {
+              "index": "244",
+              "text": "Do agricultural programs use common targeting tools for food and nutrition security and/or social protection?",
+              "tooltip" : "Evaluates whether agricultural programs use common targeting tools, such as shared databases, a unified social registry, consensual criteria or joint methodologies, to identify and register the most vulnerable populations in food and nutrition security, to ensure that agricultural interventions effectively reach the most in-need individuals and households.",
+              "description": {
+                "level1": "Agricultural programs do not use any targeting mechanism for vulnerable populations from the NRP or social protection = 1",
+                "level2": "Limited or sporadic use of targeting mechanisms is observed, but it covers less than 30% of populations in food and nutrition crisis = 2",
+                "level3": "Agricultural programs regularly use targeting mechanisms, but coverage is between 30% to 50% of populations in crisis = 3",
+                "level4": "Targeting mechanisms from the NRP and/or social protection are integrated into agricultural programs, reaching between 50% and 80% of beneficiaries = 4",
+                "level5": "Agricultural programs optimize the use of FNS and social protection targeting mechanisms, ensuring coverage above 80% = 5"
+              }
+            },
+            {
+              "index": "245",
+              "text": "Do agricultural programs use distribution systems from social protection or FNS when necessary?",
+              "tooltip" : "Evaluates whether agricultural programs rely on existing distribution systems from social protection or FNS to prevent crises or provide rapid assistance when needed, for example by using the UR.",
+              "description": {
+                "level1": "Agricultural programs do not use any distribution mechanism from food and nutrition security or social protection = 1",
+                "level2": "Limited or irregular use of distribution mechanisms is observed, covering less than 30% of crisis areas = 2",
+                "level3": "Agricultural programs regularly use distribution mechanisms, reaching 30% - 50% of crisis areas = 3",
+                "level4": "Distribution mechanisms from FNS and social protection are integrated into agricultural programs, reaching 50% - 80% of crisis areas = 4",
+                "level5": "Agricultural programs optimize the use of existing distribution mechanisms, ensuring coverage of more than 80% of crisis areas = 5"
+              }
+            },
+            {
+              "index": "246",
+              "text": "Are prevention and response measures of agricultural programs implemented in a synchronized manner with FNS?",
+              "tooltip" : "Evaluates whether prevention and response measures of agricultural programs are implemented in a coordinated and synchronized manner with other sectors (FNS, livestock, social protection, nutrition, etc.) to ensure effective prevention and management of food and nutrition crises.",
+              "description": {
+                "level1": "Prevention and response measures of agricultural programs are implemented in a disjointed manner, without coordination with FNS = 1",
+                "level2": "Implementation of prevention and response measures is sporadic, covering less than 30% of areas in food and nutrition crisis = 2",
+                "level3": "Implementation of prevention and response measures is systematic, and covers 30% to 50% of areas in food and nutrition crisis = 3",
+                "level4": "Implementation of prevention and response measures is systematic, and covers 50% to 80% of areas in food and nutrition crisis = 4",
+                "level5": "Implementation of prevention and response measures is systematic, and covers more than 80% of areas in food and nutrition crisis = 5"
+              }
+            }
+          ]
+        },
+        {
+          "title": "2.5. Coverage and capacity for prevention and response of livestock programs",
+          "questions": [
+            {
+              "index": "251",
+              "text": "Do livestock programs provide for prevention and economic inclusion measures for individuals in food crisis?",
+              "tooltip" : "Evaluates whether livestock programs integrate prevention and economic support measures specifically targeting populations in food and nutrition crisis.",
+              "description": {
+                "level1": "No specific provision is envisaged by livestock programs to specifically support individuals in food insecurity = 1",
+                "level2": "Programs integrate prevention measures but coverage does not exceed 30% of individuals in food insecurity = 2",
+                "level3": "Programs integrate prevention and economic inclusion measures that reach 30% - 50% of individuals in food insecurity = 3",
+                "level4": "Programs integrate prevention and economic inclusion measures that reach 50% - 80% of individuals in food insecurity = 4",
+                "level5": "Programs integrate prevention and economic inclusion measures that reach more than 80% of individuals in food insecurity = 5"
+              }
+            },
+            {
+              "index": "252",
+              "text": "Are support measures to improve market functioning and the purchasing power of poor and vulnerable people applied?",
+              "tooltip" : "Evaluates whether specific measures are implemented to improve market functioning, such as price regulation, improving supply of essential goods or reducing trade barriers, and to increase the purchasing power of poor and vulnerable people, for example through destocking, cash transfers, targeted employment, targeted subsidies, etc.",
+              "description": {
+                "level1": "Market analyses have not provided solutions to support market functioning and the purchasing power of poor and vulnerable populations = 1",
+                "level2": "Market analyses have generated support solutions but they are weakly executed = 2",
+                "level3": "Among the solutions proposed by market analyses, only short-term measures are partially implemented = 3",
+                "level4": "Support solutions for the market and the purchasing power of poor and vulnerable people, both short and long-term, are partially realized = 4",
+                "level5": "Support solutions for the market and the purchasing power of poor and vulnerable people, both short and long-term, are fully realized = 5"
+              }
+            },
+            {
+              "index": "253",
+              "text": "Do livestock programs provide for response measures in favor of individuals in food crisis?",
+              "tooltip" : "Evaluates whether livestock programs provide for specific measures to respond to the needs of individuals in food crisis, such as providing livestock feed, emergency veterinary care, distribution of breeding stock, to protect livelihoods and strengthen resilience of populations in food crisis.",
+              "description": {
+                "level1": "No specific provision is envisaged by livestock programs to specifically support individuals in food insecurity = 1",
+                "level2": "Livestock programs integrate response actions but do not exceed 30% of individuals in food insecurity = 2",
+                "level3": "Livestock programs integrate response actions that reach 30% - 50% of individuals in food insecurity = 3",
+                "level4": "Livestock programs integrate response actions that reach 50% - 80% of individuals in food insecurity = 4",
+                "level5": "Livestock programs integrate response actions that reach more than 80% of individuals in food insecurity = 5"
+              }
+            },
+            {
+              "index": "254",
+              "text": "Do livestock programs use common targeting tools for food and nutrition security and/or social protection?",
+              "tooltip" : "Evaluates whether livestock programs use common targeting tools, such as shared databases, harmonized selection criteria or joint methodologies, to identify vulnerable populations in food and nutrition security, to ensure that livestock interventions effectively reach the most at-risk individuals and households.",
+              "description": {
+                "level1": "Livestock programs do not use any targeting mechanism for vulnerable populations from the NRP or social protection = 1",
+                "level2": "Limited or sporadic use of targeting mechanisms is observed, but it covers less than 30% of crisis areas = 2",
+                "level3": "Livestock programs regularly use targeting mechanisms, but coverage is between 30% to 50% of crisis areas = 3",
+                "level4": "Targeting mechanisms from the NRP and/or social protection are integrated into livestock programs, reaching between 50% and 80% of crisis areas = 4",
+                "level5": "Livestock programs optimize the use of FNS and social protection targeting mechanisms, covering more than 80% of crisis areas = 5"
+              }
+            },
+            {
+              "index": "255",
+              "text": "Do livestock programs use distribution systems from social protection or FNS when necessary?",
+              "tooltip" : "Evaluates whether livestock programs rely on existing distribution systems from social protection or FNS to prevent crises or provide rapid assistance when needed, for example by using the UR.",
+              "description": {
+                "level1": "Livestock programs do not use any distribution mechanism from food and nutrition security or social protection = 1",
+                "level2": "Limited or sporadic use of distribution mechanisms is observed, covering less than 30% of crisis areas = 2",
+                "level3": "Livestock programs regularly use distribution mechanisms, reaching 30% - 50% of crisis areas = 3",
+                "level4": "Distribution mechanisms from FNS and social protection are integrated into livestock programs, reaching 50% - 80% of crisis areas = 4",
+                "level5": "Livestock programs optimize the use of existing distribution mechanisms, ensuring coverage of more than 80% of crisis areas = 5"
+              }
+            },
+            {
+              "index": "256",
+              "text": "Are prevention and response measures of livestock programs implemented in a synchronized manner with FNS?",
+              "tooltip" : "Evaluates whether prevention and response measures of livestock programs are implemented in a coordinated and synchronized manner with other sectors (FNS, agriculture, social protection, nutrition, etc.) to ensure effective prevention and management of food and nutrition crises.",
+              "description": {
+                "level1": "Prevention and response measures of agricultural programs are implemented in a disjointed manner, without coordination with FNS = 1",
+                "level2": "Implementation of prevention and response measures is sporadic, covering less than 30% of areas in food and nutrition crisis = 2",
+                "level3": "Implementation of prevention and response measures is systematic, and covers 30% to 50% of areas in food and nutrition crisis = 3",
+                "level4": "Implementation of prevention and response measures is systematic, and covers 50% to 80% of areas in food and nutrition crisis = 4",
+                "level5": "Implementation of prevention and response measures is systematic, and covers more than 80% of areas in food and nutrition crisis = 5"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "3: Financing of food and nutrition security",
+      "subsections": [
+        {
+          "title": "3.1 Policy and financing instruments for food and nutrition security",
+          "questions": [
+            {
+              "index": "311",
+              "text": "Does the Government have a policy, law and/or national financing strategy for responding to food and nutrition crises?",
+              "tooltip" : "Evaluates the existence of specific policies, laws or national strategies that provide financing mechanisms to prevent and respond to food and nutrition crises.",
+              "description": {
+                "level1": "No policy, law or national financing strategy for preventing or managing food crises is established = 1",
+                "level2": "Policy documents for preventing and responding to food and nutrition crises are under development, or are not up to date = 2",
+                "level3": "A financing strategy for food crisis risks exists but is not supported by a law or financial instruments = 3",
+                "level4": "There is a financing policy for risks related to food crises, supported by laws and financial instruments that are poorly adapted = 4",
+                "level5": "A financing policy for food crisis risks exists; it is supported by adequate legislation and financial instruments = 5"
+              }
+            },
+            {
+              "index": "312",
+              "text": "Is responsibility for financing different sectors to respond to food crises clear for all actors?",
+              "tooltip" : "Evaluates whether the allocation of financial responsibilities between different sectors (such as agriculture, health, social protection, etc.) to prevent and respond to food crises is clearly defined and understood by all involved actors, to ensure effective coordination and adequate resource allocation at all times.",
+              "description": {
+                "level1": "No specification on responsibilities for financing different sectors = 1",
+                "level2": "Responsibilities between different sectors are not explicit and are not coordinated = 2",
+                "level3": "Responsibilities are well defined, however, some sectors lack financial instruments and budget allocation = 3",
+                "level4": "Responsibilities are well defined, however, despite allocated budgets, resources remain modest in all sectors = 4",
+                "level5": "Responsibilities are well defined and all sectors allocate substantial resources = 5"
+              }
+            },
+            {
+              "index": "313",
+              "text": "Does the government conduct an analysis and estimation of potential costs associated with a food and nutrition crisis?",
+              "tooltip" : "Evaluates whether the government conducts detailed assessments of costs related to preventing and managing food and nutrition crises, taking into account necessary expenditures for humanitarian assistance, support to agricultural sectors, health care, nutrition programs, and other essential interventions.",
+              "description": {
+                "level1": "No, the government does not conduct any analysis or estimation of potential costs related to a food and nutrition crisis = 1",
+                "level2": "The government undertakes an analysis based on historical data, but it is not consensual, and coverage of at-risk areas is low = 2",
+                "level3": "The Government conducts a periodic analysis with expanded geographic coverage, but consensus is partial = 3",
+                "level4": "The Government conducts a periodic analysis covering all at-risk areas with partial consensus = 4",
+                "level5": "The Government conducts a proactive, regular, and consensual analysis. These analyses cover all at-risk areas = 5"
+              }
+            },
+            {
+              "index": "314",
+              "text": "Does a joint mechanism for managing financial resources in food and nutrition security exist?",
+              "tooltip" : "Evaluates whether a common mechanism exists for managing financial resources in food and nutrition security, allowing different actors (government, NGOs, international agencies) to coordinate their efforts and ensure effective fund allocation to respond to food and nutrition crises.",
+              "description": {
+                "level1": "No coordination of financial resources, no dedicated budget line and no joint/common FNS fund = 1",
+                "level2": "The dedicated budget line and common funds exist. However, they capture less than 30% of resources allocated to the FNS sector = 2",
+                "level3": "A dedicated budget line and common funds exist but they capture 30% to 50% of resources allocated to the FNS sector = 3",
+                "level4": "A dedicated budget line and common funds exist but they capture 50% to 80% of resources allocated to the FNS sector = 4",
+                "level5": "The instruments are functional and capture more than 80% of resources = 5"
+              }
+            }
+          ]
+        },
+        {
+          "title": "3.2 Types and availability of food and nutrition security (FNS) financing",
+          "questions": [
+            {
+              "index": "321",
+              "text": "What are the available financing sources to support information production in food and nutrition matters?",
+              "tooltip" : "Identifies the different financing sources available to support information collection, analysis and dissemination related to food and nutrition security, such as national funds, financing from technical and financial partners. The ideal situation being substantial sovereign financing.",
+              "description": {
+                "level1": "Financing of FNS information production depends exclusively on contributions from international partners = 1",
+                "level2": "Government contribution to financing FNS information production does not exceed 30% = 2",
+                "level3": "The government contributes 30% - 50% of financing for FNS information production = 3",
+                "level4": "The government contributes 50% - 80% of financing for FNS information production = 4",
+                "level5": "Government financial contribution to FNS information production exceeds 80% of needs = 5"
+              }
+            },
+            {
+              "index": "322",
+              "text": "What are the available financing sources to support emergency interventions in food and nutrition matters?",
+              "tooltip" : "Identifies financing sources available to support emergency interventions in food and nutrition matters, such as national (governmental) mechanisms, and international financing from technical and financial partners.",
+              "description": {
+                "level1": "Financing of FNS emergency interventions depends exclusively on contributions from international partners = 1",
+                "level2": "Government contribution to financing FNS emergency interventions does not exceed 30% = 2",
+                "level3": "The government contributes 30% - 50% of financing for FNS emergency interventions = 3",
+                "level4": "The government contributes 50% - 80% of financing for FNS emergency interventions = 4",
+                "level5": "Government contribution to financing FNS emergency interventions exceeds 80% of financing needs = 5"
+              }
+            },
+            {
+              "index": "323",
+              "text": "Are financial resources in place to enable timely prevention and response?",
+              "tooltip" : "Evaluates whether necessary financial resources are available and allocated in advance to enable effective prevention and rapid response in case of food and nutrition crisis, thus ensuring timely intervention before the situation deteriorates further.",
+              "description": {
+                "level1": "Financial resources are not prepositioned and depend entirely on budget reallocation and external assistance = 1",
+                "level2": "Prepositioned funds, although existing, cover less than 30% of financial needs and become accessible after a period of six months = 2",
+                "level3": "Prepositioned funds cover 30% to 50% of financial needs and become accessible within a range of three to six months = 3",
+                "level4": "Prepositioned funds cover 50% to 80% of financial needs and become accessible within a range of three to six months = 4",
+                "level5": "Prepositioned funds cover more than 80% of financial needs and become accessible in less than three months = 5"
+              }
+            },
+            {
+              "index": "324",
+              "text": "Are sectoral interventions (agriculture, livestock, income generation, ...) flexible to support responses to food crises?",
+              "tooltip" : "Evaluates whether sectoral interventions, such as those related to agriculture, livestock, are sufficiently flexible to respond rapidly to food crises. This can be done by increasing the volume of support per beneficiary, introducing new activities in response to crises, and/or targeting new beneficiaries in food crisis situations.",
+              "description": {
+                "level1": "No flexibility of sectoral interventions to contribute to financing responses to food and nutrition crises = 1",
+                "level2": "A limited number of sectoral interventions are flexible and allocate less than 5% of their budget; this practice is not institutionalized = 2",
+                "level3": "Some sectoral interventions are flexible and allocate less than 5% of their budget; institutionalization in progress = 3",
+                "level4": "Most sectoral interventions are flexible and allocate more than 5% of their budget to FNS emergency response; institutionalized but poorly applied = 4",
+                "level5": "Flexibility of sectoral interventions is institutionalized; they allocate more than 5% of their budget to FNS emergency response = 5"
+              }
+            },
+            {
+              "index": "325",
+              "text": "Do sectoral interventions (agriculture, livestock, income generation, ...) finance long-term FNS response in favor of populations in crisis?",
+              "tooltip" : "Evaluates whether interventions in sectors such as agriculture and livestock integrate sustainable solutions to address food and nutrition crises. These solutions can be incorporated from project design, while ensuring sufficient flexibility to adapt to long-term challenges. This includes adjusting approaches or redirecting resources to effectively respond to evolving needs.",
+              "description": {
+                "level1": "No flexibility of sectoral interventions to contribute to financing long-term response = 1",
+                "level2": "A limited number of sectoral interventions are flexible and allocate less than 5% of their budget; this practice is not institutionalized = 2",
+                "level3": "Some sectoral interventions are flexible and allocate less than 5% of their budget; institutionalization in progress = 3",
+                "level4": "Most sectoral interventions are flexible and allocate more than 5% of their budget to long-term response; institutionalized but poorly applied = 4",
+                "level5": "Flexibility of sectoral interventions is institutionalized; they allocate more than 5% of their budget to long-term response = 5"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "4: Governance framework for the prevention and management of food and nutrition crises, influence and accountability",
+      "subsections": [
+        {
+          "title": "4.1 National framework and policy framework for preventing and managing food crises",
+          "questions": [
+            {
+              "index": "411",
+              "text": "Does a functional national framework for preventing and managing food crises exist?",
+              "tooltip" : "Evaluates whether a national framework for preventing and managing food crises is in place and functioning effectively, including monitoring mechanisms, emergency intervention plans and dedicated resources to respond rapidly to food crisis situations at the national level.",
+              "description": {
+                "level1": "There is no national framework for preventing and managing food and nutrition crises = 1",
+                "level2": "A national framework for preventing and managing crises exists but other frameworks operate in parallel = 2",
+                "level3": "The national framework for preventing and managing crises functions irregularly and does not mobilize all FNS actors = 3",
+                "level4": "The national framework for preventing and managing crises functions regularly and brings together most actors = 4",
+                "level5": "The national framework for preventing and managing crises functions regularly and brings together all actors = 5"
+              }
+            },
+            {
+              "index": "412",
+              "text": "Does the national framework have established procedures for communicating and disseminating analysis results as well as responses?",
+              "tooltip" : "Evaluates whether the national food crisis management framework has clear and established procedures (schedule, platform, responsible party) for communicating and disseminating situation analysis results, as well as for implemented responses, to ensure smooth information flow and effective coordination between different actors (government, NGOs, international agencies, etc.).",
+              "description": {
+                "level1": "No procedure for communicating analysis results is in place = 1",
+                "level2": "The country has procedures for disseminating FNS analysis results but they are not applied or information is not disseminated = 2",
+                "level3": "Information procedures are established but there is dissemination of contradictory information, involving several actors = 3",
+                "level4": "Dissemination of contradictory information is limited to a few isolated cases, the majority of actors respecting established procedures = 4",
+                "level5": "Established FNS information procedures are respected by all actors who follow the official communication of the State = 5"
+              }
+            },
+            {
+              "index": "413",
+              "text": "Are recommendations from the prevention and management framework politically approved and effectively implemented?",
+              "tooltip" : "Evaluates whether recommendations formulated by the national framework for preventing and managing food crises, after being validated by political authorities, are actually translated into concrete actions and effectively implemented by different actors (government, NGOs, international agencies) to prevent and respond to food crises appropriately and in a timely manner.",
+              "description": {
+                "level1": "Recommendations from the prevention and management framework are not officially approved by political decision-makers = 1",
+                "level2": "Recommendations are politically validated, but are not implemented by the government = 2",
+                "level3": "Recommendations are politically validated, but the government does not play a predominant role in implementation = 3",
+                "level4": "Recommendations are politically approved, and the government implements the majority of decided actions (50% to 80%) = 4",
+                "level5": "Recommendations are politically approved, and the government ensures leadership and implements all decided actions (> 80%) = 5"
+              }
+            },
+            {
+              "index": "414",
+              "text": "Are prevention actions for food and nutrition crises integrated into sectoral strategies (Agriculture, livestock, employment, nutrition)?",
+              "tooltip" : "Evaluates whether prevention actions for food and nutrition crises, such as improving agricultural techniques, diversifying income sources, access to adequate nutrition and sustainable livestock management, are specifically integrated into strategies of sectors such as agriculture, livestock, employment and nutrition. This would create synergies and ensure a coherent and proactive response to prevent crises and strengthen population resilience.",
+              "description": {
+                "level1": "No crisis prevention measures are integrated into sectoral strategies for preventing and managing crises = 1",
+                "level2": "Crisis prevention measures are included in some sectoral strategies, but with weak coherence and implementation = 2",
+                "level3": "Crisis prevention is integrated into some sectoral strategies, with implementation covering between 30% and 50% of at-risk areas = 3",
+                "level4": "Crisis prevention is integrated into all targeted sectoral strategies, implemented in 50% to 80% of at-risk areas = 4",
+                "level5": "Crisis prevention is integrated into all sectoral strategies, covering more than 80% of at-risk areas = 5"
+              }
+            },
+            {
+              "index": "415",
+              "text": "Is management of food and nutrition crises integrated into the country's sectoral strategies?",
+              "tooltip" : "Evaluates whether management of food and nutrition crises is an integral part of strategies of different sectors of the country, such as agriculture, health, employment, nutrition and livestock, to ensure a coordinated and holistic approach to effectively prevent and respond to food and nutrition crises.",
+              "description": {
+                "level1": "No nutrition prevention measures are integrated into policies or strategic framework for preventing and managing crises = 1",
+                "level2": "Prevention and crisis management measures are included in some sectoral strategies, but with weak coherence and implementation = 2",
+                "level3": "Crisis management is integrated into some sectoral strategies, with implementation covering between 30% and 50% of at-risk areas = 3",
+                "level4": "Management of food and nutrition crises is implemented in 50% to 80% of at-risk areas = 4",
+                "level5": "All targeted sectoral strategies include management of food and nutrition crises, implemented in 50% to 80% of at-risk areas = 5"
+              }
+            }
+          ]
+        },
+        {
+          "title": "4.2 Coordination and consultation to respond to food and nutrition crises",
+          "questions": [
+            {
+              "index": "421",
+              "text": "Do consultations of the prevention and management framework result in consensus on response packages for food crises?",
+              "tooltip" : "The question seeks to know whether discussions and collaborations between different actors of the food crisis prevention and management framework (government, NGOs, international agencies, etc.) lead to a common agreement on interventions to implement (quantity, value, duration and period) for each type of beneficiary, to ensure an optimal response that meets the needs of affected people. This should not be based on available resources but on needs.",
+              "description": {
+                "level1": "Consultations around prevention and response options for crises are not held to exchange on options and modalities = 1",
+                "level2": "Consultations around information production and response are held but do not result in definition of consensual response packages = 2",
+                "level3": "A consensus exists regarding the choice of prevention and response tools for crises, but \"minimum\" response packages remain undefined. = 3",
+                "level4": "A consensus is established around the choice of prevention and response tools for crises, but some response packages are not approved = 4",
+                "level5": "A consensus is established around the choice of prevention and response tools for crises, and all response packages are developed consensually = 5"
+              }
+            },
+            {
+              "index": "422",
+              "text": "Does a single plan or multiple plans, initiatives and programs exist to respond to food crises?",
+              "tooltip" : "Checks whether a single consolidated and consensual global plan or multiple response plans for food crises, distinct initiatives and programs, implemented by different actors (government, NGOs, international agencies, etc.), exist to respond to food crises, and how these efforts are coordinated to ensure an effective and well-structured response.",
+              "description": {
+                "level1": "The country has neither a response plan, nor initiatives, nor adequate programs to face food and nutrition crises = 1",
+                "level2": "One or more response plans, crisis-sensitive programs or initiatives exist, but they are weakly implemented = 2",
+                "level3": "Multiple response plans, crisis-sensitive programs or initiatives coexist, but they lack coordination and complementarity = 3",
+                "level4": "Multiple response plans, crisis-sensitive programs or initiatives coexist, covering most aspects necessary for crisis management = 4",
+                "level5": "Multiple response plans, initiatives or complementary programs exist, effectively covering all aspects of food crisis management = 5"
+              }
+            },
+            {
+              "index": "423",
+              "text": "Do response implementation and coordination rely on a regularly updated mapping of interventions?",
+              "tooltip" : "Evaluates whether implementation and coordination of responses to food crises are based on a mapping of all interventions to ensure good complementarity and synchronization by actors.",
+              "description": {
+                "level1": "No, a mapping of FNS-sensitive interventions does not exist or is not updated = 1",
+                "level2": "A mapping of interventions is available but is not used to refine response implementation modalities = 2",
+                "level3": "A mapping of interventions is available in some areas but synergies are not developed = 3",
+                "level4": "A mapping of interventions is available in all areas and intervention modalities are partially adjusted = 4",
+                "level5": "A mapping of interventions is available in all areas and intervention modalities are adjusted accordingly = 5"
+              }
+            },
+            {
+              "index": "424",
+              "text": "Is a consensual methodology for geographic and individual targeting implemented?",
+              "tooltip" : "Evaluates whether a common method, accepted by all involved actors, is used to target the most vulnerable geographic areas and individuals (for example through the UR or surveys), to ensure that resources and interventions effectively reach the most in-need populations during food crises.",
+              "description": {
+                "level1": "No, there is no consensual methodology for geographic and individual targeting = 1",
+                "level2": "No, several non-consensual methodologies coexist and are not used for geographic and individual targeting = 2",
+                "level3": "Yes, but they do not distinguish between chronic areas and populations and conjunctural crisis areas and populations; or are not applied = 3",
+                "level4": "Yes, although it distinguishes between chronic and conjunctural areas and populations, they are applied by few sectors = 4",
+                "level5": "Yes, they differentiate between chronic and conjunctural areas and people. They are applied by structural programs and emergency response = 5"
+              }
+            },
+            {
+              "index": "425",
+              "text": "Does the country have consensual individual targeting platform(s)?",
+              "tooltip" : "Evaluates whether the country has systems or platforms shared and approved for distribution by all concerned actors (government, NGOs, humanitarian agencies...) to coordinate and manage distribution of food and nutrition assistance, to ensure that resources reach vulnerable populations effectively, transparently and without overlapping interventions.",
+              "description": {
+                "level1": "No, there are no consensual individual targeting platform(s) = 1",
+                "level2": "No, several platforms coexist and are not used for individual targeting = 2",
+                "level3": "Yes, several platforms coexist and are used by different intervention sectors with weak integration = 3",
+                "level4": "The country has consensual, interconnected platform(s). However, they are used for emergency response and social protection only = 4",
+                "level5": "The country has consensual, interconnected platform(s). It (they) is (are) used by all sectors = 5"
+              }
+            },
+            {
+              "index": "426",
+              "text": "Does the country have consensual distribution platform(s)?",
+              "tooltip" : "Evaluates whether the country has systems or platforms shared and approved for distribution by all concerned actors (government, NGOs, humanitarian agencies...) to coordinate and manage distribution of food and nutrition assistance, to ensure that resources reach vulnerable populations effectively, transparently and without overlapping interventions.",
+              "description": {
+                "level1": "No, there are no consensual distribution platform(s) = 1",
+                "level2": "No, several platforms coexist and are not used for distributing emergency and structural response packages = 2",
+                "level3": "Yes, several distribution platforms coexist and are used by different intervention sectors with weak integration = 3",
+                "level4": "The country has consensual, interconnected platform(s). However, they are used for emergency response and social protection only = 4",
+                "level5": "The country has consensual, interconnected platform(s). It (they) is (are) used by all sectors = 5"
+              }
+            }
+        ]
+      },
+      {
+        "title": "4.3 Monitoring evaluation and accountability on food and nutrition security",
+        "questions": [
+          {
+            "index": "431",
+            "text": "Do standards/indicators exist for monitoring capacities for preventing and managing food and nutrition crises?",
+            "tooltip" : "Evaluates whether standards and indicators have been established to monitor and evaluate the country's capacities to prevent and manage food and nutrition crises, to ensure that response systems are effective and ready to intervene when needed.",
+            "description": {
+              "level1": "No, there are no performance standards/indicators on capacities for preventing and managing food crises = 1",
+              "level2": "There are performance standards/indicators on capacities for preventing and managing crises; they do not achieve consensus and are poorly applied = 2",
+              "level3": "Performance standards/indicators on capacities for preventing and managing crises are established but their application is limited = 3",
+              "level4": "Performance standards/indicators have been defined and are widely implemented in most aspects of emergency response = 4",
+              "level5": "Performance standards/indicators have been defined and are used in all prevention and FNS crisis management actions = 5"
+            }
+          },
+          {
+            "index": "432",
+            "text": "Do standards/indicators exist for monitoring emergency response performance?",
+            "tooltip" : "Evaluates whether standards and indicators have been defined to assess the performance of emergency responses to food and nutrition crises, to measure their effectiveness, speed and impact on vulnerable populations.",
+            "description": {
+              "level1": "No, there are no performance standards/indicators for emergency response = 1",
+              "level2": "There are performance standards/indicators for emergency response, however, they do not achieve consensus and are applied in a limited manner = 2",
+              "level3": "Performance standards/indicators for emergency response are established but their application is limited = 3",
+              "level4": "Performance standards/indicators have been defined and are widely implemented in most aspects of emergency response = 4",
+              "level5": "Performance standards/indicators have been defined and are implemented throughout emergency response = 5"
+            }
+          },
+          {
+            "index": "433",
+            "text": "Is a monitoring system for capacities for preventing and managing crises operational and are its recommendations implemented?",
+            "tooltip" : "Evaluates whether a monitoring system is in place to continuously assess the country's capacities to prevent and manage food and nutrition crises, and whether recommendations from this system are effectively applied to improve preparation and response in case of crisis.",
+            "description": {
+              "level1": "No, there is no monitoring system for capacities for preventing and managing food and nutrition crises = 1",
+              "level2": "Multiple monitoring instruments for capacities for preventing and managing crises coexist with standardization in progress = 2",
+              "level3": "A monitoring system for capacities for preventing and managing crises is established but its functioning is irregular = 3",
+              "level4": "A monitoring system for capacities for preventing and managing crises is functional but recommendations are poorly applied = 4",
+              "level5": "A monitoring system for capacities for preventing and managing crises is functional and recommendations are applied = 5"
+            }
+          },
+          {
+            "index": "434",
+            "text": "Is a monitoring system for FNS response performance operational and are its recommendations implemented?",
+            "tooltip" : "Evaluates whether a system is in place to monitor the effectiveness of food and nutrition security (FNS) response and whether recommendations from this monitoring are effectively applied to improve management and impact of interventions in case of crisis.",
+            "description": {
+              "level1": "No, there is no monitoring system for performance of responses to food and nutrition crises = 1",
+              "level2": "Multiple monitoring instruments for performance of responses to food and nutrition crises coexist with standardization in progress = 2",
+              "level3": "A monitoring system for FNS response performance is established but its functioning is irregular = 3",
+              "level4": "A monitoring system for FNS response performance is functional but recommendations are poorly applied = 4",
+              "level5": "A monitoring system for FNS response performance is functional and recommendations are applied = 5"
+            }
+          },
+          {
+            "index": "435",
+            "text": "Is there a framework for civil society engagement on accountability of food and nutrition security interventions?",
+            "tooltip" : "Evaluates whether a formal framework exists allowing civil society to play an active role in monitoring and accountability of food and nutrition security interventions, to ensure that these interventions meet population needs and are conducted in a transparent and effective manner.",
+            "description": {
+              "level1": "No, there is no framework for civil society engagement on accountability of food and nutrition security interventions = 1",
+              "level2": "Multiple accountability monitoring instruments for food and nutrition security interventions coexist with standardization in progress = 2",
+              "level3": "A framework for civil society engagement on FNS interventions exists, but its functioning is irregular = 3",
+              "level4": "A framework for civil society engagement on interventions is functional but recommendations are poorly applied = 4",
+              "level5": "An accountability monitoring framework for interventions is functional and recommendations are applied = 5"
+            }
+          },
+          {
+            "index": "436",
+            "text": "Is a parliamentary monitoring and oversight system for FNS policies, laws and programs functional and are its recommendations implemented?",
+            "tooltip" : "Evaluates whether a parliamentary monitoring and oversight system is in place to assess the effectiveness of food and nutrition security (FNS) policies, laws and programs, and whether recommendations from this system are effectively applied to improve implementation of these initiatives.",
+            "description": {
+              "level1": "No, there is no parliamentary monitoring system on policies, laws and programs sensitive to food and nutrition security = 1",
+              "level2": "Multiple parliamentary monitoring instruments on policies, laws and sensitive programs coexist with standardization in progress = 2",
+              "level3": "A parliamentary monitoring system on policies, laws and programs is established but its functioning is irregular = 3",
+              "level4": "A parliamentary monitoring system on policies, laws and programs is functional but recommendations are poorly applied = 4",
+              "level5": "A parliamentary monitoring system on policies, laws and programs is functional and recommendations are applied = 5"
+            }
+          }
+      ]
+    }
+    ]
+  }
+]

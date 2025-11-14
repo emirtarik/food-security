@@ -8,13 +8,15 @@ const resources = {
     misc: require("./data/locales/en/misc.json"),
     slideDataLeft: require("./data/locales/en/slideDataLeft.json"),
     slideDataRight: require("./data/locales/en/slideDataRight.json"),
-    analysis: require("./data/locales/en/analysis.json") // new analysis namespace for EN
+    analysis: require("./data/locales/en/analysis.json"), // new analysis namespace for EN
+    questionnaire: require("./data/locales/en/questionnaire.json") // questionnaire namespace for EN
   },
   fr: {
     misc: require("./data/locales/fr/misc.json"),
     slideDataLeft: require("./data/locales/fr/slideDataLeft.json"),
     slideDataRight: require("./data/locales/fr/slideDataRight.json"),
-    analysis: require("./data/locales/fr/analysis.json") // new analysis namespace for FR
+    analysis: require("./data/locales/fr/analysis.json"), // new analysis namespace for FR
+    questionnaire: require("./data/locales/fr/questionnaire.json") // questionnaire namespace for FR
   },
 };
 
