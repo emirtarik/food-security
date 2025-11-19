@@ -771,6 +771,7 @@ function Uploader({ onFileSelected, onUploaded }) {
 
     if (!PRESIGN_URL) {
       setStatus('error');
+      console.log("PRESIGN ENV = ", process.env.REACT_APP_PRESIGN_URL);
       setMessage('Missing REACT_APP_PRESIGN_URL');
       return;
     }
@@ -1183,35 +1184,42 @@ function MetadataForm({ uploadedKey, pdfFile }) {
       
         imgKey = thumbKey;
       }
-      // ---- FLAG PATH SELECTION ----
-      let flagPath = '';
-      if (flagChoice === 'eu') {
 
-        flagPath = '/images/EN_Co-fundedbytheEU_RGB_POS.png';
-      }
 
-      
-      
-      const payload = {
-        title,
-        img: `/${imgKey}`, 
-        flag: flagPath || undefined,
-        datecontent: monthYear,
-        bllink: `/documents/${slug}`,
-        content: {
-          Published: published,
-          Description: description,
-          Countries: countries.join(', '),
-          Themes: themes.join(', '),
-          Scale: scale,
-          Langs: langs.join(', '),
-        },
-        permalink: `/${targetKey}`, 
-        sourceKey: uploadedKey,    
-        targetKey,                  
-      };
-  
-      setPreviewJson(payload);
+//  FLAG SELECTION 
+let flagPath;   
+if (flagChoice === 'eu') {
+  const hasEnglish = langs.includes('English');
+  const hasFrench = langs.includes('French');
+
+  if (hasFrench && !hasEnglish) {
+    flagPath = '/images/FR_Co-fundedbytheEU_RGB_POS.png';
+  } else {
+    flagPath = '/images/EN_Co-fundedbytheEU_RGB_POS.png';
+  }
+}
+
+const payload = {
+  title,
+  img: `/${imgKey}`,
+  tag: flagPath || undefined,
+  datecontent: monthYear,
+  bllink: `/documents/${slug}`,
+  content: {
+    Published: published,
+    Description: description,
+    Countries: countries.join(', '),
+    Themes: themes.join(', '),
+    Scale: scale,
+    Langs: langs.join(', '),
+  },
+  permalink: `/${targetKey}`,
+  sourceKey: uploadedKey,
+  targetKey,
+};
+
+
+setPreviewJson(payload);
   
       if (!META_URL) {
         setMsg('Metadata JSON has been generated locally (no REACT_APP_META_URL).');

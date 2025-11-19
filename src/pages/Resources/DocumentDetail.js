@@ -73,25 +73,23 @@ const SimpleSubHeader = () => {
 
 const DocumentDetail = () => {
   const { t } = useTranslationHook(["misc"]);
-  const { bllink } = useParams(); // /documents/:bllink
+  const { bllink } = useParams(); 
   const navigate = useNavigate();
   const location = useLocation();
 
   const initialFromState = location.state?.document || null;
 
   const [document, setDocument] = useState(initialFromState);
-  const [loading, setLoading] = useState(!initialFromState);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // PDF viewer state
+ 
   const [showPDF, setShowPDF] = useState(false);
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [scale, setScale] = useState(1.0);
 
   useEffect(() => {
-    if (initialFromState) return;
-
     async function load() {
       setLoading(true);
       setError("");
@@ -107,15 +105,15 @@ const DocumentDetail = () => {
           console.warn("Falling back to local DocumentsRPCA.json:", e);
           data = fallbackDocumentData;
         }
-
+  
         const fullPath = `/documents/${bllink}`;
         const foundDoc = data.find((doc) => doc.bllink === fullPath);
-
+  
         if (!foundDoc) {
           setError("Document not found.");
           setDocument(null);
         } else {
-          setDocument(foundDoc);
+          setDocument((prev) => ({ ...prev, ...foundDoc }));
         }
       } catch (e) {
         console.error("Error loading document:", e);
@@ -125,10 +123,10 @@ const DocumentDetail = () => {
         setLoading(false);
       }
     }
-
+  
     load();
-  }, [bllink, initialFromState]);
-
+  }, [bllink]);   
+  
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
     setPageNumber(1);
@@ -211,15 +209,17 @@ const DocumentDetail = () => {
             <span className="list-header">{t("Languages")}: </span>
             <span className="list">{languages}</span>
           </p>
+          {/* EU Flag / Funding Visual */}
           {document?.flag && (
-            <div className="document-flag">
-              <img
-                src={resolveAsset(document.flag)}
-                alt="Document flag"
-                className="flag-logo"
-              />
-            </div>
-          )}
+  <div className="document-flag">
+    <img
+      src={resolveAsset(document.flag)}
+      alt="Document flag"
+      className="flag-logo"
+    />
+  </div>
+)}
+
         </div>
       </div>
 
