@@ -9,7 +9,18 @@
       "type": "RPCA Annual Meeting",
       "excerpt": "The 41st Annual Meeting of the Food Crisis Prevention Network (RPCA) will take place from 3-5 December 2025, in a hybrid format, both in Accra, Ghana, and via videoconference (Zoom).\n\nThe central theme of the meeting will be: Strengthening national and regional approaches to food crisis prevention and management: Findings, adaptation of instruments, new intervention modalities and policy challenges.\n\nMembers of the Network will have the opportunity to examine the provisional results of the 2025-26 agro-pastoral season, the situation of agricultural markets, the assessment of responses to crises implemented in 2025, and measures to strengthen the effectiveness of emergency interventions, including investment in the food resilience of the most vulnerable.",
       "isMarkdown": true,
-      "sections": []
+      "sections": [
+        {
+          "id": "rub-2",
+          "title": "Key documents",
+          "documents": [
+            {
+              "title": "Draft agenda",
+              "link": "/uploads/2025/12/2025-DEC_EN_Ordre_du_jour.pdf"
+            }
+          ]
+        }
+      ]
     },
     "fr": {
       "img": "/uploads/2025/12/SavethedateFR.png",
@@ -19,7 +30,18 @@
       "type": "Réunion annuelle du RPCA",
       "excerpt": "La 41e réunion annuelle du Réseau de Prévention des Crises Alimentaires (RPCA) se tiendra du 3 au 5 décembre 2025 dans un format hybride, à Accra, Ghana, et en visioconférence (zoom).\n\nLa réunion est placée sous le thème central : Refonder les approches nationales et régionales de prévention et de gestion des crises alimentaires : constats, adaptation des instruments, nouvelles modalités d'intervention et défis politiques.\n\nLes membres du Réseau auront l'occasion d'examiner les résultats provisoires de la campagne agropastorale 2025-26, la situation des marchés agricoles, le bilan des réponses aux crises mises en œuvre en 2025, ainsi que les mesures visant à renforcer l'efficacité des interventions d'urgence, y compris l'investissement dans la résilience alimentaire des personnes les plus vulnérables.",
       "isMarkdown": true,
-      "sections": []
+      "sections": [
+        {
+          "id": "rub-2",
+          "title": "Documents clés",
+          "documents": [
+            {
+              "title": "Projet d'ordre du jour",
+              "link": "/uploads/2025/12/2025-DEC_FR_Ordre_du_jour.pdf"
+            }
+          ]
+        }
+      ]
     },
     "year": "2025",
     "has_content": false,

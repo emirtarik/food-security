@@ -97,7 +97,19 @@ const HomeSlideRight = ({
     useTranslationHook("slideDataRight");
   return (
     <section className="home-slide lazy" style={bgStyle("/images/banner-right.jpg")}>
-      <div className="container">
+      <div
+        className="container"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          textAlign: "center",
+          backgroundColor: "#243d54",
+          marginLeft: "80px",
+          marginRight: "80px",
+          marginTop: "120px",
+        }}
+      >
         <a href={`${BASE_URL}${slideLink}`}>
           <div
             style={{
@@ -105,7 +117,7 @@ const HomeSlideRight = ({
               alignItems: "center",
               justifyContent: "center",
               textAlign: "center",
-              backgroundColor: "rgba(36, 61, 84, 0.7)",
+              backgroundColor: "rgba(36, 61, 84, 1)",
               padding: "30px",
               borderRadius: "8px",
             }}
